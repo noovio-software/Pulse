@@ -168,13 +168,6 @@
             {
                 <VaultRow Icon="raid" Label="Raids" Columns="Columns" Slots="RaidSlots" Unit="boss" />
                 <VaultRow Icon="dungeon" Label="Donjons" Columns="Columns" Slots="DungeonSlots" Unit="clé" />
-                <tr>
-                    <th class="label-col" title="Monde : les activités Monde / Gouffres ne sont pas exposées par les API publiques."><GridLabel Icon="world" Text="Monde" /></th>
-                    @foreach (var col in Columns)
-                    {
-                        <td><span class="muted" title="Non disponible via les API Blizzard / Raider.io">n/d</span></td>
-                    }
-                </tr>
                 <VaultRow Icon="history" Label="Semaine passée (M+)" Columns="Columns" Slots="PreviousWeekSlots" Unit="clé" Previous="true" />
             }
 
