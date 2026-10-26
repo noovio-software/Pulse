@@ -523,6 +523,8 @@ thead .label-col { z-index: 3; vertical-align: bottom; }
 /* En-têtes de personnage */
 .char-head {
     vertical-align: top;
+    /* Hauteur nominale : la cellule s'étire à la hauteur de la ligne, ce qui permet à .char-card d'en prendre 100 %. */
+    height: 1px;
     padding: 14px 10px 12px !important;
     border-bottom: 1px solid var(--line) !important;
     --class-color: var(--class-0);
@@ -534,7 +536,7 @@ thead .label-col { z-index: 3; vertical-align: bottom; }
     box-shadow: inset 0 2px 0 var(--venom);
 }
 
-.char-card { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.char-card { display: flex; flex-direction: column; align-items: center; gap: 2px; height: 100%; }
 
 .avatar {
     position: relative;
@@ -563,7 +565,8 @@ thead .label-col { z-index: 3; vertical-align: bottom; }
 .char-realm, .char-spec, .char-guild { font-size: 0.78rem; color: var(--text-dim); font-weight: 400; }
 .char-guild { color: var(--venom-2); opacity: 0.8; }
 
-.char-actions { display: flex; gap: 4px; margin-top: 8px; }
+/* margin-top: auto colle les actions en bas de la carte, alignées d'une colonne à l'autre (guilde absente, erreur...). */
+.char-actions { display: flex; gap: 4px; margin-top: auto; padding-top: 8px; }
 .char-actions button, .char-actions a {
     width: 28px;
     height: 28px;

@@ -55,6 +55,14 @@
                                     <span class="char-guild">&lt;@c.GuildName&gt;</span>
                                 }
                             }
+                            @if (col.Error is not null)
+                            {
+                                <span class="char-error">@col.Error</span>
+                            }
+                            else if (c is { Warnings.Count: > 0 })
+                            {
+                                <span class="char-warning" title="@string.Join("\n", c.Warnings)">⚠ données partielles</span>
+                            }
                             <div class="char-actions">
                                 <button type="button" title="Rafraîchir (ignore le cache)" @onclick="() => OnRefresh.InvokeAsync(col)" disabled="@col.Loading">↻</button>
                                 <button type="button" title="Équipement" @onclick="() => OnShowEquipment.InvokeAsync(col)" disabled="@(c is null)">⚔</button>
@@ -64,14 +72,6 @@
                                 }
                                 <button type="button" title="Retirer de l'historique" class="danger" @onclick="() => OnRemove.InvokeAsync(col)">✕</button>
                             </div>
-                            @if (col.Error is not null)
-                            {
-                                <span class="char-error">@col.Error</span>
-                            }
-                            else if (c is { Warnings.Count: > 0 })
-                            {
-                                <span class="char-warning" title="@string.Join("\n", c.Warnings)">⚠ données partielles</span>
-                            }
                         </div>
                     </th>
                 }
