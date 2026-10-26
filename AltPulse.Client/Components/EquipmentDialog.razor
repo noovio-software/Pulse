@@ -1,4 +1,3 @@
-@inject IJSRuntime JS
 
 <div class="modal-backdrop" @onclick="OnClose">
     <div class="modal panel @Ui.ClassCss(Character.ClassId)" @onclick:stopPropagation role="dialog" aria-modal="true" aria-label="Équipement de @Character.Name">
@@ -46,16 +45,3 @@
         }
     </div>
 </div>
-
-@code {
-    [Parameter, EditorRequired] public CharacterSnapshot Character { get; set; } = default!;
-    [Parameter] public EventCallback OnClose { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JS.InvokeVoidAsync("altpulse.refreshTooltips");
-        }
-    }
-}

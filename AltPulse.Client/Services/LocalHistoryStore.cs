@@ -24,6 +24,9 @@ public sealed record AltPulseSettings
     public string SortBy { get; init; } = "recent";
     public string LastRegion { get; init; } = "eu";
     public HashSet<string> CollapsedSections { get; init; } = [];
+
+    /// <summary>Colonne des libellés réduite aux icônes. null = jamais choisi : réduite par défaut sur petit écran.</summary>
+    public bool? LabelsCompact { get; init; }
 }
 
 /// <summary>

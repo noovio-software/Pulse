@@ -1,0 +1,25 @@
+@* Ligne de la Grande Chambre forte : trois cases par personnage (débloquée = récompense, sinon progression). *@
+
+<tr class="@(Previous ? "vault-previous" : "")">
+    <th class="label-col" title="@Label"><GridLabel Icon="@Icon" Text="@Label" /></th>
+    @foreach (var col in Columns)
+    {
+        <td>
+            @if (col.Data is { } c)
+            {
+                <div class="vault">
+                    @foreach (var slot in Slots(c))
+                    {
+                        <span class="vault-slot @(slot.Reward is null ? "" : "unlocked")" title="@SlotTooltip(slot)">
+                            @(slot.Reward ?? $"{slot.Progress}/{slot.Threshold}")
+                        </span>
+                    }
+                </div>
+            }
+            else
+            {
+                <CellPlaceholder Loading="col.Loading" />
+            }
+        </td>
+    }
+</tr>

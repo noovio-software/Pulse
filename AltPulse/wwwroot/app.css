@@ -404,10 +404,74 @@ input:disabled, select:disabled { opacity: 0.55; cursor: not-allowed; }
 .reset-info { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.2; cursor: help; }
 .reset-info strong { font-size: 0.95rem; }
 
-/* Tri, dans le coin de la grille */
+/* --- Coin de la grille : compteur, repli de la colonne, tri -------------- */
+.corner-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.corner-count { display: flex; flex-direction: column; }
+.corner .label-icon { display: none; }
+
+.compact-toggle {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: rgba(2, 10, 6, 0.6);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+}
+.compact-toggle:hover { color: var(--venom); border-color: var(--venom); }
+.compact-toggle svg { transition: transform 0.2s; }
+
 .corner .sort { display: block; margin-top: 12px; font-weight: 400; }
 .corner .sort .eyebrow { margin-bottom: 4px; }
 .corner .sort select { height: 32px; font-size: 0.85rem; }
+
+/* Icônes des libellés (visibles dans les deux modes) */
+.label-icon { display: inline-flex; vertical-align: -3px; margin-right: 10px; color: var(--venom); opacity: 0.8; }
+
+/* --- Colonne réduite aux icônes ------------------------------------------ */
+.track-grid.is-compact .label-col {
+    min-width: 0;
+    width: 58px;
+    padding-left: 6px;
+    padding-right: 6px;
+    text-align: center !important;
+}
+.track-grid.is-compact .label-text,
+.track-grid.is-compact .dungeon-name,
+.track-grid.is-compact .dungeon-short { display: none; }
+.track-grid.is-compact .label-icon { margin-right: 0; }
+.track-grid.is-compact .label-col .diff { margin-right: 0; }
+.track-grid.is-compact .dungeon-label { justify-content: center; }
+
+.track-grid.is-compact .corner-head { flex-direction: column-reverse; align-items: center; }
+.track-grid.is-compact .corner-count { align-items: center; gap: 2px; }
+.track-grid.is-compact .corner .label-icon { display: inline-flex; }
+.track-grid.is-compact .corner strong { font-size: 1.2rem; }
+.track-grid.is-compact .compact-toggle svg { transform: rotate(180deg); }
+
+/* Tri en mode réduit : le select est posé invisible sur l'icône, un tap ouvre la liste native */
+.track-grid.is-compact .corner .sort { position: relative; display: flex; justify-content: center; }
+.track-grid.is-compact .corner .sort-icon {
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: rgba(2, 10, 6, 0.6);
+}
+.track-grid.is-compact .corner .sort select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
 
 /* --- Grille de suivi ----------------------------------------------------- */
 .grid-wrap { overflow-x: auto; padding: 0; width: fit-content; max-width: 100%; }
@@ -727,14 +791,14 @@ thead .label-col { z-index: 3; vertical-align: bottom; }
     .shell { padding: 16px; }
     .topbar { padding: 10px 16px; flex-wrap: wrap; row-gap: 10px; }
     .topbar-actions { width: 100%; justify-content: space-between; gap: 10px; }
+    .btn-search { padding: 0 12px; }
+    .btn-search-label { display: none; }
     .affixes img { width: 28px; height: 28px; }
     .affixes li:nth-child(-n+2) .affix-tooltip { left: -8px; right: auto; }
     .search-modal { padding: 16px; }
     .footer { padding: 24px 16px 28px; }
     .footer-inner { flex-direction: column; align-items: flex-start; }
     .search-modal { margin-top: 0; }
-    .label-col { min-width: 150px; }
-    .dungeon-name { display: none; }
-    .dungeon-short { margin-left: 0; color: var(--text); font-size: 0.85rem; }
+    .track-grid:not(.is-compact) .label-col { min-width: 180px; }
     .track-grid td { min-width: 140px; }
 }

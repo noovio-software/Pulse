@@ -1,0 +1,9 @@
+@* Ligne de titre d'une section repliable de la grille. *@
+
+<tr class="section-row @(IsCollapsed ? "is-collapsed" : "")">
+    <th colspan="@ColumnCount">
+        <button type="button" class="section-toggle" @onclick="ToggleAsync" aria-expanded="@(!IsCollapsed)">
+            <span class="chevron">▾</span> @Title
+        </button>
+    </th>
+</tr>

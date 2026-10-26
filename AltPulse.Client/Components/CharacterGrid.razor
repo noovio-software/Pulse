@@ -1,15 +1,28 @@
 @* Grille de suivi : une colonne par personnage, une ligne par information. *@
 
 <div class="grid-wrap panel">
-    <table class="track-grid">
+    <table class="track-grid @(Compact ? "is-compact" : "")">
         <thead>
             <tr>
                 <th class="label-col corner">
-                    <span class="eyebrow">Personnages</span>
-                    <strong>@Columns.Count</strong>
-                    <label class="sort">
-                        <span class="eyebrow">Trier par</span>
-                        <select value="@SortBy" @onchange="OnSortSelected">
+                    <div class="corner-head">
+                        <span class="corner-count" title="@Columns.Count personnage(s) suivi(s)">
+                            <span class="label-icon"><GridIcon Name="users" /></span>
+                            <span class="label-text eyebrow">Personnages</span>
+                            <strong>@Columns.Count</strong>
+                        </span>
+                        <button type="button" class="compact-toggle" @onclick="OnToggleCompact"
+                                title="@(Compact ? "Déplier la colonne" : "Réduire la colonne aux icônes")"
+                                aria-label="@(Compact ? "Déplier la colonne" : "Réduire la colonne aux icônes")"
+                                aria-expanded="@(!Compact)">
+                            <GridIcon Name="collapse" Size="16" />
+                        </button>
+                    </div>
+                    <label class="sort" title="Trier par : @SortLabel">
+                        <span class="label-icon sort-icon"><GridIcon Name="sort" /></span>
+                        <span class="label-text eyebrow">Trier par</span>
+                        @* En mode réduit, le select est posé invisible sur l'icône : un tap ouvre la liste native. *@
+                        <select value="@SortBy" @onchange="OnSortSelected" aria-label="Trier par">
                             @foreach (var (value, label) in Ui.SortOptions)
                             {
                                 <option value="@value">@label</option>
@@ -67,18 +80,27 @@
 
         <tbody>
             @* ───────── Résumé ───────── *@
-            @SectionHeader("summary", "Personnage")
+            <SectionHeaderRow Id="summary" Title="Personnage" ColumnCount="@(Columns.Count + 1)" CollapsedSections="CollapsedSections" OnToggle="OnToggleSection" />
             @if (!IsCollapsed("summary"))
             {
                 <tr>
-                    <th class="label-col">Niveau</th>
+                    <th class="label-col" title="Niveau"><GridLabel Icon="level" Text="Niveau" /></th>
                     @foreach (var col in Columns)
                     {
-                        <td>@Value(col, c => c.Level > 0 ? c.Level.ToString() : "-")</td>
+                        <td>
+                            @if (col.Data is { } c)
+                            {
+                                @(c.Level > 0 ? c.Level.ToString() : "-")
+                            }
+                            else
+                            {
+                                <CellPlaceholder Loading="col.Loading" />
+                            }
+                        </td>
                     }
                 </tr>
                 <tr>
-                    <th class="label-col">Niveau d'objet</th>
+                    <th class="label-col" title="Niveau d'objet"><GridLabel Icon="ilvl" Text="Niveau d'objet" /></th>
                     @foreach (var col in Columns)
                     {
                         <td class="ilvl">
@@ -92,13 +114,13 @@
                             }
                             else
                             {
-                                @Placeholder(col)
+                                <CellPlaceholder Loading="col.Loading" />
                             }
                         </td>
                     }
                 </tr>
                 <tr>
-                    <th class="label-col">Score Mythique+</th>
+                    <th class="label-col" title="Score Mythique+"><GridLabel Icon="rating" Text="Score Mythique+" /></th>
                     @foreach (var col in Columns)
                     {
                         <td>
@@ -108,13 +130,13 @@
                             }
                             else
                             {
-                                @Placeholder(col)
+                                <CellPlaceholder Loading="col.Loading" />
                             }
                         </td>
                     }
                 </tr>
                 <tr>
-                    <th class="label-col">Clés cette semaine</th>
+                    <th class="label-col" title="Clés cette semaine"><GridLabel Icon="key" Text="Clés cette semaine" /></th>
                     @foreach (var col in Columns)
                     {
                         <td>
@@ -133,7 +155,7 @@
                             }
                             else
                             {
-                                @Placeholder(col)
+                                <CellPlaceholder Loading="col.Loading" />
                             }
                         </td>
                     }
@@ -141,25 +163,25 @@
             }
 
             @* ───────── Grande Chambre forte ───────── *@
-            @SectionHeader("vault", "Grande Chambre forte")
+            <SectionHeaderRow Id="vault" Title="Grande Chambre forte" ColumnCount="@(Columns.Count + 1)" CollapsedSections="CollapsedSections" OnToggle="OnToggleSection" />
             @if (!IsCollapsed("vault"))
             {
-                @VaultRow("Raids", c => c.Vault.Raids, "boss")
-                @VaultRow("Donjons", c => c.Vault.Dungeons, "clé")
+                <VaultRow Icon="raid" Label="Raids" Columns="Columns" Slots="RaidSlots" Unit="boss" />
+                <VaultRow Icon="dungeon" Label="Donjons" Columns="Columns" Slots="DungeonSlots" Unit="clé" />
                 <tr>
-                    <th class="label-col" title="Les activités Monde / Gouffres ne sont pas exposées par les API publiques.">Monde</th>
+                    <th class="label-col" title="Monde : les activités Monde / Gouffres ne sont pas exposées par les API publiques."><GridLabel Icon="world" Text="Monde" /></th>
                     @foreach (var col in Columns)
                     {
                         <td><span class="muted" title="Non disponible via les API Blizzard / Raider.io">n/d</span></td>
                     }
                 </tr>
-                @VaultRow("Semaine passée (M+)", c => c.Vault.PreviousWeekDungeons, "clé", previous: true)
+                <VaultRow Icon="history" Label="Semaine passée (M+)" Columns="Columns" Slots="PreviousWeekSlots" Unit="clé" Previous="true" />
             }
 
             @* ───────── Mythique+ ───────── *@
             @if (Season is not null)
             {
-                @SectionHeader("dungeons", $"Mythique+ · {Season.Name}")
+                <SectionHeaderRow Id="dungeons" Title="@DungeonsTitle" ColumnCount="@(Columns.Count + 1)" CollapsedSections="CollapsedSections" OnToggle="OnToggleSection" />
                 @if (!IsCollapsed("dungeons"))
                 {
                     @foreach (var dungeon in Season.Dungeons)
@@ -179,7 +201,7 @@
                                 <td>
                                     @if (col.Data is null)
                                     {
-                                        @Placeholder(col)
+                                        <CellPlaceholder Loading="col.Loading" />
                                     }
                                     else if (best is null)
                                     {
@@ -202,18 +224,18 @@
                 @foreach (var raid in Season.Raids)
                 {
                     var sectionId = $"raid:{raid.Slug}";
-                    @SectionHeader(sectionId, raid.Name)
+                    <SectionHeaderRow Id="@sectionId" Title="@raid.Name" ColumnCount="@(Columns.Count + 1)" CollapsedSections="CollapsedSections" OnToggle="OnToggleSection" />
                     @if (!IsCollapsed(sectionId))
                     {
                         <tr>
-                            <th class="label-col">Progression</th>
+                            <th class="label-col" title="Progression"><GridLabel Icon="progress" Text="Progression" /></th>
                             @foreach (var col in Columns)
                             {
                                 var lockout = col.Data?.Raids.FirstOrDefault(r => r.RaidSlug == raid.Slug);
                                 <td>
                                     @if (col.Data is null)
                                     {
-                                        @Placeholder(col)
+                                        <CellPlaceholder Loading="col.Loading" />
                                     }
                                     else
                                     {
@@ -225,7 +247,7 @@
                         @foreach (var (difficulty, label, shortLabel) in Ui.Difficulties)
                         {
                             <tr class="lockout-row">
-                                <th class="label-col"><span class="diff diff-@shortLabel.ToLowerInvariant()">@shortLabel</span> @label</th>
+                                <th class="label-col" title="@label"><span class="diff diff-@shortLabel.ToLowerInvariant()">@shortLabel</span> <span class="label-text">@label</span></th>
                                 @foreach (var col in Columns)
                                 {
                                     var kills = col.Data?.Raids.FirstOrDefault(r => r.RaidSlug == raid.Slug)?.KilledThisWeek.GetValueOrDefault(difficulty);
@@ -234,7 +256,7 @@
                                         {
                                             @if (col.Data is null)
                                             {
-                                                @Placeholder(col)
+                                                <CellPlaceholder Loading="col.Loading" />
                                             }
                                             else
                                             {
@@ -261,7 +283,7 @@
             }
 
             <tr class="footer-row">
-                <th class="label-col">Mis à jour</th>
+                <th class="label-col" title="Mis à jour"><GridLabel Icon="clock" Text="Mis à jour" /></th>
                 @foreach (var col in Columns)
                 {
                     <td><small class="muted">@(col.Data is { } c ? Ui.Ago(c.FetchedAtUtc) : "-")</small></td>
@@ -270,86 +292,3 @@
         </tbody>
     </table>
 </div>
-
-@code {
-    [Parameter] public SeasonInfo? Season { get; set; }
-    [Parameter, EditorRequired] public IReadOnlyList<CharacterColumn> Columns { get; set; } = [];
-    [Parameter] public string? HighlightKey { get; set; }
-    [Parameter] public string SortBy { get; set; } = "recent";
-    [Parameter] public EventCallback<string> OnSortChanged { get; set; }
-    [Parameter] public ISet<string> CollapsedSections { get; set; } = new HashSet<string>();
-    [Parameter] public EventCallback<string> OnToggleSection { get; set; }
-    [Parameter] public EventCallback<CharacterColumn> OnRefresh { get; set; }
-    [Parameter] public EventCallback<CharacterColumn> OnRemove { get; set; }
-    [Parameter] public EventCallback<CharacterColumn> OnShowEquipment { get; set; }
-
-    private bool IsCollapsed(string section) => CollapsedSections.Contains(section);
-
-    private Task OnSortSelected(ChangeEventArgs e) => OnSortChanged.InvokeAsync(e.Value?.ToString() ?? "recent");
-
-    private RenderFragment SectionHeader(string id, string title) => __builder =>
-    {
-        <tr class="section-row @(IsCollapsed(id) ? "is-collapsed" : "")">
-            <th colspan="@(Columns.Count + 1)">
-                <button type="button" class="section-toggle" @onclick="() => OnToggleSection.InvokeAsync(id)">
-                    <span class="chevron">▾</span> @title
-                </button>
-            </th>
-        </tr>
-    };
-
-    private RenderFragment VaultRow(string label, Func<CharacterSnapshot, IReadOnlyList<VaultSlot>> slots, string unit, bool previous = false) => __builder =>
-    {
-        <tr class="@(previous ? "vault-previous" : "")">
-            <th class="label-col">@label</th>
-            @foreach (var col in Columns)
-            {
-                <td>
-                    @if (col.Data is { } c)
-                    {
-                        <div class="vault">
-                            @foreach (var slot in slots(c))
-                            {
-                                <span class="vault-slot @(slot.Reward is null ? "" : "unlocked")"
-                                      title="@(slot.Reward is null ? $"{slot.Progress}/{slot.Threshold} {unit}(s)" : $"Débloqué : {slot.Reward}")">
-                                    @(slot.Reward ?? $"{slot.Progress}/{slot.Threshold}")
-                                </span>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        @Placeholder(col)
-                    }
-                </td>
-            }
-        </tr>
-    };
-
-    private RenderFragment Value(CharacterColumn col, Func<CharacterSnapshot, string> selector) => __builder =>
-    {
-        if (col.Data is { } c)
-        {
-            @selector(c)
-        }
-        else
-        {
-            @Placeholder(col)
-        }
-    };
-
-    private RenderFragment Placeholder(CharacterColumn col) => __builder =>
-    {
-        if (col.Loading)
-        {
-            <span class="skeleton"></span>
-        }
-        else
-        {
-            <span class="muted">-</span>
-        }
-    };
-
-    private static string BossTooltip(RaidInfo raid, bool[] kills) =>
-        string.Join("\n", raid.Encounters.Select((e, i) => $"{(i < kills.Length && kills[i] ? "✔" : "·")} {e.Name}"));
-}
