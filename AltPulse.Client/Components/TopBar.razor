@@ -1,0 +1,28 @@
+@* En-tête du site : logo à gauche, actions de la page (ChildContent) alignées à droite. *@
+
+<header class="topbar">
+    <a class="brand" href="/">
+        <span class="brand-sigil" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="30" height="30">
+                <path d="M16 2c5 4 9 8 9 14a9 9 0 0 1-18 0c0-6 4-10 9-14Z" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M12 15c1.5 2 6.5 2 8 0M13 19l1 4M19 19l-1 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+        </span>
+        <span class="brand-wordmark">
+            <span class="brand-name">AltPulse</span>
+            <span class="brand-by">by Noovio</span>
+        </span>
+        <span class="brand-tag">Suivi de personnages · Malédiction d'Ula'tek</span>
+    </a>
+
+    @if (ChildContent is not null)
+    {
+        <div class="topbar-actions">
+            @ChildContent
+        </div>
+    }
+</header>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

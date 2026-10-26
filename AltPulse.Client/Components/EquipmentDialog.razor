@@ -1,0 +1,61 @@
+@inject IJSRuntime JS
+
+<div class="modal-backdrop" @onclick="OnClose">
+    <div class="modal panel @Ui.ClassCss(Character.ClassId)" @onclick:stopPropagation role="dialog" aria-modal="true" aria-label="Équipement de @Character.Name">
+        <header class="modal-head">
+            @if ((Character.InsetUrl ?? Character.AvatarUrl) is { } img)
+            {
+                <img class="modal-portrait" src="@img" alt="" />
+            }
+            <div>
+                <h2 class="char-name">@Character.Name</h2>
+                <p class="muted">@Character.SpecName @Character.ClassName · @Character.RealmName</p>
+                <p>Niveau d'objet <strong>@Ui.Ilvl(Character.ItemLevelEquipped)</strong></p>
+            </div>
+            <button type="button" class="btn btn-ghost close" @onclick="OnClose" aria-label="Fermer">✕</button>
+        </header>
+
+        @if (Character.Equipment.Count == 0)
+        {
+            <p class="muted">Aucun équipement disponible.</p>
+        }
+        else
+        {
+            <ul class="gear">
+                @foreach (var item in Character.Equipment)
+                {
+                    <li>
+                        <span class="gear-icon @Ui.QualityCss(item.Quality)">
+                            @if (item.IconUrl is not null)
+                            {
+                                <img src="@item.IconUrl" alt="" loading="lazy" />
+                            }
+                        </span>
+                        <span class="gear-ilvl">@item.ItemLevel</span>
+                        <div class="gear-text">
+                            <small class="muted">@item.SlotName</small>
+                            <a class="@Ui.QualityCss(item.Quality)" href="https://www.wowhead.com/fr/item=@item.ItemId" data-wowhead="@Ui.WowheadData(item)&domain=fr" target="_blank" rel="noopener">@item.Name</a>
+                            @foreach (var enchant in item.Enchantments)
+                            {
+                                <small class="enchant">@enchant</small>
+                            }
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public CharacterSnapshot Character { get; set; } = default!;
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("altpulse.refreshTooltips");
+        }
+    }
+}

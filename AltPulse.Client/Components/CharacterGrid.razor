@@ -1,0 +1,355 @@
+@* Grille de suivi : une colonne par personnage, une ligne par information. *@
+
+<div class="grid-wrap panel">
+    <table class="track-grid">
+        <thead>
+            <tr>
+                <th class="label-col corner">
+                    <span class="eyebrow">Personnages</span>
+                    <strong>@Columns.Count</strong>
+                    <label class="sort">
+                        <span class="eyebrow">Trier par</span>
+                        <select value="@SortBy" @onchange="OnSortSelected">
+                            @foreach (var (value, label) in Ui.SortOptions)
+                            {
+                                <option value="@value">@label</option>
+                            }
+                        </select>
+                    </label>
+                </th>
+                @foreach (var col in Columns)
+                {
+                    var c = col.Data;
+                    <th class="char-head @(col.Key == HighlightKey ? "is-highlight" : "") @Ui.ClassCss(c?.ClassId ?? col.Entry.ClassId)" data-character-key="@col.Key">
+                        <div class="char-card">
+                            <div class="avatar">
+                                @if (c?.AvatarUrl is not null)
+                                {
+                                    <img src="@c.AvatarUrl" alt="" loading="lazy" />
+                                }
+                                @if (col.Loading)
+                                {
+                                    <span class="spinner small"></span>
+                                }
+                            </div>
+                            <a class="char-name" href="@(c?.ArmoryUrl ?? "#")" target="_blank" rel="noopener">@(c?.Name ?? col.Entry.Name)</a>
+                            <span class="char-realm">@(c?.RealmName ?? col.Entry.RealmName) · @col.Entry.Region.ToUpperInvariant()</span>
+                            @if (c is not null)
+                            {
+                                <span class="char-spec">@c.SpecName @c.ClassName</span>
+                                @if (c.GuildName is not null)
+                                {
+                                    <span class="char-guild">&lt;@c.GuildName&gt;</span>
+                                }
+                            }
+                            <div class="char-actions">
+                                <button type="button" title="Rafraîchir (ignore le cache)" @onclick="() => OnRefresh.InvokeAsync(col)" disabled="@col.Loading">↻</button>
+                                <button type="button" title="Équipement" @onclick="() => OnShowEquipment.InvokeAsync(col)" disabled="@(c is null)">⚔</button>
+                                @if (c?.RaiderIoUrl is not null)
+                                {
+                                    <a title="Profil Raider.io" href="@c.RaiderIoUrl" target="_blank" rel="noopener">R</a>
+                                }
+                                <button type="button" title="Retirer de l'historique" class="danger" @onclick="() => OnRemove.InvokeAsync(col)">✕</button>
+                            </div>
+                            @if (col.Error is not null)
+                            {
+                                <span class="char-error">@col.Error</span>
+                            }
+                            else if (c is { Warnings.Count: > 0 })
+                            {
+                                <span class="char-warning" title="@string.Join("\n", c.Warnings)">⚠ données partielles</span>
+                            }
+                        </div>
+                    </th>
+                }
+            </tr>
+        </thead>
+
+        <tbody>
+            @* ───────── Résumé ───────── *@
+            @SectionHeader("summary", "Personnage")
+            @if (!IsCollapsed("summary"))
+            {
+                <tr>
+                    <th class="label-col">Niveau</th>
+                    @foreach (var col in Columns)
+                    {
+                        <td>@Value(col, c => c.Level > 0 ? c.Level.ToString() : "-")</td>
+                    }
+                </tr>
+                <tr>
+                    <th class="label-col">Niveau d'objet</th>
+                    @foreach (var col in Columns)
+                    {
+                        <td class="ilvl">
+                            @if (col.Data is { } c)
+                            {
+                                <strong>@Ui.Ilvl(c.ItemLevelEquipped)</strong>
+                                @if (c.ItemLevelAverage is { } avg && avg > (c.ItemLevelEquipped ?? 0))
+                                {
+                                    <small title="Niveau d'objet moyen (sacs inclus)"> / @Ui.Ilvl(avg)</small>
+                                }
+                            }
+                            else
+                            {
+                                @Placeholder(col)
+                            }
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <th class="label-col">Score Mythique+</th>
+                    @foreach (var col in Columns)
+                    {
+                        <td>
+                            @if (col.Data is { } c)
+                            {
+                                <strong class="rating" style="color:@(c.RatingColor ?? "inherit")">@Ui.Rating(c.Rating)</strong>
+                            }
+                            else
+                            {
+                                @Placeholder(col)
+                            }
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <th class="label-col">Clés cette semaine</th>
+                    @foreach (var col in Columns)
+                    {
+                        <td>
+                            @if (col.Data is { } c)
+                            {
+                                @if (c.WeeklyRuns.Count == 0)
+                                {
+                                    <span class="muted">Aucune</span>
+                                }
+                                else
+                                {
+                                    <span title="@string.Join("\n", c.WeeklyRuns.Select(r => $"+{r.Level} {r.Dungeon} {Ui.Stars(r.Upgrades)}"))">
+                                        @(c.WeeklyRuns.Count >= 10 ? "10+" : c.WeeklyRuns.Count.ToString()) · max <strong>+@c.WeeklyRuns[0].Level</strong>
+                                    </span>
+                                }
+                            }
+                            else
+                            {
+                                @Placeholder(col)
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+
+            @* ───────── Grande Chambre forte ───────── *@
+            @SectionHeader("vault", "Grande Chambre forte")
+            @if (!IsCollapsed("vault"))
+            {
+                @VaultRow("Raids", c => c.Vault.Raids, "boss")
+                @VaultRow("Donjons", c => c.Vault.Dungeons, "clé")
+                <tr>
+                    <th class="label-col" title="Les activités Monde / Gouffres ne sont pas exposées par les API publiques.">Monde</th>
+                    @foreach (var col in Columns)
+                    {
+                        <td><span class="muted" title="Non disponible via les API Blizzard / Raider.io">n/d</span></td>
+                    }
+                </tr>
+                @VaultRow("Semaine passée (M+)", c => c.Vault.PreviousWeekDungeons, "clé", previous: true)
+            }
+
+            @* ───────── Mythique+ ───────── *@
+            @if (Season is not null)
+            {
+                @SectionHeader("dungeons", $"Mythique+ · {Season.Name}")
+                @if (!IsCollapsed("dungeons"))
+                {
+                    @foreach (var dungeon in Season.Dungeons)
+                    {
+                        <tr>
+                            <th class="label-col dungeon-label" title="@dungeon.Name - chrono @Ui.Duration(dungeon.TimerSeconds * 1000L)">
+                                @if (dungeon.IconUrl is not null)
+                                {
+                                    <img src="@dungeon.IconUrl" alt="" loading="lazy" />
+                                }
+                                <span class="dungeon-name">@dungeon.Name</span>
+                                <span class="dungeon-short">@dungeon.ShortName</span>
+                            </th>
+                            @foreach (var col in Columns)
+                            {
+                                var best = col.Data?.DungeonBests.FirstOrDefault(b => b.DungeonSlug == dungeon.Slug);
+                                <td>
+                                    @if (col.Data is null)
+                                    {
+                                        @Placeholder(col)
+                                    }
+                                    else if (best is null)
+                                    {
+                                        <span class="muted">-</span>
+                                    }
+                                    else
+                                    {
+                                        <a class="run @Ui.RunCss(best.Upgrades)" href="@best.Url" target="_blank" rel="noopener"
+                                           title="@($"+{best.Level} en {Ui.Duration(best.ClearTimeMs)} / {Ui.Duration(best.ParTimeMs)} · {best.Score:0.#} pts")">
+                                            +@best.Level<span class="stars">@Ui.Stars(best.Upgrades)</span>
+                                        </a>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+
+                @* ───────── Raids ───────── *@
+                @foreach (var raid in Season.Raids)
+                {
+                    var sectionId = $"raid:{raid.Slug}";
+                    @SectionHeader(sectionId, raid.Name)
+                    @if (!IsCollapsed(sectionId))
+                    {
+                        <tr>
+                            <th class="label-col">Progression</th>
+                            @foreach (var col in Columns)
+                            {
+                                var lockout = col.Data?.Raids.FirstOrDefault(r => r.RaidSlug == raid.Slug);
+                                <td>
+                                    @if (col.Data is null)
+                                    {
+                                        @Placeholder(col)
+                                    }
+                                    else
+                                    {
+                                        <span class="raid-summary">@(lockout?.Summary ?? "-")</span>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                        @foreach (var (difficulty, label, shortLabel) in Ui.Difficulties)
+                        {
+                            <tr class="lockout-row">
+                                <th class="label-col"><span class="diff diff-@shortLabel.ToLowerInvariant()">@shortLabel</span> @label</th>
+                                @foreach (var col in Columns)
+                                {
+                                    var kills = col.Data?.Raids.FirstOrDefault(r => r.RaidSlug == raid.Slug)?.KilledThisWeek.GetValueOrDefault(difficulty);
+                                    <td>
+                                        @if (kills is null)
+                                        {
+                                            @if (col.Data is null)
+                                            {
+                                                @Placeholder(col)
+                                            }
+                                            else
+                                            {
+                                                <span class="muted">-</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var count = kills.Count(k => k);
+                                            <div class="bosses @(count == 0 ? "is-empty" : "")" title="@BossTooltip(raid, kills)">
+                                                @for (var i = 0; i < kills.Length; i++)
+                                                {
+                                                    <span class="boss @(kills[i] ? "killed" : "") diff-@shortLabel.ToLowerInvariant()"></span>
+                                                }
+                                                <small>@count/@kills.Length</small>
+                                            </div>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                }
+            }
+
+            <tr class="footer-row">
+                <th class="label-col">Mis à jour</th>
+                @foreach (var col in Columns)
+                {
+                    <td><small class="muted">@(col.Data is { } c ? Ui.Ago(c.FetchedAtUtc) : "-")</small></td>
+                }
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter] public SeasonInfo? Season { get; set; }
+    [Parameter, EditorRequired] public IReadOnlyList<CharacterColumn> Columns { get; set; } = [];
+    [Parameter] public string? HighlightKey { get; set; }
+    [Parameter] public string SortBy { get; set; } = "recent";
+    [Parameter] public EventCallback<string> OnSortChanged { get; set; }
+    [Parameter] public ISet<string> CollapsedSections { get; set; } = new HashSet<string>();
+    [Parameter] public EventCallback<string> OnToggleSection { get; set; }
+    [Parameter] public EventCallback<CharacterColumn> OnRefresh { get; set; }
+    [Parameter] public EventCallback<CharacterColumn> OnRemove { get; set; }
+    [Parameter] public EventCallback<CharacterColumn> OnShowEquipment { get; set; }
+
+    private bool IsCollapsed(string section) => CollapsedSections.Contains(section);
+
+    private Task OnSortSelected(ChangeEventArgs e) => OnSortChanged.InvokeAsync(e.Value?.ToString() ?? "recent");
+
+    private RenderFragment SectionHeader(string id, string title) => __builder =>
+    {
+        <tr class="section-row @(IsCollapsed(id) ? "is-collapsed" : "")">
+            <th colspan="@(Columns.Count + 1)">
+                <button type="button" class="section-toggle" @onclick="() => OnToggleSection.InvokeAsync(id)">
+                    <span class="chevron">▾</span> @title
+                </button>
+            </th>
+        </tr>
+    };
+
+    private RenderFragment VaultRow(string label, Func<CharacterSnapshot, IReadOnlyList<VaultSlot>> slots, string unit, bool previous = false) => __builder =>
+    {
+        <tr class="@(previous ? "vault-previous" : "")">
+            <th class="label-col">@label</th>
+            @foreach (var col in Columns)
+            {
+                <td>
+                    @if (col.Data is { } c)
+                    {
+                        <div class="vault">
+                            @foreach (var slot in slots(c))
+                            {
+                                <span class="vault-slot @(slot.Reward is null ? "" : "unlocked")"
+                                      title="@(slot.Reward is null ? $"{slot.Progress}/{slot.Threshold} {unit}(s)" : $"Débloqué : {slot.Reward}")">
+                                    @(slot.Reward ?? $"{slot.Progress}/{slot.Threshold}")
+                                </span>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        @Placeholder(col)
+                    }
+                </td>
+            }
+        </tr>
+    };
+
+    private RenderFragment Value(CharacterColumn col, Func<CharacterSnapshot, string> selector) => __builder =>
+    {
+        if (col.Data is { } c)
+        {
+            @selector(c)
+        }
+        else
+        {
+            @Placeholder(col)
+        }
+    };
+
+    private RenderFragment Placeholder(CharacterColumn col) => __builder =>
+    {
+        if (col.Loading)
+        {
+            <span class="skeleton"></span>
+        }
+        else
+        {
+            <span class="muted">-</span>
+        }
+    };
+
+    private static string BossTooltip(RaidInfo raid, bool[] kills) =>
+        string.Join("\n", raid.Encounters.Select((e, i) => $"{(i < kills.Length && kills[i] ? "✔" : "·")} {e.Name}"));
+}
