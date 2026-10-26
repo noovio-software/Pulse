@@ -6,6 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
     <UserSecretsId>bb509a77-9119-4e31-bf17-b7b40a958a37</UserSecretsId>
+
+    <!-- Ces valeurs sont injectées dynamiquement via GitHub Actions : le workflow écrit
+         VERSION=x.y.z dans $GITHUB_ENV, et MSBuild importe les variables d'environnement
+         comme propriétés (noms insensibles à la casse), donc $(Version) vaut $VERSION.
+         Les autres retombent sur les valeurs par défaut du SDK, dérivées de Version.
+         En local, sans variable VERSION, la version est 1.0.0. -->
+    <Version>$(Version)</Version>
+    <AssemblyVersion>$(AssemblyVersion)</AssemblyVersion>
+    <FileVersion>$(FileVersion)</FileVersion>
+    <InformationalVersion>$(InformationalVersion)</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>

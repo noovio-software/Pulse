@@ -207,6 +207,19 @@ h1:focus { outline: none; }
 .footer-brand .brand-name { font-size: 1.15rem; }
 .footer-brand .brand-by { font-size: 0.66rem; }
 
+.app-version {
+    align-self: flex-end;
+    margin-bottom: 1px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+}
+
 .footer-sources { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .footer-sources .eyebrow { margin-right: 4px; }
 
