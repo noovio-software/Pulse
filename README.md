@@ -32,60 +32,47 @@ dotnet user-secrets set "Blizzard:ClientSecret" "<client-secret>" --project AltP
 
 The secret stays server-side: the WASM front end only calls the `/api/*` endpoints.
 
-## Production deployment (Linux + Kestrel, GitHub Actions)
+## Production (https://altpulse.noovio.fr)
 
-The workflow `.github/workflows/altpulse.yml` publishes and deploys on a tag:
+Hosted on the OVH VPS `<vps-host>` (user `ubuntu`), alongside Nowtilus, WattsIn, Aidalap…
 
-```powershell
-git tag prod-altpulse-1.0.0
-git push origin prod-altpulse-1.0.0
+| Piece | Location |
+|---|---|
+| App files | `/home/ubuntu/projects/altpulse/` |
+| systemd unit | `/etc/systemd/system/kestrel-altpulse.service` (Kestrel on `127.0.0.1:8500`) |
+| Blizzard credentials | `/etc/altpulse/altpulse.env`, `root:root 600`, loaded by `EnvironmentFile=` |
+| Nginx vhost | `/etc/nginx/sites-available/altpulse` (WebSocket upgrade for Blazor, HTTP → HTTPS) |
+| TLS certificate | Let's Encrypt `altpulse.noovio.fr`, renewed by certbot |
+
+Unlike the other units of the VPS, the secrets are **not** in `Environment=` lines: units are world-readable (`644`), the env file is not.
+
+To change a Blizzard credential: `sudo nano /etc/altpulse/altpulse.env` then `sudo systemctl restart kestrel-altpulse`.
+Check what the process actually sees (lengths only, never values):
+
+```bash
+sudo tr '\0' '\n' < /proc/$(systemctl show -p MainPID --value kestrel-altpulse)/environ \
+  | grep '^Blizzard__' | awk -F= '{ print $1 " -> " length($2) }'
 ```
 
-**GitHub secrets** (repo > Settings > Secrets and variables > Actions):
+### Deploy (GitHub Actions)
+
+The workflow `.github/workflows/altpulse.yml` publishes, rsyncs, restarts the service and smoke-tests the site on a tag:
+
+```powershell
+git tag prod-altpulse-1.0.1
+git push origin prod-altpulse-1.0.1
+```
+
+GitHub secrets (repo > Settings > Secrets and variables > Actions):
 
 | Secret | Value |
 |---|---|
-| `REMOTE_HOST` | server address |
-| `REMOTE_USER` | SSH user used for deployment |
-| `REMOTE_KEY` | private SSH key of that user (its public key in `~/.ssh/authorized_keys` on the server) |
-| `REMOTE_TARGET_APP` | target folder, e.g. `/var/www/altpulse/` |
+| `REMOTE_HOST` | `<vps-host>` |
+| `REMOTE_USER` | `ubuntu` |
+| `REMOTE_TARGET_APP` | `/home/ubuntu/projects/altpulse/` |
+| `REMOTE_KEY` | private SSH key whose public half is in `~ubuntu/.ssh/authorized_keys` |
 
-The Blizzard credentials are **not** GitHub secrets: they stay on the server.
-
-**One-time server setup:**
-
-1. Blizzard credentials, readable by root only, in `/etc/altpulse/altpulse.env`:
-   ```ini
-   Blizzard__ClientId=...
-   Blizzard__ClientSecret=...
-   ```
-   `sudo chmod 600 /etc/altpulse/altpulse.env`
-2. Service `/etc/systemd/system/altpulse.service`:
-   ```ini
-   [Unit]
-   Description=AltPulse by Noovio
-   After=network.target
-
-   [Service]
-   WorkingDirectory=/var/www/altpulse
-   ExecStart=/usr/bin/dotnet /var/www/altpulse/AltPulse.dll
-   Restart=always
-   RestartSec=10
-   User=www-data
-   EnvironmentFile=/etc/altpulse/altpulse.env
-   Environment=ASPNETCORE_ENVIRONMENT=Production
-   Environment=ASPNETCORE_URLS=http://127.0.0.1:5000
-
-   [Install]
-   WantedBy=multi-user.target
-   ```
-   `sudo systemctl daemon-reload && sudo systemctl enable altpulse`
-3. Let the deploy user restart the service without a password, and nothing else (`sudo visudo -f /etc/sudoers.d/altpulse`):
-   ```
-   <REMOTE_USER> ALL=(root) NOPASSWD: /usr/bin/systemctl restart altpulse
-   ```
-4. The .NET 10 ASP.NET Core runtime must be installed on the server.
-
+`ubuntu` has passwordless sudo on this VPS, so the workflow can restart the service without a password.
 ## Architecture
 
 | Project | Role |

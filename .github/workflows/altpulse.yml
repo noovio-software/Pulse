@@ -49,6 +49,9 @@ jobs:
       - name: Deploy with rsync
         run: rsync -avz deploy/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_TARGET_APP }}
 
-      # Nécessite sur le serveur une règle sudoers limitée à cette commande (voir README).
+      # is-active échoue (et fait échouer le job) si le service n'a pas redémarré.
       - name: Restart service
-        run: ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'sudo systemctl restart altpulse && systemctl is-active altpulse'
+        run: ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'sudo systemctl restart kestrel-altpulse.service && sleep 5 && systemctl is-active kestrel-altpulse.service'
+
+      - name: Smoke test
+        run: curl -fsS -o /dev/null -w "HTTP %{http_code}\n" https://altpulse.noovio.fr/

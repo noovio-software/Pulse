@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using AltPulse.Client.Services;
 using AltPulse.Components;
 using AltPulse.Services;
@@ -9,6 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+// En prod, Nginx termine le HTTPS et relaie en HTTP sur 127.0.0.1 : sans ces en-têtes,
+// l'app se croit en HTTP et UseHttpsRedirection boucle. Nginx étant en local, il fait
+// partie des proxys connus par défaut (loopback).
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto);
 
 builder.Services.AddMemoryCache();
 builder.Services.Configure<BlizzardOptions>(builder.Configuration.GetSection(BlizzardOptions.SectionName));
@@ -26,6 +33,8 @@ builder.Services.AddScoped<IAltPulseApi, AltPulseService>();
 builder.Services.AddScoped<LocalHistoryStore>();
 
 var app = builder.Build();
+
+app.UseForwardedHeaders();
 
 if (app.Environment.IsDevelopment())
 {

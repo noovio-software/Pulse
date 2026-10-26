@@ -1,0 +1,15 @@
+@* Emblème AltPulse : la goutte de venin. Même tracé que wwwroot/favicon.svg. *@
+
+<span class="brand-sigil" aria-hidden="true">
+    <svg viewBox="0 0 32 32" width="@Size" height="@Size">
+        @* La goutte (y 2 à 25) est descendue de 2 pour être centrée optiquement dans le cadre. *@
+        <g transform="translate(0 2)">
+            <path d="M16 2c5 4 9 8 9 14a9 9 0 0 1-18 0c0-6 4-10 9-14Z" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="M12 15c1.5 2 6.5 2 8 0M13 19l1 4M19 19l-1 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </g>
+    </svg>
+</span>
+
+@code {
+    [Parameter] public int Size { get; set; } = 30;
+}
