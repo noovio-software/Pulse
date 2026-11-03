@@ -36,7 +36,7 @@ jobs:
       # Le projet serveur référence AltPulse.Client : le WebAssembly est publié avec.
       # Pas de -p:Version : la variable VERSION posée ci-dessus est lue par le .csproj.
       - name: Dotnet Publish
-        run: dotnet publish AltPulse/AltPulse.csproj -c Release -o deploy
+        run: dotnet publish AltPulse/AltPulse/AltPulse.csproj -c Release -o deploy
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
