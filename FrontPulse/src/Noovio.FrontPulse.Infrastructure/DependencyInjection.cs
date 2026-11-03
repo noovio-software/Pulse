@@ -68,23 +68,38 @@ public static class DependencyInjection
     /// <summary>
     /// Au démarrage du site et du worker : détecte les migrations pas encore jouées et les applique
     /// (la base est créée si elle n'existe pas). Sans effet si la base est à jour.
-    /// Si les deux processus démarrent ensemble, EF Core les sérialise par un verrou en base.
+    /// Le site et le worker redémarrent ensemble à chaque déploiement : si l'autre processus applique
+    /// les mêmes migrations au même instant, l'échec (« relation already exists ») est attendu ;
+    /// on patiente puis on revérifie, au lieu de faire tomber le service.
     /// </summary>
     public static async Task MigrateFrontPulseDatabaseAsync(this IServiceProvider services, CancellationToken ct = default)
     {
+        const int attempts = 4;
         await using var scope = services.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<FrontPulseDbContext>().Database;
         var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Noovio.FrontPulse.Migrations");
 
-        var pending = (await db.GetPendingMigrationsAsync(ct)).ToList();
-        if (pending.Count == 0)
+        for (var attempt = 1; ; attempt++)
         {
-            logger.LogInformation("Base de données à jour");
-            return;
-        }
+            var pending = (await db.GetPendingMigrationsAsync(ct)).ToList();
+            if (pending.Count == 0)
+            {
+                logger.LogInformation("Base de données à jour");
+                return;
+            }
 
-        logger.LogInformation("{Count} migration(s) à appliquer : {Migrations}", pending.Count, string.Join(", ", pending));
-        await db.MigrateAsync(ct);
-        logger.LogInformation("Migrations appliquées");
+            try
+            {
+                logger.LogInformation("{Count} migration(s) à appliquer : {Migrations}", pending.Count, string.Join(", ", pending));
+                await db.MigrateAsync(ct);
+                logger.LogInformation("Migrations appliquées");
+                return;
+            }
+            catch (System.Data.Common.DbException ex) when (attempt < attempts)
+            {
+                logger.LogWarning(ex, "Migration en échec (essai {Attempt}/{Attempts}), sans doute appliquée en parallèle par l'autre service : nouvelle vérification dans 5 s", attempt, attempts);
+                await Task.Delay(TimeSpan.FromSeconds(5), ct);
+            }
+        }
     }
 }

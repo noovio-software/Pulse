@@ -63,5 +63,6 @@ jobs:
       - name: Restart services
         run: ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'sudo systemctl restart kestrel-frontpulse.service kestrel-frontpulse-worker.service && sleep 8 && systemctl is-active kestrel-frontpulse.service kestrel-frontpulse-worker.service'
 
+      # Réessaie pendant ~30 s : au démarrage, le site peut attendre la fin des migrations appliquées par le worker.
       - name: Smoke test
-        run: curl -fsS -o /dev/null -w "HTTP %{http_code}\n" https://frontpulse.noovio.fr/
+        run: curl -fsS --retry 6 --retry-delay 5 --retry-all-errors -o /dev/null -w "HTTP %{http_code}\n" https://frontpulse.noovio.fr/
