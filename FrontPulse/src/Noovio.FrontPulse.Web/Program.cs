@@ -24,6 +24,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 builder.Services.AddFrontPulseApplication(builder.Configuration);
 builder.Services.AddFrontPulseInfrastructure(builder.Configuration);
 builder.Services.AddBattleNetAuthentication(builder.Configuration);
+builder.Services.AddFrontPulseAdmin(builder.Configuration);
 
 // Clés de chiffrement du cookie de connexion : en prod, dans un dossier persistant (sinon chaque redémarrage,
 // donc chaque déploiement, déconnecterait tout le monde). En local, l'emplacement par défaut suffit.
@@ -46,7 +47,11 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     app.UseHsts();
 }
-app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
+// Page « introuvable » pour les pages seulement : sur /api, un 401 ou un 404 doit rester tel quel
+// (rejoué en POST vers /not-found, il deviendrait un 400 d'antiforgery).
+app.UseWhen(
+    context => !context.Request.Path.StartsWithSegments("/api"),
+    pages => pages.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true));
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
@@ -54,6 +59,7 @@ app.UseAuthorization();
 app.UseAntiforgery();
 
 app.MapAccountEndpoints();
+app.MapAdminEndpoints();
 
 var api = app.MapGroup("/api");
 

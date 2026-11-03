@@ -40,6 +40,11 @@ if ! sudo test -f "$ENV_FILE"; then
     fi
     echo "   à compléter : Blizzard__ClientId et Blizzard__ClientSecret (sudo nano $ENV_FILE)"
 fi
+if ! sudo grep -qE '^Admin__ApiKey=.{32,}' "$ENV_FILE"; then
+    # Clé d'admin pour l'ingestion forcée en ligne de commande, jamais affichée : sudo grep Admin__ApiKey "$ENV_FILE"
+    sudo sed -i '/^Admin__ApiKey=/d' "$ENV_FILE"
+    echo "Admin__ApiKey=$(openssl rand -hex 24)" | sudo tee -a "$ENV_FILE" >/dev/null
+fi
 sudo chown root:root "$ENV_FILE"
 sudo chmod 600 "$ENV_FILE"
 

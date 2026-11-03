@@ -14,6 +14,7 @@ public sealed class FrontPulseDbContext(DbContextOptions<FrontPulseDbContext> op
     public DbSet<DungeonRoute> DungeonRoutes => Set<DungeonRoute>();
     public DbSet<UserAccount> UserAccounts => Set<UserAccount>();
     public DbSet<UserCharacter> UserCharacters => Set<UserCharacter>();
+    public DbSet<IngestionRequest> IngestionRequests => Set<IngestionRequest>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -44,6 +45,14 @@ public sealed class FrontPulseDbContext(DbContextOptions<FrontPulseDbContext> op
             e.HasIndex(r => new { r.Season, r.DungeonSlug });
             e.Property(r => r.Season).HasMaxLength(64);
             e.Property(r => r.DungeonSlug).HasMaxLength(64);
+        });
+
+        modelBuilder.Entity<IngestionRequest>(e =>
+        {
+            e.ToTable("ingestion_requests");
+            e.HasIndex(r => r.Status);
+            e.Property(r => r.RequestedBy).HasMaxLength(64);
+            e.Property(r => r.Status).HasConversion<string>().HasMaxLength(16);
         });
 
         modelBuilder.Entity<UserAccount>(e =>

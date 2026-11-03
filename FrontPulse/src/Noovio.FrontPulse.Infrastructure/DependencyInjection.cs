@@ -58,6 +58,7 @@ public static class DependencyInjection
         services.AddScoped<ICharacterDetailsSource>(sp => sp.GetRequiredService<BlizzardCharacterSource>());
         services.AddScoped<IAccountCharactersSource, BlizzardAccountSource>();
         services.AddScoped<IAccountStore, AccountStore>();
+        services.AddScoped<IIngestionRequestStore, IngestionRequestStore>();
         services.AddScoped<IMediaSource, BlizzardMediaSource>();
         services.AddScoped<ITalentTreeSource, BlizzardTalentTreeSource>();
         services.AddScoped<ITankMetaStore, TankMetaStore>();
