@@ -32,23 +32,42 @@ public static class AdminEndpoints
                 request.Id,
                 Status = request.Status.ToString(),
                 request.RequestedAtUtc,
-                Message = "Demande enregistrée : le worker la lance sous 30 s (environ 30 min d'ingestion)."
+                Message = "Demande enregistrée : le worker la lance sous 5 s, ou la rattache à l'ingestion en cours (environ 30 min d'ingestion)."
             });
         });
 
-        admin.MapGet("/ingestion", async (HttpContext context, AdminAccess access, IIngestionRequestStore requests, CancellationToken ct) =>
+        // Exécutions (avec leur avancement, la plus récente d'abord) et demandes forcées.
+        admin.MapGet("/ingestion", async (HttpContext context, AdminAccess access, IIngestionRequestStore requests, IIngestionRunStore runs, CancellationToken ct) =>
             access.Requester(context) is null
                 ? Results.Unauthorized()
-                : Results.Ok((await requests.GetRecentAsync(10, ct)).Select(r => new
+                : Results.Ok(new
                 {
-                    r.Id,
-                    Status = r.Status.ToString(),
-                    r.RequestedBy,
-                    r.RequestedAtUtc,
-                    r.StartedAtUtc,
-                    r.CompletedAtUtc,
-                    r.Message
-                })));
+                    Runs = (await runs.GetRecentAsync(5, ct)).Select(r => new
+                    {
+                        r.Id,
+                        Status = r.Status.ToString(),
+                        r.Forced,
+                        r.StartedAtUtc,
+                        r.UpdatedAtUtc,
+                        r.CompletedAtUtc,
+                        Phase = r.Phase.ToString(),
+                        CurrentSpec = r.CurrentSpec?.ToString(),
+                        r.SpecsDone,
+                        r.ProfilesRead,
+                        r.Candidates,
+                        r.Message
+                    }),
+                    Requests = (await requests.GetRecentAsync(10, ct)).Select(r => new
+                    {
+                        r.Id,
+                        Status = r.Status.ToString(),
+                        r.RequestedBy,
+                        r.RequestedAtUtc,
+                        r.StartedAtUtc,
+                        r.CompletedAtUtc,
+                        r.Message
+                    })
+                }));
 
         return app;
     }

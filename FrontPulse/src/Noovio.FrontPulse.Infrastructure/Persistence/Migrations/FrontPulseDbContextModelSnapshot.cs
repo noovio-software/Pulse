@@ -119,6 +119,68 @@ namespace Noovio.FrontPulse.Infrastructure.Persistence.Migrations
                     b.ToTable("ingestion_requests", (string)null);
                 });
 
+            modelBuilder.Entity("Noovio.FrontPulse.Domain.Entities.IngestionRun", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("Candidates")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("CompletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CurrentSpec")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<bool>("Forced")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("LeaderboardQueries")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LeaderboardQueriesDone")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Phase")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<int>("ProfilesRead")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("ProfilesStartedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("SpecsDone")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("StartedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StartedAtUtc");
+
+                    b.ToTable("ingestion_runs", (string)null);
+                });
+
             modelBuilder.Entity("Noovio.FrontPulse.Domain.Entities.SpecMeta", b =>
                 {
                     b.Property<long>("Id")

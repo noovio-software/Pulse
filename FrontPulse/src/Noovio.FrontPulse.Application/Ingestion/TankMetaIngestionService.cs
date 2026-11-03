@@ -45,29 +45,34 @@ public sealed class TankMetaIngestionService(
 {
     private readonly IngestionOptions _options = options.Value;
 
-    public async Task<IngestionReport> RunAsync(CancellationToken ct)
+    /// <param name="progress">Avancement tenu à jour pendant l'exécution (suivi par la page d'admin), facultatif.</param>
+    public async Task<IngestionReport> RunAsync(CancellationToken ct, IngestionProgress? progress = null)
     {
         var startedAt = time.GetUtcNow();
         var season = await leaderboard.GetCurrentSeasonAsync(ct);
-        var candidates = await leaderboard.GetTopTanksAsync(season, _options.CandidatesPerSpec, ct);
+        var candidates = await leaderboard.GetTopTanksAsync(season, _options.CandidatesPerSpec, ct, progress);
+        progress?.LeaderboardRead(candidates.Values.Sum(c => c.Count), time.GetUtcNow());
         var results = new List<SpecIngestionResult>();
 
         foreach (var info in TankSpecs.All)
         {
+            progress?.SpecStarted(info.Spec);
             var tanks = candidates.GetValueOrDefault(info.Spec) ?? [];
-            var profiles = await ResolveAsync(season, info.Spec, tanks, ct);
+            var profiles = await ResolveAsync(season, info.Spec, tanks, progress, ct);
             results.Add(new SpecIngestionResult(info.Spec, tanks.Count, profiles.Count));
 
             if (profiles.Count == 0)
             {
                 // On garde le snapshot précédent plutôt que d'afficher une page vide.
                 logger.LogWarning("Aucun profil résolu pour {Spec} ({Candidates} candidats), snapshot conservé", info.Spec, tanks.Count);
+                progress?.SpecDone();
                 continue;
             }
 
             await store.ReplaceAsync(season, info.Spec, profiles, await BuildSnapshotAsync(info.Spec, season, profiles, ct), ct);
 
             logger.LogInformation("{Spec} : {Profiles}/{Candidates} profils agrégés", info.Spec, profiles.Count, tanks.Count);
+            progress?.SpecDone();
         }
 
         return new IngestionReport(season, startedAt, time.GetUtcNow() - startedAt, results);
@@ -105,7 +110,7 @@ public sealed class TankMetaIngestionService(
         return TankMetaAggregatorService.WithTalentTree(snapshot, await talentTrees.GetLayoutAsync(spec, ct));
     }
 
-    private async Task<List<TankProfile>> ResolveAsync(string season, TankSpec spec, IReadOnlyList<LeaderboardTank> tanks, CancellationToken ct)
+    private async Task<List<TankProfile>> ResolveAsync(string season, TankSpec spec, IReadOnlyList<LeaderboardTank> tanks, IngestionProgress? progress, CancellationToken ct)
     {
         var resolved = new TankProfile?[tanks.Count];
         var parallel = new ParallelOptions { MaxDegreeOfParallelism = _options.MaxParallelism, CancellationToken = ct };
@@ -127,6 +132,10 @@ public sealed class TankMetaIngestionService(
             {
                 // Erreur réseau ou timeout sur un personnage : il est ignoré, les autres continuent.
                 logger.LogWarning(ex, "Profil {Region}/{Realm}/{Name} ignoré", tank.Region, tank.RealmSlug, tank.Name);
+            }
+            finally
+            {
+                progress?.ProfileRead();
             }
         });
 

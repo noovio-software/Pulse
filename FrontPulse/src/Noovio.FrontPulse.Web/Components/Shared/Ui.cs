@@ -68,6 +68,12 @@ public static class Ui
             : $"il y a {(int)elapsed.TotalDays} j";
     }
 
+    /// <summary>Durée → « 2 h 15 », « 40 min », « moins d'une minute ».</summary>
+    public static string Duration(TimeSpan duration) =>
+        duration.TotalMinutes < 1 ? "moins d'une minute"
+            : duration.TotalHours < 1 ? $"{(int)duration.TotalMinutes} min"
+            : $"{(int)duration.TotalHours} h {duration.Minutes:00}";
+
     /// <summary>Durée restante → « dans 2 h 15 », « dans 40 min ».</summary>
     public static string In(TimeSpan remaining) =>
         remaining.TotalHours < 1 ? $"dans {Math.Max(1, (int)remaining.TotalMinutes)} min"

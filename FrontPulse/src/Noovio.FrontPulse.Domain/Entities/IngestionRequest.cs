@@ -10,8 +10,8 @@ public enum IngestionRequestStatus
 
 /// <summary>
 /// Demande d'ingestion hors calendrier, déposée par le site (page d'admin ou API) et exécutée par le worker,
-/// qui la relève à son prochain passage (30 s au plus). Les demandes déposées pendant une exécution
-/// sont regroupées dans l'exécution suivante.
+/// qui la relève à son prochain passage (5 s au plus). Une demande déposée pendant une exécution
+/// la rejoint : elle passe « en cours » aussitôt et se termine avec elle.
 /// </summary>
 public sealed class IngestionRequest
 {

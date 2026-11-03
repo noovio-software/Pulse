@@ -1,3 +1,4 @@
+using Noovio.FrontPulse.Application.Ingestion;
 using Noovio.FrontPulse.Domain.Entities;
 
 namespace Noovio.FrontPulse.Application.Abstractions;
@@ -16,5 +17,22 @@ public interface IIngestionRequestStore
     Task<IReadOnlyList<IngestionRequest>> GetRecentAsync(int count, CancellationToken ct);
 
     /// <summary>Au démarrage du worker : les demandes restées « en cours » ont été coupées par un arrêt (déploiement).</summary>
+    Task FailInterruptedAsync(CancellationToken ct);
+}
+
+/// <summary>Exécutions de l'ingestion et leur avancement : écrites par le worker, lues par la page d'admin.</summary>
+public interface IIngestionRunStore
+{
+    Task<IngestionRun> StartAsync(bool forced, CancellationToken ct);
+
+    /// <summary>Recopie l'avancement en mémoire ; <paramref name="forced"/> passe à vrai quand une demande rejoint l'exécution.</summary>
+    Task ReportAsync(long id, IngestionProgress progress, bool forced, CancellationToken ct);
+
+    Task CompleteAsync(long id, bool succeeded, string message, CancellationToken ct);
+
+    /// <summary>Plus récentes d'abord.</summary>
+    Task<IReadOnlyList<IngestionRun>> GetRecentAsync(int count, CancellationToken ct);
+
+    /// <summary>Au démarrage du worker : les exécutions restées « en cours » ont été coupées par un arrêt (déploiement).</summary>
     Task FailInterruptedAsync(CancellationToken ct);
 }

@@ -1,3 +1,4 @@
+using Noovio.FrontPulse.Application.Ingestion;
 using Noovio.FrontPulse.Domain.Entities;
 using Noovio.FrontPulse.Domain.Enums;
 
@@ -12,7 +13,9 @@ public interface ILeaderboardSource
     /// Tanks par spécialisation, dans l'ordre du classement des clés, dédoublonnés,
     /// jusqu'à <paramref name="perSpec"/> par spécialisation.
     /// </summary>
-    Task<IReadOnlyDictionary<TankSpec, IReadOnlyList<LeaderboardTank>>> GetTopTanksAsync(string season, int perSpec, CancellationToken ct);
+    /// <param name="progress">Avancement, rendu après chaque requête (région, donjon) parcourue.</param>
+    Task<IReadOnlyDictionary<TankSpec, IReadOnlyList<LeaderboardTank>>> GetTopTanksAsync(string season, int perSpec, CancellationToken ct,
+        IProgress<LeaderboardStep>? progress = null);
 }
 
 /// <summary>Phase 2 : équipement, talents et caractéristiques d'un personnage (API Blizzard).</summary>

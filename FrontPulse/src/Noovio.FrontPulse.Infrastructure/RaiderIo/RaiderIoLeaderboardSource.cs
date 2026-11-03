@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Noovio.FrontPulse.Application.Abstractions;
+using Noovio.FrontPulse.Application.Ingestion;
 using Noovio.FrontPulse.Domain;
 using Noovio.FrontPulse.Domain.Enums;
 
@@ -23,7 +24,8 @@ public sealed class RaiderIoLeaderboardSource(
 
     public async Task<string> GetCurrentSeasonAsync(CancellationToken ct) => (await GetCurrentSeasonInfoAsync(ct)).Slug;
 
-    public async Task<IReadOnlyDictionary<TankSpec, IReadOnlyList<LeaderboardTank>>> GetTopTanksAsync(string season, int perSpec, CancellationToken ct)
+    public async Task<IReadOnlyDictionary<TankSpec, IReadOnlyList<LeaderboardTank>>> GetTopTanksAsync(string season, int perSpec, CancellationToken ct,
+        IProgress<LeaderboardStep>? progress = null)
     {
         var key = $"rio:top-tanks:{season}:{perSpec}";
         if (await cache.GetStringAsync(key, ct) is { } cached)
@@ -35,6 +37,9 @@ public sealed class RaiderIoLeaderboardSource(
         var dungeons = (await GetCurrentSeasonInfoAsync(ct)).Dungeons.Select(d => d.Slug).ToList();
         var best = new Dictionary<long, LeaderboardTank>();
         var requests = 0;
+        var queries = _options.Regions.Length * dungeons.Count;
+        var queriesDone = 0;
+        progress?.Report(new LeaderboardStep(0, queries));
 
         foreach (var region in _options.Regions)
         {
@@ -54,6 +59,8 @@ public sealed class RaiderIoLeaderboardSource(
                         Collect(ranking, best);
                     }
                 }
+
+                progress?.Report(new LeaderboardStep(++queriesDone, queries));
             }
         }
 

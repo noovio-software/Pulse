@@ -75,3 +75,99 @@
     background: rgba(11, 14, 20, 0.7);
     border: 1px solid var(--line);
 }
+
+/* --- Avancement de l'ingestion ------------------------------------------- */
+.progress-card { display: flex; flex-direction: column; gap: 12px; }
+
+.progress-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.progress-meta { font-size: 0.85rem; color: var(--text-dim); }
+.progress-eta { display: flex; flex-direction: column; align-items: flex-end; margin-left: auto; line-height: 1.2; }
+.progress-eta strong { font-family: var(--font-title); font-size: 1.3rem; color: var(--text); font-variant-numeric: tabular-nums; }
+.progress-eta small { font-size: 0.78rem; color: var(--text-faint); }
+
+.progress-track {
+    position: relative;
+    height: 12px;
+    overflow: hidden;
+    border-radius: 6px;
+    background: rgba(42, 54, 79, 0.6);
+    border: 1px solid var(--line);
+}
+.progress-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--bronze), var(--run));
+    box-shadow: 0 0 14px color-mix(in srgb, var(--run) 55%, transparent);
+    transition: width 0.6s ease;
+}
+/* lecture du classement : pas encore de quoi mesurer, la barre balaie */
+.progress-track.is-indeterminate .progress-fill { animation: sweep 1.6s ease-in-out infinite; }
+@keyframes sweep {
+    from { left: -30%; }
+    to { left: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .progress-track.is-indeterminate .progress-fill { animation: none; } }
+
+.progress-percent { align-self: flex-end; margin-top: -6px; font-size: 0.8rem; font-weight: 700; color: var(--run); font-variant-numeric: tabular-nums; }
+
+.progress-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.progress-steps li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(11, 14, 20, 0.55);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--line-strong);
+}
+.progress-steps li .muted { font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+.step-bar { display: block; height: 4px; margin: 6px 0 4px; overflow: hidden; border-radius: 2px; background: rgba(42, 54, 79, 0.7); }
+.step-bar span { display: block; height: 100%; border-radius: 2px; background: var(--line-strong); transition: width 0.6s ease; }
+.progress-steps li.is-current .step-bar span { background: var(--amber); box-shadow: 0 0 8px var(--amber-glow); }
+.progress-steps li.is-done .step-bar span { background: #34D399; }
+.progress-steps li.is-current { border-left-color: var(--amber); }
+.progress-steps li.is-done { border-left-color: #34D399; }
+
+.progress-specs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.progress-specs li {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 10px 3px 3px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-faint);
+    border: 1px solid var(--line);
+    opacity: 0.55;
+}
+.progress-specs img { width: 26px; height: 26px; border-radius: 50%; filter: grayscale(0.8); }
+.progress-specs li.is-done { opacity: 1; color: var(--class-color); border-color: color-mix(in srgb, var(--class-color) 45%, var(--line)); }
+.progress-specs li.is-done img { filter: none; }
+.progress-specs li.is-current {
+    opacity: 1;
+    color: var(--text);
+    border-color: var(--class-color);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--class-color) 35%, transparent);
+    animation: current 1.4s ease-in-out infinite alternate;
+}
+.progress-specs li.is-current img { filter: none; }
+@keyframes current { to { box-shadow: 0 0 4px color-mix(in srgb, var(--class-color) 15%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .progress-specs li.is-current { animation: none; } }
+
+.progress-stale {
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: #FECACA;
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.35);
+}
+.progress-next { margin: 0; font-size: 0.8rem; }
+
+@media (max-width: 640px) {
+    .progress-steps { grid-template-columns: 1fr; }
+    .progress-eta { align-items: flex-start; margin-left: 0; }
+}

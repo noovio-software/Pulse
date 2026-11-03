@@ -15,6 +15,7 @@ public sealed class FrontPulseDbContext(DbContextOptions<FrontPulseDbContext> op
     public DbSet<UserAccount> UserAccounts => Set<UserAccount>();
     public DbSet<UserCharacter> UserCharacters => Set<UserCharacter>();
     public DbSet<IngestionRequest> IngestionRequests => Set<IngestionRequest>();
+    public DbSet<IngestionRun> IngestionRuns => Set<IngestionRun>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -53,6 +54,15 @@ public sealed class FrontPulseDbContext(DbContextOptions<FrontPulseDbContext> op
             e.HasIndex(r => r.Status);
             e.Property(r => r.RequestedBy).HasMaxLength(64);
             e.Property(r => r.Status).HasConversion<string>().HasMaxLength(16);
+        });
+
+        modelBuilder.Entity<IngestionRun>(e =>
+        {
+            e.ToTable("ingestion_runs");
+            e.HasIndex(r => r.StartedAtUtc);
+            e.Property(r => r.Status).HasConversion<string>().HasMaxLength(16);
+            e.Property(r => r.Phase).HasConversion<string>().HasMaxLength(16);
+            e.Property(r => r.CurrentSpec).HasConversion<string>().HasMaxLength(32);
         });
 
         modelBuilder.Entity<UserAccount>(e =>

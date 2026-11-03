@@ -23,7 +23,7 @@ else
             <h1>Ingestion des données</h1>
             <p class="muted">
                 Classement Raider.io, profils Blizzard puis recalcul de la méta des six spécialisations (environ 30 min).
-                Le worker relève la demande sous 30 s ; elle s'ajoute aux exécutions automatiques toutes les 6 h.
+                Le worker la lance sous 5 s, ou la rattache à l'ingestion déjà en cours ; elle s'ajoute aux exécutions automatiques toutes les 6 h.
             </p>
         </div>
         <button type="button" class="btn btn-primary" @onclick="RequestAsync" disabled="@(busy || HasActive)">
@@ -39,8 +39,134 @@ else
         <p class="admin-notice">@notice</p>
     }
 
+    @* --- Avancement de l'exécution en cours, ou bilan de la dernière ------------------------- *@
     <section class="panel meta-section">
-        <h2 class="section-title">Dernières demandes <small class="muted">actualisé toutes les 15 s</small></h2>
+        <h2 class="section-title">
+            @(Latest?.Status == IngestionRunStatus.Running ? "Ingestion en cours" : "Dernière ingestion")
+            <small class="muted">actualisé toutes les 5 s</small>
+        </h2>
+
+        @if (Latest is not { } run)
+        {
+            <p class="muted">
+                Aucune exécution suivie pour l'instant : le suivi démarre avec la prochaine ingestion.
+                @if (nextScheduled is { } next)
+                {
+                    <text>Prochaine automatique vers @ParisTime(next).</text>
+                }
+            </p>
+        }
+        else
+        {
+            var now = DateTimeOffset.UtcNow;
+            var running = run.Status == IngestionRunStatus.Running;
+            var remaining = running ? Remaining(run, now) : null;
+            var fraction = running ? Fraction(run, remaining, now) : run.Status == IngestionRunStatus.Succeeded ? 1 : null;
+
+            <div class="progress-card status-@run.Status.ToString().ToLowerInvariant()">
+                <div class="progress-head">
+                    <span class="run-status">@RunStatusLabel(run.Status)</span>
+                    <span class="progress-meta">
+                        @(run.Forced ? "Forcée" : "Automatique") · démarrée à @ParisTime(run.StartedAtUtc) (@Ui.Ago(run.StartedAtUtc))
+                        @if (run.CompletedAtUtc is { } completed)
+                        {
+                            <text> · terminée à @ParisTime(completed), en @Ui.Duration(completed - run.StartedAtUtc)</text>
+                        }
+                    </span>
+                    @if (running)
+                    {
+                        <span class="progress-eta">
+                            @if (remaining is { } left)
+                            {
+                                <span class="eyebrow">Fin estimée</span>
+                                <strong>@(left == TimeSpan.Zero ? "imminente" : $"vers {ParisTime(now + left)}")</strong>
+                                @if (left > TimeSpan.Zero)
+                                {
+                                    <small>@Ui.In(left)</small>
+                                }
+                            }
+                            else
+                            {
+                                <span class="eyebrow">Fin estimée</span>
+                                <small>calculée dès les premiers profils lus</small>
+                            }
+                        </span>
+                    }
+                </div>
+
+                <div class="progress-track @(fraction is null ? "is-indeterminate" : null)" role="progressbar"
+                     aria-valuemin="0" aria-valuemax="100" aria-valuenow="@(fraction is { } f ? (int)(f * 100) : null)">
+                    <span class="progress-fill" style="width: @(fraction is { } w ? Ui.CssPercent(w) : "30%")"></span>
+                </div>
+                @if (fraction is { } shown)
+                {
+                    <span class="progress-percent">@Ui.Percent(shown)</span>
+                }
+
+                <ol class="progress-steps">
+                    <li class="@(run.Phase == IngestionPhase.Profiles || !running ? "is-done" : "is-current")">
+                        <strong>1. Classement Raider.io</strong>
+                        <span class="step-bar"><span style="width: @Ui.CssPercent(run.Phase == IngestionPhase.Profiles ? 1 : StepFraction(run.LeaderboardQueriesDone, run.LeaderboardQueries))"></span></span>
+                        <span class="muted">
+                            @if (run.ProfilesStartedAtUtc is { } read)
+                            {
+                                <text>@run.Candidates candidats en @Ui.Duration(read - run.StartedAtUtc)</text>
+                            }
+                            else if (run.LeaderboardQueries > 0)
+                            {
+                                <text>@run.LeaderboardQueriesDone / @run.LeaderboardQueries requêtes (région × donjon)</text>
+                                @if (running && LeaderboardRemaining(run, now) is { } lbLeft)
+                                {
+                                    <text> · fin du classement vers @ParisTime(now + lbLeft)</text>
+                                }
+                            }
+                            else
+                            {
+                                <text>lecture des classements par région et donjon…</text>
+                            }
+                        </span>
+                    </li>
+                    <li class="@(run.Phase != IngestionPhase.Profiles ? null : running ? "is-current" : "is-done")">
+                        <strong>2. Profils Blizzard et méta</strong>
+                        <span class="step-bar"><span style="width: @Ui.CssPercent(run.Phase == IngestionPhase.Profiles ? StepFraction(run.ProfilesRead, run.Candidates) : 0)"></span></span>
+                        <span class="muted">
+                            @(run.Phase == IngestionPhase.Profiles ? $"{run.ProfilesRead} / {run.Candidates} profils · {run.SpecsDone} / {TankSpecs.All.Count} spécialisations" : "en attente du classement")
+                        </span>
+                    </li>
+                </ol>
+
+                <ul class="progress-specs" aria-label="Spécialisations">
+                    @for (var i = 0; i < TankSpecs.All.Count; i++)
+                    {
+                        var spec = TankSpecs.All[i];
+                        <li class="@SpecState(run, spec, i)" style="--class-color: @spec.Color" title="@spec.SpecName @spec.ClassName">
+                            <img class="wow-icon" src="@spec.IconUrl" alt="" width="26" height="26" />
+                            <span>@spec.SpecName</span>
+                        </li>
+                    }
+                </ul>
+
+                @if (running && now - run.UpdatedAtUtc > StaleAfter)
+                {
+                    <p class="progress-stale">
+                        Aucune nouvelle du worker depuis @Ui.Duration(now - run.UpdatedAtUtc) : il est peut-être arrêté ou bloqué
+                        (<code>journalctl -u kestrel-frontpulse-worker</code>).
+                    </p>
+                }
+                @if (run.Message is not null)
+                {
+                    <p class="run-message">@run.Message</p>
+                }
+                @if (!running && nextScheduled is { } upcoming)
+                {
+                    <p class="muted progress-next">Prochaine ingestion automatique vers @ParisTime(upcoming).</p>
+                }
+            </div>
+        }
+    </section>
+
+    <section class="panel meta-section">
+        <h2 class="section-title">Dernières demandes</h2>
         @if (recent.Count == 0)
         {
             <p class="muted">Aucune demande pour l'instant : seules les exécutions automatiques ont tourné.</p>
