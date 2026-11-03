@@ -1,0 +1,19 @@
+@* Mène à la comparaison d'un personnage avec la méta : la page du compte, après connexion Battle.net si besoin. *@
+
+<AuthorizeView>
+    <Authorized>
+        <a class="btn btn-compare @(Compact ? "is-compact" : null)" href="@AccountUrl"
+           title="@(Spec is null ? "Comparer un de mes personnages au top" : $"Comparer mon {Spec.SpecName} au top")">
+            <CompareIcon />
+            <span>@Label</span>
+        </a>
+    </Authorized>
+    <NotAuthorized>
+        <a class="btn btn-compare @(Compact ? "is-compact" : null)" href="compte/connexion?returnUrl=@Uri.EscapeDataString("/" + AccountUrl)"
+           data-enhance-nav="false" title="Connexion Battle.net, puis choix du personnage à comparer">
+            <CompareIcon />
+            <span>@Label</span>
+            <span class="compare-bnet" aria-label="via Battle.net"><BattleNetLogo Size="14" /></span>
+        </a>
+    </NotAuthorized>
+</AuthorizeView>

@@ -1,8 +1,3 @@
-.stat-haste { --stat: var(--amber); }
-.stat-versatility { --stat: var(--steel); }
-.stat-mastery { --stat: #8B5CF6; }
-.stat-crit { --stat: #F87171; }
-
 /* --- Priorité : Maîtrise › Hâte › … -------------------------------------- */
 .stat-priority {
     list-style: none;

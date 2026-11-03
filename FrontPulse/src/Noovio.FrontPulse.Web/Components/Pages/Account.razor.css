@@ -19,6 +19,7 @@
     text-transform: uppercase;
     color: var(--amber);
 }
+.section-heading small { margin-left: 10px; font-family: var(--font); font-size: 0.78rem; letter-spacing: 0; text-transform: none; }
 
 .character-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px; }
 
@@ -40,6 +41,10 @@
     box-shadow: 0 0 12px var(--class-color);
 }
 .character-card.is-low { opacity: 0.6; }
+.character-card.is-target {
+    border-color: color-mix(in srgb, var(--class-color) 60%, var(--line));
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45), 0 0 22px color-mix(in srgb, var(--class-color) 22%, transparent);
+}
 
 .character-spec { width: 44px; height: 44px; border-radius: 9px; border: 2px solid var(--class-color); }
 .character-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }

@@ -8,13 +8,9 @@ namespace Noovio.FrontPulse.Web.Components.Shared;
 
 public static class Ui
 {
-    public static string ShortLabel(TankSpecInfo info) => info.Spec switch
-    {
-        TankSpec.ProtectionPaladin => "Prot. Paladin",
-        TankSpec.ProtectionWarrior => "Prot. Guerrier",
-        TankSpec.BrewmasterMonk => "Brasseur",
-        _ => info.SpecName
-    };
+    /// <summary>Slug Raider.io de la saison (« season-mn-1 ») → « Saison 1 » ; tel quel s'il a une autre forme.</summary>
+    public static string SeasonLabel(string season) =>
+        season.Split('-') is [.., var last] && int.TryParse(last, out var number) ? $"Saison {number}" : season;
 
     public static string SlotLabel(GearSlot slot) => slot switch
     {
@@ -71,6 +67,12 @@ public static class Ui
             : elapsed.TotalDays < 1 ? $"il y a {(int)elapsed.TotalHours} h"
             : $"il y a {(int)elapsed.TotalDays} j";
     }
+
+    /// <summary>Durée restante → « dans 2 h 15 », « dans 40 min ».</summary>
+    public static string In(TimeSpan remaining) =>
+        remaining.TotalHours < 1 ? $"dans {Math.Max(1, (int)remaining.TotalMinutes)} min"
+            : remaining.Minutes == 0 ? $"dans {(int)remaining.TotalHours} h"
+            : $"dans {(int)remaining.TotalHours} h {remaining.Minutes:00}";
 
     /// <summary>Nombre de pixels CSS, indépendant de la culture (« 12.5px »).</summary>
     public static string Px(double value) => value.ToString("0.#", CultureInfo.InvariantCulture) + "px";

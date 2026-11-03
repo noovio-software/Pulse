@@ -16,6 +16,11 @@ public partial class Account
 
     [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; } = default!;
 
+    /// <summary>Spécialisation d'où vient la demande de comparaison (bouton « Comparer ») : ses personnages passent en tête.</summary>
+    [SupplyParameterFromQuery(Name = "spec")] private string? SpecSlug { get; set; }
+
+    private TankSpecInfo? target;
+
     private UserAccount? account;
     private List<UserCharacter> characters = [];
     private List<UserCharacter> tanks = [];
@@ -34,7 +39,12 @@ public partial class Account
 
         // Niveau maximum d'abord, puis par niveau et par nom.
         var ordered = characters.OrderByDescending(c => c.Level).ThenBy(c => c.Name, StringComparer.CurrentCulture).ToList();
-        tanks = ordered.Where(c => TankSpecs.ForClass(c.ClassId) is not null).ToList();
+        target = TankSpecs.FromSlug(SpecSlug);
+        tanks = ordered.Where(c => TankSpecs.ForClass(c.ClassId) is not null)
+            .OrderByDescending(IsTarget) // tri stable : l'ordre par niveau est conservé dans chaque groupe
+            .ToList();
         others = ordered.Where(c => TankSpecs.ForClass(c.ClassId) is null).ToList();
     }
+
+    private bool IsTarget(UserCharacter character) => target is not null && character.ClassId == target.ClassId;
 }

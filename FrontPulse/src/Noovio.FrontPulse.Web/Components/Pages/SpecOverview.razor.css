@@ -21,7 +21,7 @@
     box-shadow: 0 0 18px var(--class-color);
 }
 
-.spec-identity { display: flex; align-items: center; gap: 16px; }
+.spec-identity { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 22px; }
 
 .spec-icon {
     width: 64px;

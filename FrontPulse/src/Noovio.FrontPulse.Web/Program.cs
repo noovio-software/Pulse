@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Noovio.FrontPulse.Application;
 using Noovio.FrontPulse.Application.Abstractions;
+using Noovio.FrontPulse.Web;
 using Noovio.FrontPulse.Web.Auth;
 using Noovio.FrontPulse.Domain;
 using Noovio.FrontPulse.Infrastructure;
@@ -25,6 +26,7 @@ builder.Services.AddFrontPulseApplication(builder.Configuration);
 builder.Services.AddFrontPulseInfrastructure(builder.Configuration);
 builder.Services.AddBattleNetAuthentication(builder.Configuration);
 builder.Services.AddFrontPulseAdmin(builder.Configuration);
+builder.Services.AddSingleton<RefreshSchedule>();
 
 // Clés de chiffrement du cookie de connexion : en prod, dans un dossier persistant (sinon chaque redémarrage,
 // donc chaque déploiement, déconnecterait tout le monde). En local, l'emplacement par défaut suffit.
