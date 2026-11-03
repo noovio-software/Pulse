@@ -1,0 +1,43 @@
+@* En-tête compact : logo à gauche, une entrée par spécialisation tank, actions de la page à droite. *@
+
+<header class="topbar">
+    <a class="brand" href="/">
+        <Sigil />
+        <span class="brand-wordmark">
+            <span class="brand-name">FrontPulse</span>
+            <span class="brand-by">by Noovio</span>
+        </span>
+        <span class="brand-tag">Méta tank · Mythique+</span>
+    </a>
+
+    <nav class="spec-nav" aria-label="Spécialisations">
+        @foreach (var info in TankSpecs.All)
+        {
+            <a class="spec-link @(info.Spec == Active ? "is-active" : null)" href="specs/@info.Slug"
+               style="--class-color: @info.Color" aria-current="@(info.Spec == Active ? "page" : null)">
+                <img class="spec-nav-icon" src="@info.IconUrl" alt="" width="22" height="22" />
+                @Ui.ShortLabel(info)
+            </a>
+        }
+    </nav>
+
+    <div class="topbar-actions">
+        @ChildContent
+        <AuthorizeView>
+            <Authorized>
+                <a class="account-link" href="compte" title="Mes personnages">
+                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" />
+                    </svg>
+                    <span class="account-name">@context.User.Identity?.Name</span>
+                </a>
+            </Authorized>
+            <NotAuthorized>
+                <a class="btn btn-bnet" href="compte/connexion?returnUrl=%2Fcompte" data-enhance-nav="false">
+                    <BattleNetLogo />
+                    <span>Connexion</span>
+                </a>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</header>

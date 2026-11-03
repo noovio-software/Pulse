@@ -1,0 +1,19 @@
+@* Pastille de verdict : coche (bon), point d'exclamation (à améliorer), croix (problème). *@
+
+<span class="verdict-icon @Ui.VerdictCss(Verdict)" title="@Ui.VerdictLabel(Verdict)" style="width: @(Size)px; height: @(Size)px">
+    <svg viewBox="0 0 24 24" width="@(Size - 8)" height="@(Size - 8)" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        @switch (Verdict)
+        {
+            case Verdict.Good:
+                <path d="M5 12.5l4.5 4.5L19 7.5" />
+                break;
+            case Verdict.Improve:
+                <path d="M12 5v9M12 19h.01" />
+                break;
+            default:
+                <path d="M6 6l12 12M18 6L6 18" />
+                break;
+        }
+    </svg>
+    <span class="visually-hidden">@Ui.VerdictLabel(Verdict)</span>
+</span>

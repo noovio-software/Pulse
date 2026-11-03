@@ -1,0 +1,21 @@
+# PostgreSQL + Redis de développement, alignés sur appsettings.Development.json.
+#   docker compose -f FrontPulse/docker-compose.yml up -d
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: frontpulse
+      POSTGRES_USER: frontpulse
+      POSTGRES_PASSWORD: frontpulse
+    ports:
+      - "5432:5432"
+    volumes:
+      - frontpulse-pg:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+volumes:
+  frontpulse-pg:

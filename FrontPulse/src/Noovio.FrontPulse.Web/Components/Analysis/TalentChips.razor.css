@@ -1,0 +1,16 @@
+.talent-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+
+.talent-chips a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 10px 3px 3px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: var(--text);
+    background: rgba(11, 14, 20, 0.55);
+    border: 1px solid var(--line);
+}
+.talent-chips a:hover { text-decoration: none; border-color: var(--line-strong); }
+.talent-chips img { width: 24px; height: 24px; }
+.talent-chips strong { font-size: 0.72rem; color: var(--text-faint); font-variant-numeric: tabular-nums; }

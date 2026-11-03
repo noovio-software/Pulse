@@ -1,0 +1,209 @@
+@page "/compte/personnages/{Id:long}/analyse"
+@attribute [Authorize]
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>@(analysis?.Character.Name ?? "Analyse") · FrontPulse by Noovio</PageTitle>
+
+<TopBar Active="analysis?.Spec.Spec" />
+
+<main class="shell">
+    <a class="back-link" href="compte">‹ Mes personnages</a>
+
+@if (loading)
+{
+    <section class="panel empty-state">
+        <div class="spinner"></div>
+        <p>Analyse en cours : équipement, talents et caractéristiques (Blizzard), clés (Raider.io), méta du top…</p>
+    </section>
+}
+else if (error is not null)
+{
+    <section class="panel empty-state">
+        <h1>Analyse impossible</h1>
+        <p>@error</p>
+        <a class="btn" href="compte">Retour</a>
+    </section>
+}
+else if (analysis is { } a)
+{
+    var c = a.Character;
+    <section class="panel report-hero" style="--class-color: @a.Spec.Color; @(c.PortraitUrl is null ? null : $"--portrait: url('{c.PortraitUrl}')")">
+        <div class="report-identity">
+            @if (c.AvatarUrl is not null)
+            {
+                <img class="report-avatar" src="@c.AvatarUrl" alt="" width="72" height="72" />
+            }
+            <div>
+                <span class="eyebrow">@a.Spec.SpecName @a.Spec.ClassName · @(character?.RealmName) (@c.Region.ToUpperInvariant())</span>
+                <h1>@c.Name</h1>
+                <div class="report-chips">
+                    <span class="chip">
+                        <small>Niv. d'objet</small> @Ui.Ilvl(c.Loadout.ItemLevel)
+                        <em class="@(c.Loadout.ItemLevel >= a.Meta.MedianItemLevel ? "is-up" : "is-down")">
+                            @((c.Loadout.ItemLevel - a.Meta.MedianItemLevel).ToString("+0.#;-0.#;0")) vs top
+                        </em>
+                    </span>
+                    @if (c.MythicPlus is { } m)
+                    {
+                        <span class="chip"><small>Score M+</small> <strong style="color: @(m.ScoreColor ?? "inherit")">@m.Score.ToString("0")</strong></span>
+                    }
+                    @if (a.Talents.HeroTree is not null)
+                    {
+                        <HeroBadge Name="@a.Talents.HeroTree" IconUrl="@Ui.HeroIcon(a.Meta.TalentTree, a.Talents.HeroTree)" />
+                    }
+                    @if (!a.PlaysTankSpec)
+                    {
+                        <span class="chip is-warn">Joué en @(c.ActiveSpecName ?? "autre spécialisation")</span>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="report-score">
+            <ScoreRing Score="a.Score" />
+            <span class="eyebrow">Conformité à la méta</span>
+            <button type="button" class="btn btn-ghost btn-refresh" @onclick="() => LoadAsync(force: true)" title="Relire le personnage chez Blizzard et Raider.io">
+                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 0 1-15.5 6.2L3 16M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M3 21v-5h5" />
+                </svg>
+                Relancer · @Ui.Ago(a.AnalyzedAtUtc)
+            </button>
+        </div>
+    </section>
+
+    <ul class="area-tiles" aria-label="Synthèse par domaine">
+        @foreach (var area in a.Areas)
+        {
+            <li class="@Ui.VerdictCss(area.Verdict)">
+                <VerdictIcon Verdict="area.Verdict" Size="22" />
+                <span class="area-name">@Ui.AreaLabel(area.Kind)</span>
+                <strong>@area.Summary</strong>
+            </li>
+        }
+    </ul>
+
+    <section class="panel meta-section">
+        <h2 class="section-title">Plan d'action <small class="muted">du plus important au moins important</small></h2>
+        @if (ToFix.Count == 0)
+        {
+            <p class="muted">Rien à corriger : ton personnage suit la méta du top sur tous les points analysés.</p>
+        }
+        else
+        {
+            <div class="findings">
+                @foreach (var f in ToFix)
+                {
+                    <FindingCard Finding="f" />
+                }
+            </div>
+        }
+
+        @if (Strengths.Count > 0)
+        {
+            <details class="strengths">
+                <summary><VerdictIcon Verdict="Verdict.Good" Size="18" /> @Strengths.Count point@(Strengths.Count > 1 ? "s" : "") fort@(Strengths.Count > 1 ? "s" : "")</summary>
+                <div class="findings">
+                    @foreach (var f in Strengths)
+                    {
+                        <FindingCard Finding="f" />
+                    }
+                </div>
+            </details>
+        }
+    </section>
+
+    <div class="meta-columns">
+        <section class="panel meta-section">
+            <h2 class="section-title">Caractéristiques <small class="muted">toi (◆) face au top</small></h2>
+            @if (a.Stats.Count == 0)
+            {
+                <p class="muted">Caractéristiques indisponibles.</p>
+            }
+            else
+            {
+                <StatReviewList Stats="a.Stats" />
+            }
+        </section>
+
+        <section class="panel meta-section">
+            <h2 class="section-title">Talents</h2>
+            <div class="talent-summary">
+                <div class="similarity">
+                    <strong>@Ui.Percent(a.Talents.Similarity)</strong>
+                    <span class="muted">des talents majoritaires du top</span>
+                    <span class="share-bar" aria-hidden="true"><span style="width: @Ui.CssPercent(a.Talents.Similarity)"></span></span>
+                </div>
+                <div class="talent-actions">
+                    <button type="button" class="btn btn-primary" @onclick="() => treeOpen = true" disabled="@(a.Meta.TalentTree is null)">Voir mon arbre</button>
+                    @if (a.Talents.LoadoutCode is { } mine)
+                    {
+                        <a class="btn btn-ghost" href="@Ui.TalentCalculatorUrl(mine)" target="_blank" rel="noopener">Mon build sur Wowhead</a>
+                    }
+                    @if (a.Meta.TalentBuilds.FirstOrDefault() is { } topBuild)
+                    {
+                        <a class="btn btn-ghost" href="@Ui.TalentCalculatorUrl(topBuild.LoadoutCode)" target="_blank" rel="noopener">Build du top</a>
+                    }
+                </div>
+            </div>
+
+            @if (a.Talents.MissingCore.Count > 0)
+            {
+                <h3 class="chip-title is-problem">Incontournables manquants</h3>
+                <TalentChips Talents="a.Talents.MissingCore" Layout="a.Meta.TalentTree" />
+            }
+            @if (a.Talents.Atypical.Count > 0)
+            {
+                <h3 class="chip-title is-improve">Choix atypiques (&lt; 10 % du top)</h3>
+                <TalentChips Talents="a.Talents.Atypical" Layout="a.Meta.TalentTree" />
+            }
+        </section>
+    </div>
+
+    <section class="panel meta-section">
+        <h2 class="section-title">Équipement <small class="muted">niveau d'objet comparé à la médiane du top sur chaque emplacement</small></h2>
+        <GearReviewList Gear="a.Gear" />
+    </section>
+
+    <div class="meta-columns">
+        <section class="panel meta-section">
+            <h2 class="section-title">Mythique+</h2>
+            <MythicPlusPanel MythicPlus="c.MythicPlus" />
+        </section>
+
+        <section class="panel meta-section">
+            <h2 class="section-title">Fiche complète</h2>
+            @if (c.Sheet is { } s)
+            {
+                <dl class="sheet">
+                    <div><dt>Points de vie</dt><dd>@s.Health.ToString("N0")</dd></div>
+                    <div><dt>Endurance</dt><dd>@s.Stamina.ToString("N0")</dd></div>
+                    <div><dt>@(s.Strength >= s.Agility ? "Force" : "Agilité")</dt><dd>@Math.Max(s.Strength, s.Agility).ToString("N0")</dd></div>
+                    <div><dt>Armure</dt><dd>@s.Armor.ToString("N0")</dd></div>
+                    <div><dt>Hâte</dt><dd>@s.Secondary.Haste.Percent.ToString("0.0") %</dd></div>
+                    <div><dt>Maîtrise</dt><dd>@s.Secondary.Mastery.Percent.ToString("0.0") %</dd></div>
+                    <div><dt>Critique</dt><dd>@s.Secondary.Crit.Percent.ToString("0.0") %</dd></div>
+                    <div><dt>Polyvalence</dt><dd>@s.Secondary.Versatility.Percent.ToString("0.0") % <small>/ @s.VersatilityDamageTaken.ToString("0.0") % subis</small></dd></div>
+                    <div><dt>Esquive</dt><dd>@s.Dodge.ToString("0.0") %</dd></div>
+                    <div><dt>Parade</dt><dd>@s.Parry.ToString("0.0") %</dd></div>
+                    @if (s.Block > 0)
+                    {
+                        <div><dt>Blocage</dt><dd>@s.Block.ToString("0.0") %</dd></div>
+                    }
+                    <div><dt>Ponction</dt><dd>@s.Leech.ToString("0.0") %</dd></div>
+                    <div><dt>Évitement</dt><dd>@s.Avoidance.ToString("0.0") %</dd></div>
+                    <div><dt>Vitesse</dt><dd>@s.Speed.ToString("0.0") %</dd></div>
+                </dl>
+            }
+            else
+            {
+                <p class="muted">Fiche indisponible.</p>
+            }
+        </section>
+    </div>
+
+    @if (treeOpen && a.Meta.TalentTree is { } layout)
+    {
+        <TalentCalculatorDialog Layout="layout" Spec="a.Spec" SampleSize="a.Meta.SampleSize" LoadoutCode="@a.Talents.LoadoutCode"
+                                Selected="a.Talents.SelectedTalentIds" InitialHero="@a.Talents.HeroTree" OnClose="() => treeOpen = false" />
+    }
+}
+</main>

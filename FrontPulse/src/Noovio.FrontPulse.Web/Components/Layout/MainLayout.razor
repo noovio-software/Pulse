@@ -1,0 +1,38 @@
+@inherits LayoutComponentBase
+
+<div class="forge-backdrop" aria-hidden="true"></div>
+
+@* Chaque page rend sa propre <TopBar> (la spécialisation active y est surlignée). *@
+@Body
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <Sigil Size="24" />
+            <span class="brand-wordmark">
+                <span class="brand-name">FrontPulse</span>
+                <span class="brand-by">by Noovio</span>
+            </span>
+            <span class="app-version" title="Version déployée">v@(AppVersion)</span>
+        </div>
+
+        <div class="footer-sources">
+            <span class="eyebrow">Données</span>
+            <a class="source" href="https://raider.io" target="_blank" rel="noopener">
+                <span class="source-dot" aria-hidden="true"></span> Raider.io
+            </a>
+            <a class="source" href="https://develop.battle.net" target="_blank" rel="noopener">
+                <span class="source-dot" aria-hidden="true"></span> API Blizzard
+            </a>
+            <a class="source" href="https://www.wowhead.com/fr" target="_blank" rel="noopener">
+                <span class="source-dot" aria-hidden="true"></span> Wowhead
+            </a>
+        </div>
+    </div>
+</footer>
+
+<div id="blazor-error-ui" data-nosnippet>
+    Une erreur inattendue est survenue.
+    <a href="." class="reload">Recharger</a>
+    <span class="dismiss">🗙</span>
+</div>

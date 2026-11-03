@@ -1,0 +1,17 @@
+@* Talents en vignettes : icône (tirée de l'arbre), nom et part du top, infobulle Wowhead. *@
+
+<ul class="talent-chips">
+    @foreach (var t in Talents)
+    {
+        <li>
+            <a href="@Ui.SpellUrl(t.SpellId)" data-wowhead="@Ui.SpellWowhead(t.SpellId)" target="_blank" rel="noopener">
+                @if (Icon(t) is { } icon)
+                {
+                    <img class="wow-icon" src="@icon" alt="" loading="lazy" />
+                }
+                <span>@t.Name</span>
+                <strong>@Ui.Percent(t.Share)</strong>
+            </a>
+        </li>
+    }
+</ul>

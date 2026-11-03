@@ -1,0 +1,9 @@
+@* Arbre héroïque : icône (celle de son talent d'entrée) et nom. *@
+
+<span class="hero-badge @(Small ? "is-small" : null)">
+    @if (IconUrl is not null)
+    {
+        <img src="@IconUrl" alt="" loading="lazy" />
+    }
+    @Name
+</span>

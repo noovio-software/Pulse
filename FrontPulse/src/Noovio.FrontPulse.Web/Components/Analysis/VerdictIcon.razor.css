@@ -1,0 +1,18 @@
+.verdict-icon {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    border-radius: 50%;
+    color: #0B0E14;
+    background: var(--verdict);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--verdict) 45%, transparent);
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}

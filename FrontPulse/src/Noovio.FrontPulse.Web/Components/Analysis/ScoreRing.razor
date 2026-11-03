@@ -1,0 +1,12 @@
+@* Note globale sur 100 en anneau : rouge sous 50, ambre jusqu'à 75, vert au-delà. *@
+
+<div class="score-ring" style="--score-color: @Color" role="img" aria-label="Conformité à la méta : @Score sur 100">
+    <svg viewBox="0 0 120 120" width="@Size" height="@Size" aria-hidden="true">
+        <circle cx="60" cy="60" r="52" class="track" />
+        <circle cx="60" cy="60" r="52" class="value" stroke-dasharray="@Dash" transform="rotate(-90 60 60)" />
+    </svg>
+    <div class="score-text">
+        <strong>@Score</strong>
+        <span>/ 100</span>
+    </div>
+</div>

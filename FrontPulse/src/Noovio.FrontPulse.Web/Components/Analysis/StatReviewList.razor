@@ -1,0 +1,22 @@
+@* Caractéristiques du personnage sur la réglette du top : bande = moitié centrale du top, trait = médiane, losange = toi. *@
+
+<ul class="stat-review">
+    @foreach (var s in Stats)
+    {
+        <li class="@Ui.StatCss(s.Stat) @Ui.VerdictCss(s.Verdict)">
+            <div class="stat-head">
+                <StatIcon Stat="s.Stat" />
+                <span class="stat-name">@Ui.StatLabel(s.Stat)</span>
+                <strong class="stat-mine">@s.Percent.ToString("0") %</strong>
+                <VerdictIcon Verdict="s.Verdict" Size="20" />
+            </div>
+            <div class="stat-scale" role="img"
+                 aria-label="@($"{Ui.StatLabel(s.Stat)} : toi {s.Percent:0} %, la moitié du top entre {s.Top.P25Percent:0} et {s.Top.P75Percent:0} %")">
+                <span class="stat-band" style="left: @Pos(s.Top.P25Percent); width: @Width(s)"></span>
+                <span class="stat-median" style="left: @Pos(s.Top.MedianPercent)"></span>
+                <span class="stat-you" style="left: @Pos(s.Percent)"></span>
+            </div>
+            <p class="stat-range">Top : @s.Top.P25Percent.ToString("0")–@s.Top.P75Percent.ToString("0") % (médiane @s.Top.MedianPercent.ToString("0") %)</p>
+        </li>
+    }
+</ul>

@@ -1,0 +1,17 @@
+@* Un constat de l'analyse : quoi (titre), pourquoi, comment. *@
+
+<article class="finding @Ui.VerdictCss(Finding.Verdict)">
+    <VerdictIcon Verdict="Finding.Verdict" />
+    <div class="finding-body">
+        <header>
+            @if (Finding.IconUrl is not null)
+            {
+                <img class="wow-icon" src="@Finding.IconUrl" alt="" width="22" height="22" />
+            }
+            <strong>@Finding.Title</strong>
+            <span class="finding-area">@Ui.AreaLabel(Finding.Area)</span>
+        </header>
+        <p class="finding-why"><span>Pourquoi</span> @Finding.Why</p>
+        <p class="finding-how"><span>Comment</span> @Finding.How</p>
+    </div>
+</article>

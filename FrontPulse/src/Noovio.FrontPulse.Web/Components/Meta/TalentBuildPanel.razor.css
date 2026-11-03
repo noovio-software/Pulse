@@ -1,0 +1,37 @@
+.build-main {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.10), rgba(37, 99, 235, 0.06));
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.build-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.build-head .eyebrow { width: 100%; }
+.build-figures { display: flex; align-items: baseline; gap: 8px; margin-right: auto; }
+.build-share { font-family: var(--font-title); font-size: 1.7rem; line-height: 1; color: var(--amber); }
+
+.build-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.build-alternatives { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.build-alternatives li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 6px 6px 12px;
+    border-radius: 10px;
+    background: rgba(11, 14, 20, 0.55);
+    border: 1px solid var(--line);
+}
+.build-alt-share { min-width: 40px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.build-alt-actions { display: flex; gap: 4px; margin-left: auto; }
+
+.hero-trees { margin-top: 18px; }
+.hero-trees ul { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.hero-trees li { display: grid; grid-template-columns: minmax(150px, auto) 1fr 56px; align-items: center; gap: 12px; }
+.hero-trees strong { text-align: right; white-space: nowrap; color: var(--steel); font-variant-numeric: tabular-nums; }
+
+.share-bar { display: block; height: 6px; border-radius: 3px; background: rgba(42, 54, 79, 0.7); overflow: hidden; }
+.share-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--cobalt), var(--steel)); }

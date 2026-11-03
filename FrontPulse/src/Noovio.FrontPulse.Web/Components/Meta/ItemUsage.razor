@@ -1,0 +1,36 @@
+@* Un objet et sa popularité. Ligne : icône, nom (infobulle Wowhead), part du top.
+   Vignette : icône seule avec la part en pastille, le nom passe dans l'infobulle. *@
+
+@if (Chip)
+{
+    <a class="item-chip" href="@Ui.ItemUrl(Item)" data-wowhead="@Ui.ItemWowhead(Item)" target="_blank" rel="noopener"
+       aria-label="@Item.Name, @Ui.Percent(Item.Share)">
+        @if (Item.IconUrl is not null)
+        {
+            <img class="wow-icon" src="@Item.IconUrl" alt="" loading="lazy" />
+        }
+        else
+        {
+            <span class="wow-icon"></span>
+        }
+        <span class="chip-share">@Ui.Percent(Item.Share)</span>
+    </a>
+}
+else
+{
+    <div class="item-usage">
+        @if (Item.IconUrl is not null)
+        {
+            <img class="wow-icon item-icon" src="@Item.IconUrl" alt="" loading="lazy" />
+        }
+        else
+        {
+            <span class="wow-icon item-icon"></span>
+        }
+        <div class="item-text">
+            <a href="@Ui.ItemUrl(Item)" data-wowhead="@Ui.ItemWowhead(Item)" target="_blank" rel="noopener">@Item.Name</a>
+            <span class="share-bar" aria-hidden="true"><span style="width: @Ui.CssPercent(Item.Share)"></span></span>
+        </div>
+        <span class="item-share" title="@Item.Count tanks">@Ui.Percent(Item.Share)</span>
+    </div>
+}

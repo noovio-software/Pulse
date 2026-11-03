@@ -1,0 +1,18 @@
+[Unit]
+Description=FrontPulse by Noovio - ingestion toutes les 6 h (worker)
+After=network.target postgresql.service
+
+[Service]
+WorkingDirectory=/home/ubuntu/projects/frontpulse/worker
+ExecStart=/usr/bin/dotnet /home/ubuntu/projects/frontpulse/worker/Noovio.FrontPulse.Worker.dll
+Restart=always
+RestartSec=30
+KillSignal=SIGINT
+SyslogIdentifier=frontpulse-worker
+User=ubuntu
+Environment=DOTNET_ENVIRONMENT=Production
+Environment=DOTNET_NOLOGO=true
+EnvironmentFile=/etc/frontpulse/frontpulse.env
+
+[Install]
+WantedBy=multi-user.target

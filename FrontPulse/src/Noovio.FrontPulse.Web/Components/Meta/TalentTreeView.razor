@@ -1,0 +1,35 @@
+@* Une section de l'arbre (classe, héros ou spécialisation) disposée comme en jeu.
+   Mode méta : chaque nœud montre l'option la plus prise, son anneau suit le taux de sélection du top.
+   Mode joueur (Selected renseigné) : l'anneau compare les choix du joueur à ceux du top. *@
+
+<div class="tree" style="width: @Ui.Px(Section.Width * Cell); height: @Ui.Px(Section.Height * Cell)">
+    <svg class="tree-links" width="@Ui.Px(Section.Width * Cell)" height="@Ui.Px(Section.Height * Cell)" aria-hidden="true">
+        @foreach (var (from, to) in Links)
+        {
+            <line x1="@Center(from.X)" y1="@Center(from.Y)" x2="@Center(to.X)" y2="@Center(to.Y)"
+                  class="@(IsLit(from) && IsLit(to) ? "is-lit" : null)" />
+        }
+    </svg>
+
+    @foreach (var node in Section.Nodes)
+    {
+        var shown = Shown(node);
+        <a class="node kind-@node.Kind.ToString().ToLowerInvariant() @Tier(node)"
+           style="left: @Ui.Px(node.X * Cell + Offset); top: @Ui.Px(node.Y * Cell + Offset)"
+           href="@Ui.SpellUrl(shown.SpellId)" data-wowhead="@Ui.SpellWowhead(shown.SpellId)" target="_blank" rel="noopener"
+           aria-label="@Label(node)">
+            @if (shown.IconUrl is not null)
+            {
+                <img src="@shown.IconUrl" alt="" loading="lazy" />
+            }
+            @if (node.Kind == TalentNodeKind.Choice)
+            {
+                <span class="node-choice" aria-hidden="true">@(node.Choices.ToList().IndexOf(shown) + 1)/@node.Choices.Count</span>
+            }
+            @if (Share(node) > 0)
+            {
+                <span class="node-share">@((Share(node) * 100).ToString("0"))</span>
+            }
+        </a>
+    }
+</div>

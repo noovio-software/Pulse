@@ -1,0 +1,48 @@
+@page "/"
+
+<PageTitle>FrontPulse by Noovio · Méta tank Mythique+</PageTitle>
+
+<TopBar />
+
+<main class="shell">
+    <section class="home-intro">
+        <h1 class="title">La méta des tanks, au top du classement</h1>
+        <p class="subtitle">
+            Équipement, caractéristiques, talents et embellissements des 100 meilleurs tanks de chaque spécialisation
+            en Mythique+, recalculés toutes les 6 heures depuis Raider.io et l'API Blizzard.
+        </p>
+    </section>
+
+    <div class="spec-cards">
+        @foreach (var info in TankSpecs.All)
+        {
+            var summary = summaries.FirstOrDefault(s => s.Spec == info.Spec);
+            <a class="panel spec-card" href="specs/@info.Slug" style="--class-color: @info.Color">
+                <span class="spec-card-identity">
+                    <img class="wow-icon spec-card-icon" src="@info.IconUrl" alt="" width="48" height="48" />
+                    <span>
+                        <span class="eyebrow">@info.ClassName</span>
+                        <strong class="spec-card-name">@info.SpecName</strong>
+                    </span>
+                </span>
+                @if (summary is null)
+                {
+                    <span class="muted">En attente de la première ingestion</span>
+                }
+                else
+                {
+                    <span class="spec-card-facts">
+                        <span><small>Niv.</small> @Ui.Ilvl(summary.MedianItemLevel)</span>
+                        <span><small>Clé</small> +@summary.MedianKeyLevel</span>
+                        <span><small>Tanks</small> @summary.SampleSize</span>
+                    </span>
+                    @if (summary.TopHeroTree is not null)
+                    {
+                        <HeroBadge Name="@summary.TopHeroTree" IconUrl="@summary.TopHeroIconUrl" />
+                    }
+                    <span class="muted spec-card-updated">Mis à jour @Ui.Ago(summary.ComputedAtUtc)</span>
+                }
+            </a>
+        }
+    </div>
+</main>

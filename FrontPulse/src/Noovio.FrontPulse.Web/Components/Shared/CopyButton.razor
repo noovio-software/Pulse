@@ -1,0 +1,20 @@
+@* Copie 1 clic dans le presse-papiers (code de talents, route MDT…), avec retour visuel. *@
+
+<button type="button" class="btn @(Primary ? "btn-primary" : "btn-ghost") btn-copy @(IconOnly ? "btn-icon" : null) @(copied ? "is-copied" : null)"
+        @onclick="CopyAsync" disabled="@string.IsNullOrEmpty(Text)" title="@(copied ? "Copié !" : Label)" aria-label="@Label">
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        @if (copied)
+        {
+            <path d="M5 12l5 5L20 7" />
+        }
+        else
+        {
+            <rect x="9" y="9" width="11" height="11" rx="2" />
+            <path d="M5 15V5a2 2 0 0 1 2-2h8" />
+        }
+    </svg>
+    @if (!IconOnly)
+    {
+        <span>@(copied ? "Copié !" : failed ? "Copie impossible" : Label)</span>
+    }
+</button>

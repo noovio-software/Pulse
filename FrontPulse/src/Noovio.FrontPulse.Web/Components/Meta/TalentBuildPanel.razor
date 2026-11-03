@@ -1,0 +1,89 @@
+@* Configuration la plus jouée (calculateur, Wowhead, copie), alternatives et arbres héroïques. *@
+
+@if (Builds.Count == 0)
+{
+    <p class="muted">Aucune configuration de talents dans l'échantillon.</p>
+}
+else
+{
+    var top = Builds[0];
+    <div class="build-main">
+        <div class="build-head">
+            <span class="eyebrow">Configuration la plus jouée</span>
+            <div class="build-figures">
+                <strong class="build-share">@Ui.Percent(top.Share)</strong>
+                <span class="muted">du top · @top.Count joueurs</span>
+            </div>
+            @if (top.HeroTree is not null)
+            {
+                <HeroBadge Name="@top.HeroTree" IconUrl="@Ui.HeroIcon(Layout, top.HeroTree)" />
+            }
+        </div>
+
+        <div class="build-actions">
+            <button type="button" class="btn btn-primary" @onclick="() => calculatorOpen = true" disabled="@(Layout is null)"
+                    title="@(Layout is null ? "Arbre disponible à la prochaine mise à jour" : null)">
+                <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="4.5" r="2.5" /><circle cx="5" cy="19.5" r="2.5" /><circle cx="19" cy="19.5" r="2.5" />
+                    <path d="M12 7v5M12 12l-6 5M12 12l6 5" />
+                </svg>
+                Calculateur de talents
+            </button>
+            <a class="btn btn-ghost" href="@Ui.TalentCalculatorUrl(top.LoadoutCode)" target="_blank" rel="noopener" title="Ouvrir cette configuration dans le calculateur Wowhead">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
+                </svg>
+                Wowhead
+            </a>
+            <CopyButton Text="@top.LoadoutCode" Label="Copier le code de talents" IconOnly />
+        </div>
+    </div>
+
+    @if (Builds.Count > 1)
+    {
+        <ul class="build-alternatives" aria-label="Autres configurations">
+            @foreach (var build in Builds.Skip(1))
+            {
+                <li>
+                    <span class="build-alt-share">@Ui.Percent(build.Share)</span>
+                    @if (build.HeroTree is not null)
+                    {
+                        <HeroBadge Name="@build.HeroTree" IconUrl="@Ui.HeroIcon(Layout, build.HeroTree)" Small />
+                    }
+                    <span class="build-alt-actions">
+                        <a class="btn btn-ghost btn-icon" href="@Ui.TalentCalculatorUrl(build.LoadoutCode)" target="_blank" rel="noopener"
+                           title="Ouvrir dans Wowhead" aria-label="Ouvrir dans Wowhead">
+                            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
+                            </svg>
+                        </a>
+                        <CopyButton Text="@build.LoadoutCode" Label="Copier le code de talents" IconOnly />
+                    </span>
+                </li>
+            }
+        </ul>
+    }
+}
+
+@if (HeroTrees.Count > 0)
+{
+    <div class="hero-trees">
+        <span class="eyebrow">Arbres héroïques</span>
+        <ul>
+            @foreach (var tree in HeroTrees)
+            {
+                <li>
+                    <HeroBadge Name="@tree.Name" IconUrl="@Ui.HeroIcon(Layout, tree.Name)" />
+                    <span class="share-bar" aria-hidden="true"><span style="width: @Ui.CssPercent(tree.Share)"></span></span>
+                    <strong>@Ui.Percent(tree.Share)</strong>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@if (calculatorOpen && Layout is not null)
+{
+    <TalentCalculatorDialog Layout="Layout" Spec="Spec" SampleSize="SampleSize"
+                            LoadoutCode="@Builds.FirstOrDefault()?.LoadoutCode" OnClose="() => calculatorOpen = false" />
+}

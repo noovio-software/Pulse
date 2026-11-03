@@ -1,0 +1,52 @@
+.home-intro { max-width: 760px; padding: 12px 0 4px; }
+.home-intro .subtitle { margin-bottom: 0; }
+
+.spec-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+}
+
+.spec-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 18px 20px;
+    overflow: hidden;
+    color: var(--text);
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.spec-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: var(--class-color);
+    box-shadow: 0 0 14px var(--class-color);
+}
+.spec-card:hover {
+    text-decoration: none;
+    color: var(--text);
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--class-color) 55%, var(--line));
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45), 0 0 24px color-mix(in srgb, var(--class-color) 18%, transparent);
+}
+
+.spec-card-identity { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+.spec-card-identity > span { display: flex; flex-direction: column; }
+.spec-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    border: 2px solid var(--class-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 16px color-mix(in srgb, var(--class-color) 40%, transparent);
+}
+
+.spec-card-name { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: 0.05em; color: var(--class-color); }
+.spec-card ::deep .hero-badge { align-self: flex-start; }
+
+.spec-card-facts { display: flex; gap: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.spec-card-facts small { margin-right: 4px; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); }
+
+.spec-card-updated { margin-top: 4px; font-size: 0.75rem; }

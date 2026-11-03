@@ -1,0 +1,50 @@
+@* Équipement porté face au top : pièce, niveau d'objet contre la médiane du top, enchantement, pièce la plus jouée. *@
+
+<ul class="gear-review">
+    @foreach (var g in Gear)
+    {
+        var gap = g.ItemLevel - g.TopItemLevel;
+        <li class="@Ui.VerdictCss(g.Verdict)">
+            <a class="gear-piece" href="@Ui.ItemUrl(g.ItemId)" data-wowhead="item=@g.ItemId&ilvl=@g.ItemLevel&domain=fr" target="_blank" rel="noopener">
+                @if (g.IconUrl is not null)
+                {
+                    <img class="wow-icon" src="@g.IconUrl" alt="" loading="lazy" />
+                }
+                else
+                {
+                    <span class="wow-icon"></span>
+                }
+            </a>
+            <div class="gear-text">
+                <span class="eyebrow">@Ui.SlotLabel(g.Slot)</span>
+                <span class="gear-name">@g.Name</span>
+                <span class="gear-tags">
+                    <span class="ilvl-tag @(gap < -5 ? "is-low" : gap >= 0 ? "is-high" : null)" title="Médiane du top sur cet emplacement : @g.TopItemLevel">
+                        @g.ItemLevel <small>@(gap >= 0 ? "+" : "")@gap</small>
+                    </span>
+                    @if (g.EnchantExpected)
+                    {
+                        <span class="enchant-tag @(g.HasEnchant ? "is-ok" : "is-missing")" title="@(g.HasEnchant ? "Enchanté" : $"Sans enchantement — top : {g.SuggestedEnchant}")">
+                            @(g.HasEnchant ? "Enchanté" : "Sans enchantement")
+                        </span>
+                    }
+                    @if (g.TopShare >= 0.2)
+                    {
+                        <span class="meta-tag" title="Part du top portant cette pièce">Méta @Ui.Percent(g.TopShare)</span>
+                    }
+                </span>
+            </div>
+            @if (g.TopPick is { } pick && pick.ItemId != g.ItemId)
+            {
+                <a class="gear-top" href="@Ui.ItemUrl(pick)" data-wowhead="@Ui.ItemWowhead(pick)" target="_blank" rel="noopener"
+                   title="Le plus porté par le top : @pick.Name (@Ui.Percent(pick.Share))">
+                    @if (pick.IconUrl is not null)
+                    {
+                        <img class="wow-icon" src="@pick.IconUrl" alt="" loading="lazy" />
+                    }
+                    <span>@Ui.Percent(pick.Share)</span>
+                </a>
+            }
+        </li>
+    }
+</ul>

@@ -1,0 +1,46 @@
+@* Caractéristiques secondaires : l'ordre de priorité du top, puis la valeur à viser pour chacune
+   (médiane en jeu) avec la fourchette où se situe la moitié du top, sur une réglette commune. *@
+
+@if (Stats.Count == 0)
+{
+    <p class="muted">Caractéristiques indisponibles pour cet échantillon.</p>
+}
+else
+{
+    <ol class="stat-priority" aria-label="Ordre de priorité">
+        @foreach (var s in Stats)
+        {
+            @if (s != Stats[0])
+            {
+                <li class="stat-sep" aria-hidden="true">›</li>
+            }
+            <li class="stat-pill @Ui.StatCss(s.Stat)">
+                <StatIcon Stat="s.Stat" />
+                <span>@Ui.StatLabel(s.Stat)</span>
+            </li>
+        }
+    </ol>
+
+    <ul class="stat-targets">
+        @foreach (var s in Stats)
+        {
+            <li class="@Ui.StatCss(s.Stat)">
+                <div class="stat-head">
+                    <StatIcon Stat="s.Stat" />
+                    <span class="stat-name">@Ui.StatLabel(s.Stat)</span>
+                    <strong class="stat-value">@Format(s.MedianPercent) %</strong>
+                </div>
+                <div class="stat-scale" role="img"
+                     aria-label="@($"{Ui.StatLabel(s.Stat)} : médiane {Format(s.MedianPercent)} %, la moitié du top entre {Format(s.P25Percent)} et {Format(s.P75Percent)} %")">
+                    <span class="stat-band" style="left: @Pos(s.P25Percent); width: @Width(s)"></span>
+                    <span class="stat-median" style="left: @Pos(s.MedianPercent)"></span>
+                </div>
+                <p class="stat-range">La moitié du top entre @Format(s.P25Percent) et @Format(s.P75Percent) %</p>
+            </li>
+        }
+    </ul>
+
+    <p class="stat-note muted">
+        Pourcentages de la feuille de personnage, médiane du top. La priorité suit les points investis dans chaque caractéristique.
+    </p>
+}

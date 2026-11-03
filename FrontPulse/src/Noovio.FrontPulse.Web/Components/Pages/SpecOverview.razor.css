@@ -1,0 +1,163 @@
+/* --- En-tête de spécialisation ------------------------------------------- */
+.spec-hero {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px 32px;
+    padding: 22px 26px;
+    overflow: hidden;
+    border-color: color-mix(in srgb, var(--class-color) 40%, var(--line));
+}
+
+/* liseré à la couleur de classe, à gauche */
+.spec-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: var(--class-color);
+    box-shadow: 0 0 18px var(--class-color);
+}
+
+.spec-identity { display: flex; align-items: center; gap: 16px; }
+
+.spec-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    border: 2px solid var(--class-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 22px color-mix(in srgb, var(--class-color) 45%, transparent);
+}
+
+.hero-fact { display: flex; align-items: center; gap: 6px; }
+.hero-fact img { border-radius: 50%; }
+
+.spec-title h1 {
+    margin: 2px 0 0;
+    font-family: var(--font-title);
+    font-size: 2.2rem;
+    letter-spacing: 0.06em;
+    color: var(--class-color);
+    text-shadow: 0 0 24px color-mix(in srgb, var(--class-color) 40%, transparent);
+}
+
+.hero-facts { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
+.hero-facts div {
+    min-width: 108px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: rgba(11, 14, 20, 0.6);
+    border: 1px solid var(--line);
+}
+.hero-facts dt { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-faint); }
+.hero-facts dd { margin: 2px 0 0; font-size: 1.1rem; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.hero-facts small { font-size: 0.75rem; font-weight: 500; color: var(--text-dim); }
+
+/* --- Sections ------------------------------------------------------------ */
+.meta-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 18px;
+}
+
+.meta-section { padding: 18px 20px; min-width: 0; }
+
+.section-title {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 0 0 16px;
+    font-family: var(--font-title);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--amber);
+}
+.section-title small { font-family: var(--font); font-size: 0.75rem; letter-spacing: 0; text-transform: none; }
+
+/* --- Bijoux -------------------------------------------------------------- */
+.trinket-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.trinket-columns > div { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+
+.trinket-head {
+    margin: 0 0 2px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.trinket-head.is-defensive { color: var(--steel); }
+.trinket-head.is-offensive { color: var(--bronze); }
+
+/* --- Embellissements ----------------------------------------------------- */
+.embellishments { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; counter-reset: combo; }
+.embellishments li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(11, 14, 20, 0.55);
+    border: 1px solid var(--line);
+    counter-increment: combo;
+}
+.embellishments li::before { content: counter(combo); font-family: var(--font-title); color: var(--text-faint); }
+.embellishments strong { margin-left: auto; color: var(--amber); font-variant-numeric: tabular-nums; }
+.combo-names { display: flex; flex-wrap: wrap; gap: 6px; }
+.combo-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 10px 3px 3px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    color: var(--text);
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.28);
+}
+.combo-chip:hover { text-decoration: none; color: var(--amber); border-color: var(--amber); }
+.combo-chip img { width: 22px; height: 22px; border-radius: 50%; }
+.combo-count { font-weight: 700; color: var(--amber); }
+
+/* --- Top des joueurs (virtualisé) ---------------------------------------- */
+.players-head, .player-row {
+    display: grid;
+    grid-template-columns: 44px 1fr 64px 72px 64px;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    font-variant-numeric: tabular-nums;
+}
+.players-head span:nth-child(n+3), .player-row span:nth-child(n+3) { text-align: right; }
+
+.players-head {
+    padding-bottom: 8px;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    border-bottom: 1px solid var(--line);
+}
+
+.players { height: 420px; overflow-y: auto; }
+
+.player-row { height: 38px; border-bottom: 1px solid rgba(42, 54, 79, 0.45); }
+.player-row:hover { background: rgba(245, 158, 11, 0.04); }
+.player-rank { color: var(--text-faint); font-weight: 700; }
+.player-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.player-name a { font-weight: 600; color: var(--class-color); }
+.player-name small { margin-left: 8px; font-size: 0.72rem; color: var(--text-faint); }
+.player-key { font-weight: 700; color: var(--amber); }
+
+@media (max-width: 720px) {
+    .spec-hero { padding: 18px; }
+    .spec-title h1 { font-size: 1.7rem; }
+    .meta-columns { grid-template-columns: 1fr; }
+    .trinket-columns { grid-template-columns: 1fr; }
+    .players-head, .player-row { grid-template-columns: 32px 1fr 48px 60px; }
+    .players-head span:last-child, .player-row span:last-child { display: none; }
+    .player-name small { display: none; }
+}

@@ -1,0 +1,31 @@
+@* Grille compacte des emplacements : l'objet le plus porté en tête, les alternatives en vignettes. *@
+
+<div class="slot-grid">
+    @foreach (var slot in Slots)
+    {
+        <article class="slot-card">
+            <header class="slot-head">
+                <span class="eyebrow">@Ui.SlotLabel(slot.Slot)</span>
+                @if (slot.Items.Count > 0)
+                {
+                    <span class="slot-ilvl" title="Niveau d'objet médian">@slot.Items[0].MedianItemLevel</span>
+                }
+            </header>
+
+            @if (slot.Items.Count > 0)
+            {
+                <ItemUsage Item="slot.Items[0]" />
+            }
+
+            @if (slot.Items.Count > 1)
+            {
+                <div class="slot-alternatives" aria-label="Alternatives">
+                    @foreach (var item in slot.Items.Skip(1))
+                    {
+                        <ItemUsage Item="item" Chip />
+                    }
+                </div>
+            }
+        </article>
+    }
+</div>

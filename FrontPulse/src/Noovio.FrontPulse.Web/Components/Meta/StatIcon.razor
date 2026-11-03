@@ -1,0 +1,27 @@
+@* Pictogramme au trait (24×24, currentColor) d'une caractéristique secondaire. *@
+
+<svg class="stat-icon" viewBox="0 0 24 24" width="@Size" height="@Size" aria-hidden="true"
+     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    @switch (Stat)
+    {
+        case SecondaryStat.Haste:
+            @* éclair *@
+            <path d="M13 2L4 14h7l-1 8 9-12h-7z" />
+            break;
+        case SecondaryStat.Versatility:
+            @* épée et bouclier : dégâts et réduction des dégâts *@
+            <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z" />
+            <path d="M12 8v8M9 13h6" />
+            break;
+        case SecondaryStat.Mastery:
+            @* étoile *@
+            <path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z" />
+            break;
+        default:
+            @* cible *@
+            <circle cx="12" cy="12" r="8" />
+            <circle cx="12" cy="12" r="3" />
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+            break;
+    }
+</svg>

@@ -1,0 +1,76 @@
+.stat-haste { --stat: var(--amber); }
+.stat-versatility { --stat: var(--steel); }
+.stat-mastery { --stat: #8B5CF6; }
+.stat-crit { --stat: #F87171; }
+
+/* --- Priorité : Maîtrise › Hâte › … -------------------------------------- */
+.stat-priority {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 18px;
+    padding: 0;
+}
+
+.stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px 5px 8px;
+    border-radius: 999px;
+    font-weight: 700;
+    color: var(--stat);
+    background: color-mix(in srgb, var(--stat) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--stat) 40%, transparent);
+}
+.stat-pill:first-child { font-size: 1.05rem; box-shadow: 0 0 14px color-mix(in srgb, var(--stat) 30%, transparent); }
+
+.stat-sep { font-size: 1.3rem; line-height: 1; color: var(--text-faint); }
+
+/* --- Valeur à viser par caractéristique ---------------------------------- */
+.stat-targets { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stat-targets li {
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(11, 14, 20, 0.55);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--stat);
+}
+
+.stat-head { display: flex; align-items: center; gap: 8px; color: var(--stat); }
+.stat-name { font-weight: 600; color: var(--text); }
+.stat-value { margin-left: auto; font-size: 1.35rem; line-height: 1; color: var(--stat); font-variant-numeric: tabular-nums; }
+
+.stat-scale {
+    position: relative;
+    height: 8px;
+    margin: 12px 0 6px;
+    border-radius: 4px;
+    background: rgba(42, 54, 79, 0.6);
+}
+.stat-band {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--stat) 45%, transparent);
+}
+.stat-median {
+    position: absolute;
+    top: -4px;
+    width: 4px;
+    height: 16px;
+    margin-left: -2px;
+    border-radius: 2px;
+    background: var(--stat);
+    box-shadow: 0 0 8px var(--stat);
+}
+
+.stat-range { margin: 0; font-size: 0.74rem; color: var(--text-dim); }
+.stat-note { margin: 12px 0 0; font-size: 0.74rem; }
+
+@media (max-width: 520px) {
+    .stat-targets { grid-template-columns: 1fr; }
+}

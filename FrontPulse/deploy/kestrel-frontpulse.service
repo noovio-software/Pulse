@@ -1,0 +1,19 @@
+[Unit]
+Description=FrontPulse by Noovio - site (Kestrel)
+After=network.target postgresql.service
+
+[Service]
+WorkingDirectory=/home/ubuntu/projects/frontpulse/web
+ExecStart=/usr/bin/dotnet /home/ubuntu/projects/frontpulse/web/Noovio.FrontPulse.Web.dll --urls http://127.0.0.1:8510
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=frontpulse
+User=ubuntu
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_NOLOGO=true
+# Secrets hors de l'unité (lisible par tous) : fichier root:root 600.
+EnvironmentFile=/etc/frontpulse/frontpulse.env
+
+[Install]
+WantedBy=multi-user.target
