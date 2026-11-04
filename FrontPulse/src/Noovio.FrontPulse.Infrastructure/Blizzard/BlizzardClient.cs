@@ -35,6 +35,14 @@ public sealed class BlizzardClient(HttpClient http, BlizzardOAuthClient oauth, I
     public Task<BzTalentTree?> GetTalentTreeAsync(int treeId, int specId, CancellationToken ct) =>
         GetStaticAsync<BzTalentTree>($"/data/wow/talent-tree/{treeId}/playable-specialization/{specId}", ct);
 
+    /// <summary>En anglais : Raider.io nomme les donjons et raids en anglais, c'est la seule façon de les retrouver dans l'index.</summary>
+    public Task<BzJournalInstanceIndex?> GetJournalInstanceIndexAsync(CancellationToken ct) =>
+        GetAsync<BzJournalInstanceIndex>(_options.StaticRegion, $"/data/wow/journal-instance/index?namespace=static-{_options.StaticRegion}&locale=en_US", ct);
+
+    public Task<BzJournalInstance?> GetJournalInstanceAsync(int id, CancellationToken ct) => GetStaticAsync<BzJournalInstance>($"/data/wow/journal-instance/{id}", ct);
+
+    public Task<BzJournalEncounter?> GetJournalEncounterAsync(int id, CancellationToken ct) => GetStaticAsync<BzJournalEncounter>($"/data/wow/journal-encounter/{id}", ct);
+
     public Task<BzCharacterMedia?> GetCharacterMediaAsync(string region, string realmSlug, string name, CancellationToken ct) =>
         GetProfileResourceAsync<BzCharacterMedia>(region, realmSlug, name, "/character-media", ct);
 

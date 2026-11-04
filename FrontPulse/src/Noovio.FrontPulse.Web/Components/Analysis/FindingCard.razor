@@ -1,7 +1,7 @@
-@* Un constat de l'analyse : quoi (titre), pourquoi, comment. *@
+@* Un constat de l'analyse : quoi (titre), l'action à faire, puis sa raison en plus discret. *@
 
 <article class="finding @Ui.VerdictCss(Finding.Verdict)">
-    <VerdictIcon Verdict="Finding.Verdict" />
+    <VerdictIcon Verdict="Finding.Verdict" Size="20" />
     <div class="finding-body">
         <header>
             @if (Finding.IconUrl is not null)
@@ -11,7 +11,7 @@
             <strong>@Finding.Title</strong>
             <span class="finding-area">@Ui.AreaLabel(Finding.Area)</span>
         </header>
-        <p class="finding-why"><span>Pourquoi</span> @Finding.Why</p>
-        <p class="finding-how"><span>Comment</span> @Finding.How</p>
+        <p class="finding-how">@Finding.How</p>
+        <p class="finding-why">@Finding.Why</p>
     </div>
 </article>

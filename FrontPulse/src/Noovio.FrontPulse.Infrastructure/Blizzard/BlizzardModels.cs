@@ -32,6 +32,8 @@ public sealed class BzEquippedItem
     public List<int> BonusList { get; set; } = [];
     public List<BzEnchantment> Enchantments { get; set; } = [];
     public List<BzItemSpell> Spells { get; set; } = [];
+    public List<BzSocket> Sockets { get; set; } = [];
+    public List<BzItemStat> Stats { get; set; } = [];
 
     /// <summary>Ex. « Unique-Equipped: Embellished (2) » sur les pièces embellies.</summary>
     public string? LimitCategory { get; set; }
@@ -51,6 +53,22 @@ public sealed class BzItemSpell
 {
     public BzRef Spell { get; set; } = new();
     public string? Description { get; set; }
+}
+
+public sealed class BzSocket
+{
+    public BzTyped? SocketType { get; set; }
+
+    /// <summary>Absent quand la châsse est vide.</summary>
+    public BzRef? Item { get; set; }
+    public string? DisplayString { get; set; }
+}
+
+public sealed class BzItemStat
+{
+    public BzTyped? Type { get; set; }
+    public int Value { get; set; }
+    public bool IsNegated { get; set; }
 }
 
 public sealed class BzSpecializations
@@ -236,4 +254,37 @@ public sealed class BzAsset
 {
     public string Key { get; set; } = "";
     public string Value { get; set; } = "";
+}
+
+public sealed class BzJournalInstanceIndex
+{
+    public List<BzRef> Instances { get; set; } = [];
+}
+
+public sealed class BzJournalInstance
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = "";
+    public List<BzRef> Encounters { get; set; } = [];
+}
+
+public sealed class BzJournalEncounter
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = "";
+    public List<BzJournalItem> Items { get; set; } = [];
+    public List<BzJournalSection> Sections { get; set; } = [];
+}
+
+public sealed class BzJournalItem
+{
+    public BzRef Item { get; set; } = new();
+}
+
+/// <summary>Arbre des techniques d'une rencontre. Aucun champ de rôle ni de difficulté : seuls le titre et le texte les évoquent.</summary>
+public sealed class BzJournalSection
+{
+    public string? Title { get; set; }
+    public string? BodyText { get; set; }
+    public List<BzJournalSection> Sections { get; set; } = [];
 }

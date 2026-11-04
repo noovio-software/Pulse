@@ -39,6 +39,13 @@ public interface ITalentTreeSource
     Task<TalentTreeLayout?> GetLayoutAsync(TankSpec spec, CancellationToken ct);
 }
 
+/// <summary>Donjons de la saison et raids de l'extension : rencontres, butin et techniques (Journal d'aventure).</summary>
+public interface IEncounterJournalSource
+{
+    /// <summary>null si le journal n'a pas pu être lu : l'analyse se fait alors sans les sources de butin.</summary>
+    Task<EncounterJournal?> GetAsync(string season, CancellationToken ct);
+}
+
 /// <summary>Écriture des résultats d'une ingestion.</summary>
 public interface ITankMetaStore
 {
@@ -89,3 +96,19 @@ public sealed record SpecMetaSummary(
     int MedianKeyLevel,
     string? TopHeroTree,
     string? TopHeroIconUrl);
+
+public sealed record EncounterJournal(IReadOnlyList<JournalInstance> Instances);
+
+public enum InstanceKind
+{
+    Dungeon,
+    Raid
+}
+
+/// <summary><see cref="RaiderIoName"/> : nom anglais, celui des clés Raider.io ; <see cref="Name"/> : nom affiché.</summary>
+public sealed record JournalInstance(int Id, string Name, string RaiderIoName, InstanceKind Kind, IReadOnlyList<JournalBoss> Bosses);
+
+public sealed record JournalBoss(int Id, string Name, IReadOnlyList<int> ItemIds, IReadOnlyList<JournalAbility> Abilities);
+
+/// <summary>Une technique. <see cref="TankHeading"/> : rangée sous un titre de section mentionnant les tanks.</summary>
+public sealed record JournalAbility(string Name, string Text, bool TankHeading);

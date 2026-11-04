@@ -1,12 +1,15 @@
 @* Caractéristiques du personnage sur la réglette du top : bande = moitié centrale du top, trait = médiane, losange = toi. *@
 
 <ul class="stat-review">
-    @foreach (var s in Stats)
+    @foreach (var (s, index) in Stats.Select((s, i) => (s, i)))
     {
+        var projection = Projection.FirstOrDefault(p => p.Stat == s.Stat);
         <li class="@Ui.StatCss(s.Stat) @Ui.VerdictCss(s.Verdict)">
             <div class="stat-head">
+                <span class="stat-rank" title="Ordre de priorité dans le top">@(index + 1)</span>
                 <StatIcon Stat="s.Stat" />
                 <span class="stat-name">@Ui.StatLabel(s.Stat)</span>
+                <span class="stat-action">@Action(s)</span>
                 <strong class="stat-mine">@s.Percent.ToString("0") %</strong>
                 <VerdictIcon Verdict="s.Verdict" Size="20" />
             </div>
@@ -17,6 +20,17 @@
                 <span class="stat-you" style="left: @Pos(s.Percent)"></span>
             </div>
             <p class="stat-range">Top : @s.Top.P25Percent.ToString("0")–@s.Top.P75Percent.ToString("0") % (médiane @s.Top.MedianPercent.ToString("0") %)</p>
+            @if (projection is not null && Math.Abs(projection.Projected - projection.Current) >= 0.5)
+            {
+                <p class="stat-next">Avec les changements proposés : @projection.Current.ToString("0") → <strong>@projection.Projected.ToString("0") %</strong></p>
+            }
+            @if (projection is not null && Math.Abs(projection.RemainingPercent) >= 0.5)
+            {
+                <p class="stat-next">
+                    @(projection.RemainingPercent > 0 ? "Reste à gagner" : "Reste en trop") sur l'équipement :
+                    @Math.Abs(projection.RemainingPercent).ToString("0.#") % (≈ @Math.Abs(projection.RemainingRating).ToString("N0") d'indice)
+                </p>
+            }
         </li>
     }
 </ul>

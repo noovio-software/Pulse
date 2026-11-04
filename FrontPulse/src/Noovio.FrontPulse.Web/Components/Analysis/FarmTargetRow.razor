@@ -1,0 +1,36 @@
+@* Une pièce à aller chercher : ce qu'elle remplace, où elle tombe, et si elle corrige une caractéristique en retard. *@
+
+<li class="farm-target">
+    <a class="target-icon" href="@Ui.ItemUrl(Target.ItemId)" data-wowhead="@Ui.ItemWowhead(Target.ItemId)" target="_blank" rel="noopener">
+        @if (Target.IconUrl is not null)
+        {
+            <img class="wow-icon" src="@Target.IconUrl" alt="" loading="lazy" />
+        }
+        else
+        {
+            <span class="wow-icon"></span>
+        }
+    </a>
+    <div class="target-text">
+        <span class="target-line">
+            <span class="eyebrow">@Ui.SlotLabel(Target.Slot)</span>
+            <a class="target-name" href="@Ui.ItemUrl(Target.ItemId)" target="_blank" rel="noopener">@Target.Name</a>
+            @if (Target.Boss is not null)
+            {
+                <span class="target-boss">sur @Target.Boss</span>
+            }
+            else if (Target.IsCrafted)
+            {
+                <span class="target-boss">à crafter</span>
+            }
+        </span>
+        <span class="target-line target-why">
+            <span>@Ui.Percent(Target.TopShare) du top</span>
+            <span>remplace @Target.CurrentName (@Target.CurrentItemLevel → @Target.TargetItemLevel)</span>
+            @foreach (var stat in Target.Fixes)
+            {
+                <span class="stat-chip @Ui.StatCss(stat)">Corrige ta @Ui.StatLabel(stat)</span>
+            }
+        </span>
+    </div>
+</li>

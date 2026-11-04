@@ -1,14 +1,14 @@
 .finding {
     display: flex;
-    gap: 12px;
-    padding: 12px 14px;
+    gap: 10px;
+    padding: 10px 12px;
     border-radius: 10px;
     background: rgba(11, 14, 20, 0.55);
     border: 1px solid var(--line);
     border-left: 3px solid var(--verdict);
 }
 
-.finding-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.finding-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
 .finding-body header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .finding-body header strong { color: var(--text); }
 .finding-body header img { width: 22px; height: 22px; }
@@ -25,16 +25,6 @@
     border: 1px solid var(--line);
 }
 
-.finding-body p { margin: 0; font-size: 0.85rem; color: var(--text-dim); }
-.finding-body p span {
-    display: inline-block;
-    min-width: 72px;
-    margin-right: 6px;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-faint);
-}
-.finding-how { color: var(--text) !important; }
-.finding-how span { color: var(--verdict) !important; }
+.finding-body p { margin: 0; }
+.finding-how { font-size: 0.88rem; color: var(--text); }
+.finding-why { font-size: 0.78rem; color: var(--text-faint); }

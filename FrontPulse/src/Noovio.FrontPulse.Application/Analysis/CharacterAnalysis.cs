@@ -43,6 +43,9 @@ public sealed record CharacterAnalysis(
     IReadOnlyList<GearReview> Gear,
     IReadOnlyList<StatReview> Stats,
     TalentReview Talents,
+    GemEnchantReview GemsAndEnchants,
+    FarmRoadmap Roadmap,
+    TrinketPlan TrinketPlan,
     DateTimeOffset AnalyzedAtUtc);
 
 /// <summary>Un domaine analysé (niveau d'objet, talents…) et son verdict d'ensemble.</summary>
@@ -56,6 +59,7 @@ public enum AnalysisAreaKind
     Trinkets,
     Embellishments,
     Enchantments,
+    Gems,
     MythicPlus
 }
 

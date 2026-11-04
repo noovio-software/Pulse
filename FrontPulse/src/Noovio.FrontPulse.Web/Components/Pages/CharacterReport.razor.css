@@ -66,19 +66,66 @@
 /* --- Synthèse par domaine ------------------------------------------------ */
 .area-tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
 .area-tiles li {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: 2px 10px;
-    padding: 12px 14px;
     border-radius: 12px;
     background: var(--panel);
     border: 1px solid var(--line);
     border-top: 3px solid var(--verdict);
 }
-.area-tiles li ::deep .verdict-icon { grid-row: span 2; }
+.area-tiles li:hover { border-color: var(--line-strong); border-top-color: var(--verdict); }
+.area-tiles a {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 2px 10px;
+    padding: 12px 14px;
+    color: inherit;
+}
+.area-tiles a:hover { text-decoration: none; }
+.area-tiles a ::deep .verdict-icon { grid-row: span 2; }
 .area-name { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }
 .area-tiles strong { color: var(--text); font-variant-numeric: tabular-nums; }
+
+/* --- Navigation dans le rapport ------------------------------------------- */
+/* Collée sous l'en-tête du site, lui aussi collant (environ 62 px) ; sur mobile il passe sur deux lignes, la navigation ne colle plus. */
+.report-nav {
+    position: sticky;
+    top: 62px;
+    z-index: 5;
+    display: flex;
+    gap: 4px;
+    padding: 6px;
+    overflow-x: auto;
+    border-radius: 10px;
+    background: rgba(17, 22, 34, 0.94);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(6px);
+}
+.report-nav a {
+    flex: none;
+    padding: 4px 10px;
+    border-radius: 7px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-dim);
+}
+.report-nav a:hover { color: var(--amber); background: var(--panel-2); text-decoration: none; }
+[id] { scroll-margin-top: 120px; }
+
+/* --- Plan d'action, par effort --------------------------------------------- */
+.plan-groups { display: flex; flex-direction: column; gap: 16px; }
+.plan-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin: 0 0 8px; font-size: 0.9rem; font-weight: 700; color: var(--text); }
+.plan-title small { font-size: 0.75rem; font-weight: 500; color: var(--text-faint); }
+.plan-count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    color: #0B0E14;
+    background: var(--amber);
+}
 
 /* --- Sections ------------------------------------------------------------ */
 .meta-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 18px; }
@@ -97,6 +144,9 @@
     color: var(--amber);
 }
 .section-title small { font-family: var(--font); font-size: 0.75rem; letter-spacing: 0; text-transform: none; }
+
+.sheet-panel summary { margin: 0; cursor: pointer; }
+.sheet-panel[open] summary { margin-bottom: 16px; }
 
 .findings { display: flex; flex-direction: column; gap: 8px; }
 .strengths { margin-top: 14px; }
@@ -122,6 +172,7 @@
 .sheet small { font-weight: 500; color: var(--text-faint); }
 
 @media (max-width: 720px) {
+    .report-nav { position: static; }
     .report-hero { padding: 18px; }
     .report-identity h1 { font-size: 1.7rem; }
     .meta-columns { grid-template-columns: 1fr; }

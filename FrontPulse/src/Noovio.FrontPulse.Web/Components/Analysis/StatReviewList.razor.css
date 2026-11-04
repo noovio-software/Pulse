@@ -1,8 +1,3 @@
-.stat-haste { --stat: var(--amber); }
-.stat-versatility { --stat: var(--steel); }
-.stat-mastery { --stat: #8B5CF6; }
-.stat-crit { --stat: #F87171; }
-
 .stat-review { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .stat-review li {
     padding: 10px 12px;
@@ -14,6 +9,18 @@
 
 .stat-head { display: flex; align-items: center; gap: 8px; color: var(--stat); }
 .stat-name { font-weight: 600; color: var(--text); }
+.stat-rank {
+    display: inline-grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    border: 1px solid var(--line-strong);
+}
+.stat-action { font-size: 0.78rem; font-weight: 600; color: var(--verdict); }
 .stat-mine { margin-left: auto; font-size: 1.25rem; line-height: 1; color: var(--stat); font-variant-numeric: tabular-nums; }
 
 .stat-scale { position: relative; height: 8px; margin: 14px 0 8px; border-radius: 4px; background: rgba(42, 54, 79, 0.6); }
@@ -35,3 +42,5 @@
 }
 
 .stat-range { margin: 0; font-size: 0.74rem; color: var(--text-dim); }
+.stat-next { margin: 2px 0 0; font-size: 0.78rem; color: var(--text); }
+.stat-next strong { color: var(--stat); }

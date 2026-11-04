@@ -46,7 +46,15 @@ public sealed record GearPiece(
     IReadOnlyList<int> BonusIds,
     IReadOnlyList<string> Enchantments,
     IReadOnlyList<ItemEffect> Effects,
-    bool IsEmbellished);
+    bool IsEmbellished,
+    IReadOnlyList<GemSocket>? Sockets = null,
+    IReadOnlyList<ItemStat>? Stats = null);
+
+/// <summary>Une châsse de la pièce. <see cref="GemId"/> est null quand elle est vide ; <see cref="Display"/> : texte de la gemme (« +70 Hâte »).</summary>
+public sealed record GemSocket(string? SocketType, int? GemId, string? GemName, string? Display);
+
+/// <summary>Indice secondaire porté par la pièce elle-même, hors gemmes et enchantements.</summary>
+public sealed record ItemStat(SecondaryStat Stat, int Value);
 
 /// <summary>Effet porté par un objet (on-use / proc de bijou, embellissement…).</summary>
 public sealed record ItemEffect(int SpellId, string Name, string? Description);

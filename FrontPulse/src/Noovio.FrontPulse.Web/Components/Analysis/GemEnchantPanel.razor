@@ -1,0 +1,143 @@
+@* Gemmes et enchantements : ce qu'il faut changer et son effet estimé, d'où viennent les stats, puis le détail pièce par pièce. *@
+
+@if (!Review.TopHasDetails)
+{
+    <p class="gem-note">Les gemmes du top seront disponibles après la prochaine mise à jour de la méta : seules tes pièces sont lues pour l'instant.</p>
+}
+
+@if (Review.Swaps.Count > 0)
+{
+    <h3 class="gem-title">À faire <small>estimations, d'après la conversion indice → % mesurée sur le top</small></h3>
+    <ol class="swap-list">
+        @foreach (var swap in Review.Swaps)
+        {
+            <li>
+                <span class="swap-slot" title="@swap.ItemName">@Ui.SlotLabel(swap.Slot)</span>
+                <span class="swap-change">
+                    @if (swap.ToIconUrl is not null)
+                    {
+                        <img class="wow-icon" src="@swap.ToIconUrl" alt="" loading="lazy" />
+                    }
+                    <span>
+                        @if (swap.From is not null)
+                        {
+                            <del>@swap.From</del> <text>→ </text>
+                        }
+                        <strong>@swap.To</strong>
+                    </span>
+                </span>
+                <span class="swap-deltas">
+                    @foreach (var delta in swap.Deltas)
+                    {
+                        <span class="stat-chip @Ui.StatCss(delta.Stat)">@Ui.StatDelta(delta)</span>
+                    }
+                </span>
+            </li>
+        }
+    </ol>
+}
+else if (Review.Sockets.Count > 0 || Review.Enchants.Count > 0)
+{
+    <p class="gem-ok">Aucun changement de gemme ou d'enchantement ne rapprocherait tes caractéristiques du top.</p>
+}
+
+@if (HasBreakdown)
+{
+    <h3 class="gem-title">D'où viennent tes stats <small>indice : toi / médiane du top</small></h3>
+    <table class="origin-table">
+        <thead>
+            <tr><th></th><th>Pièces</th><th>Gemmes</th><th>Enchants</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var b in Review.Breakdown)
+            {
+                <tr class="@Ui.StatCss(b.Stat)">
+                    <th scope="row">@Ui.StatLabel(b.Stat)</th>
+                    <td><strong>@b.Items.ToString("N0")</strong> / @b.TopItems.ToString("N0")</td>
+                    <td><strong>@b.Gems.ToString("N0")</strong> / @b.TopGems.ToString("N0")</td>
+                    <td><strong>@b.Enchants.ToString("N0")</strong> / @b.TopEnchants.ToString("N0")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (Rows.Count > 0)
+{
+    <details class="piece-details" open="@(Review.Swaps.Count == 0)">
+        <summary>Détail pièce par pièce (@Rows.Count)</summary>
+        <ul class="piece-list">
+            @foreach (var row in Rows)
+            {
+                <li class="@Ui.VerdictCss(row.Verdict)">
+                    <span class="piece-slot">@Ui.SlotLabel(row.Slot)</span>
+                    <div class="piece-mods">
+                        @foreach (var socket in row.Sockets)
+                        {
+                            <div class="piece-mod">
+                                @if (socket.GemId is { } gemId)
+                                {
+                                    <a href="@Ui.ItemUrl(gemId)" data-wowhead="@Ui.ItemWowhead(gemId)" target="_blank" rel="noopener">
+                                        @if (socket.IconUrl is not null)
+                                        {
+                                            <img class="wow-icon" src="@socket.IconUrl" alt="" loading="lazy" />
+                                        }
+                                        @socket.GemName
+                                    </a>
+                                    <span class="muted">@Ui.StatList(socket.Stats)</span>
+                                    @if (Review.TopHasDetails)
+                                    {
+                                        <span class="mod-share">@Ui.Percent(socket.TopShare) du top</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="mod-missing">Châsse vide</span>
+                                }
+                            </div>
+                        }
+                        @if (row.Enchant is { } enchant)
+                        {
+                            <div class="piece-mod">
+                                @if (enchant.Label is not null)
+                                {
+                                    <span>@enchant.Label</span>
+                                    <span class="mod-share">@Ui.Percent(enchant.TopShare) du top</span>
+                                }
+                                else
+                                {
+                                    <span class="mod-missing">Sans enchantement</span>
+                                }
+                                @if (enchant.TopChoice is not null)
+                                {
+                                    <span class="mod-top">Top : @enchant.TopChoice (@Ui.Percent(enchant.TopChoiceShare))</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    </details>
+}
+
+@if (Review.TopGems.Count > 0)
+{
+    <h3 class="gem-title">Gemmes les plus posées par le top</h3>
+    <ul class="top-gems">
+        @foreach (var gem in Review.TopGems)
+        {
+            <li>
+                <a href="@Ui.ItemUrl(gem.GemId)" data-wowhead="@Ui.ItemWowhead(gem.GemId)" target="_blank" rel="noopener">
+                    @if (gem.IconUrl is not null)
+                    {
+                        <img class="wow-icon" src="@gem.IconUrl" alt="" loading="lazy" />
+                    }
+                    @gem.Name
+                </a>
+                <span class="muted">@Ui.StatList(gem.Stats)</span>
+                <span class="mod-share">@Ui.Percent(gem.Share)</span>
+            </li>
+        }
+    </ul>
+}

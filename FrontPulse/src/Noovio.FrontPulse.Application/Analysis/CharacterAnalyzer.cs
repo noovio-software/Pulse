@@ -35,7 +35,9 @@ public static class CharacterAnalyzer
         IReadOnlyList<TankProfile> top,
         CharacterDetails character,
         IReadOnlyDictionary<int, string> itemIcons,
-        DateTimeOffset now)
+        DateTimeOffset now,
+        EncounterJournal? journal = null,
+        Func<GearPiece, TrinketOrientation>? trinketOrientation = null)
     {
         var findings = new List<AnalysisFinding>();
         var areas = new List<AnalysisArea>();
@@ -57,6 +59,8 @@ public static class CharacterAnalyzer
         areas.Add(Trinkets(gear, meta, top, itemIcons, findings));
         areas.Add(Embellishments(gear, meta, findings));
         areas.Add(Enchantments(gearReviews, findings));
+        var gemsAndEnchants = GemEnchantOptimizer.Review(gear, character.Loadout.Stats, meta, top, itemIcons);
+        areas.Add(Gems(gemsAndEnchants, findings));
         areas.Add(MythicPlus(character.MythicPlus, findings));
 
         // Note sur 100 : chaque domaine vaut 1 (bon), 0,5 (à améliorer) ou 0 (problème).
@@ -67,7 +71,10 @@ public static class CharacterAnalyzer
             .ThenBy(f => f.Area)
             .ToList();
 
-        return new CharacterAnalysis(spec, character, meta, playsTank, score, areas, ordered, gearReviews, stats, talents, now);
+        var roadmap = FarmRoadmapBuilder.Build(gear, meta, top, stats, character.MythicPlus, journal, itemIcons);
+        var trinketPlan = TrinketPlanner.Build(gear, meta, top, journal, trinketOrientation, itemIcons);
+
+        return new CharacterAnalysis(spec, character, meta, playsTank, score, areas, ordered, gearReviews, stats, talents, gemsAndEnchants, roadmap, trinketPlan, now);
     }
 
     // --- Équipement et niveau d'objet ------------------------------------
@@ -86,7 +93,7 @@ public static class CharacterAnalyzer
             var enchantRate = (double)top.Count(p => p.Gear.Any(g => g.Slot == piece.Slot && g.Enchantments.Count > 0)) / n;
             var expected = enchantRate >= EnchantExpectedShare;
             var suggested = topPieces.SelectMany(g => g.Enchantments)
-                .GroupBy(e => e)
+                .GroupBy(StatText.Label)
                 .OrderByDescending(g => g.Count())
                 .Select(g => g.Key)
                 .FirstOrDefault();
@@ -351,6 +358,46 @@ public static class CharacterAnalyzer
 
         return new AnalysisArea(AnalysisAreaKind.Enchantments, missing.Count == 0 ? Verdict.Good : Verdict.Problem,
             missing.Count == 0 ? "Complets" : $"{missing.Count} manquant{(missing.Count > 1 ? "s" : "")}");
+    }
+
+    private static AnalysisArea Gems(GemEnchantReview review, List<AnalysisFinding> findings)
+    {
+        var empty = review.Sockets.Count(s => s.GemId is null);
+        var swaps = review.Swaps.Where(s => s.Kind != SwapKind.FillSocket).ToList();
+
+        if (empty > 0)
+        {
+            findings.Add(new(AnalysisAreaKind.Gems, Verdict.Problem, $"{empty} châsse{(empty > 1 ? "s" : "")} vide{(empty > 1 ? "s" : "")}",
+                "Une châsse vide, c'est de l'indice perdu pour le prix d'une gemme.",
+                "À remplir : " + string.Join(", ", review.Sockets.Where(s => s.GemId is null).Select(s => s.Swap is { } fill ? $"{SlotName(s.Slot)} → {fill.To}" : SlotName(s.Slot))) + "."));
+        }
+
+        if (review.MissingSockets.Count > 0)
+        {
+            findings.Add(new(AnalysisAreaKind.Gems, Verdict.Improve, $"Pas de châsse sur : {string.Join(", ", review.MissingSockets.Select(SlotName))}",
+                "La majorité du top a une châsse sur ces emplacements.",
+                "Vise une pièce avec châsse, ou ajoutes-en une si l'emplacement le permet."));
+        }
+
+        if (swaps.Count > 0)
+        {
+            findings.Add(new(AnalysisAreaKind.Gems, Verdict.Improve, $"{swaps.Count} gemme{(swaps.Count > 1 ? "s" : "")} ou enchantement{(swaps.Count > 1 ? "s" : "")} à réorienter",
+                "Ces changements rapprochent tes caractéristiques de la fourchette du top, sans changer de pièce.",
+                string.Join(" ; ", swaps.Take(3).Select(s => $"{SlotName(s.Slot)} : {s.To}")) + (swaps.Count > 3 ? "…" : "") + "."));
+        }
+
+        var verdict = empty > 0 ? Verdict.Problem : swaps.Count + review.MissingSockets.Count > 0 ? Verdict.Improve : Verdict.Good;
+        if (verdict == Verdict.Good && review.Sockets.Count > 0)
+        {
+            findings.Add(new(AnalysisAreaKind.Gems, Verdict.Good, "Gemmes cohérentes avec le top",
+                "Aucune châsse vide, et aucun changement de gemme ne rapprocherait tes caractéristiques du top.", "Rien à faire."));
+        }
+
+        return new AnalysisArea(AnalysisAreaKind.Gems, verdict,
+            empty > 0 ? $"{empty} vide{(empty > 1 ? "s" : "")}"
+            : swaps.Count > 0 ? $"{swaps.Count} à revoir"
+            : review.Sockets.Count == 0 ? "Aucune châsse"
+            : $"{review.Sockets.Count} posée{(review.Sockets.Count > 1 ? "s" : "")}");
     }
 
     // --- Mythique+ --------------------------------------------------------

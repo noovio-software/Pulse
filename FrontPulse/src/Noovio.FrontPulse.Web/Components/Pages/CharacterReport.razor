@@ -74,25 +74,45 @@ else if (analysis is { } a)
         @foreach (var area in a.Areas)
         {
             <li class="@Ui.VerdictCss(area.Verdict)">
-                <VerdictIcon Verdict="area.Verdict" Size="22" />
-                <span class="area-name">@Ui.AreaLabel(area.Kind)</span>
-                <strong>@area.Summary</strong>
+                <a href="@Anchor(Ui.AreaSection(area.Kind))">
+                    <VerdictIcon Verdict="area.Verdict" Size="22" />
+                    <span class="area-name">@Ui.AreaLabel(area.Kind)</span>
+                    <strong>@area.Summary</strong>
+                </a>
             </li>
         }
     </ul>
 
-    <section class="panel meta-section">
-        <h2 class="section-title">Plan d'action <small class="muted">du plus important au moins important</small></h2>
+    <nav class="report-nav" aria-label="Sections du rapport">
+        <a href="@Anchor("plan")">Plan d'action</a>
+        <a href="@Anchor("optimiser")">Stats, gemmes, enchants</a>
+        <a href="@Anchor("farm")">Roadmap de farm</a>
+        <a href="@Anchor("bijoux")">Bijoux</a>
+        <a href="@Anchor("talents")">Talents</a>
+        <a href="@Anchor("mythique")">Mythique+</a>
+        <a href="@Anchor("equipement")">Équipement</a>
+    </nav>
+
+    <section class="panel meta-section" id="plan">
+        <h2 class="section-title">Plan d'action <small class="muted">par effort, du plus immédiat au plus long ; les problèmes en tête de chaque groupe</small></h2>
         @if (ToFix.Count == 0)
         {
             <p class="muted">Rien à corriger : ton personnage suit la méta du top sur tous les points analysés.</p>
         }
         else
         {
-            <div class="findings">
-                @foreach (var f in ToFix)
+            <div class="plan-groups">
+                @foreach (var group in PlanGroups)
                 {
-                    <FindingCard Finding="f" />
+                    <div class="plan-group">
+                        <h3 class="plan-title">@group.Title <span class="plan-count">@group.Findings.Count</span> <small>@group.Hint</small></h3>
+                        <div class="findings">
+                            @foreach (var f in group.Findings)
+                            {
+                                <FindingCard Finding="f" />
+                            }
+                        </div>
+                    </div>
                 }
             </div>
         }
@@ -111,20 +131,37 @@ else if (analysis is { } a)
         }
     </section>
 
-    <div class="meta-columns">
+    <div class="meta-columns" id="optimiser">
         <section class="panel meta-section">
-            <h2 class="section-title">Caractéristiques <small class="muted">toi (◆) face au top</small></h2>
+            <h2 class="section-title">Caractéristiques <small class="muted">par priorité du top ; toi (◆) face à sa fourchette</small></h2>
             @if (a.Stats.Count == 0)
             {
                 <p class="muted">Caractéristiques indisponibles.</p>
             }
             else
             {
-                <StatReviewList Stats="a.Stats" />
+                <StatReviewList Stats="a.Stats" Projection="a.GemsAndEnchants.Projection" />
             }
         </section>
 
         <section class="panel meta-section">
+            <h2 class="section-title">Gemmes et enchantements <small class="muted">ce qui change tes stats sans changer de pièce</small></h2>
+            <GemEnchantPanel Review="a.GemsAndEnchants" />
+        </section>
+    </div>
+
+    <section class="panel meta-section" id="farm">
+        <h2 class="section-title">Roadmap de farm <small class="muted">où aller, dans l'ordre, et quoi y chercher</small></h2>
+        <FarmRoadmapPanel Roadmap="a.Roadmap" />
+    </section>
+
+    <section class="panel meta-section" id="bijoux">
+        <h2 class="section-title">Bijoux <small class="muted">quoi garder, quoi viser et comment les jouer</small></h2>
+        <TrinketPlanPanel Plan="a.TrinketPlan" />
+    </section>
+
+    <div class="meta-columns">
+        <section class="panel meta-section" id="talents">
             <h2 class="section-title">Talents</h2>
             <div class="talent-summary">
                 <div class="similarity">
@@ -156,21 +193,20 @@ else if (analysis is { } a)
                 <TalentChips Talents="a.Talents.Atypical" Layout="a.Meta.TalentTree" />
             }
         </section>
+
+        <section class="panel meta-section" id="mythique">
+            <h2 class="section-title">Mythique+</h2>
+            <MythicPlusPanel MythicPlus="c.MythicPlus" />
+        </section>
     </div>
 
-    <section class="panel meta-section">
+    <section class="panel meta-section" id="equipement">
         <h2 class="section-title">Équipement <small class="muted">niveau d'objet comparé à la médiane du top sur chaque emplacement</small></h2>
         <GearReviewList Gear="a.Gear" />
     </section>
 
-    <div class="meta-columns">
-        <section class="panel meta-section">
-            <h2 class="section-title">Mythique+</h2>
-            <MythicPlusPanel MythicPlus="c.MythicPlus" />
-        </section>
-
-        <section class="panel meta-section">
-            <h2 class="section-title">Fiche complète</h2>
+    <details class="panel meta-section sheet-panel">
+        <summary class="section-title">Fiche complète</summary>
             @if (c.Sheet is { } s)
             {
                 <dl class="sheet">
@@ -197,8 +233,7 @@ else if (analysis is { } a)
             {
                 <p class="muted">Fiche indisponible.</p>
             }
-        </section>
-    </div>
+    </details>
 
     @if (treeOpen && a.Meta.TalentTree is { } layout)
     {

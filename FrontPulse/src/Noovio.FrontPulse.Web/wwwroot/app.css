@@ -570,6 +570,24 @@ h1:focus { outline: none; }
 .stat-crit { --stat: #F87171; }
 
 /* --- Verdicts d'analyse (partagés par les composants d'analyse) ---------- */
+/* Couleur de chaque caractéristique secondaire, et pastille portant une caractéristique */
+.stat-haste { --stat: var(--amber); }
+.stat-versatility { --stat: var(--steel); }
+.stat-mastery { --stat: #8B5CF6; }
+.stat-crit { --stat: #F87171; }
+.stat-chip {
+    display: inline-block;
+    padding: 0 7px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 18px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    color: var(--stat, var(--text-dim));
+    border: 1px solid color-mix(in srgb, var(--stat, var(--line)) 45%, transparent);
+}
+
 .verdict-good { --verdict: #34D399; }
 .verdict-improve { --verdict: #FBBF24; }
 .verdict-problem { --verdict: #F87171; }

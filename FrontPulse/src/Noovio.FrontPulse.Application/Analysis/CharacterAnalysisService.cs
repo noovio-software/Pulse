@@ -1,4 +1,5 @@
 using Noovio.FrontPulse.Application.Abstractions;
+using Noovio.FrontPulse.Application.Meta;
 using Noovio.FrontPulse.Domain;
 using Noovio.FrontPulse.Domain.Entities;
 
@@ -10,6 +11,8 @@ public sealed class CharacterAnalysisService(
     ISpecMetaQueries meta,
     ITankMetaStore store,
     IMediaSource media,
+    IEncounterJournalSource journal,
+    TankMetaAggregatorService aggregator,
     TimeProvider time)
 {
     public async Task<AnalysisResult> AnalyzeAsync(UserCharacter character, CancellationToken ct)
@@ -30,8 +33,16 @@ public sealed class CharacterAnalysisService(
         }
 
         var top = await store.GetProfilesAsync(snapshot.Season, spec.Spec, ct);
-        var icons = await media.GetItemIconsAsync(found.Loadout.Gear.Select(g => g.ItemId), ct);
+        var gems = found.Loadout.Gear.Concat(top.SelectMany(p => p.Gear))
+            .SelectMany(g => g.Sockets ?? [])
+            .Select(s => s.GemId)
+            .OfType<int>();
+        var icons = await media.GetItemIconsAsync(found.Loadout.Gear.Select(g => g.ItemId).Concat(gems).Distinct(), ct);
+        var encounters = await journal.GetAsync(snapshot.Season, ct);
 
-        return new AnalysisResult(AnalysisStatus.Ok, CharacterAnalyzer.Analyze(spec, snapshot, top, found, icons, time.GetUtcNow()), spec);
+        return new AnalysisResult(
+            AnalysisStatus.Ok,
+            CharacterAnalyzer.Analyze(spec, snapshot, top, found, icons, time.GetUtcNow(), encounters, aggregator.Orientation),
+            spec);
     }
 }

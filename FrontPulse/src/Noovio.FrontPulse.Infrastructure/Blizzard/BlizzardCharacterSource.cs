@@ -162,7 +162,21 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
                 item.BonusList,
                 item.Enchantments.Select(e => e.DisplayString).OfType<string>().ToList(),
                 item.Spells.Select(s => new ItemEffect(s.Spell.Id, s.Spell.Name ?? "", s.Description)).ToList(),
-                IsEmbellished(item.LimitCategory));
+                IsEmbellished(item.LimitCategory),
+                item.Sockets.Select(s => new GemSocket(s.SocketType?.Type, s.Item?.Id, s.Item?.Name, s.DisplayString)).ToList(),
+                item.Stats.Where(s => !s.IsNegated).Select(ToItemStat).OfType<ItemStat>().ToList());
+    }
+
+    /// <summary>Types attendus : CRIT_RATING, HASTE_RATING, MASTERY_RATING, VERSATILITY ; l'indice primaire et l'endurance sont ignorés.</summary>
+    private static ItemStat? ToItemStat(BzItemStat stat)
+    {
+        var type = stat.Type?.Type ?? "";
+        SecondaryStat? secondary = type.Contains("HASTE", StringComparison.OrdinalIgnoreCase) ? SecondaryStat.Haste
+            : type.Contains("VERSATILITY", StringComparison.OrdinalIgnoreCase) ? SecondaryStat.Versatility
+            : type.Contains("MASTERY", StringComparison.OrdinalIgnoreCase) ? SecondaryStat.Mastery
+            : type.Contains("CRIT", StringComparison.OrdinalIgnoreCase) ? SecondaryStat.Crit
+            : null;
+        return secondary is null ? null : new ItemStat(secondary.Value, stat.Value);
     }
 
     /// <summary>« Unique-Equipped: Embellished (2) » en anglais, « Unique - Équipé : Enjolivement (2) » en français.</summary>

@@ -1,4 +1,5 @@
 using System.Globalization;
+using Noovio.FrontPulse.Application.Abstractions;
 using Noovio.FrontPulse.Application.Analysis;
 using Noovio.FrontPulse.Domain;
 using Noovio.FrontPulse.Domain.Entities;
@@ -117,14 +118,37 @@ public static class Ui
         AnalysisAreaKind.Trinkets => "Bijoux",
         AnalysisAreaKind.Embellishments => "Embellissements",
         AnalysisAreaKind.Enchantments => "Enchantements",
+        AnalysisAreaKind.Gems => "Gemmes",
         _ => "Mythique+"
     };
+
+    /// <summary>Section du rapport qui détaille un domaine.</summary>
+    public static string AreaSection(AnalysisAreaKind area) => area switch
+    {
+        AnalysisAreaKind.Stats or AnalysisAreaKind.Gems or AnalysisAreaKind.Enchantments => "optimiser",
+        AnalysisAreaKind.ItemLevel => "farm",
+        AnalysisAreaKind.Trinkets => "bijoux",
+        AnalysisAreaKind.Talents => "talents",
+        AnalysisAreaKind.MythicPlus => "mythique",
+        _ => "plan"
+    };
+
+    public static string InstanceKindLabel(InstanceKind kind) => kind == InstanceKind.Raid ? "Raid" : "Donjon";
+
+    /// <summary>« +1,2 % Hâte ».</summary>
+    public static string StatDelta(StatDelta delta) => $"{delta.Percent:+0.0;-0.0} % {StatLabel(delta.Stat)}";
+
+    /// <summary>« +70 Hâte · +30 Maîtrise » ; null si le texte ne donne aucune secondaire.</summary>
+    public static string? StatList(IReadOnlyList<ItemStat> stats) =>
+        stats.Count == 0 ? null : string.Join(" · ", stats.Select(s => $"+{s.Value} {StatLabel(s.Stat)}"));
 
     public static string ItemUrl(int itemId) => $"https://www.wowhead.com/fr/item={itemId}";
 
     public static string ItemUrl(ItemStatSnapshot item) => ItemUrl(item.ItemId);
 
     public static string SpellUrl(int spellId) => $"https://www.wowhead.com/fr/spell={spellId}";
+
+    public static string ItemWowhead(int itemId) => $"item={itemId}&domain=fr";
 
     public static string ItemWowhead(ItemStatSnapshot item) => $"item={item.ItemId}&ilvl={item.MedianItemLevel}&domain=fr";
 

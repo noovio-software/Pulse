@@ -34,6 +34,22 @@ public partial class CharacterReport
     private bool refreshTooltips;
 
     private IReadOnlyList<AnalysisFinding> ToFix => analysis?.Findings.Where(f => f.Verdict != Verdict.Good).ToList() ?? [];
+    /// <summary>Le plan d'action par effort demandé : ce qui se règle ce soir, puis ce qui demande du craft, du farm, des clés.</summary>
+    private IReadOnlyList<PlanGroup> PlanGroups =>
+    [
+        .. new[]
+        {
+            new PlanGroup("À régler tout de suite", "gemmes, enchantements, talents : sans farmer", ToFix.Where(f => f.Area is AnalysisAreaKind.Stats or AnalysisAreaKind.Gems or AnalysisAreaKind.Enchantments or AnalysisAreaKind.Talents).ToList()),
+            new PlanGroup("À crafter", "commandes d'artisanat", ToFix.Where(f => f.Area is AnalysisAreaKind.Embellishments).ToList()),
+            new PlanGroup("À farmer", "détail dans la roadmap", ToFix.Where(f => f.Area is AnalysisAreaKind.ItemLevel or AnalysisAreaKind.Trinkets).ToList()),
+            new PlanGroup("À jouer", "clés à pousser", ToFix.Where(f => f.Area is AnalysisAreaKind.MythicPlus).ToList())
+        }.Where(g => g.Findings.Count > 0)
+    ];
+
+    private string Anchor(string section) => $"compte/personnages/{Id}/analyse#{section}";
+
+    private sealed record PlanGroup(string Title, string Hint, IReadOnlyList<AnalysisFinding> Findings);
+
     private IReadOnlyList<AnalysisFinding> Strengths => analysis?.Findings.Where(f => f.Verdict == Verdict.Good).ToList() ?? [];
 
     protected override Task OnParametersSetAsync() => LoadAsync(force: false);

@@ -48,6 +48,9 @@ public sealed class RaiderIoClient(HttpClient http, IDistributedCache cache, IOp
     public Task<RioMythicPlusStaticData?> GetMythicPlusStaticDataAsync(CancellationToken ct) =>
         GetAsync<RioMythicPlusStaticData>($"api/v1/mythic-plus/static-data?expansion_id={_options.ExpansionId}", TimeSpan.FromHours(12), ct);
 
+    public Task<RioRaidingStaticData?> GetRaidingStaticDataAsync(CancellationToken ct) =>
+        GetAsync<RioRaidingStaticData>($"api/v1/raiding/static-data?expansion_id={_options.ExpansionId}", TimeSpan.FromHours(12), ct);
+
     /// <summary>Profil M+ d'un personnage (null si inconnu de Raider.io, qui répond alors 400).</summary>
     public Task<RioCharacterProfile?> GetCharacterAsync(string region, string realmSlug, string name, CancellationToken ct) =>
         GetAsync<RioCharacterProfile>(
@@ -90,6 +93,11 @@ public sealed class RaiderIoClient(HttpClient http, IDistributedCache cache, IOp
 public sealed class RioMythicPlusStaticData
 {
     public List<RioSeason> Seasons { get; set; } = [];
+}
+
+public sealed class RioRaidingStaticData
+{
+    public List<RioDungeon> Raids { get; set; } = [];
 }
 
 public sealed class RioSeason
