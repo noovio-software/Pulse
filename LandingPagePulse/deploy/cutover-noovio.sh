@@ -70,7 +70,8 @@ sudo ln -sf "/etc/nginx/sites-available/$NEW_VHOST" "/etc/nginx/sites-enabled/$N
 reload_nginx
 
 echo "== Certificat Let's Encrypt"
-sudo certbot --nginx -d www.noovio.fr -d noovio.fr --redirect --non-interactive --agree-tos --register-unsafely-without-email --keep-until-expiring
+# --expand : le certificat noovio.fr de l'ancien site existe déjà, www.noovio.fr y est ajouté.
+sudo certbot --nginx -d www.noovio.fr -d noovio.fr --redirect --expand --non-interactive --agree-tos --register-unsafely-without-email --keep-until-expiring
 reload_nginx
 
 echo "== Vérification publique"
