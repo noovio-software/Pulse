@@ -1,0 +1,47 @@
+.item-usage {
+    display: grid;
+    grid-template-columns: 42px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+/* Bordure épique : la quasi-totalité du top est en objets épiques */
+.item-icon { width: 42px; height: 42px; border-color: #a335ee; box-shadow: 0 0 0 1px rgba(163, 53, 238, 0.5), 0 0 10px rgba(163, 53, 238, 0.25); }
+
+.item-text { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.item-text a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+    color: #c99bff;
+}
+
+.share-bar { display: block; height: 4px; border-radius: 2px; background: rgba(42, 54, 79, 0.7); overflow: hidden; }
+.share-bar span { display: block; height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent-deep), var(--accent)); }
+
+.item-share { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--accent-text); }
+
+/* Vignette */
+.item-chip { position: relative; display: block; width: 32px; height: 32px; }
+.item-chip:hover { text-decoration: none; }
+.item-chip .wow-icon { width: 32px; height: 32px; transition: transform 0.12s; }
+.item-chip:hover .wow-icon { transform: scale(1.1); box-shadow: 0 0 0 1px #a335ee, 0 0 10px rgba(163, 53, 238, 0.4); }
+
+.chip-share {
+    position: absolute;
+    left: 50%;
+    bottom: -7px;
+    transform: translateX(-50%);
+    padding: 0 4px;
+    border-radius: 5px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    line-height: 13px;
+    white-space: nowrap;
+    color: var(--text);
+    background: #0B0E14;
+    border: 1px solid var(--line-strong);
+    font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,14 @@
+<Project>
+
+  <!-- Réglages communs à PulseCore et aux applications qui en dépendent (importés par leur Directory.Build.props). Même cible que AltPulse (même SDK, même VPS). -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Version d'EF Core et des extensions : les applications doivent rester alignées sur PulseCore. -->
+    <PulseExtensionsVersion>10.0.14</PulseExtensionsVersion>
+  </PropertyGroup>
+
+</Project>

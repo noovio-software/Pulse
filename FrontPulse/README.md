@@ -9,13 +9,13 @@ of the top 100 tanks of each spec (Blood, Vengeance, Guardian, Brewmaster, Prote
 
 ## Architecture
 
+The engine is shared with LifePulse and lives in [PulseCore](../PulseCore/README.md) (rules, API clients, pages, worker). This folder holds what is specific to FrontPulse:
+
 | Project | Role |
 |---|---|
-| `Noovio.FrontPulse.Domain` | Entities (`TankProfile`, `SpecMeta` + `SpecMetaSnapshot`, `DungeonRoute`, `ItemStatSnapshot`), enums (`TankSpec` = Blizzard spec ids, `SecondaryStat`, `MythicAffix`, `GearSlot`) |
-| `Noovio.FrontPulse.Application` | Contracts (`ILeaderboardSource`, `ICharacterLoadoutSource`, `IItemMediaSource`, `ITankMetaStore`, `ISpecMetaQueries`), `TankMetaAggregatorService` (pure computation), `TankMetaIngestionService` (orchestration) |
-| `Noovio.FrontPulse.Infrastructure` | `RaiderIoClient`, `BlizzardOAuthClient` (token in memory + Redis), `BlizzardClient`, rate limiters, `FrontPulseDbContext` (jsonb columns), migrations |
-| `Noovio.FrontPulse.Worker` | `MetaIngestionWorker` (`BackgroundService`, `PeriodicTimer`), applies migrations at startup |
-| `Noovio.FrontPulse.Web` | Blazor site: `/` (spec cards), `/specs/{slug}` (`SpecOverview`), `/compte` (characters), `/compte/personnages/{id}/analyse` (`CharacterReport`), Battle.net sign-in (`Auth/`), `/api/specs` and `/api/specs/{slug}` (JSON) |
+| `Noovio.FrontPulse.Infrastructure` | `FrontPulseApp` (name, tank role, sigil), `FrontPulseDbContext`, migrations |
+| `Noovio.FrontPulse.Worker` | Ingestion every 6 hours, applies migrations at startup |
+| `Noovio.FrontPulse.Web` | The site: `Program.cs`, `wwwroot/theme.css`, favicon |
 
 ### Ingestion pipeline
 
@@ -72,11 +72,9 @@ dotnet run --project FrontPulse/src/Noovio.FrontPulse.Web --launch-profile http
 Without `ConnectionStrings:Redis` (the default in Development), the distributed cache falls back to in-process memory.
 With the compose Redis: `dotnet user-secrets set "ConnectionStrings:Redis" "localhost:6379" --project <Worker or Web>`.
 
-Tests: `dotnet test FrontPulse/tests/Noovio.FrontPulse.Application.Tests`.
+Tests: `dotnet test PulseCore/tests/Noovio.Pulse.Tests`.
 
 ## Not done yet
 
 - **MDT routes**: the `DungeonRoute` entity and the `dungeon_routes` table exist, but there is no dungeon page and no import/sync yet. The Keystone.guru API still has to be checked before writing `KeystoneGuruClient`.
 - **Talent tree in its real layout**: the grid shows nodes by pick rate. Placing them like the in-game tree needs the Game Data API `talent-tree` endpoints.
-- **Shared design system**: layout, `TopBar`, `Sigil` and the atoms (`.panel`, `.btn`, `.eyebrow`…) follow AltPulse's structure, but they are copies. A `Noovio.Ui` RCL shared by both apps would remove the duplication.
-- **Production deployment**: no workflow or systemd unit yet (AltPulse's `.github/workflows/altpulse.yml` is the model to reuse).

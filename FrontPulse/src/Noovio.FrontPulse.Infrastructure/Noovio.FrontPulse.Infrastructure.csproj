@@ -1,21 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Noovio.FrontPulse.Application\Noovio.FrontPulse.Application.csproj" />
+    <ProjectReference Include="..\..\..\PulseCore\src\Noovio.Pulse.Infrastructure\Noovio.Pulse.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.14">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(PulseExtensionsVersion)">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.14" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.14" />
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.14" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.14" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.14" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
-    <PackageReference Include="System.Threading.RateLimiting" Version="10.0.14" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#0070DD" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#0070DD" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="#080E18" />
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#glow)" stroke="#0070DD" stroke-opacity="0.65" stroke-width="2" />
+  <!-- Même tracé que PulseApp.Sigil -->
+  <g transform="translate(8 8) scale(1.5)" fill="none" stroke="#4FA8F7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 2.5c5.2 6.6 10.5 11.4 10.5 17.1a10.5 10.5 0 0 1-21 0C5.5 13.9 10.8 9.1 16 2.5z" stroke-width="2.2" />
+    <path d="M9 16h3.5l2-4 3 8 2-4H23" stroke-width="1.9" />
+  </g>
+</svg>

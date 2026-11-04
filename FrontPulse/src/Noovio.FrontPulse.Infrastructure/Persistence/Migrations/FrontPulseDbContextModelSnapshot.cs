@@ -23,7 +23,7 @@ namespace Noovio.FrontPulse.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Noovio.FrontPulse.Domain.Entities.DungeonRoute", b =>
+            modelBuilder.Entity("Noovio.Pulse.Domain.Entities.DungeonRoute", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,7 +82,7 @@ namespace Noovio.FrontPulse.Infrastructure.Persistence.Migrations
                     b.ToTable("dungeon_routes", (string)null);
                 });
 
-            modelBuilder.Entity("Noovio.FrontPulse.Domain.Entities.IngestionRequest", b =>
+            modelBuilder.Entity("Noovio.Pulse.Domain.Entities.IngestionRequest", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -119,7 +119,7 @@ namespace Noovio.FrontPulse.Infrastructure.Persistence.Migrations
                     b.ToTable("ingestion_requests", (string)null);
                 });
 
-            modelBuilder.Entity("Noovio.FrontPulse.Domain.Entities.IngestionRun", b =>
+            modelBuilder.Entity("Noovio.Pulse.Domain.Entities.IngestionRun", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -181,41 +181,7 @@ namespace Noovio.FrontPulse.Infrastructure.Persistence.Migrations
                     b.ToTable("ingestion_runs", (string)null);
                 });
 
-            modelBuilder.Entity("Noovio.FrontPulse.Domain.Entities.SpecMeta", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTimeOffset>("ComputedAtUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("SampleSize")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Season")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.Property<string>("Snapshot")
-                        .IsRequired()
-                        .HasColumnType("jsonb");
-
-                    b.Property<int>("Spec")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Season", "Spec")
-                        .IsUnique();
-
-                    b.ToTable("spec_metas", (string)null);
-                });
-
-            modelBuilder.Entity("Noovio.FrontPulse.Domain.Entities.TankProfile", b =>
+            modelBuilder.Entity("Noovio.Pulse.Domain.Entities.PlayerProfile", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -291,7 +257,41 @@ namespace Noovio.FrontPulse.Infrastructure.Persistence.Migrations
                     b.ToTable("tank_profiles", (string)null);
                 });
 
-            modelBuilder.Entity("Noovio.FrontPulse.Domain.Entities.UserAccount", b =>
+            modelBuilder.Entity("Noovio.Pulse.Domain.Entities.SpecMeta", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("ComputedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("SampleSize")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Season")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("Snapshot")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<int>("Spec")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Season", "Spec")
+                        .IsUnique();
+
+                    b.ToTable("spec_metas", (string)null);
+                });
+
+            modelBuilder.Entity("Noovio.Pulse.Domain.Entities.UserAccount", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -324,7 +324,7 @@ namespace Noovio.FrontPulse.Infrastructure.Persistence.Migrations
                     b.ToTable("user_accounts", (string)null);
                 });
 
-            modelBuilder.Entity("Noovio.FrontPulse.Domain.Entities.UserCharacter", b =>
+            modelBuilder.Entity("Noovio.Pulse.Domain.Entities.UserCharacter", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -388,16 +388,16 @@ namespace Noovio.FrontPulse.Infrastructure.Persistence.Migrations
                     b.ToTable("user_characters", (string)null);
                 });
 
-            modelBuilder.Entity("Noovio.FrontPulse.Domain.Entities.UserCharacter", b =>
+            modelBuilder.Entity("Noovio.Pulse.Domain.Entities.UserCharacter", b =>
                 {
-                    b.HasOne("Noovio.FrontPulse.Domain.Entities.UserAccount", null)
+                    b.HasOne("Noovio.Pulse.Domain.Entities.UserAccount", null)
                         .WithMany("Characters")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Noovio.FrontPulse.Domain.Entities.UserAccount", b =>
+            modelBuilder.Entity("Noovio.Pulse.Domain.Entities.UserAccount", b =>
                 {
                     b.Navigation("Characters");
                 });

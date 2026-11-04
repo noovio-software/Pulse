@@ -32,7 +32,7 @@ jobs:
 
       # Les tests de règles (agrégation, analyse) bloquent le déploiement s'ils échouent.
       - name: Tests
-        run: dotnet test FrontPulse/tests/Noovio.FrontPulse.Application.Tests -c Release
+        run: dotnet test PulseCore/tests/Noovio.Pulse.Tests -c Release
 
       - name: Clean deploy directory
         run: rm -rf deploy

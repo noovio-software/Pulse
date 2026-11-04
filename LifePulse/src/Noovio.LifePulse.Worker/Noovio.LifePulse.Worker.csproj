@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <UserSecretsId>2be8f4d0-93a7-4c1e-b6d2-e10c75a8d394</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Noovio.LifePulse.Infrastructure\Noovio.LifePulse.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

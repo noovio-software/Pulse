@@ -1,0 +1,121 @@
+@* Bijoux : le verdict d'abord (quoi changer), puis pour chaque bijou quoi en faire et où le trouver. Les coups de boss viennent en dernier. *@
+
+@if (Plan.Trinkets.Count == 0)
+{
+    <p class="muted">Aucun bijou équipé.</p>
+}
+else
+{
+    <p class="trinket-verdict @Ui.VerdictCss(ToReplace.Count == 0 ? Verdict.Good : Verdict.Improve)">
+        <VerdictIcon Verdict="@(ToReplace.Count == 0 ? Verdict.Good : Verdict.Improve)" Size="22" />
+        <span>@Headline</span>
+    </p>
+
+    <ul class="trinket-rows">
+        @foreach (var trinket in Plan.Trinkets)
+        {
+            var usage = trinket.ReplaceWith?.Usage ?? trinket.Usage;
+            <li class="@Ui.VerdictCss(trinket.ReplaceWith is null ? Verdict.Good : Verdict.Improve)">
+                <div class="trinket-now">
+                    <a href="@Ui.ItemUrl(trinket.ItemId)" data-wowhead="item=@trinket.ItemId&ilvl=@trinket.ItemLevel&domain=fr" target="_blank" rel="noopener">
+                        @if (trinket.IconUrl is not null)
+                        {
+                            <img class="wow-icon" src="@trinket.IconUrl" alt="" loading="lazy" />
+                        }
+                        else
+                        {
+                            <span class="wow-icon"></span>
+                        }
+                    </a>
+                    <div>
+                        <strong class="trinket-name @(trinket.ReplaceWith is null ? null : "is-out")">@trinket.Name</strong>
+                        <span class="trinket-facts">
+                            Niveau @trinket.ItemLevel@(trinket.TopItemLevel is { } ilvl && ilvl > trinket.ItemLevel ? $" (top : {ilvl})" : "")
+                            · @Ui.Percent(trinket.TopShare) du top
+                        </span>
+                    </div>
+                    <span class="trinket-state">@(trinket.ReplaceWith is null ? "À garder" : "À remplacer")</span>
+                </div>
+
+                @if (trinket.ReplaceWith is { } target)
+                {
+                    <div class="trinket-target">
+                        <span class="trinket-arrow" aria-hidden="true">→</span>
+                        <a href="@Ui.ItemUrl(target.ItemId)" data-wowhead="@Ui.ItemWowhead(target.ItemId)" target="_blank" rel="noopener">
+                            @if (target.IconUrl is not null)
+                            {
+                                <img class="wow-icon" src="@target.IconUrl" alt="" loading="lazy" />
+                            }
+                        </a>
+                        <div>
+                            <strong class="trinket-name">@target.Name</strong>
+                            <span class="trinket-facts">@Ui.Percent(target.TopShare) du top · niveau @target.ItemLevel</span>
+                            <span class="trinket-source">@Source(target)</span>
+                        </div>
+                    </div>
+                }
+
+                @if (usage is not null)
+                {
+                    <p class="trinket-play">
+                        <strong>@(trinket.ReplaceWith is null ? "En jeu" : "Une fois équipé") :</strong> @Advice(usage)
+                    </p>
+                    @if (usage.Effect is not null)
+                    {
+                        <p class="trinket-effect">@usage.Effect</p>
+                    }
+                }
+            </li>
+        }
+    </ul>
+
+    @if (Plan.Pairs.Count > 0)
+    {
+        <h3 class="trinket-title">Paires les plus jouées par le top</h3>
+        <ul class="trinket-pairs">
+            @foreach (var pair in Plan.Pairs)
+            {
+                <li class="@(pair.IsWorn ? "is-worn" : null)">
+                    <span class="pair-share">@Ui.Percent(pair.Share)</span>
+                    <span class="pair-items">@string.Join(" + ", pair.Items.Select(i => i.Name))</span>
+                    @if (pair.IsWorn)
+                    {
+                        <span class="pair-mine">ta paire</span>
+                    }
+                </li>
+            }
+        </ul>
+    }
+}
+
+@if (Plan.BossHits.Count > 0)
+{
+    <details class="boss-hits" open="@HasRoleTrinket">
+        <summary>@Site.Words.HitsTitle <small>@Plan.BossHits.Sum(i => i.Bosses.Count) boss</small></summary>
+        <p class="hits-note">
+            @(HasRoleTrinket ? Site.Words.HitsWithTrinket : Site.Words.HitsWithoutTrinket)
+            Texte du Journal d'aventure, sans mesure de dégâts ; certaines techniques peuvent dépendre de la difficulté.
+        </p>
+        <table class="hits-table">
+            <tbody>
+                @foreach (var instance in Plan.BossHits)
+                {
+                    <tr class="hits-instance">
+                        <th colspan="2" scope="colgroup">@instance.Instance <small>@Ui.InstanceKindLabel(instance.Kind)</small></th>
+                    </tr>
+                    @foreach (var hit in instance.Bosses)
+                    {
+                        <tr>
+                            <th scope="row">@hit.Boss</th>
+                            <td>@hit.Text</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </details>
+}
+else if (!Plan.HasJournal)
+{
+    <p class="muted hits-empty">Le Journal d'aventure n'a pas pu être lu : ni sources de butin, ni moments de boss pour l'instant.</p>
+}

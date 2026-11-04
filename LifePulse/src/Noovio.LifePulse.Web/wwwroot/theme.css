@@ -1,0 +1,26 @@
+/* LifePulse - thème « Totem » : le bleu du chaman (#0070DD), quelles que soient les classes affichées, et un turquoise de soin en second.
+   #0070DD reste la couleur des aplats (boutons, bordures, lueurs) : sur ce fond sombre, le texte en prend une teinte plus claire pour rester lisible. */
+:root {
+    --accent: #0070DD;
+    --accent-text: #4FA8F7;
+    --accent-text-deep: #2E8FEA;
+    --accent-deep: #0057AD;
+    --accent-glow: rgba(0, 112, 221, 0.42);
+    --accent-bright: #5CB6FF;
+    --accent-bright-ink: #04162B;
+    --accent-ink: #FFFFFF;
+    --cta: #0070DD;
+    --cta-deep: #0057AD;
+    --cta-line: rgba(92, 182, 255, 0.5);
+    --accent-alt: #2DD4BF;
+    --accent-alt-deep: #0F766E;
+    --accent-alt-glow: rgba(45, 212, 191, 0.25);
+
+    --bg: #080E18;
+    --bg-2: #0D1626;
+    --panel: rgba(20, 33, 54, 0.84);
+    --panel-solid: #142136;
+    --panel-2: #1B2C47;
+    --line: #243A5C;
+    --line-strong: #33507C;
+}

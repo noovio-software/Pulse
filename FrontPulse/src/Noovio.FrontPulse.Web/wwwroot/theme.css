@@ -1,0 +1,18 @@
+/* FrontPulse - thème « Forge » : ardoise métallique, ambre de forge pour l'aggro, bleu acier pour la mitigation.
+   Ce sont les valeurs par défaut de pulse.css : le fichier ne fait que les nommer pour cette application. */
+:root {
+    --accent: #F59E0B;
+    --accent-text: #F59E0B;
+    --accent-text-deep: #D97706;
+    --accent-deep: #D97706;
+    --accent-glow: rgba(245, 158, 11, 0.32);
+    --accent-bright: #FBBF24;
+    --accent-bright-ink: #1A1204;
+    --accent-ink: #1A1204;
+    --cta: #38BDF8;
+    --cta-deep: #2563EB;
+    --cta-line: rgba(125, 211, 252, 0.45);
+    --accent-alt: #38BDF8;
+    --accent-alt-deep: #2563EB;
+    --accent-alt-glow: rgba(56, 189, 248, 0.25);
+}

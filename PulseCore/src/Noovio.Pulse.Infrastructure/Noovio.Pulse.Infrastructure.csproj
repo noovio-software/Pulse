@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Noovio.Pulse.Application\Noovio.Pulse.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Noovio.Pulse.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="$(PulseExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="$(PulseExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="$(PulseExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(PulseExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="$(PulseExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="$(PulseExtensionsVersion)" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <PackageReference Include="System.Threading.RateLimiting" Version="$(PulseExtensionsVersion)" />
+  </ItemGroup>
+
+</Project>

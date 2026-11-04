@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Noovio.Pulse.Domain\Noovio.Pulse.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(PulseExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(PulseExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="$(PulseExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="$(PulseExtensionsVersion)" />
+  </ItemGroup>
+
+</Project>

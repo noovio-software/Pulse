@@ -1,0 +1,90 @@
+@page "/compte"
+@attribute [Authorize]
+
+<PageTitle>Mes personnages · @Site.Name by Noovio</PageTitle>
+
+<TopBar />
+
+<main class="shell">
+    <section class="panel account-head">
+        <div>
+            <span class="eyebrow">Compte Battle.net</span>
+            <h1>@account?.BattleTag</h1>
+            <p class="muted">
+                @if (account?.LastSyncAtUtc is { } sync)
+                {
+                    <text>@characters.Count personnages · synchronisés @Ui.Ago(sync)</text>
+                }
+                else
+                {
+                    <text>Personnages pas encore synchronisés</text>
+                }
+            </p>
+        </div>
+        <div class="account-actions">
+            <a class="btn btn-primary" href="compte/synchroniser" data-enhance-nav="false">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 0 1-15.5 6.2L3 16M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M3 21v-5h5" />
+                </svg>
+                Synchroniser
+            </a>
+            <a class="btn btn-ghost" href="compte/deconnexion" data-enhance-nav="false">Déconnexion</a>
+        </div>
+    </section>
+
+    @if (eligible.Count == 0)
+    {
+        <section class="panel empty-state">
+            <h2>Aucun personnage @Site.Words.Noun</h2>
+            <p>Aucun personnage d'une classe qui peut @Site.Words.Verb (@Site.Words.Classes) sur ce compte.</p>
+        </section>
+    }
+    else
+    {
+        <h2 class="section-heading">
+            Personnages pouvant @Site.Words.Verb
+            @if (target is not null && eligible.Any(IsTarget))
+            {
+                <small class="muted">tes personnages @target.ClassName en premier : choisis celui à comparer au top @target.SpecName</small>
+            }
+        </h2>
+        <div class="character-grid">
+            @foreach (var c in eligible)
+            {
+                var specs = SpecsOf(c);
+                var spec = specs[0];
+                <article class="panel character-card @(c.Level < MaxLevel ? "is-low" : null) @(IsTarget(c) ? "is-target" : null)" style="--class-color: @spec.Color">
+                    <img class="wow-icon character-spec" src="@spec.IconUrl" alt="" width="44" height="44" />
+                    <div class="character-text">
+                        <strong class="character-name">@c.Name</strong>
+                        <span class="muted">@c.RaceName @c.ClassName · niv. @c.Level</span>
+                        <span class="muted">@c.RealmName (@c.Region.ToUpperInvariant())</span>
+                    </div>
+                    <div class="character-actions">
+                        @foreach (var option in specs)
+                        {
+                            <a class="btn btn-primary btn-analyze" href="compte/personnages/@c.Id/analyse?spec=@option.Slug"
+                               title="@(c.Level < MaxLevel ? "Niveau maximum requis pour une analyse pertinente" : $"Comparer à la méta {option.SpecName}")">
+                                <CompareIcon Size="16" />
+                                @(specs.Count > 1 ? option.SpecName : "Comparer")
+                            </a>
+                        }
+                    </div>
+                </article>
+            }
+        </div>
+    }
+
+    @if (others.Count > 0)
+    {
+        <details class="panel other-characters">
+            <summary>@others.Count autres personnages (classes sans spécialisation @Site.Words.Noun)</summary>
+            <ul>
+                @foreach (var c in others)
+                {
+                    <li><strong>@c.Name</strong> <span class="muted">@c.ClassName niv. @c.Level · @c.RealmName</span></li>
+                }
+            </ul>
+        </details>
+    }
+</main>

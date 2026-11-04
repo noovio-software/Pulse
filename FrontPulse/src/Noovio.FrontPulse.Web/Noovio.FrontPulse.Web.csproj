@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+
+    <!-- Les pages sont dans la RCL : sans .razor ici, le SDK n'embarquerait pas _framework/blazor.web.js. -->
+    <RequiresAspNetWebAssets>true</RequiresAspNetWebAssets>
     <UserSecretsId>9a4e1b7c-3d2f-4e8a-b6c5-1f0d9e2a7b34</UserSecretsId>
 
     <!-- Comme AltPulse : VERSION est posée par GitHub Actions et lue ici ; 1.0.0 en local. -->
@@ -9,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\PulseCore\src\Noovio.Pulse.Web\Noovio.Pulse.Web.csproj" />
     <ProjectReference Include="..\Noovio.FrontPulse.Infrastructure\Noovio.FrontPulse.Infrastructure.csproj" />
   </ItemGroup>
 

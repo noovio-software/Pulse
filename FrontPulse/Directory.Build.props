@@ -1,11 +1,5 @@
 <Project>
 
-  <!-- Réglages communs aux projets FrontPulse. Même cible que AltPulse (même SDK, même VPS). -->
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+  <Import Project="..\PulseCore\Directory.Build.props" />
 
 </Project>
