@@ -1,10 +1,10 @@
 # LandingPagePulse by Noovio
 
-Presentation page of the Noovio brand at https://www.noovio.fr: it introduces AltPulse and FrontPulse and sends visitors to them.
+Presentation page of the Noovio brand at https://www.noovio.fr: it introduces AltPulse, FrontPulse and LifePulse and sends visitors to them.
 
 - **Stack**: ASP.NET Core / Blazor Web App .NET 10, static server rendering only (no circuit, no WebAssembly, no JavaScript, no cookie, no database).
-- **Redirects**: `/altpulse` and `/frontpulse` answer a 302 to the tool. The targets live in `appsettings.json` (`Tools` section), and every link on the page goes through them.
-- **Theme**: « Battement », the page is shared between the two tools' worlds: AltPulse's venom green on the left, FrontPulse's forge amber on the right. The side of the tool being hovered lights up.
+- **Redirects**: `/altpulse`, `/frontpulse` and `/lifepulse` answer a 302 to the tool. The targets live in `appsettings.json` (`Tools` section), and every link on the page goes through them.
+- **Theme**: « Battement », the page is shared between the three tools' worlds: AltPulse's venom green on the left, FrontPulse's forge amber in the centre, LifePulse's shaman blue on the right. The side of the tool being hovered lights up.
 
 ## Run it
 
@@ -13,11 +13,11 @@ dotnet run --project LandingPagePulse/LandingPagePulse --launch-profile http
 # → http://localhost:5188
 ```
 
-In development, the redirects target the tools' local ports (5166 and 5177).
+In development, the redirects target the tools' local ports (5166, 5177 and 5178).
 
 ## Production (https://www.noovio.fr)
 
-Hosted on the same OVH VPS as AltPulse and FrontPulse.
+Hosted on the same OVH VPS as AltPulse, FrontPulse and LifePulse.
 
 | Piece | Location |
 |---|---|

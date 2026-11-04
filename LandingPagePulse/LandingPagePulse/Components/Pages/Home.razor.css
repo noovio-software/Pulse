@@ -7,36 +7,8 @@
     text-align: center;
 }
 
-.hero-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 12px 4px 10px;
-    border-radius: 999px;
-    border: 1px solid var(--line-strong);
-    background: rgba(230, 238, 240, 0.04);
-    color: var(--text-dim);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-}
-
-/* pastille qui bat comme un pouls */
-.pulse-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--venom);
-    animation: pulse 2s ease-out infinite;
-}
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(77, 255, 136, 0.6); }
-    70%, 100% { box-shadow: 0 0 0 9px rgba(77, 255, 136, 0); }
-}
-
 .hero-title {
-    margin: 20px 0 14px;
+    margin: 0 0 14px;
     font-family: var(--font-title);
     font-size: clamp(2.2rem, 5.2vw, 4.25rem);
     font-weight: 800;
@@ -47,7 +19,7 @@
 .hero-title em {
     display: block;
     font-style: normal;
-    background: linear-gradient(90deg, var(--venom), var(--amber) 70%, var(--steel));
+    background: linear-gradient(90deg, var(--venom), var(--amber) 50%, var(--tide));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -83,13 +55,15 @@
     to { stroke-dashoffset: 0; }
 }
 
-/* --- Les deux portes ----------------------------------------------------- */
-.doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+/* --- Les trois portes ---------------------------------------------------- */
+/* Chaque carte reprend les rangées de la grille (subgrid) : titres, aperçus et boutons s'alignent d'une carte à l'autre. */
+.doors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(5, auto); column-gap: 18px; }
 
 .door {
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-row: span 5;
+    grid-template-rows: subgrid;
     padding: 26px;
     overflow: hidden;
     border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
@@ -112,7 +86,7 @@
     box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5), 0 0 34px var(--glow);
 }
 
-/* le motif de chaque outil, repris de son propre fond : écailles pour AltPulse, plaques rivetées pour FrontPulse */
+/* le motif de chaque outil, repris de son propre fond : écailles pour AltPulse, plaques rivetées pour FrontPulse, ondes pour LifePulse */
 .door-pattern {
     position: absolute;
     inset: 0;
@@ -136,7 +110,14 @@
     background-size: 56px 56px;
 }
 
-.door-head { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.tool-life .door-pattern {
+    opacity: 0.14;
+    background-image:
+        radial-gradient(circle at 50% 50%, transparent 12px, var(--accent) 13px, transparent 14px, transparent 25px, var(--accent) 26px, transparent 27px);
+    background-size: 60px 60px;
+}
+
+.door-head { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; }
 .door-head ::deep .tool-sigil {
     display: grid;
     place-items: center;
@@ -149,10 +130,10 @@
     box-shadow: 0 0 20px var(--glow);
 }
 
-.door-wordmark { display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1.05; }
+.door-wordmark { display: inline-flex; flex-direction: column; align-items: flex-start; line-height: 1.05; }
 .door-name {
     font-family: var(--font-title);
-    font-size: 1.75rem;
+    font-size: 1.6rem;
     font-weight: 800;
     letter-spacing: 0.08em;
     background: linear-gradient(90deg, var(--accent), var(--accent-2) 55%, var(--accent-3));
@@ -163,7 +144,8 @@
 .door-by { margin-top: 1px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; color: var(--text-dim); }
 
 .door-badge {
-    margin-left: auto;
+    grid-column: 1 / -1;
+    justify-self: start;
     padding: 4px 10px;
     border-radius: 999px;
     border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
@@ -175,8 +157,8 @@
     white-space: nowrap;
 }
 
-.door-title { position: relative; margin: 20px 0 8px; font-size: 1.4rem; font-weight: 700; line-height: 1.25; }
-.door-lead { position: relative; margin: 0; font-size: 0.98rem; line-height: 1.6; color: var(--text-dim); text-wrap: pretty; }
+.door-title { position: relative; margin: 18px 0 8px; font-size: 1.3rem; font-weight: 700; line-height: 1.25; }
+.door-lead { position: relative; margin: 0; font-size: 0.95rem; line-height: 1.6; color: var(--text-dim); text-wrap: pretty; }
 
 /* --- Aperçus (illustrations, valeurs fictives) --------------------------- */
 .preview {
@@ -184,6 +166,9 @@
     margin: 20px 0;
     padding: 16px;
     border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     border: 1px solid var(--line);
     background: rgba(8, 12, 16, 0.62);
     font-size: 0.8rem;
@@ -204,8 +189,8 @@
     text-transform: uppercase;
 }
 
-.alt-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: 9px 8px; align-items: center; }
-.alt-grid > span { color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.alt-grid { display: grid; grid-template-columns: max-content repeat(3, minmax(0, 1fr)); gap: 9px 6px; align-items: center; }
+.alt-grid > span { color: var(--text-dim); white-space: nowrap; }
 .alt-grid > strong { color: var(--class); text-align: center; font-size: 0.78rem; }
 .alt-grid > b { text-align: center; font-weight: 600; }
 
@@ -218,15 +203,15 @@
 }
 .vault u.on { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 7px var(--glow); }
 
-.front-report { display: flex; align-items: center; gap: 20px; }
+.report { display: flex; align-items: center; gap: 16px; }
 
 /* anneau de score : tracé en conic-gradient, à la valeur de --score */
 .score {
     display: grid;
     place-content: center;
     flex: none;
-    width: 92px;
-    height: 92px;
+    width: 84px;
+    height: 84px;
     border-radius: 50%;
     text-align: center;
     line-height: 1;
@@ -264,11 +249,11 @@
 }
 
 .legend { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-top: 12px; font-size: 0.7rem; color: var(--text-dim); }
-.legend u { width: 14px; height: 6px; border-radius: 999px; background: var(--amber); }
+.legend u { width: 14px; height: 6px; border-radius: 999px; background: var(--accent); }
 .legend u.is-top { width: 2px; height: 12px; margin-left: 8px; background: var(--text); }
 
 /* --- Pied de carte ------------------------------------------------------- */
-.door-foot { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: auto; }
+.door-foot { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
 
 .door-link {
     display: inline-flex;
@@ -279,7 +264,7 @@
     border-radius: 10px;
     color: var(--on-accent);
     font-weight: 700;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    background: linear-gradient(135deg, var(--fill), var(--fill-2));
     box-shadow: 0 0 20px var(--glow);
     transition: box-shadow 0.15s;
 }
@@ -304,12 +289,13 @@
     text-align: center;
 }
 
-.questions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 18px; margin: 0; padding: 0; list-style: none; }
+.questions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 18px; margin: 0; padding: 0; list-style: none; }
 .questions a {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 16px;
+    gap: 8px;
     height: 100%;
     padding: 12px 16px;
     border-radius: 10px;
@@ -328,25 +314,36 @@
 .answer { display: inline-flex; align-items: center; gap: 6px; flex: none; color: var(--accent); font-weight: 700; font-size: 0.85rem; }
 
 /* --- Écrans moyens et mobile --------------------------------------------- */
+/* Sous 1180 px, trois colonnes laissent peu de place : l'aperçu passe en pile. */
+@media (max-width: 1180px) {
+    .door { padding: 22px 18px; }
+    .preview { font-size: 0.72rem; padding: 16px 12px; }
+    .alt-grid > strong { font-size: 0.7rem; }
+    .report { flex-direction: column; align-items: stretch; }
+    .score { align-self: center; }
+}
 @media (max-width: 900px) {
     .doors, .questions { grid-template-columns: minmax(0, 1fr); }
+    .doors { grid-template-rows: none; row-gap: 18px; }
+    .door { grid-row: auto; grid-template-rows: none; padding: 26px; }
+    .preview { font-size: 0.8rem; padding: 16px; }
+    .alt-grid > strong { font-size: 0.78rem; }
+    .report { flex-direction: row; align-items: center; }
     .hero { padding-top: 24px; }
     .heartbeat { height: 72px; }
 }
 @media (max-width: 480px) {
     .door { padding: 20px 16px; }
-    .door-badge { margin-left: 0; }
     .door-link { width: 100%; justify-content: center; }
     .door-note { flex-basis: 100%; }
-    .front-report { gap: 14px; }
+    .report { gap: 14px; }
     .score { width: 76px; height: 76px; }
     .score strong { font-size: 1.4rem; }
     .gauges li { grid-template-columns: 66px minmax(0, 1fr); gap: 6px; }
-    .questions a { flex-direction: column; align-items: flex-start; gap: 6px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .pulse-dot, .heartbeat-spark { animation: none; }
+    .heartbeat-spark { animation: none; }
     .heartbeat-spark { display: none; }
     .door, .door:hover, .door:focus-within { transform: none; }
 }

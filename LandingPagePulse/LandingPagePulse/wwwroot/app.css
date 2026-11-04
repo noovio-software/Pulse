@@ -1,7 +1,7 @@
 /* ==========================================================================
    Noovio - thème « Battement »
-   Même structure que AltPulse et FrontPulse (en-tête, panneaux, pied de page) ;
-   la page se partage entre leurs deux univers : vert venin à gauche, ambre de forge à droite.
+   Même structure que les outils (en-tête, panneaux, pied de page) ;
+   la page se partage entre leurs univers : vert venin à gauche, ambre de forge au centre, bleu chaman à droite.
    Les styles propres à la page sont dans Home.razor.css.
    ========================================================================== */
 
@@ -17,7 +17,7 @@
 
     --venom: #4DFF88;
     --amber: #F59E0B;
-    --steel: #38BDF8;
+    --tide: #4FA8F7;
 
     --text: #E6EEF0;
     --text-dim: #A3B3BC;
@@ -33,6 +33,8 @@
     --accent: #4DFF88;
     --accent-2: #9DFF3C;
     --accent-3: #D7FF5A;
+    --fill: #4DFF88;
+    --fill-2: #9DFF3C;
     --glow: rgba(77, 255, 136, 0.3);
     --on-accent: #04140A;
 }
@@ -40,8 +42,20 @@
     --accent: #F59E0B;
     --accent-2: #D97706;
     --accent-3: #38BDF8;
+    --fill: #F59E0B;
+    --fill-2: #D97706;
     --glow: rgba(245, 158, 11, 0.32);
     --on-accent: #1A1204;
+}
+/* #0070DD reste la couleur des aplats : sur ce fond sombre, le texte en prend une teinte plus claire pour rester lisible. */
+.tool-life {
+    --accent: #4FA8F7;
+    --accent-2: #2E8FEA;
+    --accent-3: #2DD4BF;
+    --fill: #0070DD;
+    --fill-2: #0057AD;
+    --glow: rgba(0, 112, 221, 0.42);
+    --on-accent: #FFFFFF;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -76,6 +90,7 @@ a:hover { text-decoration: underline; }
     background: linear-gradient(180deg, var(--bg-2), var(--bg));
 }
 .noovio-backdrop::before,
+.noovio-backdrop span,
 .noovio-backdrop::after {
     content: "";
     position: absolute;
@@ -90,15 +105,24 @@ a:hover { text-decoration: underline; }
 }
 .noovio-backdrop::after {
     background:
-        radial-gradient(1000px 640px at 92% -8%, rgba(245, 158, 11, 0.16), transparent 62%),
-        radial-gradient(700px 600px at 100% 100%, rgba(37, 99, 235, 0.16), transparent 65%);
+        radial-gradient(1000px 640px at 92% -8%, rgba(0, 112, 221, 0.22), transparent 62%),
+        radial-gradient(700px 600px at 100% 100%, rgba(45, 212, 191, 0.1), transparent 65%);
+}
+.noovio-backdrop span {
+    background: radial-gradient(900px 560px at 50% -12%, rgba(245, 158, 11, 0.14), transparent 62%);
 }
 body:has(.tool-alt:hover) .noovio-backdrop::before,
 body:has(.tool-alt:focus-visible) .noovio-backdrop::before,
-body:has(.tool-front:hover) .noovio-backdrop::after,
-body:has(.tool-front:focus-visible) .noovio-backdrop::after { opacity: 1; }
+body:has(.tool-front:hover) .noovio-backdrop span,
+body:has(.tool-front:focus-visible) .noovio-backdrop span,
+body:has(.tool-life:hover) .noovio-backdrop::after,
+body:has(.tool-life:focus-visible) .noovio-backdrop::after { opacity: 1; }
+body:has(.tool-alt:hover) .noovio-backdrop span,
 body:has(.tool-alt:hover) .noovio-backdrop::after,
-body:has(.tool-front:hover) .noovio-backdrop::before { opacity: 0.25; }
+body:has(.tool-front:hover) .noovio-backdrop::before,
+body:has(.tool-front:hover) .noovio-backdrop::after,
+body:has(.tool-life:hover) .noovio-backdrop::before,
+body:has(.tool-life:hover) .noovio-backdrop span { opacity: 0.25; }
 
 /* --- En-tête ------------------------------------------------------------- */
 .topbar {
@@ -305,7 +329,8 @@ body:has(.tool-front:hover) .noovio-backdrop::before { opacity: 0.25; }
     .footer { padding: 24px 16px 28px; }
     .footer-inner { flex-direction: column; align-items: flex-start; }
 }
-@media (max-width: 480px) {
+/* Trois liens et le logo ne tiennent pas sur une ligne : les noms laissent place aux emblèmes. */
+@media (max-width: 640px) {
     .tool-link { width: 36px; padding: 0; justify-content: center; }
     .tool-link-name { display: none; }
 }
