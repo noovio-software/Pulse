@@ -480,3 +480,19 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Secrets: never committed, whatever the folder
+*.env
+.env.*
+!*.env.example
+secrets.json
+appsettings.Production.json
+appsettings.Local.json
+*.pem
+*.key
+*.p12
+id_rsa*
+id_ed25519*
+
+# Claude Code local settings
+.claude/settings.local.json

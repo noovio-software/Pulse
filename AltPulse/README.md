@@ -34,7 +34,7 @@ The secret stays server-side: the WASM front end only calls the `/api/*` endpoin
 
 ## Production (https://altpulse.noovio.fr)
 
-Hosted on the OVH VPS `<vps-host>` (user `ubuntu`), alongside Nowtilus, WattsIn, Aidalap…
+Hosted on an OVH VPS (user `ubuntu`), alongside other sites.
 
 | Piece | Location |
 |---|---|
@@ -67,12 +67,12 @@ GitHub secrets (repo > Settings > Secrets and variables > Actions):
 
 | Secret | Value |
 |---|---|
-| `REMOTE_HOST` | `<vps-host>` |
+| `REMOTE_HOST` | hostname of the VPS |
 | `REMOTE_USER` | `ubuntu` |
 | `REMOTE_TARGET_APP` | `/home/ubuntu/projects/altpulse/` |
 | `REMOTE_KEY` | private SSH key whose public half is in `~ubuntu/.ssh/authorized_keys` |
 
-`ubuntu` has passwordless sudo on this VPS, so the workflow can restart the service without a password.
+The workflow restarts the service with `sudo`, so the deploy user needs to be allowed to do this without a password.
 ## Architecture
 
 | Project | Role |

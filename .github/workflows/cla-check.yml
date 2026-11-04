@@ -1,0 +1,27 @@
+name: CLA
+
+# Checks the assignment declaration in the pull request description.
+# Runs on pull_request, so a fork gets no repository secret. No checkout: contributed code is never run here.
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions: {}
+
+jobs:
+  declaration:
+    runs-on: ubuntu-latest
+    if: ${{ !contains(fromJSON('["rampinflorian", "noovio-software"]'), github.event.pull_request.user.login) }}
+
+    steps:
+      # The description goes through an environment variable: it is never interpolated into the script.
+      - name: Check the declaration is ticked
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if printf '%s\n' "$PR_BODY" | grep -qiE '^[[:space:]]*[-*] \[x\] I have read .*CLA\.md.* version 1\.0, and I assign the copyright'; then
+            echo "Declaration found."
+          else
+            echo "::error::Tick the contributor assignment declaration in the pull request description (see CLA.md)."
+            exit 1
+          fi
