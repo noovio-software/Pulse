@@ -6,3 +6,4 @@ Solution `Pulse.sln`, one folder per application:
 |---|---|
 | [`AltPulse/`](AltPulse/README.md) | AltPulse, World of Warcraft character tracker (https://altpulse.noovio.fr) |
 | [`FrontPulse/`](FrontPulse/README.md) | FrontPulse, Mythic+ tank meta (top 100 per spec) |
+| [`LandingPagePulse/`](LandingPagePulse/README.md) | Noovio presentation page, gives access to both tools (https://www.noovio.fr) |

@@ -1,0 +1,352 @@
+/* --- Accroche ------------------------------------------------------------ */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 44px 0 0;
+    text-align: center;
+}
+
+.hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: rgba(230, 238, 240, 0.04);
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+/* pastille qui bat comme un pouls */
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--venom);
+    animation: pulse 2s ease-out infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(77, 255, 136, 0.6); }
+    70%, 100% { box-shadow: 0 0 0 9px rgba(77, 255, 136, 0); }
+}
+
+.hero-title {
+    margin: 20px 0 14px;
+    font-family: var(--font-title);
+    font-size: clamp(2.2rem, 5.2vw, 4.25rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: 0.03em;
+    text-wrap: balance;
+}
+.hero-title em {
+    display: block;
+    font-style: normal;
+    background: linear-gradient(90deg, var(--venom), var(--amber) 70%, var(--steel));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero-lead { max-width: 620px; margin: 0; font-size: 1.1rem; line-height: 1.6; color: var(--text-dim); text-wrap: pretty; }
+
+/* --- Le tracé du pouls --------------------------------------------------- */
+.heartbeat {
+    display: block;
+    width: 100%;
+    height: 96px;
+    margin-bottom: -14px;
+    overflow: visible;
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+.heartbeat path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+.heartbeat-base { stroke-width: 1.5; opacity: 0.5; }
+/* l'étincelle : un segment clair qui parcourt tout le tracé */
+.heartbeat-spark {
+    stroke-width: 2.5;
+    stroke-dasharray: 14 86;
+    filter: drop-shadow(0 0 6px rgba(230, 238, 240, 0.45));
+    animation: heartbeat-run 4.5s linear infinite;
+}
+@keyframes heartbeat-run {
+    from { stroke-dashoffset: 100; }
+    to { stroke-dashoffset: 0; }
+}
+
+/* --- Les deux portes ----------------------------------------------------- */
+.doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+
+.door {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 26px;
+    overflow: hidden;
+    border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
+    background:
+        radial-gradient(520px 280px at 100% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%),
+        var(--panel);
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+}
+.door::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: var(--accent);
+    box-shadow: 0 0 16px var(--accent);
+}
+.door:hover, .door:focus-within {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent) 65%, var(--line));
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5), 0 0 34px var(--glow);
+}
+
+/* le motif de chaque outil, repris de son propre fond : écailles pour AltPulse, plaques rivetées pour FrontPulse */
+.door-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.09;
+    pointer-events: none;
+    mask-image: linear-gradient(200deg, black, transparent 55%);
+}
+.tool-alt .door-pattern {
+    background-image:
+        radial-gradient(circle at 50% 0%, transparent 13px, var(--accent) 14px, transparent 15px),
+        radial-gradient(circle at 0% 50%, transparent 13px, var(--accent) 14px, transparent 15px),
+        radial-gradient(circle at 100% 50%, transparent 13px, var(--accent) 14px, transparent 15px);
+    background-size: 28px 28px;
+}
+.tool-front .door-pattern {
+    opacity: 0.16;
+    background-image:
+        radial-gradient(circle at 4px 4px, var(--accent) 1.2px, transparent 1.8px),
+        linear-gradient(var(--line-strong) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line-strong) 1px, transparent 1px);
+    background-size: 56px 56px;
+}
+
+.door-head { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.door-head ::deep .tool-sigil {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    color: var(--accent);
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 24%, transparent), transparent 70%);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+    box-shadow: 0 0 20px var(--glow);
+}
+
+.door-wordmark { display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1.05; }
+.door-name {
+    font-family: var(--font-title);
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2) 55%, var(--accent-3));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.door-by { margin-top: 1px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; color: var(--text-dim); }
+
+.door-badge {
+    margin-left: auto;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    background: color-mix(in srgb, var(--accent) 9%, transparent);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+}
+
+.door-title { position: relative; margin: 20px 0 8px; font-size: 1.4rem; font-weight: 700; line-height: 1.25; }
+.door-lead { position: relative; margin: 0; font-size: 0.98rem; line-height: 1.6; color: var(--text-dim); text-wrap: pretty; }
+
+/* --- Aperçus (illustrations, valeurs fictives) --------------------------- */
+.preview {
+    position: relative;
+    margin: 20px 0;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: rgba(8, 12, 16, 0.62);
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+}
+.preview-tag {
+    position: absolute;
+    top: -9px;
+    left: 14px;
+    padding: 1px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: var(--panel-solid);
+    color: var(--text-dim);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.alt-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: 9px 8px; align-items: center; }
+.alt-grid > span { color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.alt-grid > strong { color: var(--class); text-align: center; font-size: 0.78rem; }
+.alt-grid > b { text-align: center; font-weight: 600; }
+
+.vault { display: flex; justify-content: center; gap: 3px; }
+.vault u {
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+    border: 1px solid var(--line-strong);
+}
+.vault u.on { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 7px var(--glow); }
+
+.front-report { display: flex; align-items: center; gap: 20px; }
+
+/* anneau de score : tracé en conic-gradient, à la valeur de --score */
+.score {
+    display: grid;
+    place-content: center;
+    flex: none;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 1;
+    background:
+        radial-gradient(closest-side, #0D1319 80%, transparent 81%),
+        conic-gradient(var(--accent) calc(var(--score) * 1%), rgba(230, 238, 240, 0.1) 0);
+    box-shadow: 0 0 22px var(--glow);
+}
+.score strong { font-family: var(--font-title); font-size: 1.75rem; font-weight: 800; color: var(--accent); }
+.score small { margin-top: 2px; font-size: 0.66rem; color: var(--text-dim); }
+
+.gauges { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.gauges li { display: grid; grid-template-columns: 76px minmax(0, 1fr); align-items: center; gap: 10px; }
+.gauges span { color: var(--stat); font-weight: 600; }
+.gauges i {
+    position: relative;
+    display: block;
+    height: 7px;
+    border-radius: 999px;
+    background:
+        linear-gradient(var(--stat), var(--stat)) no-repeat left / var(--you) 100%,
+        rgba(230, 238, 240, 0.08);
+}
+/* le repère blanc marque la médiane du top */
+.gauges i::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    left: var(--top);
+    width: 2px;
+    border-radius: 2px;
+    background: var(--text);
+    box-shadow: 0 0 6px rgba(230, 238, 240, 0.7);
+}
+
+.legend { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-top: 12px; font-size: 0.7rem; color: var(--text-dim); }
+.legend u { width: 14px; height: 6px; border-radius: 999px; background: var(--amber); }
+.legend u.is-top { width: 2px; height: 12px; margin-left: 8px; background: var(--text); }
+
+/* --- Pied de carte ------------------------------------------------------- */
+.door-foot { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: auto; }
+
+.door-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 20px;
+    border-radius: 10px;
+    color: var(--on-accent);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 0 20px var(--glow);
+    transition: box-shadow 0.15s;
+}
+.door-link:hover { color: var(--on-accent); text-decoration: none; }
+.door:hover .door-link { box-shadow: 0 0 32px var(--glow); }
+.door-link svg { transition: transform 0.15s; }
+.door:hover .door-link svg { transform: translateX(3px); }
+.door-link:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+/* lien étiré : toute la carte ouvre l'outil */
+.door-link::after { content: ""; position: absolute; inset: -100vh -100vw; }
+.door { isolation: isolate; }
+
+.door-note { flex: 1 1 200px; font-size: 0.78rem; line-height: 1.4; color: var(--text-dim); }
+
+/* --- Lequel ouvrir ? ----------------------------------------------------- */
+.chooser { margin-top: 26px; }
+.chooser-heading {
+    margin: 0 0 14px;
+    font-family: var(--font-title);
+    font-size: 1.35rem;
+    letter-spacing: 0.06em;
+    text-align: center;
+}
+
+.questions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 18px; margin: 0; padding: 0; list-style: none; }
+.questions a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: rgba(20, 28, 36, 0.5);
+    color: var(--text);
+    transition: border-color 0.15s, background 0.15s;
+}
+.questions a:hover, .questions a:focus-visible {
+    text-decoration: none;
+    color: var(--text);
+    border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+    background: color-mix(in srgb, var(--accent) 7%, rgba(20, 28, 36, 0.5));
+}
+.question { font-size: 0.92rem; line-height: 1.4; }
+.answer { display: inline-flex; align-items: center; gap: 6px; flex: none; color: var(--accent); font-weight: 700; font-size: 0.85rem; }
+
+/* --- Écrans moyens et mobile --------------------------------------------- */
+@media (max-width: 900px) {
+    .doors, .questions { grid-template-columns: minmax(0, 1fr); }
+    .hero { padding-top: 24px; }
+    .heartbeat { height: 72px; }
+}
+@media (max-width: 480px) {
+    .door { padding: 20px 16px; }
+    .door-badge { margin-left: 0; }
+    .door-link { width: 100%; justify-content: center; }
+    .door-note { flex-basis: 100%; }
+    .front-report { gap: 14px; }
+    .score { width: 76px; height: 76px; }
+    .score strong { font-size: 1.4rem; }
+    .gauges li { grid-template-columns: 66px minmax(0, 1fr); gap: 6px; }
+    .questions a { flex-direction: column; align-items: flex-start; gap: 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pulse-dot, .heartbeat-spark { animation: none; }
+    .heartbeat-spark { display: none; }
+    .door, .door:hover, .door:focus-within { transform: none; }
+}

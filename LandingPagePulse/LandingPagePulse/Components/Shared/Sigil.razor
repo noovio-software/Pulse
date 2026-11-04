@@ -1,0 +1,17 @@
+@* Emblème Noovio : un N tracé d'un seul trait, comme un battement de pouls. Même tracé que wwwroot/favicon.svg. *@
+
+<span class="brand-sigil" aria-hidden="true">
+    <svg viewBox="0 0 32 32" width="@Size" height="@Size">
+        <defs>
+            <linearGradient id="sigil-@Size" x1="3" y1="0" x2="29" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#4DFF88" />
+                <stop offset="1" stop-color="#F59E0B" />
+            </linearGradient>
+        </defs>
+        <path d="M3 16h5V7l16 18v-9h5" fill="none" stroke="url(#sigil-@Size)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+</span>
+
+@code {
+    [Parameter] public int Size { get; set; } = 26;
+}

@@ -1,0 +1,5 @@
+# Fichiers destinés au serveur Linux : fins de ligne LF, sinon bash et systemd échouent sur les \r.
+deploy/*.sh       text eol=lf
+deploy/*.service  text eol=lf
+deploy/*.conf     text eol=lf
+deploy/*.example  text eol=lf

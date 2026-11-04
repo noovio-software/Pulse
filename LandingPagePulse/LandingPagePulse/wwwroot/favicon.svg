@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="frame" x1="2" y1="0" x2="62" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4DFF88" />
+      <stop offset="1" stop-color="#F59E0B" />
+    </linearGradient>
+    <linearGradient id="beat" x1="3" y1="0" x2="29" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4DFF88" />
+      <stop offset="1" stop-color="#F59E0B" />
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="#080C10" stroke="url(#frame)" stroke-opacity="0.65" stroke-width="2" />
+  <!-- Même tracé que le composant Sigil -->
+  <path transform="translate(8 8) scale(1.5)" d="M3 16h5V7l16 18v-9h5" fill="none" stroke="url(#beat)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

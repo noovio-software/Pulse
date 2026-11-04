@@ -1,0 +1,173 @@
+@page "/"
+
+<PageTitle>Noovio · Outils World of Warcraft : AltPulse et FrontPulse</PageTitle>
+
+<HeadContent>
+    <link rel="canonical" href="https://www.noovio.fr/" />
+    <meta name="description" content="Noovio réunit deux outils World of Warcraft : AltPulse pour suivre tous tes personnages dans une seule grille, FrontPulse pour jouer ton tank comme le top 100 en Mythique+." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Noovio" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:url" content="https://www.noovio.fr/" />
+    <meta property="og:title" content="Noovio · Prends le pouls de tes personnages" />
+    <meta property="og:description" content="AltPulse pour suivre tous tes personnages, FrontPulse pour jouer ton tank comme le top 100 en Mythique+." />
+    <meta property="og:image" content="https://www.noovio.fr/og-noovio.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+</HeadContent>
+
+<main class="shell">
+    @* --- Accroche ------------------------------------------------------------------------------ *@
+    <section class="hero">
+        <span class="hero-kicker">
+            <span class="pulse-dot" aria-hidden="true"></span>
+            Deux outils World of Warcraft
+        </span>
+        <h1 class="hero-title">Prends le pouls <em>de tes personnages</em></h1>
+        <p class="hero-lead">
+            Un outil pour savoir où en sont tous tes personnages cette semaine, un autre pour jouer ton tank
+            comme les meilleurs. Choisis ta porte.
+        </p>
+    </section>
+
+    @* Le tracé relie les deux portes : chaque battement tombe au-dessus de sa carte, à la couleur de son outil. *@
+    <svg class="heartbeat" viewBox="0 0 1200 96" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+            <linearGradient id="heartbeat-color" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#4DFF88" />
+                <stop offset="0.42" stop-color="#4DFF88" />
+                <stop offset="0.58" stop-color="#F59E0B" />
+                <stop offset="0.88" stop-color="#F59E0B" />
+                <stop offset="1" stop-color="#38BDF8" />
+            </linearGradient>
+        </defs>
+        <path class="heartbeat-base" d="@HeartbeatPath" stroke="url(#heartbeat-color)" />
+        <path class="heartbeat-spark" d="@HeartbeatPath" stroke="url(#heartbeat-color)" pathLength="100" />
+    </svg>
+
+    @* --- Les deux portes : le lien couvre toute la carte (::after) ------------------------------- *@
+    <section class="doors" aria-label="Les outils">
+        <article class="panel door tool-alt">
+            <div class="door-pattern" aria-hidden="true"></div>
+            <header class="door-head">
+                <ToolSigil Size="34" />
+                <span class="door-wordmark">
+                    <span class="door-name">AltPulse</span>
+                    <span class="door-by">by Noovio</span>
+                </span>
+                <span class="door-badge">Tous tes personnages</span>
+            </header>
+            <h2 class="door-title">Toute ta semaine, une seule grille</h2>
+            <p class="door-lead">
+                Une colonne par personnage : niveau d'objet, score, clés, Grande Chambre forte, meilleure clé
+                par donjon et raids de la semaine. Fini de reconnecter chaque perso pour vérifier.
+            </p>
+
+            <div class="preview" aria-hidden="true">
+                <span class="preview-tag">Exemple</span>
+                <div class="alt-grid">
+                    <span></span>
+                    <strong style="--class: #C69B6D">Guerrier</strong>
+                    <strong style="--class: #3FC7EB">Mage</strong>
+                    <strong style="--class: #F48CBA">Paladin</strong>
+
+                    <span>Niveau d'objet</span><b>284</b><b>279</b><b>263</b>
+                    <span>Score M+</span><b>3 120</b><b>2 480</b><b>1 655</b>
+                    <span>Clés semaine</span><b>8</b><b>4</b><b>1</b>
+                    <span>Chambre forte</span>
+                    <i class="vault"><u class="on"></u><u class="on"></u><u class="on"></u></i>
+                    <i class="vault"><u class="on"></u><u class="on"></u><u></u></i>
+                    <i class="vault"><u class="on"></u><u></u><u></u></i>
+                </div>
+            </div>
+
+            <footer class="door-foot">
+                <a class="door-link" href="altpulse">
+                    Ouvrir AltPulse
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </a>
+                <span class="door-note">Sans compte, ton historique reste dans ton navigateur</span>
+            </footer>
+        </article>
+
+        <article class="panel door tool-front">
+            <div class="door-pattern" aria-hidden="true"></div>
+            <header class="door-head">
+                <ToolSigil Front Size="34" />
+                <span class="door-wordmark">
+                    <span class="door-name">FrontPulse</span>
+                    <span class="door-by">by Noovio</span>
+                </span>
+                <span class="door-badge">Ton tank en Mythique+</span>
+            </header>
+            <h2 class="door-title">Joue ton tank comme le top 100</h2>
+            <p class="door-lead">
+                Caractéristiques, talents, équipement et bijoux des 100 meilleurs tanks de chaque spécialisation.
+                Compare ton personnage et repars avec ce qu'il faut changer en premier.
+            </p>
+
+            <div class="preview" aria-hidden="true">
+                <span class="preview-tag">Exemple</span>
+                <div class="front-report">
+                    <div class="score" style="--score: 78">
+                        <strong>78</strong>
+                        <small>/ 100</small>
+                    </div>
+                    <ul class="gauges">
+                        <li style="--stat: #F59E0B; --you: 92%; --top: 88%"><span>Hâte</span><i></i></li>
+                        <li style="--stat: #8B5CF6; --you: 44%; --top: 66%"><span>Maîtrise</span><i></i></li>
+                        <li style="--stat: #38BDF8; --you: 40%; --top: 48%"><span>Polyvalence</span><i></i></li>
+                        <li style="--stat: #F87171; --you: 34%; --top: 22%"><span>Critique</span><i></i></li>
+                    </ul>
+                </div>
+                <span class="legend"><u></u> ton perso <u class="is-top"></u> médiane du top</span>
+            </div>
+
+            <footer class="door-foot">
+                <a class="door-link" href="frontpulse">
+                    Ouvrir FrontPulse
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </a>
+                <span class="door-note">Méta recalculée toutes les 6 h, comparaison via Battle.net</span>
+            </footer>
+        </article>
+    </section>
+
+    @* --- Lequel ouvrir ? -------------------------------------------------------------------------- *@
+    <section class="chooser">
+        <h2 class="chooser-heading">Lequel ouvrir ?</h2>
+        <ul class="questions">
+            <li class="tool-alt">
+                <a href="altpulse">
+                    <span class="question">Où en sont mes clés et ma Grande Chambre forte cette semaine ?</span>
+                    <span class="answer"><ToolSigil Size="16" /> AltPulse</span>
+                </a>
+            </li>
+            <li class="tool-front">
+                <a href="frontpulse">
+                    <span class="question">Quelles caractéristiques et quels talents jouent les meilleurs tanks ?</span>
+                    <span class="answer"><ToolSigil Front Size="16" /> FrontPulse</span>
+                </a>
+            </li>
+            <li class="tool-alt">
+                <a href="altpulse">
+                    <span class="question">Quels boss ai-je déjà tués cette semaine, et dans quelle difficulté ?</span>
+                    <span class="answer"><ToolSigil Size="16" /> AltPulse</span>
+                </a>
+            </li>
+            <li class="tool-front">
+                <a href="frontpulse">
+                    <span class="question">Que changer en priorité sur mon tank ?</span>
+                    <span class="answer"><ToolSigil Front Size="16" /> FrontPulse</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+</main>
+
+@code {
+    // Ligne plate, un battement au milieu de chaque carte (x = 300 et x = 900), comme les colonnes de .doors.
+    private const string HeartbeatPath =
+        "M0 62H250l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H850l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H1200";
+}

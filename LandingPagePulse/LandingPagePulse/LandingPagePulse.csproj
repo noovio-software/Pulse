@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Comme AltPulse : VERSION est posée par GitHub Actions et lue ici ; 1.0.0 en local. -->
+    <Version>$(Version)</Version>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,34 @@
+@inherits LayoutComponentBase
+
+<div class="noovio-backdrop" aria-hidden="true"></div>
+
+<TopBar />
+
+@Body
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <Sigil Size="24" />
+            <span class="brand-name">Noovio</span>
+            <span class="app-version" title="Version déployée">v@(AppVersion)</span>
+        </div>
+
+        <div class="footer-sources">
+            <span class="eyebrow">Données</span>
+            <a class="source" href="https://raider.io" target="_blank" rel="noopener">
+                <span class="source-dot" aria-hidden="true"></span> Raider.io
+            </a>
+            <a class="source" href="https://develop.battle.net" target="_blank" rel="noopener">
+                <span class="source-dot" aria-hidden="true"></span> API Blizzard
+            </a>
+        </div>
+
+        <a class="footer-contact" href="mailto:contact@@noovio.fr">contact@@noovio.fr</a>
+
+        <p class="footer-legal">
+            World of Warcraft est une marque déposée de Blizzard Entertainment, Inc.
+            Noovio n'est ni affilié à Blizzard, ni approuvé par cet éditeur.
+        </p>
+    </div>
+</footer>

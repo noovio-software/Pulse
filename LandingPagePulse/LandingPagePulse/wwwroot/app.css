@@ -1,0 +1,311 @@
+/* ==========================================================================
+   Noovio - thème « Battement »
+   Même structure que AltPulse et FrontPulse (en-tête, panneaux, pied de page) ;
+   la page se partage entre leurs deux univers : vert venin à gauche, ambre de forge à droite.
+   Les styles propres à la page sont dans Home.razor.css.
+   ========================================================================== */
+
+:root {
+    color-scheme: dark;
+
+    --bg: #080C10;
+    --bg-2: #0E151B;
+    --panel: rgba(18, 26, 33, 0.86);
+    --panel-solid: #121A21;
+    --line: rgba(170, 195, 210, 0.16);
+    --line-strong: rgba(170, 195, 210, 0.32);
+
+    --venom: #4DFF88;
+    --amber: #F59E0B;
+    --steel: #38BDF8;
+
+    --text: #E6EEF0;
+    --text-dim: #A3B3BC;
+    --text-faint: #71828C;
+
+    --radius: 14px;
+    --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-title: "Cinzel", Georgia, serif;
+}
+
+/* La palette de chaque outil, reprise de son propre thème */
+.tool-alt {
+    --accent: #4DFF88;
+    --accent-2: #9DFF3C;
+    --accent-3: #D7FF5A;
+    --glow: rgba(77, 255, 136, 0.3);
+    --on-accent: #04140A;
+}
+.tool-front {
+    --accent: #F59E0B;
+    --accent-2: #D97706;
+    --accent-3: #38BDF8;
+    --glow: rgba(245, 158, 11, 0.32);
+    --on-accent: #1A1204;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    min-height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+/* Pied de page collé en bas même sur une page courte : body en colonne, le footer prend le reste (margin-top: auto). */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+a { color: var(--text); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* --- Fond : chaque outil éclaire son côté, et s'avive quand on survole sa porte --- */
+.noovio-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(180deg, var(--bg-2), var(--bg));
+}
+.noovio-backdrop::before,
+.noovio-backdrop::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.7;
+    transition: opacity 0.35s;
+}
+.noovio-backdrop::before {
+    background:
+        radial-gradient(1000px 640px at 8% -8%, rgba(77, 255, 136, 0.17), transparent 62%),
+        radial-gradient(700px 600px at 0% 100%, rgba(31, 143, 74, 0.16), transparent 65%);
+}
+.noovio-backdrop::after {
+    background:
+        radial-gradient(1000px 640px at 92% -8%, rgba(245, 158, 11, 0.16), transparent 62%),
+        radial-gradient(700px 600px at 100% 100%, rgba(37, 99, 235, 0.16), transparent 65%);
+}
+body:has(.tool-alt:hover) .noovio-backdrop::before,
+body:has(.tool-alt:focus-visible) .noovio-backdrop::before,
+body:has(.tool-front:hover) .noovio-backdrop::after,
+body:has(.tool-front:focus-visible) .noovio-backdrop::after { opacity: 1; }
+body:has(.tool-alt:hover) .noovio-backdrop::after,
+body:has(.tool-front:hover) .noovio-backdrop::before { opacity: 0.25; }
+
+/* --- En-tête ------------------------------------------------------------- */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 12px 24px;
+    background: rgba(8, 12, 16, 0.82);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: none;
+    color: var(--text);
+}
+.brand:hover { text-decoration: none; color: var(--text); }
+
+.brand-sigil {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: radial-gradient(circle, rgba(230, 238, 240, 0.08), transparent 70%);
+    border: 1px solid var(--line-strong);
+}
+
+.brand-name {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 1.45rem;
+    letter-spacing: 0.08em;
+    background: linear-gradient(90deg, var(--venom), var(--amber));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.brand-tag {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.topbar-tools { display: flex; gap: 8px; }
+
+.tool-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+    color: var(--accent);
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.tool-link:hover, .tool-link:focus-visible {
+    text-decoration: none;
+    color: var(--accent);
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    box-shadow: 0 0 14px var(--glow);
+}
+.tool-link .tool-sigil { display: grid; }
+
+/* --- Contenu ------------------------------------------------------------- */
+.shell {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto 32px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(230, 238, 240, 0.04);
+}
+
+.eyebrow {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-faint);
+}
+
+.muted { color: var(--text-dim); }
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 18px;
+    border-radius: 10px;
+    border: 1px solid var(--line-strong);
+    color: var(--text);
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn:hover { text-decoration: none; background: rgba(230, 238, 240, 0.06); border-color: var(--text-dim); }
+
+.empty-state { padding: 48px 24px; margin-top: 40px; text-align: center; color: var(--text-dim); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.empty-state h1 { margin: 0; font-family: var(--font-title); color: var(--text); }
+
+/* --- Pied de page -------------------------------------------------------- */
+.footer {
+    position: relative;
+    margin-top: auto;
+    padding: 28px 24px 32px;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    background: linear-gradient(180deg, transparent, rgba(8, 12, 16, 0.88));
+}
+
+/* filet qui passe du venin à la forge et s'estompe sur les bords */
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--venom), var(--amber), transparent);
+    opacity: 0.6;
+}
+
+.footer-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 32px;
+}
+
+.footer-brand { display: flex; align-items: center; gap: 10px; }
+.footer-brand .brand-sigil { width: 34px; height: 34px; border-radius: 10px; }
+.footer-brand .brand-name { font-size: 1.15rem; }
+
+.app-version {
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+}
+
+.footer-sources { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.footer-sources .eyebrow { margin-right: 4px; color: var(--text-dim); }
+
+.source {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--text-dim);
+    font-weight: 600;
+    transition: border-color 0.15s, color 0.15s;
+}
+.source:hover { text-decoration: none; color: var(--text); border-color: var(--line-strong); }
+
+.source-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, var(--venom), var(--amber));
+}
+
+.footer-contact { color: var(--text-dim); font-weight: 600; }
+.footer-contact:hover { color: var(--text); }
+
+.footer-legal { flex-basis: 100%; margin: 0; font-size: 0.74rem; line-height: 1.5; color: var(--text-faint); }
+
+/* --- Écrans moyens et mobile --------------------------------------------- */
+@media (max-width: 760px) {
+    .brand-tag { display: none; }
+}
+@media (max-width: 640px) {
+    .shell { padding: 16px; }
+    .topbar { padding: 10px 16px; gap: 12px; }
+    .footer { padding: 24px 16px 28px; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+    .tool-link { width: 36px; padding: 0; justify-content: center; }
+    .tool-link-name { display: none; }
+}
