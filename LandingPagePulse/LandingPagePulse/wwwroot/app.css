@@ -317,6 +317,23 @@ body:has(.tool-life:hover) .noovio-backdrop span { opacity: 0.25; }
 .footer-contact { color: var(--text-dim); font-weight: 600; }
 .footer-contact:hover { color: var(--text); }
 
+.footer-social { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+
+/* Plus lisibles que dans les outils : ici, le nom accompagne l'icône. */
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: border-color 0.15s, background-color 0.15s;
+}
+.social-link:hover { text-decoration: none; border-color: var(--text-dim); background: rgba(230, 238, 240, 0.06); }
+
 .footer-legal { flex-basis: 100%; margin: 0; font-size: 0.74rem; line-height: 1.5; color: var(--text-faint); }
 
 /* --- Écrans moyens et mobile --------------------------------------------- */
