@@ -3,6 +3,7 @@ using System.Threading.RateLimiting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Noovio.Pulse.Infrastructure.Blizzard;
+using Noovio.Pulse.Infrastructure.KeystoneGuru;
 using Noovio.Pulse.Infrastructure.RaiderIo;
 
 namespace Noovio.Pulse.Infrastructure.Http;
@@ -54,6 +55,8 @@ public sealed class BlizzardRateLimiter(IOptions<BlizzardOptions> options) : Htt
     PartitionedRateLimiter.CreateChained(TokenBucket(options.Value.RequestsPerSecond), SlidingHour(options.Value.RequestsPerHour)));
 
 public sealed class RaiderIoRateLimiter(IOptions<RaiderIoOptions> options) : HttpRateLimiter(TokenBucket(options.Value.RequestsPerSecond));
+
+public sealed class KeystoneGuruRateLimiter(IOptions<KeystoneGuruOptions> options) : HttpRateLimiter(TokenBucket(options.Value.RequestsPerSecond));
 
 /// <summary>
 /// Applique le limiteur avant chaque envoi, et respecte un 429 éventuel (Retry-After,

@@ -107,4 +107,7 @@ public sealed record PulseApp(string Name, PulseRole Role, string Sigil)
     public string Key => Name.ToLowerInvariant();
 
     public RoleWording Words => Role.Wording;
+
+    /// <summary>Routes de donjons Keystone.guru : synchronisation dans le worker, pages et liens sur le site.</summary>
+    public bool HasDungeonRoutes { get; init; }
 }

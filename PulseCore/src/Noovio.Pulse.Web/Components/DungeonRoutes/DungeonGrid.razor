@@ -1,0 +1,39 @@
+@* Une carte par donjon de la saison : sur la page des routes et sur l'accueil. *@
+
+<ul class="dungeon-grid">
+    @foreach (var dungeon in Dungeons)
+    {
+        var top = dungeon.Routes.FirstOrDefault();
+        <li>
+            <a class="dungeon-card" href="routes/@dungeon.Slug">
+                <span class="dungeon-card-art">
+                    @if (dungeon.ImageUrl is { } image)
+                    {
+                        <img src="@image" alt="" loading="lazy" />
+                    }
+                    <span class="dungeon-card-key">@dungeon.ShortName</span>
+                    <span class="dungeon-card-timer">@Ui.KeyTimer(dungeon.TimerSeconds)</span>
+                </span>
+                <span class="dungeon-card-body">
+                    <strong class="dungeon-card-name">@dungeon.Name</strong>
+                    @if (top is not null)
+                    {
+                        <span class="dungeon-card-route">
+                            <span class="eyebrow">Route la plus populaire</span>
+                            <span class="dungeon-card-title">@top.Title</span>
+                        </span>
+                        <span class="dungeon-card-facts">
+                            <span><strong>@top.PullSizes.Count</strong> pulls</span>
+                            <span><strong>@top.LargestPull</strong> au plus gros</span>
+                            <span><strong>@dungeon.Routes.Count</strong> routes</span>
+                        </span>
+                    }
+                </span>
+            </a>
+        </li>
+    }
+</ul>
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<SeasonDungeon> Dungeons { get; set; } = [];
+}

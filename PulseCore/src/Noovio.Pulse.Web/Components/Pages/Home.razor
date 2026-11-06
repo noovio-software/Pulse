@@ -26,10 +26,18 @@
                         <path d="M12 5v14M6 13l6 6 6-6" />
                     </svg>
                 </a>
+                @if (dungeons.Count > 0)
+                {
+                    <a class="btn btn-ghost" href="routes">Routes Midnight</a>
+                }
             </div>
             <ul class="landing-proof">
                 <li>Classements Raider.io</li>
                 <li>Profils de l'API Blizzard</li>
+                @if (dungeons.Count > 0)
+                {
+                    <li>Routes Keystone.guru</li>
+                }
                 <li>Recalculé toutes les 6 h</li>
             </ul>
         </div>
@@ -165,6 +173,18 @@
             }
         </div>
     </section>
+
+    @* --- Routes de la saison, pour les applications qui en ont ---------------------------------- *@
+    @if (dungeons.Count > 0)
+    {
+        <section class="landing-section" id="routes">
+            <div class="landing-section-head">
+                <h2 class="landing-heading">Les routes Midnight</h2>
+                <p class="muted">Les routes les plus populaires de chaque donjon, avec la taille de leurs pulls. <a href="routes">Toutes les routes</a></p>
+            </div>
+            <DungeonGrid Dungeons="dungeons" />
+        </section>
+    }
 
     @* --- Comment c'est calculé ---------------------------------------------------------------- *@
     <section class="landing-section">

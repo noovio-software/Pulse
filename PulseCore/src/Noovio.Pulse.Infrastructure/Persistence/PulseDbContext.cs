@@ -17,7 +17,7 @@ public abstract class PulseDbContext(DbContextOptions options) : DbContext(optio
 
     public DbSet<PlayerProfile> PlayerProfiles => Set<PlayerProfile>();
     public DbSet<SpecMeta> SpecMetas => Set<SpecMeta>();
-    public DbSet<DungeonRoute> DungeonRoutes => Set<DungeonRoute>();
+    public DbSet<SeasonDungeon> SeasonDungeons => Set<SeasonDungeon>();
     public DbSet<UserAccount> UserAccounts => Set<UserAccount>();
     public DbSet<UserCharacter> UserCharacters => Set<UserCharacter>();
     public DbSet<IngestionRequest> IngestionRequests => Set<IngestionRequest>();
@@ -46,12 +46,13 @@ public abstract class PulseDbContext(DbContextOptions options) : DbContext(optio
             e.Property(m => m.Snapshot).HasJsonConversion();
         });
 
-        modelBuilder.Entity<DungeonRoute>(e =>
+        modelBuilder.Entity<SeasonDungeon>(e =>
         {
-            e.ToTable("dungeon_routes");
-            e.HasIndex(r => new { r.Season, r.DungeonSlug });
-            e.Property(r => r.Season).HasMaxLength(64);
-            e.Property(r => r.DungeonSlug).HasMaxLength(64);
+            e.ToTable("season_dungeons");
+            e.HasIndex(d => new { d.Season, d.Slug }).IsUnique();
+            e.Property(d => d.Season).HasMaxLength(64);
+            e.Property(d => d.Slug).HasMaxLength(64);
+            e.Property(d => d.Routes).HasJsonConversion();
         });
 
         modelBuilder.Entity<IngestionRequest>(e =>

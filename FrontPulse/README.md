@@ -5,6 +5,7 @@ of the top 100 tanks of each spec (Blood, Vengeance, Guardian, Brewmaster, Prote
 
 - **Stack**: .NET 10 (same SDK and VPS target as AltPulse), Blazor Web App in Interactive Server mode, EF Core + PostgreSQL, Redis (`IDistributedCache`).
 - **Data**: [Raider.io](https://raider.io/api) (season run leaderboard) + [Blizzard API](https://develop.battle.net) (equipment, specializations, statistics, item icons).
+- **Routes**: [Keystone.guru](https://keystone.guru) (popular routes of each season dungeon, with the size of each pull), see [the routes doc](../PulseCore/docs/keystone-guru-routes.md).
 - **Principle**: the worker precomputes one snapshot per spec every 6 hours; the site only reads those snapshots.
 
 ## Architecture
@@ -62,7 +63,13 @@ foreach ($p in 'Worker', 'Web') {
   dotnet user-secrets set "Blizzard:ClientSecret" "<client-secret>" --project FrontPulse/src/Noovio.FrontPulse.$p
 }
 
+# Keystone.guru account, for the worker only (dungeon routes)
+dotnet user-secrets set "KeystoneGuru:Email" "<email>" --project FrontPulse/src/Noovio.FrontPulse.Worker
+dotnet user-secrets set "KeystoneGuru:Password" "<password>" --project FrontPulse/src/Noovio.FrontPulse.Worker
+
 dotnet run --project FrontPulse/src/Noovio.FrontPulse.Worker   # migrations, then ingestion at startup and every 6 h
+# Sync the dungeon routes right away, without an ingestion:
+dotnet run --project FrontPulse/src/Noovio.FrontPulse.Worker -- --sync-routes
 # Recompute the snapshots from the stored profiles only (seconds), e.g. after changing an aggregation rule:
 dotnet run --project FrontPulse/src/Noovio.FrontPulse.Worker -- --rebuild-snapshots
 dotnet run --project FrontPulse/src/Noovio.FrontPulse.Web --launch-profile http
@@ -76,5 +83,4 @@ Tests: `dotnet test PulseCore/tests/Noovio.Pulse.Tests`.
 
 ## Not done yet
 
-- **MDT routes**: the `DungeonRoute` entity and the `dungeon_routes` table exist, but there is no dungeon page and no import/sync yet. The Keystone.guru API still has to be checked before writing `KeystoneGuruClient`.
 - **Talent tree in its real layout**: the grid shows nodes by pick rate. Placing them like the in-game tree needs the Game Data API `talent-tree` endpoints.

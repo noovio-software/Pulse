@@ -19,11 +19,21 @@ public sealed class RaiderIoLeaderboardSource(
     IDistributedCache cache,
     IOptions<RaiderIoOptions> options,
     TimeProvider time,
-    ILogger<RaiderIoLeaderboardSource> logger) : ILeaderboardSource
+    ILogger<RaiderIoLeaderboardSource> logger) : ILeaderboardSource, ISeasonDungeonSource
 {
     private readonly RaiderIoOptions _options = options.Value;
 
     public async Task<string> GetCurrentSeasonAsync(CancellationToken ct) => (await GetCurrentSeasonInfoAsync(ct)).Slug;
+
+    public async Task<SeasonDungeonList> GetCurrentDungeonsAsync(CancellationToken ct)
+    {
+        var season = await GetCurrentSeasonInfoAsync(ct);
+        return new SeasonDungeonList(
+            season.Slug,
+            season.Dungeons
+                .Select(d => new SeasonDungeonInfo(d.Slug, d.Name, d.ShortName, d.ChallengeModeId, d.KeystoneTimerSeconds, d.IconUrl, d.BackgroundImageUrl))
+                .ToList());
+    }
 
     public async Task<IReadOnlyDictionary<WowSpec, IReadOnlyList<LeaderboardPlayer>>> GetTopPlayersAsync(string season, int perSpec, CancellationToken ct,
         IProgress<LeaderboardStep>? progress = null)

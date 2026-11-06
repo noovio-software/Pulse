@@ -8,6 +8,10 @@ namespace Noovio.Pulse.Web.Components.Pages;
 public partial class Home
 {
     [Inject] private ISpecMetaQueries Queries { get; set; } = default!;
+    [Inject] private IDungeonRouteQueries RouteQueries { get; set; } = default!;
+
+    /// <summary>Vide si l'application n'a pas de routes, ou avant leur première synchronisation.</summary>
+    private IReadOnlyList<SeasonDungeon> dungeons = [];
 
     /// <summary>Les spécialisations du rôle dans leur ordre, snapshot null avant la première ingestion.</summary>
     private List<(SpecInfo Info, SpecMetaSnapshot? Meta)> specs = [];
@@ -21,6 +25,11 @@ public partial class Home
 
     protected override async Task OnInitializedAsync()
     {
+        if (Site.HasDungeonRoutes)
+        {
+            dungeons = await RouteQueries.GetCurrentAsync();
+        }
+
         // Lus un par un : les snapshots sont en cache mémoire, et le DbContext n'accepte pas de requêtes parallèles.
         foreach (var info in Site.Role.Specs)
         {

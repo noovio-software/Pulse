@@ -5,6 +5,7 @@ using Noovio.Pulse.Application.Accounts;
 using Noovio.Pulse.Application.Analysis;
 using Noovio.Pulse.Application.Ingestion;
 using Noovio.Pulse.Application.Meta;
+using Noovio.Pulse.Application.Routes;
 using Noovio.Pulse.Domain.Roles;
 
 namespace Noovio.Pulse.Application;
@@ -23,6 +24,8 @@ public static class DependencyInjection
         services.AddScoped<MetaIngestionService>();
         services.AddScoped<AccountSyncService>();
         services.AddScoped<CharacterAnalysisService>();
+        services.Configure<RouteSyncOptions>(configuration.GetSection($"{app.Name}:{RouteSyncOptions.SectionName}"));
+        services.AddScoped<RouteSyncService>();
         return services;
     }
 }

@@ -28,6 +28,10 @@ Plus its migrations, `appsettings`, `wwwroot/theme.css` and favicon, and deploym
 
 The host's Web project sets `RequiresAspNetWebAssets` to `true`: its pages live in the library, so the SDK would otherwise leave out `_framework/blazor.web.js` and nothing would become interactive.
 
+## Optional features
+
+`PulseApp` also switches features on per application. `HasDungeonRoutes` (FrontPulse only) enables the Keystone.guru sync, the `/routes` pages and their links: see [the routes doc](docs/keystone-guru-routes.md). The `season_dungeons` table exists in every application's database, because the model is shared, but it stays empty elsewhere.
+
 ## What a role defines
 
 `PulseRole` holds what differs between roles, as data:

@@ -10,6 +10,9 @@ public partial class TopBar
     /// <summary>Spécialisation surlignée dans la navigation.</summary>
     [Parameter] public WowSpec? Active { get; set; }
 
+    /// <summary>Lien « Routes » surligné dans la navigation.</summary>
+    [Parameter] public bool RoutesActive { get; set; }
+
     /// <summary>Actions propres à la page, alignées à droite de l'en-tête.</summary>
     [Parameter] public RenderFragment? ChildContent { get; set; }
 

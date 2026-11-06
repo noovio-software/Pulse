@@ -1,0 +1,128 @@
+@page "/routes/{Slug}"
+
+<PageTitle>@(dungeon is null ? "Donjon inconnu" : $"Routes {dungeon.Name}") · @Site.Name by Noovio</PageTitle>
+
+<TopBar RoutesActive />
+
+<main class="shell">
+    @if (dungeon is null)
+    {
+        <section class="panel empty-state">
+            <h1>Donjon inconnu</h1>
+            <p>Ce donjon n'est pas dans la saison en cours, ou ses routes ne sont pas encore synchronisées.</p>
+            <a class="btn" href="routes">Toutes les routes</a>
+        </section>
+    }
+    else
+    {
+        <section class="dungeon-hero">
+            @if (dungeon.ImageUrl is { } image)
+            {
+                <img class="dungeon-hero-art" src="@image" alt="" />
+            }
+            <div class="dungeon-hero-text">
+                <a class="dungeon-back" href="routes">← Toutes les routes</a>
+                <h1>@dungeon.Name</h1>
+                <p>
+                    <span>@Ui.SeasonLabel(dungeon.Season)</span>
+                    <span>Clé en @Ui.KeyTimer(dungeon.TimerSeconds)</span>
+                    <span>@dungeon.Routes.Count routes</span>
+                </p>
+            </div>
+            <nav class="dungeon-switch" aria-label="Donjons de la saison">
+                @foreach (var other in dungeons)
+                {
+                    var isCurrent = other.Slug == dungeon.Slug;
+                    <a class="@(isCurrent ? "is-active" : null)" href="routes/@other.Slug" title="@other.Name"
+                       aria-label="@other.Name" aria-current="@(isCurrent ? "page" : null)">
+                        @if (other.IconUrl is { } icon)
+                        {
+                            <img class="wow-icon" src="@icon" alt="" width="36" height="36" loading="lazy" />
+                        }
+                        else
+                        {
+                            @other.ShortName
+                        }
+                    </a>
+                }
+            </nav>
+        </section>
+
+        <div class="route-layout">
+            <ol class="route-list" aria-label="Routes, de la plus populaire à la moins populaire">
+                @for (var i = 0; i < dungeon.Routes.Count; i++)
+                {
+                    var route = dungeon.Routes[i];
+                    var isSelected = route.PublicKey == selected?.PublicKey;
+                    <li>
+                        <a class="route-row @(isSelected ? "is-selected" : null)" href="routes/@dungeon.Slug?route=@route.PublicKey#route"
+                           aria-current="@(isSelected ? "true" : null)">
+                            <span class="route-rank" aria-hidden="true">@(i + 1)</span>
+                            <span class="route-row-text">
+                                <strong>@route.Title</strong>
+                                <span class="muted">@(route.Author ?? "Auteur inconnu")</span>
+                                <span class="route-row-facts">
+                                    <span>@route.PullSizes.Count pulls</span>
+                                    <span>@route.LargestPull au plus gros</span>
+                                    <span>@Ui.ForcesPercent(route) mobs</span>
+                                </span>
+                                @if (highlights.GetValueOrDefault(route.PublicKey) is { Count: > 0 } tags)
+                                {
+                                    <span class="route-tags">
+                                        @foreach (var tag in tags)
+                                        {
+                                            <span class="route-tag @Ui.HighlightCss(tag)">@Ui.HighlightLabel(tag)</span>
+                                        }
+                                    </span>
+                                }
+                            </span>
+                        </a>
+                    </li>
+                }
+            </ol>
+
+            @if (selected is { } current)
+            {
+                <article class="panel route-detail" id="route">
+                    <header class="route-detail-head">
+                        <div>
+                            <h2>@current.Title</h2>
+                            <p class="muted">
+                                Par
+                                @if (current.AuthorUrl is { } authorUrl)
+                                {
+                                    <a href="@authorUrl" target="_blank" rel="noopener">@current.Author</a>
+                                }
+                                else
+                                {
+                                    @(current.Author ?? "un auteur inconnu")
+                                }
+                                sur Keystone.guru
+                            </p>
+                        </div>
+                        <a class="btn btn-primary" href="@current.ViewUrl" target="_blank" rel="noopener">
+                            Ouvrir sur Keystone.guru
+                            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
+                            </svg>
+                        </a>
+                    </header>
+
+                    <dl class="route-stats">
+                        <div><dt>Pulls</dt><dd>@current.PullSizes.Count</dd></div>
+                        <div><dt>Plus gros pull</dt><dd>@current.LargestPull <small>ennemis</small></dd></div>
+                        <div><dt>Moyenne par pull</dt><dd>@current.AveragePull.ToString("0.#")</dd></div>
+                        <div><dt>Mobs de la route</dt><dd>@Ui.ForcesPercent(current)</dd></div>
+                    </dl>
+
+                    <PullRhythm Route="current" />
+
+                    <div class="route-map">
+                        <iframe src="@current.EmbedUrl" title="Carte de la route @current.Title" loading="lazy" allowfullscreen></iframe>
+                    </div>
+                    <p class="route-mdt muted">Pour Mythic Dungeon Tools : bouton « Copy MDT » en haut de la carte.</p>
+                </article>
+            }
+        </div>
+    }
+</main>

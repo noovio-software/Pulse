@@ -1,0 +1,39 @@
+@page "/routes"
+
+<PageTitle>Routes Midnight · @Site.Name by Noovio</PageTitle>
+
+<TopBar RoutesActive />
+
+<main class="shell">
+    <section class="routes-hero">
+        @if (dungeons.Count > 0)
+        {
+            <span class="routes-kicker">@Ui.SeasonLabel(dungeons[0].Season) · Mythique+</span>
+        }
+        <h1 class="routes-title">Les routes <em>Midnight</em></h1>
+        <p class="routes-lead">
+            Les routes les plus populaires de chaque donjon de la saison, avec ce qui compte pour ouvrir la marche :
+            la taille de chaque pull, et le moment où ils sont les plus gros.
+        </p>
+        @if (lastUpdate is { } at)
+        {
+            <p class="routes-source muted">
+                Routes publiées par la communauté de <a href="https://keystone.guru" target="_blank" rel="noopener">Keystone.guru</a>,
+                mises à jour @Ui.Ago(at).
+            </p>
+        }
+    </section>
+
+    @if (dungeons.Count == 0)
+    {
+        <section class="panel empty-state">
+            <h2>Pas encore de routes</h2>
+            <p>La prochaine synchronisation avec Keystone.guru remplira cette page.</p>
+            <a class="btn" href="/">Retour</a>
+        </section>
+    }
+    else
+    {
+        <DungeonGrid Dungeons="dungeons" />
+    }
+</main>

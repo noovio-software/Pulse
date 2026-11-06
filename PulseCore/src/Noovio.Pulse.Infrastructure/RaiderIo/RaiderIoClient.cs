@@ -113,6 +113,11 @@ public sealed class RioDungeon
 {
     public string Slug { get; set; } = "";
     public string Name { get; set; } = "";
+    public string ShortName { get; set; } = "";
+    public int ChallengeModeId { get; set; }
+    public int KeystoneTimerSeconds { get; set; }
+    public string? IconUrl { get; set; }
+    public string? BackgroundImageUrl { get; set; }
 }
 
 public sealed class RioRegionDates
