@@ -1,0 +1,45 @@
+@* Le nombre d'ennemis de chaque pull, dans l'ordre de la route : où le tank doit prévoir ses défensifs. *@
+
+<figure class="rhythm">
+    <figcaption>
+        <span class="eyebrow">Rythme des pulls</span>
+        <span class="rhythm-note muted">Ennemis par pull, dans l'ordre de la route</span>
+    </figcaption>
+    <ol class="rhythm-bars" style="--rhythm-count: @Route.PullSizes.Count">
+        @for (var i = 0; i < Route.PullSizes.Count; i++)
+        {
+            var size = Route.PullSizes[i];
+            var isPeak = size == Route.LargestPull && size > 0;
+            <li class="@(isPeak ? "is-peak" : null)">
+                @if (isPeak && i == firstPeak)
+                {
+                    <span class="rhythm-peak" aria-hidden="true">@size</span>
+                }
+                <span class="rhythm-bar" style="height: @Ui.CssPercent(Share(size))"></span>
+                <span class="rhythm-tip" role="note">Pull @(i + 1) : @EnemyCount(size)</span>
+            </li>
+        }
+    </ol>
+    <div class="rhythm-axis" aria-hidden="true">
+        <span>Pull 1</span>
+        <span>Pull @Route.PullSizes.Count</span>
+    </div>
+</figure>
+
+@code {
+    [Parameter, EditorRequired] public DungeonRoute Route { get; set; } = default!;
+
+    private int firstPeak;
+
+    protected override void OnParametersSet() => firstPeak = Route.PullSizes.ToList().IndexOf(Route.LargestPull);
+
+    /// <summary>Hauteur de la barre : un pull sans ennemi compté garde un trait visible.</summary>
+    private double Share(int size) => Route.LargestPull == 0 ? 0 : Math.Max(0.03, (double)size / Route.LargestPull);
+
+    private static string EnemyCount(int size) => size switch
+    {
+        0 => "aucun ennemi compté",
+        1 => "1 ennemi",
+        _ => $"{size} ennemis"
+    };
+}

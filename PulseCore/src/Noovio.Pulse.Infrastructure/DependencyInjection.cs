@@ -7,6 +7,7 @@ using Noovio.Pulse.Application.Abstractions;
 using Noovio.Pulse.Domain.Roles;
 using Noovio.Pulse.Infrastructure.Blizzard;
 using Noovio.Pulse.Infrastructure.Http;
+using Noovio.Pulse.Infrastructure.KeystoneGuru;
 using Noovio.Pulse.Infrastructure.Persistence;
 using Noovio.Pulse.Infrastructure.RaiderIo;
 
@@ -20,6 +21,7 @@ public static class DependencyInjection
     {
         services.Configure<BlizzardOptions>(configuration.GetSection(BlizzardOptions.SectionName));
         services.Configure<RaiderIoOptions>(configuration.GetSection(RaiderIoOptions.SectionName));
+        services.Configure<KeystoneGuruOptions>(configuration.GetSection(KeystoneGuruOptions.SectionName));
 
         services.AddDbContext<TContext>(o => o.UseNpgsql(configuration.GetConnectionString(app.Name)));
         services.AddScoped<PulseDbContext>(sp => sp.GetRequiredService<TContext>());
@@ -44,6 +46,8 @@ public static class DependencyInjection
         services.AddSingleton<RaiderIoRateLimiter>();
         services.AddTransient<RateLimitingHandler<BlizzardRateLimiter>>();
         services.AddTransient<RateLimitingHandler<RaiderIoRateLimiter>>();
+        services.AddSingleton<KeystoneGuruRateLimiter>();
+        services.AddTransient<RateLimitingHandler<KeystoneGuruRateLimiter>>();
 
         services.AddHttpClient<BlizzardOAuthClient>(c => c.Timeout = TimeSpan.FromSeconds(15));
         services.AddHttpClient<BlizzardClient>(c => c.Timeout = TimeSpan.FromSeconds(20))
@@ -55,7 +59,18 @@ public static class DependencyInjection
                 c.DefaultRequestHeaders.UserAgent.ParseAdd($"{app.Name}/1.0");
             })
             .AddHttpMessageHandler<RateLimitingHandler<RaiderIoRateLimiter>>();
+        services.AddHttpClient<KeystoneGuruClient>(c =>
+            {
+                c.BaseAddress = new Uri("https://keystone.guru/");
+                c.Timeout = TimeSpan.FromSeconds(30);
+                c.DefaultRequestHeaders.UserAgent.ParseAdd($"{app.Name}/1.0");
+            })
+            .AddHttpMessageHandler<RateLimitingHandler<KeystoneGuruRateLimiter>>();
 
+        services.AddScoped<IDungeonRouteSource>(sp => sp.GetRequiredService<KeystoneGuruClient>());
+        services.AddScoped<IDungeonRouteStore, DungeonRouteStore>();
+        services.AddScoped<IDungeonRouteQueries, DungeonRouteQueries>();
+        services.AddScoped<ISeasonDungeonSource, RaiderIoLeaderboardSource>();
         services.AddScoped<ILeaderboardSource, RaiderIoLeaderboardSource>();
         services.AddScoped<BlizzardCharacterSource>();
         services.AddScoped<ICharacterLoadoutSource>(sp => sp.GetRequiredService<BlizzardCharacterSource>());

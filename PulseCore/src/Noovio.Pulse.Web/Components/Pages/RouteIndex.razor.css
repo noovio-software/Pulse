@@ -1,0 +1,33 @@
+.routes-hero { padding: 20px 0 6px; }
+
+.routes-kicker {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    color: var(--accent-text);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.routes-title {
+    margin: 14px 0 10px;
+    font-family: var(--font-title);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: 0.03em;
+}
+.routes-title em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--accent-text), var(--accent-text-deep) 50%, var(--accent-alt));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.routes-lead { max-width: 680px; margin: 0; font-size: 1.05rem; line-height: 1.6; color: var(--text-dim); }
+.routes-source { margin: 10px 0 0; font-size: 0.82rem; }

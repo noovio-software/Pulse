@@ -1,6 +1,7 @@
 using System.Globalization;
 using Noovio.Pulse.Application.Abstractions;
 using Noovio.Pulse.Application.Analysis;
+using Noovio.Pulse.Application.Routes;
 using Noovio.Pulse.Domain;
 using Noovio.Pulse.Domain.Entities;
 using Noovio.Pulse.Domain.Enums;
@@ -12,6 +13,28 @@ public static class Ui
     /// <summary>Slug Raider.io de la saison (« season-mn-1 ») → « Saison 1 » ; tel quel s'il a une autre forme.</summary>
     public static string SeasonLabel(string season) =>
         season.Split('-') is [.., var last] && int.TryParse(last, out var number) ? $"Saison {number}" : season;
+
+    /// <summary>Forces ennemies de la route par rapport au minimum du donjon → « 101 % ».</summary>
+    public static string ForcesPercent(DungeonRoute route) =>
+        route.EnemyForcesRequired > 0 ? Percent((double)route.EnemyForces / route.EnemyForcesRequired) : "-";
+
+    /// <summary>Durée de la clé → « 30 min ».</summary>
+    public static string KeyTimer(int seconds) => $"{seconds / 60} min";
+
+    public static string HighlightLabel(RouteHighlight highlight) => highlight switch
+    {
+        RouteHighlight.MostPopular => "La plus populaire",
+        RouteHighlight.TankAuthored => "Par un tank",
+        RouteHighlight.BiggestPulls => "Plus gros pulls en moyenne",
+        _ => "Pic de pull le plus bas"
+    };
+
+    public static string HighlightCss(RouteHighlight highlight) => highlight switch
+    {
+        RouteHighlight.MostPopular => "is-popular",
+        RouteHighlight.TankAuthored => "is-tank",
+        _ => "is-pulls"
+    };
 
     public static string SlotLabel(GearSlot slot) => slot switch
     {

@@ -1,83 +1,59 @@
-# Routes de donjons via Keystone.guru
+# Dungeon routes from Keystone.guru
 
-Étude de l'API Keystone.guru (3 novembre 2026) avant d'implémenter des routes de donjons dans FrontPulse.
-Rien n'est codé pour l'instant. Seules l'entité `DungeonRoute` et la table `dungeon_routes` existent déjà.
+How FrontPulse gets its Mythic+ routes. The engine lives in PulseCore; only applications with `PulseApp.HasDungeonRoutes` use it (FrontPulse today).
 
-## Sources
+## Flow
 
-- Documentation (Swagger UI rendu en JavaScript) : https://keystone.guru/api/documentation
-- Spécification OpenAPI lue par cette page : https://keystone.guru/docs?api-docs.json
-- API « Keystone.guru API », version 1, base `https://keystone.guru/api/v1`
+1. **Season dungeons** come from Raider.io (`ISeasonDungeonSource`), with their timer, short name and artwork.
+2. **Slugs** come from `GET /api/v1/dungeon`, matched on `challengeModeId`.
+3. **Popular route keys**: `GET /api/v1/route/retail/{dungeon}/popular` first. If it answers 404, the keys are read from the public page `https://keystone.guru/routes/retail/{dungeon}`.
+4. **Details**: `GET /api/v1/route/{key}` for up to 15 candidates per dungeon. `RouteSelection.Keep` drops expired, empty and incomplete routes and routes from an older season, then keeps 8.
+5. **Storage**: one `season_dungeons` row per (season, dungeon), routes in a jsonb column. A dungeon that fails keeps its previous routes.
+6. **Site**: `/routes`, `/routes/{slug}` and a section on the home page, read through `IDungeonRouteQueries` (5 minutes of memory cache).
 
-## Authentification
+`RouteSyncWorker` runs this every 6 hours, separately from the ingestion, and counts from the last sync in the database so that a restart does not read everything again. To sync immediately:
 
-- **HTTP Basic sur toute l'API** : email et mot de passe d'un compte Keystone.guru.
-- Un appel anonyme renvoie **401** (vérifié sur `GET /api/v1/dungeon`).
-- Il faut donc un compte, de préférence dédié au site. Ses identifiants iraient en configuration :
-  - en local : secrets utilisateur ;
-  - en prod : `/etc/frontpulse/frontpulse.env` (`KeystoneGuru__Email`, `KeystoneGuru__Password`).
+```powershell
+dotnet run --project FrontPulse/src/Noovio.FrontPulse.Worker -- --sync-routes
+```
 
-## Endpoints utiles
+## Credentials
 
-| Méthode | Chemin | Utilité |
-|---|---|---|
-| GET | `/api/v1/dungeon` | Liste des donjons |
-| GET | `/api/v1/dungeon/{dungeon}` | Détail d'un donjon |
-| GET | `/api/v1/route/{gameVersion}/{dungeon}/popular` | Routes populaires d'un donjon |
-| GET | `/api/v1/route/{gameVersion}/{dungeon}/new` | Routes récentes d'un donjon |
-| GET | `/api/v1/route/{gameVersion}/popular` | Routes populaires, tous donjons confondus |
-| GET | `/api/v1/route` | Liste de routes, filtrable par `dungeon_id` |
-| GET | `/api/v1/route/{route}` | Détail d'une route, pull par pull |
+The API uses HTTP Basic with the email and password of a Keystone.guru account. Only the worker needs them:
 
-**Paramètres des routes populaires et récentes :**
-- `gameVersion` : `retail` ;
-- `dungeon` : slug du donjon, par exemple `ara-kara-city-of-echoes` ;
-- `offset` : 0 par défaut ;
-- `count` : 10 par défaut, 100 au maximum.
+- locally, in `dotnet user-secrets` on the Worker project (`KeystoneGuru:Email`, `KeystoneGuru:Password`);
+- in production, in `/etc/frontpulse/frontpulse.env` (`KeystoneGuru__Email`, `KeystoneGuru__Password`).
 
-L'API expose aussi des endpoints de miniatures (`POST /route/{route}/thumbnail`, `GET /route/thumbnailJob/{id}`). On n'en a pas besoin.
+Credentials are sent to the API only, never with the public page requests. Without them, the worker logs a warning and the route pages stay empty.
 
-## Données disponibles
+## What the API really does
 
-**Résumé d'une route (`DungeonRouteSummary`)**
-- `dungeonId`, `publicKey`, `title`, `expiresAt` ;
-- `enemyForces` / `enemyForcesRequired`, pour le pourcentage de mobs ;
-- `pullCount` ;
-- `author` : `name`, `avatar`, liens ;
-- `affixGroups`, chaque affixe avec son `id` et son `name`.
+Checked on November 6, 2026, against the [documentation](https://keystone.guru/api/documentation) and [its OpenAPI spec](https://keystone.guru/docs?api-docs.json):
 
-**Liens d'une route (`links`)**
-- `view` : la page de la route sur Keystone.guru ;
-- `edit` ;
-- `embed` : **la carte interactive, intégrable en iframe** ;
-- `thumbnails` : les miniatures.
+| Documented | Observed |
+|---|---|
+| `GET /route/{gameVersion}/popular`, `/route/{gameVersion}/new`, and the same per dungeon | 404 `{"error":"Not Found"}` for every dungeon and game version tried |
+| `GET /route`, filterable by `dungeon_id` | 200 but empty for this account, apparently limited to the account's own routes |
+| `GET /route/{route}` | Works for any public route, with its pulls |
+| `affixGroups` is an array | It is an object: `expansion`, `season`, `affixes` |
+| No stated rate limit | `X-RateLimit-Limit: 900` header, window unknown. The client sends 2 requests per second |
 
-**Détail d'une route (`DungeonRoute`)** : le résumé, plus `pulls`, chaque pull avec sa `description`, ses `spells` et ses `enemies`.
+Reading the public page is a fallback, not the design: it depends on the site's HTML. `robots.txt` allows it (`Disallow:` is empty), and it costs 8 pages per sync. It stops by itself once the API answers. If the markup changes, `ParseRouteKeys` finds nothing and the previous routes stay in place, with a warning in the log.
 
-**Donjon (`Dungeon`)**
-- `id`, `expansion`, `name`, `slug`, `key` ;
-- `zoneId`, `mapId`, `instanceId` ;
-- `challengeModeId` : le même identifiant que côté Blizzard. Il permet de recouper avec les donjons de la saison lus sur Raider.io.
-- `floors`.
+## Terms of use
 
-## Limites
+The [terms](https://keystone.guru/terms) say nothing about the API or iframes, but they do forbid republishing, reproducing or redistributing material from the site "unless content is specifically made for redistribution". Keystone.guru publishes an API and an `embed` link, which suggests this use is welcome, but the terms do not settle it.
 
-1. **Pas de chaîne d'export MDT dans l'API**, donc pas de bouton « Copier pour MDT ». Le mieux possible : un lien « Ouvrir sur Keystone.guru », où l'export MDT existe.
-2. **Aucune information sur les limites d'appels ni sur les conditions d'utilisation** dans la spécification.
-3. **Aucun champ de note ni de nombre de vues** dans le résumé : la popularité n'apparaît qu'à travers l'ordre de l'endpoint `popular`.
+**Keystone.guru's agreement has not been obtained.** It should be requested before this goes to production, along with the status of the `popular` endpoints.
 
-## À vérifier avant d'implémenter
+To stay close to the source, the site credits Keystone.guru and each author, links to every route, and shows the map in their own embed. There is no MDT string in the API: the embed has its own "Copy MDT" button.
 
-- [ ] Les conditions d'utilisation de l'API, et l'accord de Keystone.guru pour afficher leurs routes et intégrer leurs cartes (iframe `embed`).
-- [ ] Les limites d'appels, s'il y en a.
-- [ ] La création d'un compte dédié à FrontPulse.
-- [ ] Les slugs Keystone.guru par rapport aux slugs Raider.io des donjons de la saison (le recoupement se ferait par `challengeModeId`).
+## Tank highlights
 
-## Implémentation proposée
+`RouteSelection.Highlights` keeps the popularity order and labels what stands out:
 
-- **Worker** : à chaque ingestion, récupérer les routes populaires de chaque donjon de la saison (environ 8 appels, `count` = 10) et les stocker dans `dungeon_routes`.
-- **Site** :
-  - une page « Donjons » avec une carte par donjon ;
-  - une page par donjon avec les 5 à 10 routes les plus populaires (titre, auteur, % de mobs, pulls, affixes), la carte `embed` de la route choisie et un lien « Ouvrir sur Keystone.guru (export MDT) » ;
-  - une entrée « Donjons » dans la topbar.
-- **Attribution** : créditer Keystone.guru et l'auteur sur chaque route, et ajouter Keystone.guru aux sources du pied de page.
+- **La plus populaire**: first in the list.
+- **Par un tank**: the word "tank" appears in the author or title. This is free text, not verified data.
+- **Plus gros pulls en moyenne** and **Pic de pull le plus bas**: computed from the number of enemies per pull, and only when routes actually differ.
+
+Pull sizes count enemies, not damage. A pull with 0 enemies is shown as "aucun ennemi compté"; those pulls are left out of the average.
