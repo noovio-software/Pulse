@@ -272,6 +272,84 @@ h1:focus { outline: none; }
 .spec-tip span { font-size: 0.72rem; color: var(--text-dim); }
 .spec-link:hover .spec-tip, .spec-link:focus-visible .spec-tip { opacity: 1; transform: translate(-50%, 0); }
 
+/* Menu des spécialisations, quand le rôle en compte trop pour une rangée d'icônes : une ligne par classe */
+.spec-menu { position: relative; margin-left: auto; }
+.spec-menu-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 10px 4px 4px;
+    border-radius: 11px;
+    border: 1px solid color-mix(in srgb, var(--class-color) 45%, var(--line));
+    background: color-mix(in srgb, var(--class-color) 9%, transparent);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    transition: background 0.15s, border-color 0.15s;
+}
+.spec-menu-toggle::-webkit-details-marker { display: none; }
+.spec-menu-toggle:hover { background: color-mix(in srgb, var(--class-color) 15%, transparent); }
+.spec-menu-toggle:focus-visible { outline: 2px solid var(--class-color); outline-offset: 1px; }
+.spec-menu-toggle .spec-nav-icon { filter: none; }
+.spec-menu-grid {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    color: var(--accent-text);
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.spec-menu-label { display: flex; flex-direction: column; line-height: 1.15; }
+.spec-menu-label strong { font-family: var(--font-title); font-size: 0.9rem; letter-spacing: 0.04em; color: var(--text); white-space: nowrap; }
+.spec-menu-label small { font-size: 0.68rem; color: var(--text-dim); white-space: nowrap; }
+.spec-menu-chevron { color: var(--text-dim); transition: transform 0.15s; }
+.spec-menu[open] .spec-menu-chevron { transform: rotate(180deg); }
+
+.spec-menu-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 18px;
+    width: min(720px, calc(100vw - 32px));
+    max-height: min(72vh, 620px);
+    overflow-y: auto;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line-strong);
+    background: var(--panel-solid);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6), 0 0 24px var(--accent-glow);
+}
+.spec-menu-class { display: flex; align-items: center; gap: 10px; padding: 7px 4px; border-bottom: 1px solid var(--line); }
+.spec-menu-class-name {
+    flex: none;
+    width: 112px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--class-color);
+}
+.spec-menu-specs { display: flex; flex-wrap: wrap; gap: 4px; }
+.spec-menu-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 9px 3px 3px;
+    border-radius: 9px;
+    border: 1px solid transparent;
+    color: var(--text);
+    font-size: 0.82rem;
+    white-space: nowrap;
+}
+.spec-menu-link .spec-nav-icon { width: 26px; height: 26px; border-radius: 7px; border-color: color-mix(in srgb, var(--class-color) 70%, black); }
+.spec-menu-link:hover, .spec-menu-link:focus-visible { text-decoration: none; color: var(--text); background: color-mix(in srgb, var(--class-color) 12%, transparent); }
+.spec-menu-link:hover .spec-nav-icon, .spec-menu-link:focus-visible .spec-nav-icon, .spec-menu-link.is-active .spec-nav-icon { filter: none; }
+.spec-menu-link.is-active { border-color: color-mix(in srgb, var(--class-color) 55%, transparent); background: color-mix(in srgb, var(--class-color) 16%, transparent); }
+
 /* Prochain rechargement des données */
 .next-refresh {
     display: inline-flex;
@@ -706,6 +784,9 @@ h1:focus { outline: none; }
     .shell { padding: 16px; }
     .topbar { padding: 10px 16px; flex-wrap: wrap; row-gap: 12px; }
     .spec-nav { order: 1; width: 100%; margin-left: 0; justify-content: space-between; }
+    .spec-menu { order: 1; width: 100%; margin-left: 0; }
+    .spec-menu-chevron { margin-left: auto; }
+    .spec-menu-panel { left: 0; right: 0; width: auto; grid-template-columns: 1fr; }
     .next-refresh { margin-left: auto; }
     .compare-callout { padding: 16px; }
     .compare-callout .btn-compare { width: 100%; }

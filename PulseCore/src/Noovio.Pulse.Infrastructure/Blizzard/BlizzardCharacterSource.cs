@@ -21,8 +21,9 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
         var statsTask = client.GetStatisticsAsync(player.Region, player.RealmSlug, player.Name, ct);
         await Task.WhenAll(equipmentTask, specsTask, statsTask);
 
+        // L'ingestion ne garde le profil que si la spécialisation active est celle du classement : ses lignes de la feuille font foi.
         return await equipmentTask is { } equipment
-            ? BuildLoadout(equipment, await specsTask, await statsTask, talentsOf: null)
+            ? BuildLoadout(equipment, await specsTask, await statsTask, talentsOf: null, player.Spec)
             : null;
     }
 
@@ -52,8 +53,8 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
             realmSlug,
             specs?.ActiveSpecialization?.Id,
             activeName,
-            BuildLoadout(equipment, specs, stats, talentsOf: (int)spec),
-            ToSheet(stats),
+            BuildLoadout(equipment, specs, stats, talentsOf: (int)spec, spec),
+            ToSheet(stats, spec),
             media?.Assets.FirstOrDefault(a => a.Key == "inset")?.Value ?? media?.Assets.FirstOrDefault(a => a.Key == "main-raw")?.Value,
             media?.Assets.FirstOrDefault(a => a.Key == "avatar")?.Value,
             await rioTask);
@@ -62,8 +63,9 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
     /// <summary>
     /// Talents de <paramref name="talentsOf"/> si précisé (configuration active de cette spécialisation,
     /// même si le personnage en joue une autre), sinon de la spécialisation active.
+    /// Caractéristiques lues comme les lit <paramref name="statsOf"/>.
     /// </summary>
-    private CharacterLoadout BuildLoadout(BzEquipment equipment, BzSpecializations? specs, BzStatistics? stats, int? talentsOf)
+    private CharacterLoadout BuildLoadout(BzEquipment equipment, BzSpecializations? specs, BzStatistics? stats, int? talentsOf, WowSpec statsOf)
     {
         var gear = equipment.EquippedItems.Select(ToGear).OfType<GearPiece>().ToList();
         var specId = talentsOf ?? specs?.ActiveSpecialization?.Id;
@@ -76,7 +78,7 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
             specs?.ActiveSpecialization?.Id,
             ItemLevel(gear),
             gear,
-            ToStats(stats),
+            ToStats(stats, statsOf),
             loadout is null ? [] : Talents(loadout),
             loadout?.TalentLoadoutCode,
             heroTree);
@@ -100,8 +102,8 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
                 all?.Color,
                 season?.Segments.GetValueOrDefault(role.RaiderIoRole)?.Score ?? 0,
                 rio.ProfileUrl,
-                (role.StatBasis == StatBasis.Spell ? rio.MythicPlusRanks?.Healer : rio.MythicPlusRanks?.Tank)?.World,
-                (role.StatBasis == StatBasis.Spell ? rio.MythicPlusRanks?.ClassHealer : rio.MythicPlusRanks?.ClassTank)?.World,
+                RoleRank(rio.MythicPlusRanks, classRank: false)?.World,
+                RoleRank(rio.MythicPlusRanks, classRank: true)?.World,
                 rio.MythicPlusBestRuns
                     .OrderByDescending(r => r.Score)
                     .Select(r => new MythicPlusRun(r.Dungeon, r.ShortName, r.MythicLevel, r.NumKeystoneUpgrades, r.Score, r.Url))
@@ -115,7 +117,14 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
         }
     }
 
-    private CharacterSheet? ToSheet(BzStatistics? s) => s is null || ToStats(s) is not { } secondary
+    private RioRank? RoleRank(RioRanks? ranks, bool classRank) => role.Kind switch
+    {
+        RoleKind.Tank => classRank ? ranks?.ClassTank : ranks?.Tank,
+        RoleKind.Healer => classRank ? ranks?.ClassHealer : ranks?.Healer,
+        _ => classRank ? ranks?.ClassDps : ranks?.Dps
+    };
+
+    private CharacterSheet? ToSheet(BzStatistics? s, WowSpec spec) => s is null || ToStats(s, spec) is not { } secondary
         ? null
         : new CharacterSheet(
             s.Health,
@@ -123,7 +132,7 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
             s.Strength?.Effective ?? 0,
             s.Agility?.Effective ?? 0,
             s.Intellect?.Effective ?? 0,
-            role.StatBasis == StatBasis.Spell ? s.Power : 0,
+            role.Kind == RoleKind.Healer ? s.Power : 0,
             s.Armor?.Effective ?? 0,
             secondary,
             s.VersatilityDamageTakenBonus,
@@ -200,19 +209,29 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
         return Math.Round(total / 16.0, 1);
     }
 
-    private StatSheet? ToStats(BzStatistics? stats) => stats is null ? null : ToStats(stats, role.StatBasis);
+    private StatSheet? ToStats(BzStatistics? stats, WowSpec spec) =>
+        stats is null ? null : ToStats(stats, role.BasisOf(spec), role.Kind == RoleKind.Healer);
 
-    /// <summary>Un soigneur se lit sur ses lignes de sort : celles de mêlée n'ont pas ses bonus, et ne correspondent pas à la feuille en jeu.</summary>
-    internal static StatSheet ToStats(BzStatistics stats, StatBasis basis)
+    /// <summary>
+    /// Chaque spécialisation se lit sur les lignes de sa façon de combattre (sort, distance, mêlée) : les autres n'ont pas
+    /// ses bonus et ne correspondent pas à la feuille en jeu. La polyvalence est celle des soins pour un soigneur, des dégâts sinon.
+    /// </summary>
+    internal static StatSheet ToStats(BzStatistics stats, StatBasis basis, bool healing)
     {
-        var spell = basis == StatBasis.Spell;
-        return new StatSheet(
-            Haste: Line(spell ? stats.SpellHaste : null, stats.MeleeHaste),
-            Versatility: new(stats.Versatility, spell ? stats.VersatilityHealingDoneBonus : stats.VersatilityDamageDoneBonus),
-            Mastery: new(stats.Mastery?.Rating ?? 0, stats.Mastery?.Value ?? 0),
-            Crit: Line(spell ? stats.SpellCrit : null, stats.MeleeCrit));
+        var (crit, haste) = basis switch
+        {
+            StatBasis.Spell => (stats.SpellCrit, stats.SpellHaste),
+            StatBasis.Ranged => (stats.RangedCrit, stats.RangedHaste),
+            _ => ((BzRatingStat?)null, (BzRatingStat?)null)
+        };
 
-        // L'indice est le même sur les deux lignes (seul le pourcentage diffère) : celui de mêlée sert de repli.
+        return new StatSheet(
+            Haste: Line(haste, stats.MeleeHaste),
+            Versatility: new(stats.Versatility, healing ? stats.VersatilityHealingDoneBonus : stats.VersatilityDamageDoneBonus),
+            Mastery: new(stats.Mastery?.Rating ?? 0, stats.Mastery?.Value ?? 0),
+            Crit: Line(crit, stats.MeleeCrit));
+
+        // L'indice est le même sur toutes les lignes (seul le pourcentage diffère) : celui de mêlée sert de repli.
         static StatValue Line(BzRatingStat? preferred, BzRatingStat? melee) => new(
             preferred?.Rating is > 0 ? preferred.Rating : melee?.Rating ?? 0,
             preferred?.Value ?? melee?.Value ?? 0);

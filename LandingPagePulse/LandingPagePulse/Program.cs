@@ -24,7 +24,7 @@ app.UseHttpsRedirection();
 
 app.UseAntiforgery();
 
-// Une redirection par outil (/altpulse, /frontpulse, /lifepulse) : les adresses vivent dans la configuration.
+// Une redirection par outil (/altpulse, /frontpulse, /lifepulse, /burstpulse) : les adresses vivent dans la configuration.
 // 302 et non 301 : un navigateur ne mémorise pas la cible, qui peut donc changer sans laisser de trace.
 foreach (var (slug, url) in app.Configuration.GetRequiredSection("Tools").Get<Dictionary<string, string>>()!)
 {

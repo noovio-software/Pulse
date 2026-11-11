@@ -24,3 +24,18 @@ window.pulse = {
         }
     }
 };
+
+// Menu des spécialisations (rôles qui en comptent trop pour une rangée d'icônes) : se referme au choix
+// d'une spécialisation, à un clic en dehors et sur Échap.
+document.addEventListener("click", event => {
+    for (const menu of document.querySelectorAll("details.spec-menu[open]")) {
+        if (!menu.contains(event.target) || event.target.closest(".spec-menu-link")) {
+            menu.removeAttribute("open");
+        }
+    }
+});
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        document.querySelectorAll("details.spec-menu[open]").forEach(menu => menu.removeAttribute("open"));
+    }
+});

@@ -5,6 +5,7 @@ public static class PulseRoles
 {
     public static readonly PulseRole Tank = new(
         "tank",
+        RoleKind.Tank,
         WowSpecs.Tanks,
         StatBasis.Melee,
         ["tank"],
@@ -44,6 +45,7 @@ public static class PulseRoles
 
     public static readonly PulseRole Healer = new(
         "healer",
+        RoleKind.Healer,
         WowSpecs.Healers,
         StatBasis.Spell,
         ["soigneur", "healer"],
@@ -80,4 +82,47 @@ public static class PulseRoles
             HitsWithTrinket: "Active ton bijou de soin juste avant ces moments.",
             HitsWithoutTrinket: "Aucun de tes bijoux n'est un bijou de soin à activer : ces moments servent à placer tes propres temps de recharge.",
             ServerError: "Le soigneur est à court de mana. Réessaie dans un instant."));
+
+    /// <summary>
+    /// Les bijoux du rôle sont ceux qui infligent des dégâts eux-mêmes ; les autres donnent des caractéristiques.
+    /// Le mêlée lit sa feuille sur les lignes de mêlée ; les chasseurs à distance et les lanceurs de sorts précisent les leurs dans <see cref="WowSpecs.Damage"/>.
+    /// </summary>
+    public static readonly PulseRole Damage = new(
+        "dps",
+        RoleKind.Damage,
+        WowSpecs.Damage,
+        StatBasis.Melee,
+        ["dps", "damage dealer"],
+        [
+            "inflige", "points de dégâts", "deals", "dealing", "damage to"
+        ],
+        // Ce qui demande de garder son burst : des renforts, une cible à abattre avant une échéance, un bouclier à percer.
+        // La section du rôle ne parle déjà que de lui : un seul signal suffit, l'urgence fait passer devant.
+        new BossHitRule(
+            [],
+            [
+                ["invoqu", "libère", "éclore", "se joignent", "renfort", "summon", "spawn", "adds"],
+                [" tué", "détruit", "destruction", "défaite", "élimin", " kill", "destroy", "defeat"],
+                ["bouclier", "absorbant les dégâts", "vulnérab", "subit davantage", "shield", "vulnerab", "increased damage"]
+            ],
+            ["avant", "rapidement", "grandement", "puissant", "before", "quickly", "greatly", "powerful"],
+            Threshold: 1),
+        new RoleWording(
+            Noun: "DPS",
+            NounPlural: "DPS",
+            Verb: "jouer DPS",
+            SpecCount: "vingt-sept",
+            Classes: "chaman, chasseur, chasseur de démons, chevalier de la mort, démoniste, druide, évocateur, guerrier, mage, moine, paladin, prêtre, voleur",
+            ItemLevelImpact: "tes dégâts et ta survie",
+            RoleTrinkets: "Dégâts",
+            RoleTrinket: "de dégâts",
+            DamageTrinkets: "Caractéristiques",
+            DamageTrinket: "de caractéristiques",
+            NoRoleTrinket: "Aucun bijou de dégâts dans le top : les deux emplacements servent aux caractéristiques.",
+            RoleTrinketAdvice: "à activer avec tes temps de recharge offensifs{0}, sur un gros pack ou un moment de burst du boss.",
+            DamageTrinketAdvice: "à activer dès qu'il est prêt{0}, en l'alignant sur tes temps de recharge offensifs.",
+            HitsTitle: "Moments de burst à préparer",
+            HitsWithTrinket: "Garde ton bijou de dégâts et tes temps de recharge offensifs pour ces moments.",
+            HitsWithoutTrinket: "Aucun de tes bijoux n'est un bijou de dégâts à activer : ces moments servent à placer tes propres temps de recharge offensifs.",
+            ServerError: "Le DPS a pris l'aggro. Réessaie dans un instant."));
 }

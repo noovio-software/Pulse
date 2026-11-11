@@ -1,0 +1,18 @@
+[Unit]
+Description=BurstPulse by Noovio - ingestion toutes les 6 h (worker)
+After=network.target postgresql.service
+
+[Service]
+WorkingDirectory=/home/ubuntu/projects/burstpulse/worker
+ExecStart=/usr/bin/dotnet /home/ubuntu/projects/burstpulse/worker/Noovio.BurstPulse.Worker.dll
+Restart=always
+RestartSec=30
+KillSignal=SIGINT
+SyslogIdentifier=burstpulse-worker
+User=ubuntu
+Environment=DOTNET_ENVIRONMENT=Production
+Environment=DOTNET_NOLOGO=true
+EnvironmentFile=/etc/burstpulse/burstpulse.env
+
+[Install]
+WantedBy=multi-user.target

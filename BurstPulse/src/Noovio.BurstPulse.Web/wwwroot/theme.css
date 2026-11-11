@@ -1,0 +1,26 @@
+/* BurstPulse - thème « Midnight » : le violet du Vide de l'extension, quelles que soient les classes affichées, et un fuchsia en second.
+   #7C3AED reste la couleur des aplats (boutons, bordures, lueurs) : sur ce fond sombre, le texte en prend une teinte plus claire pour rester lisible. */
+:root {
+    --accent: #7C3AED;
+    --accent-text: #A78BFA;
+    --accent-text-deep: #8B5CF6;
+    --accent-deep: #6D28D9;
+    --accent-glow: rgba(124, 58, 237, 0.42);
+    --accent-bright: #C4B5FD;
+    --accent-bright-ink: #150A2E;
+    --accent-ink: #FFFFFF;
+    --cta: #7C3AED;
+    --cta-deep: #6D28D9;
+    --cta-line: rgba(196, 181, 253, 0.5);
+    --accent-alt: #E879F9;
+    --accent-alt-deep: #A21CAF;
+    --accent-alt-glow: rgba(232, 121, 249, 0.25);
+
+    --bg: #0D0A17;
+    --bg-2: #141024;
+    --panel: rgba(30, 23, 52, 0.84);
+    --panel-solid: #1E1734;
+    --panel-2: #271E44;
+    --line: #382B5E;
+    --line-strong: #4C3B7E;
+}

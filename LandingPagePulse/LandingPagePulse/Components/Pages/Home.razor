@@ -1,16 +1,16 @@
 @page "/"
 
-<PageTitle>Noovio · Outils World of Warcraft : AltPulse, FrontPulse et LifePulse</PageTitle>
+<PageTitle>Noovio · Outils World of Warcraft : AltPulse, FrontPulse, LifePulse et BurstPulse</PageTitle>
 
 <HeadContent>
     <link rel="canonical" href="https://www.noovio.fr/" />
-    <meta name="description" content="Noovio réunit trois outils World of Warcraft : AltPulse pour suivre tous tes personnages dans une seule grille, FrontPulse et LifePulse pour jouer ton tank ou ton soigneur comme le top 100 en Mythique+." />
+    <meta name="description" content="Noovio réunit quatre outils World of Warcraft : AltPulse pour suivre tous tes personnages dans une seule grille, FrontPulse, LifePulse et BurstPulse pour jouer ton tank, ton soigneur ou ton DPS comme le top 100 en Mythique+." />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Noovio" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:url" content="https://www.noovio.fr/" />
     <meta property="og:title" content="Noovio · Prends le pouls de tes personnages" />
-    <meta property="og:description" content="AltPulse pour suivre tous tes personnages, FrontPulse et LifePulse pour jouer ton tank ou ton soigneur comme le top 100 en Mythique+." />
+    <meta property="og:description" content="AltPulse pour suivre tous tes personnages, FrontPulse, LifePulse et BurstPulse pour jouer ton tank, ton soigneur ou ton DPS comme le top 100 en Mythique+." />
     <meta property="og:image" content="https://www.noovio.fr/og-noovio.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -22,28 +22,30 @@
     <section class="hero">
         <h1 class="hero-title">Prends le pouls <em>de tes personnages</em></h1>
         <p class="hero-lead">
-            Un outil pour savoir où en sont tous tes personnages cette semaine, deux autres pour jouer ton tank
-            ou ton soigneur comme les meilleurs. Choisis ta porte.
+            Un outil pour savoir où en sont tous tes personnages cette semaine, trois autres pour jouer ton tank,
+            ton soigneur ou ton DPS comme les meilleurs. Choisis ta porte.
         </p>
     </section>
 
-    @* Le tracé relie les trois portes : chaque battement tombe au-dessus de sa carte, à la couleur de son outil. *@
+    @* Le tracé relie les quatre outils : un battement par outil, dans l'ordre des portes et à la couleur de chacun. *@
     <svg class="heartbeat" viewBox="0 0 1200 96" preserveAspectRatio="none" aria-hidden="true">
         <defs>
             <linearGradient id="heartbeat-color" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
                 <stop offset="0" stop-color="#4DFF88" />
-                <stop offset="0.27" stop-color="#4DFF88" />
-                <stop offset="0.4" stop-color="#F59E0B" />
-                <stop offset="0.6" stop-color="#F59E0B" />
-                <stop offset="0.73" stop-color="#4FA8F7" />
-                <stop offset="1" stop-color="#4FA8F7" />
+                <stop offset="0.2" stop-color="#4DFF88" />
+                <stop offset="0.3" stop-color="#F59E0B" />
+                <stop offset="0.45" stop-color="#F59E0B" />
+                <stop offset="0.55" stop-color="#4FA8F7" />
+                <stop offset="0.7" stop-color="#4FA8F7" />
+                <stop offset="0.8" stop-color="#A78BFA" />
+                <stop offset="1" stop-color="#A78BFA" />
             </linearGradient>
         </defs>
         <path class="heartbeat-base" d="@HeartbeatPath" stroke="url(#heartbeat-color)" />
         <path class="heartbeat-spark" d="@HeartbeatPath" stroke="url(#heartbeat-color)" pathLength="100" />
     </svg>
 
-    @* --- Les trois portes : le lien couvre toute la carte (::after) ------------------------------ *@
+    @* --- Les quatre portes, deux par rangée : le lien couvre toute la carte (::after) -------------- *@
     <section class="doors" aria-label="Les outils">
         <article class="panel door tool-alt">
             <div class="door-pattern" aria-hidden="true"></div>
@@ -171,6 +173,48 @@
                 <span class="door-note">Méta recalculée toutes les 6 h, comparaison via Battle.net</span>
             </footer>
         </article>
+
+        <article class="panel door tool-burst">
+            <div class="door-pattern" aria-hidden="true"></div>
+            <header class="door-head">
+                <ToolSigil Burst Size="34" />
+                <span class="door-wordmark">
+                    <span class="door-name">BurstPulse</span>
+                    <span class="door-by">by Noovio</span>
+                </span>
+                <span class="door-badge">Ton DPS en Mythique+</span>
+            </header>
+            <h2 class="door-title">Joue ton DPS comme le top 100</h2>
+            <p class="door-lead">
+                Caractéristiques, talents, équipement et bijoux des 100 meilleurs DPS, sur les vingt-sept spécialisations de dégâts.
+                Compare ton personnage et repars avec ce qu'il faut changer en premier.
+            </p>
+
+            <div class="preview" aria-hidden="true">
+                <span class="preview-tag">Exemple</span>
+                <div class="report">
+                    <div class="score" style="--score: 71">
+                        <strong>71</strong>
+                        <small>/ 100</small>
+                    </div>
+                    <ul class="gauges">
+                        <li style="--stat: #F87171; --you: 80%; --top: 88%"><span>Critique</span><i></i></li>
+                        <li style="--stat: #FB923C; --you: 66%; --top: 62%"><span>Hâte</span><i></i></li>
+                        <li style="--stat: #8B5CF6; --you: 38%; --top: 50%"><span>Maîtrise</span><i></i></li>
+                        <li style="--stat: #FBBF24; --you: 26%; --top: 20%"><span>Polyvalence</span><i></i></li>
+                    </ul>
+                </div>
+                <span class="legend"><u></u> ton perso <u class="is-top"></u> médiane du top</span>
+            </div>
+
+            <footer class="door-foot">
+                <a class="door-link" href="burstpulse">
+                    Ouvrir BurstPulse
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </a>
+                <span class="door-note">Méta recalculée toutes les 6 h, comparaison via Battle.net</span>
+            </footer>
+        </article>
     </section>
 
     @* --- Lequel ouvrir ? -------------------------------------------------------------------------- *@
@@ -195,6 +239,12 @@
                     <span class="answer"><ToolSigil Life Size="16" /> LifePulse</span>
                 </a>
             </li>
+            <li class="tool-burst">
+                <a href="burstpulse">
+                    <span class="question">Quelles caractéristiques et quels talents jouent les meilleurs DPS ?</span>
+                    <span class="answer"><ToolSigil Burst Size="16" /> BurstPulse</span>
+                </a>
+            </li>
             <li class="tool-alt">
                 <a href="altpulse">
                     <span class="question">Quels boss ai-je déjà tués cette semaine, et dans quelle difficulté ?</span>
@@ -213,12 +263,18 @@
                     <span class="answer"><ToolSigil Life Size="16" /> LifePulse</span>
                 </a>
             </li>
+            <li class="tool-burst">
+                <a href="burstpulse">
+                    <span class="question">Que changer en priorité sur mon DPS ?</span>
+                    <span class="answer"><ToolSigil Burst Size="16" /> BurstPulse</span>
+                </a>
+            </li>
         </ul>
     </section>
 </main>
 
 @code {
-    // Ligne plate, un battement au milieu de chaque carte (x = 200, 600 et 1000), comme les colonnes de .doors.
+    // Ligne plate, un battement par outil, régulièrement espacés (x = 150, 450, 750 et 1050).
     private const string HeartbeatPath =
-        "M0 62H150l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H550l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H950l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H1200";
+        "M0 62H100l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H400l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H700l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H1000l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H1200";
 }

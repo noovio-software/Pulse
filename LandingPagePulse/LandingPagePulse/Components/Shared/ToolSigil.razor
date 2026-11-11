@@ -1,4 +1,4 @@
-@* Emblèmes des trois outils : mêmes tracés que leurs composants Sigil respectifs. *@
+@* Emblèmes des quatre outils : mêmes tracés que leurs composants Sigil respectifs. *@
 
 <span class="tool-sigil" aria-hidden="true">
     <svg viewBox="0 0 32 32" width="@Size" height="@Size" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
@@ -10,6 +10,11 @@
         else if (Life)
         {
             <path d="M16 2.5c5.2 6.6 10.5 11.4 10.5 17.1a10.5 10.5 0 0 1-21 0C5.5 13.9 10.8 9.1 16 2.5z" stroke-width="2" />
+            <path d="M9 16h3.5l2-4 3 8 2-4H23" stroke-width="1.8" />
+        }
+        else if (Burst)
+        {
+            <path d="M16 2 18.9 9 25.9 6.1 23 13.1 30 16 23 18.9 25.9 25.9 18.9 23 16 30 13.1 23 6.1 25.9 9 18.9 2 16 9 13.1 6.1 6.1 13.1 9z" stroke-width="2" />
             <path d="M9 16h3.5l2-4 3 8 2-4H23" stroke-width="1.8" />
         }
         else
@@ -28,6 +33,9 @@
 
     /// <summary>LifePulse (la goutte traversée d'un pouls).</summary>
     [Parameter] public bool Life { get; set; }
+
+    /// <summary>BurstPulse (l'étoile d'explosion traversée d'un pouls).</summary>
+    [Parameter] public bool Burst { get; set; }
 
     [Parameter] public int Size { get; set; } = 26;
 }
