@@ -39,7 +39,7 @@ If BurstPulse shares FrontPulse's or LifePulse's Blizzard client, the workers sh
 
 ## Deploy
 
-Same model as FrontPulse: port 8540 behind Nginx, systemd units `kestrel-burstpulse` and `kestrel-burstpulse-worker`.
+Same model as FrontPulse: port 8550 behind Nginx, systemd units `kestrel-burstpulse` and `kestrel-burstpulse-worker`.
 
 1. Point the DNS record `burstpulse.noovio.fr` at the server.
 2. Run `BurstPulse/deploy/setup-server.sh` on the server, then fill in `/etc/burstpulse/burstpulse.env`.

@@ -4,7 +4,7 @@ After=network.target postgresql.service
 
 [Service]
 WorkingDirectory=/home/ubuntu/projects/burstpulse/web
-ExecStart=/usr/bin/dotnet /home/ubuntu/projects/burstpulse/web/Noovio.BurstPulse.Web.dll --urls http://127.0.0.1:8540
+ExecStart=/usr/bin/dotnet /home/ubuntu/projects/burstpulse/web/Noovio.BurstPulse.Web.dll --urls http://127.0.0.1:8550
 Restart=always
 RestartSec=10
 KillSignal=SIGINT
