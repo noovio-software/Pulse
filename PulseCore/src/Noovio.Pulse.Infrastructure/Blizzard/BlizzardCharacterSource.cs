@@ -143,7 +143,7 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
             s.Avoidance?.Value ?? 0,
             s.Speed?.Value ?? 0);
 
-    private static GearPiece? ToGear(BzEquippedItem item)
+    internal static GearPiece? ToGear(BzEquippedItem item)
     {
         GearSlot? slot = item.Slot.Type switch
         {
@@ -172,12 +172,19 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
                 item.Name,
                 item.Level?.Value ?? 0,
                 item.BonusList,
-                item.Enchantments.Select(e => e.DisplayString).OfType<string>().ToList(),
+                item.Enchantments.Where(IsPermanent).Select(e => e.DisplayString).OfType<string>().ToList(),
                 item.Spells.Select(s => new ItemEffect(s.Spell.Id, s.Spell.Name ?? "", s.Description)).ToList(),
                 IsEmbellished(item.LimitCategory),
                 item.Sockets.Select(s => new GemSocket(s.SocketType?.Type, s.Item?.Id, s.Item?.Name, s.DisplayString)).ToList(),
                 item.Stats.Where(s => !s.IsNegated).Select(ToItemStat).OfType<ItemStat>().ToList());
     }
+
+    /// <summary>
+    /// Les huiles et imprégnations (chaman : Garde de mande-flots sur le bouclier) sont aussi listées, en TEMPORARY :
+    /// ce ne sont pas des enchantements à poser. Sans emplacement indiqué, l'entrée est gardée.
+    /// </summary>
+    private static bool IsPermanent(BzEnchantment enchantment) =>
+        enchantment.EnchantmentSlot?.Type is not { } type || type.Equals("PERMANENT", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>Types attendus : CRIT_RATING, HASTE_RATING, MASTERY_RATING, VERSATILITY ; l'indice primaire et l'endurance sont ignorés.</summary>
     private static ItemStat? ToItemStat(BzItemStat stat)
