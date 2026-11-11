@@ -163,6 +163,8 @@ public sealed class RioRanks
     public RioRank? ClassTank { get; set; }
     public RioRank? Healer { get; set; }
     public RioRank? ClassHealer { get; set; }
+    public RioRank? Dps { get; set; }
+    public RioRank? ClassDps { get; set; }
 }
 
 public sealed class RioRank

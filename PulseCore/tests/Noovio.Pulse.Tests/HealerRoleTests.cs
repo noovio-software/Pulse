@@ -31,7 +31,7 @@ public sealed class HealerRoleTests
     [Fact]
     public void Slugs_are_unique_across_roles()
     {
-        var slugs = WowSpecs.Tanks.Concat(WowSpecs.Healers).Select(s => s.Slug).ToList();
+        var slugs = WowSpecs.Tanks.Concat(WowSpecs.Healers).Concat(WowSpecs.Damage).Select(s => s.Slug).ToList();
         Assert.Equal(slugs.Count, slugs.Distinct().Count());
     }
 
@@ -56,8 +56,8 @@ public sealed class HealerRoleTests
             """;
         var stats = JsonSerializer.Deserialize<BzStatistics>(json, RaiderIoClient.JsonOptions)!;
 
-        var healer = BlizzardCharacterSource.ToStats(stats, StatBasis.Spell);
-        var tank = BlizzardCharacterSource.ToStats(stats, StatBasis.Melee);
+        var healer = BlizzardCharacterSource.ToStats(stats, StatBasis.Spell, healing: true);
+        var tank = BlizzardCharacterSource.ToStats(stats, StatBasis.Melee, healing: false);
 
         Assert.Equal((800d, 20d), (healer.Crit.Rating, healer.Crit.Percent));
         Assert.Equal((900d, 21d), (healer.Haste.Rating, healer.Haste.Percent));

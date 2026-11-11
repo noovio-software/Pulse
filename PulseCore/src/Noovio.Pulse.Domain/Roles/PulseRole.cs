@@ -1,13 +1,29 @@
+using Noovio.Pulse.Domain.Enums;
+
 namespace Noovio.Pulse.Domain.Roles;
 
-/// <summary>Lignes de la feuille de personnage Blizzard qui font foi : le critique et la hâte n'y sont pas les mêmes selon le rôle.</summary>
+/// <summary>Ce que fait le rôle en groupe : décide des rangs Raider.io lus, de la polyvalence affichée et des lignes défensives de la fiche.</summary>
+public enum RoleKind
+{
+    Tank,
+    Healer,
+    Damage
+}
+
+/// <summary>
+/// Lignes de la feuille de personnage Blizzard qui font foi : le critique et la hâte n'y sont pas les mêmes selon la façon
+/// de combattre. La polyvalence, elle, dépend du rôle (soins pour un soigneur, dégâts sinon).
+/// </summary>
 public enum StatBasis
 {
-    /// <summary><c>melee_crit</c>, <c>melee_haste</c>, polyvalence appliquée aux dégâts.</summary>
+    /// <summary><c>melee_crit</c>, <c>melee_haste</c>.</summary>
     Melee,
 
-    /// <summary><c>spell_crit</c>, <c>spell_haste</c>, polyvalence appliquée aux soins.</summary>
-    Spell
+    /// <summary><c>spell_crit</c>, <c>spell_haste</c>.</summary>
+    Spell,
+
+    /// <summary><c>ranged_crit</c>, <c>ranged_haste</c> : chasseurs à distance.</summary>
+    Ranged
 }
 
 /// <summary>
@@ -15,6 +31,7 @@ public enum StatBasis
 /// d'aventure, et comment en parler. Le reste (agrégation, optimisation, roadmap, pages) est commun.
 /// </summary>
 /// <param name="RaiderIoRole">Valeur de <c>roster[].role</c> chez Raider.io, aussi nom du segment de score et du rang.</param>
+/// <param name="StatBasis">Lignes de la feuille lues par défaut ; une spécialisation peut en préciser d'autres (<see cref="SpecInfo.Basis"/>).</param>
 /// <param name="JournalHeadings">Mots qui désignent le rôle dans les titres de sections du Journal d'aventure (fr_FR et en_US).</param>
 /// <param name="TrinketKeywords">
 /// Un bijou dont un effet contient l'un de ces mots sert le rôle. Les descriptions Blizzard ne portent pas de rôle : c'est une
@@ -22,6 +39,7 @@ public enum StatBasis
 /// </param>
 public sealed record PulseRole(
     string RaiderIoRole,
+    RoleKind Kind,
     IReadOnlyList<SpecInfo> Specs,
     StatBasis StatBasis,
     IReadOnlyList<string> JournalHeadings,
@@ -34,7 +52,10 @@ public sealed record PulseRole(
 
     public bool Includes(int specId) => Specs.Any(s => (int)s.Spec == specId);
 
-    /// <summary>Les spécialisations du rôle pour une classe : aucune, une, ou deux (prêtre soigneur).</summary>
+    /// <summary>Lignes de la feuille de personnage à lire pour cette spécialisation.</summary>
+    public StatBasis BasisOf(WowSpec spec) => Specs.FirstOrDefault(s => s.Spec == spec)?.Basis ?? StatBasis;
+
+    /// <summary>Les spécialisations du rôle pour une classe : aucune, une, deux (prêtre soigneur) ou trois (mage DPS).</summary>
     public IReadOnlyList<SpecInfo> ForClass(int classId) => Specs.Where(s => s.ClassId == classId).ToList();
 }
 
@@ -64,14 +85,14 @@ public sealed record BossHitRule(
 }
 
 /// <summary>Le vocabulaire du rôle dans les textes affichés.</summary>
-/// <param name="Noun">« tank », « soigneur » : masculin, après « ton » ou « un ».</param>
+/// <param name="Noun">« tank », « soigneur », « DPS » : masculin, après « ton » ou « un ».</param>
 /// <param name="SpecCount">Nombre de spécialisations en toutes lettres, dans les titres.</param>
 /// <param name="Classes">Classes qui ont le rôle, pour le compte sans personnage éligible.</param>
 /// <param name="ItemLevelImpact">Ce que le niveau d'objet fait gagner, après « pèse directement sur ».</param>
 /// <param name="RoleTrinkets">Titre de la colonne des bijoux qui servent le rôle.</param>
-/// <param name="RoleTrinket">« bijou {RoleTrinket} » : « défensif », « de soin ».</param>
+/// <param name="RoleTrinket">« bijou {RoleTrinket} » : « défensif », « de soin », « de dégâts ».</param>
 /// <param name="DamageTrinkets">Titre de la colonne des autres bijoux.</param>
-/// <param name="DamageTrinket">« bijou {DamageTrinket} » : « offensif », « de dégâts ».</param>
+/// <param name="DamageTrinket">« bijou {DamageTrinket} » : « offensif », « de dégâts », « de caractéristiques ».</param>
 /// <param name="NoRoleTrinket">Le top ne joue aucun bijou du rôle.</param>
 /// <param name="RoleTrinketAdvice">Quand activer un bijou du rôle ; {0} : sa recharge.</param>
 /// <param name="DamageTrinketAdvice">Quand activer un autre bijou ; {0} : sa recharge.</param>

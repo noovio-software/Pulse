@@ -5,6 +5,9 @@ namespace Noovio.Pulse.Web.Components.Shared;
 
 public partial class TopBar
 {
+    /// <summary>Au-delà (les vingt-sept spécialisations DPS), les icônes ne tiennent plus sur une ligne : elles passent dans un menu.</summary>
+    private const int InlineNavLimit = 8;
+
     [Inject] private RefreshSchedule Schedule { get; set; } = default!;
 
     /// <summary>Spécialisation surlignée dans la navigation.</summary>

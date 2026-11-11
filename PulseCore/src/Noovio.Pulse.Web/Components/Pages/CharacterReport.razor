@@ -226,7 +226,7 @@ else if (analysis is { } a)
                     <div><dt>Maîtrise</dt><dd>@s.Secondary.Mastery.Percent.ToString("0.0") %</dd></div>
                     <div><dt>Critique</dt><dd>@s.Secondary.Crit.Percent.ToString("0.0") %</dd></div>
                     <div><dt>Polyvalence</dt><dd>@s.Secondary.Versatility.Percent.ToString("0.0") % <small>/ @s.VersatilityDamageTaken.ToString("0.0") % subis</small></dd></div>
-                    @if (Site.Role.StatBasis == StatBasis.Melee)
+                    @if (Site.Role.Kind == RoleKind.Tank)
                     {
                         <div><dt>Esquive</dt><dd>@s.Dodge.ToString("0.0") %</dd></div>
                         <div><dt>Parade</dt><dd>@s.Parry.ToString("0.0") %</dd></div>

@@ -129,6 +129,8 @@ public sealed class BzStatistics
     public BzRatingStat? MeleeHaste { get; set; }
     public BzRatingStat? SpellCrit { get; set; }
     public BzRatingStat? SpellHaste { get; set; }
+    public BzRatingStat? RangedCrit { get; set; }
+    public BzRatingStat? RangedHaste { get; set; }
     public BzRatingStat? Mastery { get; set; }
 
     /// <summary>Indice de polyvalence (le seul secondaire exposé en nombre simple).</summary>
