@@ -72,6 +72,28 @@ public sealed class HealerRoleTests
         Assert.Equal(250000, stats.Power);
     }
 
+    /// <summary>Issue #5 : l'imprégnation du bouclier d'un chaman est listée comme enchantement temporaire, ce n'en est pas un.</summary>
+    [Fact]
+    public void Temporary_enchantments_are_not_enchants()
+    {
+        const string json = """
+            {
+              "slot": { "type": "OFF_HAND" },
+              "item": { "id": 1 },
+              "name": "Bouclier",
+              "enchantments": [
+                { "display_string": "Garde de mande-flots", "enchantment_slot": { "id": 1, "type": "TEMPORARY" } }
+              ]
+            }
+            """;
+        var shield = JsonSerializer.Deserialize<BzEquippedItem>(json, RaiderIoClient.JsonOptions)!;
+
+        Assert.Empty(BlizzardCharacterSource.ToGear(shield)!.Enchantments);
+
+        shield.Enchantments.Add(new BzEnchantment { DisplayString = "Enchanté : +100 Hâte", EnchantmentSlot = new BzTyped { Type = "PERMANENT" } });
+        Assert.Equal(["Enchanté : +100 Hâte"], BlizzardCharacterSource.ToGear(shield)!.Enchantments);
+    }
+
     [Theory]
     [InlineData("Équipé : vos sorts ont une chance de rendre du mana.", TrinketOrientation.Role)]
     [InlineData("Utiliser : augmente les soins prodigués de 10 %.", TrinketOrientation.Role)]

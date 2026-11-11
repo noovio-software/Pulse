@@ -47,6 +47,9 @@ public sealed class BzValue
 public sealed class BzEnchantment
 {
     public string? DisplayString { get; set; }
+
+    /// <summary>PERMANENT pour un vrai enchantement ; TEMPORARY pour une huile ou une imprégnation (ex. Garde de mande-flots du chaman).</summary>
+    public BzTyped? EnchantmentSlot { get; set; }
 }
 
 public sealed class BzItemSpell
