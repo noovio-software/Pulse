@@ -1,7 +1,7 @@
 /* ==========================================================================
    Noovio - thème « Battement »
    Même structure que les outils (en-tête, panneaux, pied de page) ;
-   la page se partage entre leurs univers : vert venin à gauche, ambre de forge au centre, bleu chaman à droite.
+   la page se partage entre leurs univers : vert venin à gauche, ambre de forge au centre, bleu chaman à droite, violet de Midnight en bas.
    Les styles propres à la page sont dans Home.razor.css.
    ========================================================================== */
 
@@ -18,6 +18,7 @@
     --venom: #4DFF88;
     --amber: #F59E0B;
     --tide: #4FA8F7;
+    --void: #A78BFA;
 
     --text: #E6EEF0;
     --text-dim: #A3B3BC;
@@ -57,6 +58,16 @@
     --glow: rgba(0, 112, 221, 0.42);
     --on-accent: #FFFFFF;
 }
+/* #7C3AED reste la couleur des aplats, comme dans le thème de BurstPulse ; le texte en prend une teinte plus claire. */
+.tool-burst {
+    --accent: #A78BFA;
+    --accent-2: #8B5CF6;
+    --accent-3: #E879F9;
+    --fill: #7C3AED;
+    --fill-2: #6D28D9;
+    --glow: rgba(124, 58, 237, 0.42);
+    --on-accent: #FFFFFF;
+}
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -91,6 +102,7 @@ a:hover { text-decoration: underline; }
 }
 .noovio-backdrop::before,
 .noovio-backdrop span,
+.noovio-backdrop i,
 .noovio-backdrop::after {
     content: "";
     position: absolute;
@@ -111,18 +123,27 @@ a:hover { text-decoration: underline; }
 .noovio-backdrop span {
     background: radial-gradient(900px 560px at 50% -12%, rgba(245, 158, 11, 0.14), transparent 62%);
 }
+.noovio-backdrop i {
+    background: radial-gradient(1100px 520px at 50% 112%, rgba(124, 58, 237, 0.24), transparent 62%);
+}
 body:has(.tool-alt:hover) .noovio-backdrop::before,
 body:has(.tool-alt:focus-visible) .noovio-backdrop::before,
 body:has(.tool-front:hover) .noovio-backdrop span,
 body:has(.tool-front:focus-visible) .noovio-backdrop span,
 body:has(.tool-life:hover) .noovio-backdrop::after,
-body:has(.tool-life:focus-visible) .noovio-backdrop::after { opacity: 1; }
-body:has(.tool-alt:hover) .noovio-backdrop span,
+body:has(.tool-life:focus-visible) .noovio-backdrop::after,
+body:has(.tool-burst:hover) .noovio-backdrop i,
+body:has(.tool-burst:focus-visible) .noovio-backdrop i { opacity: 1; }
+body:has(.tool-alt:hover) .noovio-backdrop :is(span, i),
 body:has(.tool-alt:hover) .noovio-backdrop::after,
+body:has(.tool-front:hover) .noovio-backdrop i,
 body:has(.tool-front:hover) .noovio-backdrop::before,
 body:has(.tool-front:hover) .noovio-backdrop::after,
+body:has(.tool-life:hover) .noovio-backdrop :is(span, i),
 body:has(.tool-life:hover) .noovio-backdrop::before,
-body:has(.tool-life:hover) .noovio-backdrop span { opacity: 0.25; }
+body:has(.tool-burst:hover) .noovio-backdrop span,
+body:has(.tool-burst:hover) .noovio-backdrop::before,
+body:has(.tool-burst:hover) .noovio-backdrop::after { opacity: 0.25; }
 
 /* --- En-tête ------------------------------------------------------------- */
 .topbar {
@@ -337,7 +358,8 @@ body:has(.tool-life:hover) .noovio-backdrop span { opacity: 0.25; }
 .footer-legal { flex-basis: 100%; margin: 0; font-size: 0.74rem; line-height: 1.5; color: var(--text-faint); }
 
 /* --- Écrans moyens et mobile --------------------------------------------- */
-@media (max-width: 760px) {
+/* Le slogan cède la place aux quatre liens d'outils. */
+@media (max-width: 1000px) {
     .brand-tag { display: none; }
 }
 @media (max-width: 640px) {
@@ -346,8 +368,8 @@ body:has(.tool-life:hover) .noovio-backdrop span { opacity: 0.25; }
     .footer { padding: 24px 16px 28px; }
     .footer-inner { flex-direction: column; align-items: flex-start; }
 }
-/* Trois liens et le logo ne tiennent pas sur une ligne : les noms laissent place aux emblèmes. */
-@media (max-width: 640px) {
+/* Quatre liens et le logo ne tiennent pas sur une ligne : les noms laissent place aux emblèmes. */
+@media (max-width: 720px) {
     .tool-link { width: 36px; padding: 0; justify-content: center; }
     .tool-link-name { display: none; }
 }

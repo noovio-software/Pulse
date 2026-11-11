@@ -19,7 +19,7 @@
 .hero-title em {
     display: block;
     font-style: normal;
-    background: linear-gradient(90deg, var(--venom), var(--amber) 50%, var(--tide));
+    background: linear-gradient(90deg, var(--venom), var(--amber) 36%, var(--tide) 66%, var(--void));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -55,15 +55,17 @@
     to { stroke-dashoffset: 0; }
 }
 
-/* --- Les trois portes ---------------------------------------------------- */
-/* Chaque carte reprend les rangées de la grille (subgrid) : titres, aperçus et boutons s'alignent d'une carte à l'autre. */
-.doors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(5, auto); column-gap: 18px; }
+/* --- Les quatre portes, deux par rangée ---------------------------------- */
+/* Chaque carte reprend les rangées de la grille (subgrid) : titres, aperçus et boutons s'alignent d'une carte à l'autre.
+   L'écart entre les deux rangées de portes ne s'applique pas à l'intérieur des cartes (row-gap: 0 sur la carte). */
+.doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(10, auto); gap: 18px; }
 
 .door {
     position: relative;
     display: grid;
     grid-row: span 5;
     grid-template-rows: subgrid;
+    row-gap: 0;
     padding: 26px;
     overflow: hidden;
     border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
@@ -86,7 +88,7 @@
     box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5), 0 0 34px var(--glow);
 }
 
-/* le motif de chaque outil, repris de son propre fond : écailles pour AltPulse, plaques rivetées pour FrontPulse, ondes pour LifePulse */
+/* le motif de chaque outil, repris de son propre fond : écailles pour AltPulse, plaques rivetées pour FrontPulse, ondes pour LifePulse, éclats pour BurstPulse */
 .door-pattern {
     position: absolute;
     inset: 0;
@@ -115,6 +117,13 @@
     background-image:
         radial-gradient(circle at 50% 50%, transparent 12px, var(--accent) 13px, transparent 14px, transparent 25px, var(--accent) 26px, transparent 27px);
     background-size: 60px 60px;
+}
+
+/* huit rayons par motif : l'étoile d'explosion de l'emblème */
+.tool-burst .door-pattern {
+    opacity: 0.12;
+    background-image: repeating-conic-gradient(from -1deg at 50% 50%, var(--accent) 0deg 2deg, transparent 2deg 45deg);
+    background-size: 64px 64px;
 }
 
 .door-head { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; }
@@ -289,7 +298,7 @@
     text-align: center;
 }
 
-.questions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 18px; margin: 0; padding: 0; list-style: none; }
+.questions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 18px; margin: 0; padding: 0; list-style: none; }
 .questions a {
     display: flex;
     flex-direction: column;
@@ -314,21 +323,15 @@
 .answer { display: inline-flex; align-items: center; gap: 6px; flex: none; color: var(--accent); font-weight: 700; font-size: 0.85rem; }
 
 /* --- Écrans moyens et mobile --------------------------------------------- */
-/* Sous 1180 px, trois colonnes laissent peu de place : l'aperçu passe en pile. */
+/* Sous 1180 px, quatre questions par ligne laissent peu de place : deux suffisent. */
 @media (max-width: 1180px) {
     .door { padding: 22px 18px; }
-    .preview { font-size: 0.72rem; padding: 16px 12px; }
-    .alt-grid > strong { font-size: 0.7rem; }
-    .report { flex-direction: column; align-items: stretch; }
-    .score { align-self: center; }
+    .questions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 900px) {
     .doors, .questions { grid-template-columns: minmax(0, 1fr); }
     .doors { grid-template-rows: none; row-gap: 18px; }
     .door { grid-row: auto; grid-template-rows: none; padding: 26px; }
-    .preview { font-size: 0.8rem; padding: 16px; }
-    .alt-grid > strong { font-size: 0.78rem; }
-    .report { flex-direction: row; align-items: center; }
     .hero { padding-top: 24px; }
     .heartbeat { height: 72px; }
 }
