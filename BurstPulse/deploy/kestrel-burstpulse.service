@@ -1,0 +1,19 @@
+[Unit]
+Description=BurstPulse by Noovio - site (Kestrel)
+After=network.target postgresql.service
+
+[Service]
+WorkingDirectory=/home/ubuntu/projects/burstpulse/web
+ExecStart=/usr/bin/dotnet /home/ubuntu/projects/burstpulse/web/Noovio.BurstPulse.Web.dll --urls http://127.0.0.1:8540
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=burstpulse
+User=ubuntu
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_NOLOGO=true
+# Secrets hors de l'unité (lisible par tous) : fichier root:root 600.
+EnvironmentFile=/etc/burstpulse/burstpulse.env
+
+[Install]
+WantedBy=multi-user.target

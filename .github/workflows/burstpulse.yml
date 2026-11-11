@@ -1,0 +1,68 @@
+name: BurstPulse
+
+# Déploiement en prod sur un tag, ex. : git tag prod-burstpulse-1.0.0 && git push origin prod-burstpulse-1.0.0
+on:
+  push:
+    tags:
+      - 'prod-burstpulse-[0-9]+.[0-9]+.[0-9]+'
+
+# Un seul déploiement à la fois : un tag poussé pendant un déploiement attend la fin du précédent.
+concurrency:
+  group: burstpulse-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Extract version from tag
+        run: |
+          TAG_NAME="${GITHUB_REF##*/}"
+          VERSION="${TAG_NAME#prod-burstpulse-}"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "::notice title=Build version::$VERSION"
+
+      # Les tests de règles (agrégation, analyse) bloquent le déploiement s'ils échouent.
+      - name: Tests
+        run: dotnet test PulseCore/tests/Noovio.Pulse.Tests -c Release
+
+      - name: Clean deploy directory
+        run: rm -rf deploy
+
+      # Pas de -p:Version : la variable VERSION posée ci-dessus est lue par le .csproj.
+      - name: Dotnet Publish
+        run: |
+          dotnet publish BurstPulse/src/Noovio.BurstPulse.Web/Noovio.BurstPulse.Web.csproj -c Release -o deploy/web
+          dotnet publish BurstPulse/src/Noovio.BurstPulse.Worker/Noovio.BurstPulse.Worker.csproj -c Release -o deploy/worker
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.REMOTE_KEY }}
+          known_hosts: 'burstpulse-githubactions-known-hosts'
+
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
+
+      # REMOTE_TARGET_BURSTPULSE se termine par / : web/ et worker/ y sont créés.
+      - name: Deploy with rsync
+        run: |
+          rsync -avz --delete deploy/web/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_TARGET_BURSTPULSE }}web/
+          rsync -avz --delete deploy/worker/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_TARGET_BURSTPULSE }}worker/
+
+      # Le site applique les migrations en attente au démarrage ; le worker aussi (verrou EF Core).
+      # is-active échoue (et fait échouer le job) si un service n'a pas redémarré.
+      - name: Restart services
+        run: ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'sudo systemctl restart kestrel-burstpulse.service kestrel-burstpulse-worker.service && sleep 8 && systemctl is-active kestrel-burstpulse.service kestrel-burstpulse-worker.service'
+
+      # Réessaie pendant ~30 s : au démarrage, le site peut attendre la fin des migrations appliquées par le worker.
+      - name: Smoke test
+        run: curl -fsS --retry 6 --retry-delay 5 --retry-all-errors -o /dev/null -w "HTTP %{http_code}\n" https://burstpulse.noovio.fr/

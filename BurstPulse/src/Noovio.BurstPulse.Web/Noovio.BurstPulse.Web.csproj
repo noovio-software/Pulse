@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+
+    <!-- Les pages sont dans la RCL : sans .razor ici, le SDK n'embarquerait pas _framework/blazor.web.js. -->
+    <RequiresAspNetWebAssets>true</RequiresAspNetWebAssets>
+    <UserSecretsId>18828103-575f-4327-89a3-454dbcb762c8</UserSecretsId>
+
+    <!-- Comme AltPulse : VERSION est posée par GitHub Actions et lue ici ; 1.0.0 en local. -->
+    <Version>$(Version)</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\PulseCore\src\Noovio.Pulse.Web\Noovio.Pulse.Web.csproj" />
+    <ProjectReference Include="..\Noovio.BurstPulse.Infrastructure\Noovio.BurstPulse.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

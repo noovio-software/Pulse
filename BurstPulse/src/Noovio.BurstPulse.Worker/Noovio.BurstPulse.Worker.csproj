@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <UserSecretsId>fb3aeb5e-2786-4468-a923-342d3bfc8dea</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Noovio.BurstPulse.Infrastructure\Noovio.BurstPulse.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
