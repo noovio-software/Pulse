@@ -1,0 +1,48 @@
+@page "/benchs"
+@attribute [Authorize(Policy = AdminAuthentication.Policy)]
+@inject UsageQueries Queries
+
+<PageTitle>Benchs · PulseAdmin</PageTitle>
+
+<div class="page-head">
+    <div>
+        <h1>Benchs</h1>
+        <p class="dim">@Labels.Number(benches.Total) bench(s) · page @benches.Page / @benches.Pages</p>
+    </div>
+</div>
+
+<FilterBar Filter="filter" Options="options" Path="/benchs" ShowSearch="true" />
+
+<section class="panel">
+    <BenchTable Items="benches.Items" Filter="filter" />
+
+    @if (benches.Pages > 1)
+    {
+        <nav class="pager">
+            @if (benches.Page > 1)
+            {
+                <a class="btn btn-ghost" href="@filter.Url("/benchs", ("page", (benches.Page - 1).ToString()))">← Plus récents</a>
+            }
+            <span class="faint">@benches.Page / @benches.Pages</span>
+            @if (benches.Page < benches.Pages)
+            {
+                <a class="btn btn-ghost" href="@filter.Url("/benchs", ("page", (benches.Page + 1).ToString()))">Plus anciens →</a>
+            }
+        </nav>
+    }
+</section>
+
+@code {
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+
+    private StatsFilter filter = default!;
+    private FilterOptions options = default!;
+    private BenchPage benches = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        filter = StatsFilter.Parse(HttpContext.Request.Query);
+        options = await Queries.GetOptionsAsync(HttpContext.RequestAborted);
+        benches = await Queries.GetBenchesAsync(filter, HttpContext.RequestAborted);
+    }
+}

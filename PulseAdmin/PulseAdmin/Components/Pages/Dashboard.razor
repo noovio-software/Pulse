@@ -1,0 +1,271 @@
+@page "/"
+@attribute [Authorize(Policy = AdminAuthentication.Policy)]
+@inject UsageQueries Queries
+@inject TimeProvider Time
+
+<PageTitle>Tableau de bord · PulseAdmin</PageTitle>
+
+<div class="page-head">
+    <div>
+        <h1>Usage des benchs</h1>
+        <p class="dim">@Labels.DateTime(from) → @Labels.DateTime(to) (heure de Paris) · actualisé @Labels.DateTime(Time.GetUtcNow())</p>
+    </div>
+</div>
+
+<FilterBar Filter="filter" Options="options" Path="/" />
+
+@{
+    var k = report.Kpis;
+    var g = report.Gear;
+    var il = report.ItemLevel;
+}
+
+<section class="kpis">
+    <Kpi Label="Benchs lancés" Value="@Labels.Number(k.Benches)" Hint="@($"{Labels.Number(k.BenchesPerUser, 1)} par utilisateur")" />
+    <Kpi Label="Utilisateurs" Value="@Labels.Number(k.Users)" Hint="@($"{k.NewUsers} nouveaux · {k.ReturningUsers} revenus")" />
+    <Kpi Label="Personnages" Value="@Labels.Number(k.Characters)" Hint="distincts" />
+    <Kpi Label="Aboutis" Value="@Labels.Percent(k.SuccessRate, 1)" Hint="@($"{Labels.Percent(k.CacheRate)} servis par le cache")" />
+    <Kpi Label="Durée d'un bench" Value="@Labels.Duration(k.AverageDurationMs)" Hint="@($"p95 {Labels.Duration(k.P95DurationMs)} · hors cache")" />
+    <Kpi Label="Actualisations" Value="@Labels.Percent(k.ForcedRate)" Hint="bouton « Actualiser »" />
+</section>
+
+@if (k.Benches == 0)
+{
+    <section class="panel">
+        <p class="empty">Aucun bench sur cette période avec ces filtres.</p>
+    </section>
+}
+else
+{
+    <section class="panel">
+        <div class="panel-head">
+            <h2>Benchs par jour</h2>
+            <ul class="legend">
+                @foreach (var app in UsageReport.AppNames)
+                {
+                    <li><i class="swatch @Labels.AppClass(app)"></i>@app</li>
+                }
+            </ul>
+        </div>
+        <ColumnChart Columns="dailyColumns" />
+    </section>
+
+    <div class="grid-2">
+        <section class="panel">
+            <div class="panel-head">
+                <h2>Courbe de la journée</h2>
+                <span class="faint">benchs par heure, heure de Paris</span>
+            </div>
+            <LineChart XLabels="hours" Series="hourlySeries" AriaLabel="Benchs par heure de la journée et par application" />
+        </section>
+        <section class="panel">
+            <div class="panel-head">
+                <h2>Semaine × heure</h2>
+            </div>
+            <Heatmap Values="report.WeekHour" />
+        </section>
+    </div>
+
+    <div class="grid-3">
+        <section class="panel">
+            <h2>Applications</h2>
+            <table class="table compact">
+                <thead><tr><th>App</th><th class="num">Benchs</th><th class="num">Utilisateurs</th><th class="num">Persos</th><th class="num">ilvl moyen</th></tr></thead>
+                <tbody>
+                    @foreach (var app in report.Apps)
+                    {
+                        <tr>
+                            <td><i class="swatch @Labels.AppClass(app.App)"></i><a href="@filter.Url("/", ("app", app.App))">@app.App</a></td>
+                            <td class="num">@Labels.Number(app.Benches)</td>
+                            <td class="num">@Labels.Number(app.Users)</td>
+                            <td class="num">@Labels.Number(app.Characters)</td>
+                            <td class="num">@Labels.Number(app.AverageItemLevel, 1)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+        <section class="panel">
+            <h2>Issue des benchs</h2>
+            <BarList Items="@report.Statuses.Select(s => new BarItem(Labels.Status(s.Label), s.Count, $"{s.Count} · {Labels.Percent(s.Ratio)}", filter.Url("/benchs", ("statut", s.Label)))).ToList()" />
+        </section>
+        <section class="panel">
+            <h2>Régions</h2>
+            <BarList Items="@report.Regions.Select(s => new BarItem(s.Label, s.Count, $"{s.Count} · {Labels.Percent(s.Ratio)}", filter.Url("/", ("region", s.Label.ToLowerInvariant())))).ToList()" />
+            <h3>Factions</h3>
+            <BarList Items="@report.Factions.Select(s => new BarItem(s.Label, s.Count, Labels.Percent(s.Ratio))).ToList()" />
+        </section>
+    </div>
+
+    <h2 class="section-title">Profil des personnages benchés <span class="faint">@report.ProfileSample @(filter.AllBenches ? "benchs aboutis" : "persos (dernier bench abouti de chacun)")</span></h2>
+
+    <section class="kpis">
+        <Kpi Label="ilvl moyen" Value="@Labels.Number(il.Average, 1)" Hint="@($"médiane {Labels.Number(il.Median, 1)}")" />
+        <Kpi Label="Moitié centrale" Value="@($"{Labels.Number(il.P25, 0)} – {Labels.Number(il.P75, 0)}")" Hint="@($"min {Labels.Number(il.Min, 0)} · max {Labels.Number(il.Max, 0)}")" />
+        <Kpi Label="Écart au top" Value="@Labels.Signed(il.AverageGap, 1, " ilvl")" Hint="face à la médiane du top de la spé" />
+        <Kpi Label="Note d'analyse" Value="@Labels.Number(g.AverageScore, 0)" Hint="score moyen sur 100" />
+        <Kpi Label="Score M+" Value="@Labels.Number(g.AverageMythicScore, 0)" Hint="@($"médiane {Labels.Number(g.MedianMythicScore, 0)} · score du rôle")" />
+        <Kpi Label="Constats" Value="@($"{Labels.Number(g.AverageProblems, 1)} ✕ · {Labels.Number(g.AverageImprovements, 1)} !")" Hint="problèmes · à améliorer, par perso" />
+    </section>
+
+    <div class="grid-2">
+        <section class="panel">
+            <div class="panel-head"><h2>Répartition des ilvl</h2><span class="faint">tranches de 3</span></div>
+            <ColumnChart Columns="@il.Histogram.Select(b => new ColumnData(b.Low.ToString(), [new Segment("Persos", b.Count, "seq")], $"ilvl {b.Low}–{b.High - 1} : {b.Count} perso(s)")).ToList()" MaxLabels="12" />
+        </section>
+        <section class="panel">
+            <div class="panel-head"><h2>Note d'analyse</h2><span class="faint">tranches de 10</span></div>
+            <ColumnChart Columns="@g.ScoreHistogram.Select(b => new ColumnData(b.Low.ToString(), [new Segment("Persos", b.Count, "seq")], $"note {b.Low}–{b.High - 1} : {b.Count} perso(s)")).ToList()" />
+        </section>
+    </div>
+
+    <div class="grid-2">
+        <section class="panel">
+            <h2>Caractéristiques secondaires</h2>
+            <StatCompare Stats="report.Stats" />
+        </section>
+        <section class="panel">
+            <h2>Équipement</h2>
+            <div class="meters">
+                <Meter Label="Pièces au niveau du top" Ratio="g.GoodPieceRate" Hint="@($"{Labels.Percent(g.ProblemPieceRate)} des pièces en problème")" />
+                <Meter Label="Popularité des pièces dans le top" Ratio="g.TopShare" Hint="part moyenne du top qui porte la même pièce" />
+                <Meter Label="Enchantements posés" Ratio="g.EnchantCoverage" Hint="@($"{Labels.Percent(g.FullyEnchantedRate)} des persos entièrement enchantés")" />
+                <Meter Label="Châsses garnies" Ratio="g.SocketFill" Hint="@($"{Labels.Number(g.AverageSockets, 1)} châsses par perso")" />
+                <Meter Label="Talents proches du top" Ratio="g.TalentSimilarity" />
+                <Meter Label="Arbre héroïque du top" Ratio="g.TopHeroTreeRate" />
+                <Meter Label="Joue la spé comparée" Ratio="g.PlaysSpecRate" />
+            </div>
+            <p class="caption">@Labels.Number(g.AverageEmbellishments, 2) embellissement(s) par perso en moyenne.</p>
+        </section>
+    </div>
+
+    <div class="grid-2">
+        <section class="panel">
+            <h2>Verdicts par domaine</h2>
+            <VerdictBars Areas="report.Areas" />
+        </section>
+        <section class="panel">
+            <h2>ilvl moyen par emplacement</h2>
+            @{
+                var slotFloor = report.Slots.Count == 0 ? 0 : Math.Floor((report.Slots.Min(s => s.Average ?? 0) - 5) / 5) * 5;
+            }
+            <BarList Min="slotFloor" Items="@report.Slots.Select(s => new BarItem(Labels.Slot(s.Slot), s.Average ?? 0, Labels.Number(s.Average, 1))).ToList()" />
+            <p class="caption">Échelle à partir de @slotFloor, pour lire les écarts entre emplacements.</p>
+        </section>
+    </div>
+
+    <div class="grid-2">
+        <section class="panel">
+            <h2>Classes</h2>
+            <BarList Items="@report.Classes.Select(c => new BarItem(c.ClassName, c.Count, $"{c.Count} · ilvl {Labels.Number(c.AverageItemLevel, 0)}", filter.Url("/", ("classe", c.ClassId.ToString())), Labels.ClassColor(c.ClassId))).ToList()" />
+        </section>
+        <section class="panel">
+            <h2>Arbres héroïques joués</h2>
+            <BarList Items="@report.HeroTrees.Select(s => new BarItem(s.Label, s.Count, $"{s.Count} · {Labels.Percent(s.Ratio)}")).ToList()" />
+            <h3>Races</h3>
+            <BarList Items="@report.Races.Select(s => new BarItem(s.Label, s.Count, $"{s.Count} · {Labels.Percent(s.Ratio)}")).ToList()" />
+        </section>
+    </div>
+
+    <section class="panel">
+        <h2>Spécialisations</h2>
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Spé</th><th>App</th><th class="num">Persos</th><th class="num">Benchs</th><th class="num">ilvl</th><th class="num">Écart top</th>
+                        <th class="num">Note</th><th class="num">Hâte</th><th class="num">Crit</th><th class="num">Maîtrise</th><th class="num">Poly</th><th class="num">Talents</th><th class="num">M+</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in report.Specs)
+                    {
+                        <tr>
+                            <td><i class="swatch" style="background:@Labels.ClassColor(s.ClassId)"></i><a href="@filter.Url("/", ("spe", s.Slug))">@s.SpecName</a> <span class="faint">@s.ClassName</span></td>
+                            <td><i class="swatch @Labels.AppClass(s.App)"></i>@s.App</td>
+                            <td class="num">@s.Characters</td>
+                            <td class="num">@s.Benches</td>
+                            <td class="num">@Labels.Number(s.AverageItemLevel, 1)</td>
+                            <td class="num @(s.AverageGap < 0 ? "neg" : "pos")">@Labels.Signed(s.AverageGap, 1)</td>
+                            <td class="num">@Labels.Number(s.AverageScore, 0)</td>
+                            <td class="num">@Labels.Points(s.Haste)</td>
+                            <td class="num">@Labels.Points(s.Crit)</td>
+                            <td class="num">@Labels.Points(s.Mastery)</td>
+                            <td class="num">@Labels.Points(s.Versatility)</td>
+                            <td class="num">@Labels.Percent(s.TalentSimilarity)</td>
+                            <td class="num">@Labels.Number(s.MythicScore, 0)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="grid-2">
+        <section class="panel">
+            <h2>Royaumes</h2>
+            <BarList Items="@report.Realms.Select(s => new BarItem(s.Label, s.Count, $"{s.Count} · {Labels.Percent(s.Ratio)}")).ToList()" />
+        </section>
+        <section class="panel">
+            <h2>Utilisateurs les plus actifs</h2>
+            <div class="table-wrap">
+                <table class="table compact">
+                    <thead><tr><th>Compte</th><th class="num">Benchs</th><th class="num">Persos</th><th>Apps</th><th>Dernier</th></tr></thead>
+                    <tbody>
+                        @foreach (var u in report.TopUsers)
+                        {
+                            <tr title="Premier bench : @Labels.DateTime(u.FirstSeenUtc)">
+                                <td><a href="@filter.Url("/benchs", ("compte", u.BattleNetId.ToString()))">@u.LastCharacter</a> <span class="faint">#@u.BattleNetId</span></td>
+                                <td class="num">@u.Benches</td>
+                                <td class="num">@u.Characters</td>
+                                <td>@foreach (var app in u.Apps) { <i class="swatch @Labels.AppClass(app)" title="@app"></i> }</td>
+                                <td>@Labels.Ago(u.LastSeenUtc, Time.GetUtcNow())</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <section class="panel">
+        <div class="panel-head">
+            <h2>Derniers benchs</h2>
+            <a href="@filter.Url("/benchs")">Tout voir →</a>
+        </div>
+        <BenchTable Items="report.Recent.Take(20).ToList()" Filter="filter" />
+    </section>
+}
+
+@code {
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+
+    private StatsFilter filter = default!;
+    private FilterOptions options = default!;
+    private UsageReport report = default!;
+    private DateTimeOffset from;
+    private DateTimeOffset to;
+    private List<ColumnData> dailyColumns = [];
+    private List<Series> hourlySeries = [];
+    private static readonly IReadOnlyList<string> hours = Enumerable.Range(0, 24).Select(h => $"{h}h").ToList();
+
+    protected override async Task OnInitializedAsync()
+    {
+        filter = StatsFilter.Parse(HttpContext.Request.Query);
+        options = await Queries.GetOptionsAsync(HttpContext.RequestAborted);
+        (report, from, to) = await Queries.GetReportAsync(filter, HttpContext.RequestAborted);
+
+        var long_ = report.Daily.Count > 45;
+        dailyColumns = report.Daily
+            .Select(d => new ColumnData(
+                d.Day.ToString(long_ ? "dd/MM/yy" : "dd/MM"),
+                UsageReport.AppNames.Select(a => new Segment(a, d.ByApp[a], Labels.AppClass(a))).ToList(),
+                $"{d.Day:dddd dd/MM/yyyy} : {d.Total} bench(s), {d.Users} utilisateur(s) — " + string.Join(" · ", UsageReport.AppNames.Select(a => $"{a} {d.ByApp[a]}"))))
+            .ToList();
+
+        hourlySeries = UsageReport.AppNames
+            .Where(a => filter.App is null || filter.App == a)
+            .Select(a => new Series(a, Labels.AppClass(a), report.HourlyByApp[a].Select(v => (double)v).ToList()))
+            .ToList();
+    }
+}

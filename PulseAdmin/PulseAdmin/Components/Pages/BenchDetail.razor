@@ -1,0 +1,96 @@
+@page "/benchs/{Id:long}"
+@attribute [Authorize(Policy = AdminAuthentication.Policy)]
+@inject UsageQueries Queries
+
+<PageTitle>Bench #@Id · PulseAdmin</PageTitle>
+
+@if (bench is null)
+{
+    <section class="panel narrow">
+        <h1>Bench introuvable</h1>
+        <a class="btn" href="/benchs">Retour aux benchs</a>
+    </section>
+}
+else
+{
+    var e = bench;
+    <div class="page-head">
+        <div>
+            <h1><i class="swatch big" style="background:@Labels.ClassColor(e.ClassId)"></i>@e.CharacterName <span class="dim">@e.RealmName (@e.Region.ToUpperInvariant())</span></h1>
+            <p class="dim">
+                @Labels.DateTime(e.OccurredAtUtc) · <i class="swatch @Labels.AppClass(e.App)"></i>@e.App ·
+                @(e.SpecName ?? "—") @e.ClassName · niveau @e.Level · @e.Race · @e.Faction
+            </p>
+            <p>
+                <span class="badge @(e.Status == BenchStatus.Ok ? "ok" : "ko")">@Labels.Status(e.Status)</span>
+                @if (e.FromCache) { <span class="badge muted">cache</span> }
+                @if (e.Forced) { <span class="badge muted">actualisé</span> }
+                @if (e.PlaysSpec == false) { <span class="badge muted">ne joue pas cette spé</span> }
+                <span class="faint">durée @Labels.Duration(e.DurationMs) · compte <a href="/benchs?compte=@e.BattleNetId&periode=tout">#@e.BattleNetId</a></span>
+                @if (e.Error is not null) { <code>@e.Error</code> }
+            </p>
+        </div>
+    </div>
+
+    @if (e.Status == BenchStatus.Ok)
+    {
+        <section class="kpis">
+            <Kpi Label="Note" Value="@(e.Score?.ToString() ?? "—")" Hint="sur 100" />
+            <Kpi Label="ilvl" Value="@Labels.Number(e.ItemLevel, 1)" Hint="@($"top {Labels.Number(e.TopItemLevel, 1)} · {Labels.Signed(e.ItemLevel - e.TopItemLevel, 1)}")" />
+            <Kpi Label="Score M+" Value="@Labels.Number(e.MythicScore, 0)" />
+            <Kpi Label="Pièces" Value="@($"{e.GearGood} ✓ · {e.GearImprove} ! · {e.GearProblem} ✕")" Hint="@($"popularité {Labels.Percent(e.GearTopShare)}")" />
+            <Kpi Label="Enchantements" Value="@($"{(e.EnchantsExpected ?? 0) - (e.EnchantsMissing ?? 0)} / {e.EnchantsExpected}")" Hint="@($"châsses {(e.Sockets ?? 0) - (e.SocketsEmpty ?? 0)} / {e.Sockets} · {e.Embellishments} embellissement(s)")" />
+            <Kpi Label="Talents" Value="@Labels.Percent(e.TalentSimilarity)" Hint="@($"{e.HeroTree ?? "—"} (top : {e.TopHeroTree ?? "—"})")" />
+        </section>
+
+        <div class="grid-2">
+            <section class="panel">
+                <h2>Caractéristiques</h2>
+                <StatCompare Stats="stats" />
+            </section>
+            <section class="panel">
+                <h2>Verdicts</h2>
+                <ul class="verdict-list">
+                    @foreach (var area in UsageReport.AreaNames.Where(a => e.Areas?.ContainsKey(a) == true))
+                    {
+                        var v = e.Areas![area];
+                        <li><span class="badge @(v == "Good" ? "ok" : v == "Improve" ? "warn" : "ko")">@(v == "Good" ? "✓ Bon" : v == "Improve" ? "! À améliorer" : "✕ Problème")</span> @Labels.Area(area)</li>
+                    }
+                </ul>
+                <p class="caption">@e.FindingsProblem problème(s), @e.FindingsImprove à améliorer, @e.FindingsGood point(s) fort(s).</p>
+            </section>
+        </div>
+
+        @if (e.SlotItemLevels is { Count: > 0 } slots)
+        {
+            var floor = Math.Floor((slots.Values.Min() - 5) / 5.0) * 5;
+            <section class="panel">
+                <h2>ilvl par emplacement</h2>
+                <BarList Min="floor" Items="@UsageReport.SlotNames.Where(slots.ContainsKey).Select(s => new BarItem(Labels.Slot(s), slots[s], slots[s].ToString())).ToList()" />
+            </section>
+        }
+    }
+}
+
+@code {
+    [Parameter] public long Id { get; set; }
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+
+    private BenchEvent? bench;
+    private List<StatSummary> stats = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        bench = await Queries.GetBenchAsync(Id, HttpContext.RequestAborted);
+        if (bench is { } e)
+        {
+            stats =
+            [
+                new("Hâte", e.Haste, e.TopHaste, e.HasteRating, e.Haste - e.TopHaste),
+                new("Critique", e.Crit, e.TopCrit, e.CritRating, e.Crit - e.TopCrit),
+                new("Maîtrise", e.Mastery, e.TopMastery, e.MasteryRating, e.Mastery - e.TopMastery),
+                new("Polyvalence", e.Versatility, e.TopVersatility, e.VersatilityRating, e.Versatility - e.TopVersatility)
+            ];
+        }
+    }
+}

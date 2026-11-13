@@ -1,0 +1,38 @@
+@using System.Globalization
+@{
+    var max = Stats.SelectMany(s => new[] { s.AveragePercent ?? 0, s.AverageTopPercent ?? 0 }).DefaultIfEmpty(0).Max();
+    var scale = ColumnChart.NiceMax(max);
+}
+@if (max == 0)
+{
+    <p class="empty">Aucune analyse aboutie sur la période.</p>
+}
+else
+{
+    <ul class="legend">
+        <li><i class="swatch seq"></i>Moyenne des persos benchés</li>
+        <li><i class="swatch marker"></i>Médiane du top (moyenne sur les persos)</li>
+    </ul>
+    <ul class="statcompare">
+        @foreach (var stat in Stats)
+        {
+            <li title="@stat.Name : @Labels.Points(stat.AveragePercent) en moyenne (indice @Labels.Number(stat.AverageRating)), top @Labels.Points(stat.AverageTopPercent), écart @Labels.Signed(stat.AverageGap, 1, " pt")">
+                <span class="stat-name">@stat.Name</span>
+                <span class="stat-track">
+                    <span class="barlist-bar seq" style="width:@P(stat.AveragePercent, scale)%"></span>
+                    @if (stat.AverageTopPercent is not null)
+                    {
+                        <span class="stat-marker" style="left:@P(stat.AverageTopPercent, scale)%"></span>
+                    }
+                </span>
+                <span class="stat-value">@Labels.Points(stat.AveragePercent) <span class="faint">/ top @Labels.Points(stat.AverageTopPercent)</span> <span class="@(stat.AverageGap < 0 ? "neg" : "pos")">@Labels.Signed(stat.AverageGap, 1, " pt")</span></span>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<StatSummary> Stats { get; set; } = [];
+
+    private static string P(double? value, double scale) => ((value ?? 0) / scale * 100).ToString("0.##", CultureInfo.InvariantCulture);
+}

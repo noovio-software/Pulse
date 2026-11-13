@@ -1,0 +1,20 @@
+@page "/Error"
+@attribute [AllowAnonymous]
+@using System.Diagnostics
+
+<PageTitle>Erreur · PulseAdmin</PageTitle>
+
+<section class="panel narrow">
+    <h1>Erreur</h1>
+    <p class="dim">La requête a échoué. La base d'usage est-elle joignable ?</p>
+    @if (RequestId is not null)
+    {
+        <p class="faint">Requête <code>@RequestId</code></p>
+    }
+</section>
+
+@code {
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+
+    private string? RequestId => Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
+}

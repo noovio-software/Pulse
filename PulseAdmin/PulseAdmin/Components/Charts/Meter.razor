@@ -1,0 +1,18 @@
+@using System.Globalization
+<div class="meter" title="@Label : @Labels.Percent(Ratio, 1)">
+    <div class="meter-head">
+        <span>@Label</span>
+        <strong>@Labels.Percent(Ratio)</strong>
+    </div>
+    <span class="meter-track"><span class="barlist-bar seq" style="width:@(((Ratio ?? 0) * 100).ToString("0.##", CultureInfo.InvariantCulture))%"></span></span>
+    @if (Hint is not null)
+    {
+        <span class="kpi-hint">@Hint</span>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public string Label { get; set; } = "";
+    [Parameter, EditorRequired] public double? Ratio { get; set; }
+    [Parameter] public string? Hint { get; set; }
+}

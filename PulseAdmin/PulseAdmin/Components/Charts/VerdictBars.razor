@@ -1,0 +1,42 @@
+@using System.Globalization
+@if (Areas.Count == 0)
+{
+    <p class="empty">Aucune analyse aboutie sur la période.</p>
+}
+else
+{
+    <ul class="legend">
+        <li><i class="swatch status-good"></i>✓ Bon</li>
+        <li><i class="swatch status-warn"></i>! À améliorer</li>
+        <li><i class="swatch status-bad"></i>✕ Problème</li>
+    </ul>
+    <ul class="verdicts">
+        @foreach (var area in Areas)
+        {
+            <li>
+                <span class="verdict-label">@Labels.Area(area.Area)</span>
+                <span class="verdict-track">
+                    @Part(area.Good, area.Total, "status-good", "✓", "bon")
+                    @Part(area.Improve, area.Total, "status-warn", "!", "à améliorer")
+                    @Part(area.Problem, area.Total, "status-bad", "✕", "problème")
+                </span>
+                <span class="verdict-value">@Labels.Percent((double)area.Good / area.Total) ✓</span>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<AreaVerdicts> Areas { get; set; } = [];
+
+    private static RenderFragment Part(int count, int total, string css, string icon, string name) => __builder =>
+    {
+        if (count == 0)
+        {
+            return;
+        }
+
+        var ratio = (double)count / total;
+        <span class="verdict-seg @css" style="width:@((ratio * 100).ToString("0.##", CultureInfo.InvariantCulture))%" title="@count @name (@Labels.Percent(ratio))">@(ratio >= 0.12 ? $"{icon} {Labels.Percent(ratio)}" : "")</span>
+    };
+}

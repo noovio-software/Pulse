@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Noovio.Pulse.Infrastructure\Noovio.Pulse.Infrastructure.csproj" />
+    <ProjectReference Include="..\Noovio.Pulse.Usage\Noovio.Pulse.Usage.csproj" />
   </ItemGroup>
 
 </Project>

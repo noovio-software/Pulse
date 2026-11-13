@@ -9,7 +9,8 @@ It is not deployed on its own: each application references it and adds its host,
 | `Noovio.Pulse.Application` | Domain | Contracts, ingestion, aggregation, character analysis |
 | `Noovio.Pulse.Infrastructure` | Application | Raider.io and Blizzard clients, abstract `PulseDbContext`, stores, cache, `PulseWorker` (worker host) |
 | `Noovio.Pulse.Web` | Infrastructure | Razor Class Library: pages, components, Battle.net sign-in, `pulse.css`, `PulseSite` (site host) |
-| `Noovio.Pulse.Tests` | Infrastructure | Rules: aggregation, analysis, healer and DPS roles |
+| `Noovio.Pulse.Usage` | nothing | Usage statistics: `BenchEvent`, the shared `pulseusage` database and its migrations, `IUsageRecorder` (written by the sites), `UsageReport` (read by [PulseAdmin](../PulseAdmin/README.md)) |
+| `Noovio.Pulse.Tests` | Infrastructure, Usage | Rules: aggregation, analysis, healer and DPS roles, usage report |
 
 The layers are separate projects so that the rules stay free of EF Core and ASP.NET, as they were in FrontPulse.
 

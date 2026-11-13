@@ -1,0 +1,17 @@
+# PostgreSQL de développement pour la base d'usage, aligné sur appsettings.Development.json (PulseAdmin et les trois sites).
+# Port 5433 : le 5432 est pris par la base de FrontPulse, LifePulse ou BurstPulse.
+#   docker compose -f PulseAdmin/docker-compose.yml up -d
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: pulseusage
+      POSTGRES_USER: pulseusage
+      POSTGRES_PASSWORD: pulseusage
+    ports:
+      - "5433:5432"
+    volumes:
+      - pulseusage-pg:/var/lib/postgresql/data
+
+volumes:
+  pulseusage-pg:

@@ -1,0 +1,75 @@
+@using System.Globalization
+@if (Series.Count == 0 || Series.All(s => s.Values.All(v => v == 0)))
+{
+    <p class="empty">Aucune donnée sur la période.</p>
+}
+else
+{
+    var count = XLabels.Count;
+    var max = ColumnChart.NiceMax(Series.Max(s => s.Values.Max()));
+    <div class="linechart">
+        <svg viewBox="0 0 @Width @Height" role="img" aria-label="@AriaLabel">
+            @for (var g = 0; g <= 4; g++)
+            {
+                var y = Y(max * g / 4, max);
+                <line class="grid" x1="@Left" x2="@(Width - Right)" y1="@F(y)" y2="@F(y)" />
+                @Text(Left - 6, y + 4, "end", Labels.Number(max * g / 4))
+            }
+            @for (var i = 0; i < count; i += LabelEvery)
+            {
+                @Text(X(i, count), Height - 6, "middle", XLabels[i])
+            }
+            @foreach (var series in Series)
+            {
+                <polyline class="line @series.CssClass" points="@string.Join(' ', series.Values.Select((v, i) => $"{F(X(i, count))},{F(Y(v, max))}"))" />
+                @if (Series.Count <= 4)
+                {
+                    // Étiquette directe au point le plus haut : l'identité ne repose pas que sur la couleur.
+                    var peak = series.Values.Select((v, i) => (v, i)).MaxBy(p => p.v);
+                    @if (peak.v > 0)
+                    {
+                        <circle class="dot @series.CssClass" cx="@F(X(peak.i, count))" cy="@F(Y(peak.v, max))" r="4" />
+                    }
+                }
+            }
+            @* Une zone de survol par abscisse : l'infobulle donne toutes les séries à cet instant. *@
+            @for (var i = 0; i < count; i++)
+            {
+                var step = (Width - Left - Right) / (double)Math.Max(1, count - 1);
+                <rect class="hit" x="@F(X(i, count) - step / 2)" y="@Top" width="@F(step)" height="@(Height - Top - Bottom)">
+                    <title>@XLabels[i] — @string.Join(" · ", Series.Select(s => $"{s.Name} : {Labels.Number(s.Values[i])}"))</title>
+                </rect>
+            }
+        </svg>
+        <ul class="legend">
+            @foreach (var series in Series)
+            {
+                <li><i class="swatch @series.CssClass"></i>@series.Name <span class="faint">(pic @Labels.Number(series.Values.Max()))</span></li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    private const int Width = 760;
+    private const int Height = 240;
+    private const int Left = 44;
+    private const int Right = 12;
+    private const int Top = 10;
+    private const int Bottom = 24;
+
+    [Parameter, EditorRequired] public IReadOnlyList<string> XLabels { get; set; } = [];
+    [Parameter, EditorRequired] public IReadOnlyList<Series> Series { get; set; } = [];
+    [Parameter] public int LabelEvery { get; set; } = 3;
+    [Parameter] public string AriaLabel { get; set; } = "";
+
+    private static double X(int i, int count) => Left + (Width - Left - Right) * (count <= 1 ? 0.5 : i / (double)(count - 1));
+
+    private static double Y(double value, double max) => Top + (Height - Top - Bottom) * (1 - value / max);
+
+    private static string F(double value) => value.ToString("0.#", CultureInfo.InvariantCulture);
+
+    /// <summary>Un &lt;text&gt; SVG : Razor réserve la balise &lt;text&gt; à son propre usage.</summary>
+    private static MarkupString Text(double x, double y, string anchor, string content) =>
+        new($"<text class=\"tick\" x=\"{F(x)}\" y=\"{F(y)}\" text-anchor=\"{anchor}\">{System.Net.WebUtility.HtmlEncode(content)}</text>");
+}

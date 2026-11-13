@@ -7,6 +7,7 @@ using Noovio.Pulse.Application.Abstractions;
 using Noovio.Pulse.Domain.Roles;
 using Noovio.Pulse.Infrastructure;
 using Noovio.Pulse.Infrastructure.Persistence;
+using Noovio.Pulse.Usage;
 using Noovio.Pulse.Web.Auth;
 using Noovio.Pulse.Web.Components;
 
@@ -34,6 +35,8 @@ public static class PulseSite
         builder.Services.AddPulseInfrastructure<TContext>(builder.Configuration, pulse);
         builder.Services.AddBattleNetAuthentication(builder.Configuration, pulse);
         builder.Services.AddPulseAdmin(builder.Configuration);
+        // Chaque bench est écrit dans la base d'usage commune, lue par PulseAdmin (sans chaîne PulseUsage : rien n'est écrit).
+        builder.Services.AddPulseUsageRecording(builder.Configuration);
         builder.Services.AddSingleton<RefreshSchedule>();
 
         // Clés de chiffrement du cookie de connexion : en prod, dans un dossier persistant (sinon chaque redémarrage,

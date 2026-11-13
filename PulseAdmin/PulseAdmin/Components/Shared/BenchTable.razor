@@ -1,0 +1,49 @@
+@inject TimeProvider Time
+
+@if (Items.Count == 0)
+{
+    <p class="empty">Aucun bench.</p>
+}
+else
+{
+    <div class="table-wrap">
+        <table class="table compact">
+            <thead>
+                <tr>
+                    <th>Quand</th><th>App</th><th>Personnage</th><th>Spé</th><th>Issue</th>
+                    <th class="num">ilvl</th><th class="num">Écart</th><th class="num">Note</th><th class="num">M+</th><th class="num">Durée</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Items)
+                {
+                    <tr>
+                        <td title="@Labels.DateTime(e.OccurredAtUtc)"><a href="/benchs/@e.Id">@Labels.Ago(e.OccurredAtUtc, Time.GetUtcNow())</a></td>
+                        <td><i class="swatch @Labels.AppClass(e.App)"></i>@e.App</td>
+                        <td>
+                            <i class="swatch" style="background:@Labels.ClassColor(e.ClassId)"></i>@e.CharacterName
+                            <span class="faint">@e.RealmName (@e.Region.ToUpperInvariant())</span>
+                            <a class="faint" href="@Filter.Url("/benchs", ("compte", e.BattleNetId.ToString()))" title="Tous les benchs de ce compte">#</a>
+                        </td>
+                        <td>@(e.SpecName ?? e.ClassName)</td>
+                        <td>
+                            <span class="badge @(e.Status == BenchStatus.Ok ? "ok" : "ko")">@Labels.Status(e.Status)</span>
+                            @if (e.FromCache) { <span class="badge muted" title="Servi par le cache de 10 minutes">cache</span> }
+                            @if (e.Forced) { <span class="badge muted" title="Bouton « Actualiser »">actualisé</span> }
+                        </td>
+                        <td class="num">@Labels.Number(e.ItemLevel, 1)</td>
+                        <td class="num @(e.ItemLevel - e.TopItemLevel < 0 ? "neg" : "pos")">@Labels.Signed(e.ItemLevel - e.TopItemLevel, 1)</td>
+                        <td class="num">@(e.Score?.ToString() ?? "—")</td>
+                        <td class="num">@Labels.Number(e.MythicScore, 0)</td>
+                        <td class="num">@(e.FromCache ? "—" : Labels.Duration(e.DurationMs))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<BenchEvent> Items { get; set; } = [];
+    [Parameter, EditorRequired] public StatsFilter Filter { get; set; } = default!;
+}

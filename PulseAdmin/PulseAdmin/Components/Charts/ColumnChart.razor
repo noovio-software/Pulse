@@ -1,0 +1,59 @@
+@using System.Globalization
+@if (Columns.Count == 0 || Columns.All(c => c.Total == 0))
+{
+    <p class="empty">Aucune donnée sur la période.</p>
+}
+else
+{
+    var max = NiceMax(Columns.Max(c => c.Total));
+    var every = Math.Max(1, (int)Math.Ceiling(Columns.Count / (double)MaxLabels));
+    <div class="columns" style="--cols:@Columns.Count">
+        <div class="columns-axis">
+            <span>@Labels.Number(max)</span>
+            <span>@Labels.Number(max / 2)</span>
+            <span>0</span>
+        </div>
+        <div class="columns-plot">
+            @for (var i = 0; i < Columns.Count; i++)
+            {
+                var column = Columns[i];
+                <div class="column" title="@column.Title">
+                    <div class="column-stack">
+                        @foreach (var segment in column.Segments.Where(s => s.Value > 0))
+                        {
+                            <span class="column-seg @segment.CssClass" style="height:@((segment.Value / max * 100).ToString("0.###", CultureInfo.InvariantCulture))%"></span>
+                        }
+                    </div>
+                    <span class="column-label">@(i % every == 0 ? column.Label : "")</span>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<ColumnData> Columns { get; set; } = [];
+
+    /// <summary>Au-delà, une étiquette sur deux, trois… pour ne pas les chevaucher.</summary>
+    [Parameter] public int MaxLabels { get; set; } = 16;
+
+    /// <summary>Haut d'échelle arrondi (1, 2, 5 × 10ⁿ) : des graduations lisibles.</summary>
+    internal static double NiceMax(double value)
+    {
+        if (value <= 0)
+        {
+            return 1;
+        }
+
+        var magnitude = Math.Pow(10, Math.Floor(Math.Log10(value)));
+        foreach (var step in new[] { 1, 2, 2.5, 5, 10 })
+        {
+            if (step * magnitude >= value)
+            {
+                return step * magnitude;
+            }
+        }
+
+        return 10 * magnitude;
+    }
+}

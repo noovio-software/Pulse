@@ -1,0 +1,38 @@
+@using System.Globalization
+@{
+    var max = 0;
+    foreach (var v in Values)
+    {
+        max = Math.Max(max, v);
+    }
+}
+@if (max == 0)
+{
+    <p class="empty">Aucune donnée sur la période.</p>
+}
+else
+{
+    <div class="heatmap">
+        <span></span>
+        @for (var h = 0; h < 24; h++)
+        {
+            <span class="heat-hour">@(h % 3 == 0 ? $"{h}h" : "")</span>
+        }
+        @for (var d = 0; d < 7; d++)
+        {
+            <span class="heat-day">@Labels.Weekdays[d]</span>
+            @for (var h = 0; h < 24; h++)
+            {
+                var v = Values[d, h];
+                // Teinte séquentielle unique : de la surface (0) au bleu plein (le maximum).
+                var mix = v == 0 ? 0 : 18 + 82 * v / (double)max;
+                <span class="heat-cell" style="--mix:@(mix.ToString("0", CultureInfo.InvariantCulture))%" title="@Labels.Weekdays[d] @(h)h–@(h + 1)h : @v bench(s)"></span>
+            }
+        }
+    </div>
+    <p class="caption">Plus la case est foncée, plus il y a de benchs (max @max sur un créneau). Heure de Paris.</p>
+}
+
+@code {
+    [Parameter, EditorRequired] public int[,] Values { get; set; } = new int[7, 24];
+}

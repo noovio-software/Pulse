@@ -6,7 +6,9 @@ using Noovio.Pulse.Application.Abstractions;
 using Noovio.Pulse.Application.Analysis;
 using Noovio.Pulse.Domain;
 using Noovio.Pulse.Domain.Entities;
+using Noovio.Pulse.Usage;
 using Noovio.Pulse.Web.Auth;
+using Noovio.Pulse.Web.Usage;
 
 namespace Noovio.Pulse.Web.Components.Pages;
 
@@ -22,6 +24,8 @@ public partial class CharacterReport
     [Inject] private CharacterAnalysisService Analyzer { get; set; } = default!;
     [Inject] private IMemoryCache Cache { get; set; } = default!;
     [Inject] private IJSRuntime JS { get; set; } = default!;
+    [Inject] private IUsageRecorder Benches { get; set; } = default!;
+    [Inject] private TimeProvider Time { get; set; } = default!;
 
     [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; } = default!;
 
@@ -76,7 +80,8 @@ public partial class CharacterReport
         error = null;
 
         var user = (await AuthenticationState).User;
-        character = user.BattleNetId() is { } bnetId ? await Accounts.GetCharacterAsync(bnetId, Id, CancellationToken.None) : null;
+        var bnetId = user.BattleNetId();
+        character = bnetId is { } id ? await Accounts.GetCharacterAsync(id, Id, CancellationToken.None) : null;
         if (character is null)
         {
             // Inexistant ou appartenant à un autre compte : même réponse, pour ne rien divulguer.
@@ -92,10 +97,15 @@ public partial class CharacterReport
             Cache.Remove(key);
         }
 
+        var started = Time.GetTimestamp();
+        var fromCache = true;
+        AnalysisResult? result = null;
+        string? failure = null;
         try
         {
-            var result = await Cache.GetOrCreateAsync(key, async entry =>
+            result = await Cache.GetOrCreateAsync(key, async entry =>
             {
+                fromCache = false;
                 var computed = await Analyzer.AnalyzeAsync(character, requested, CancellationToken.None);
                 // Un échec (personnage introuvable…) n'est pas gardé en cache : il peut se résoudre au prochain essai.
                 entry.AbsoluteExpirationRelativeToNow = computed.Status == AnalysisStatus.Ok ? CacheDuration : TimeSpan.FromSeconds(1);
@@ -113,8 +123,11 @@ public partial class CharacterReport
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
+            failure = ex.GetType().Name;
             error = "Blizzard ou Raider.io ne répond pas pour le moment. Réessaie dans un instant.";
         }
+
+        Benches.Record(BenchEvents.Create(Site, bnetId!.Value, character, result, failure, fromCache, force, Time.GetElapsedTime(started), Time.GetUtcNow()));
 
         loading = false;
         refreshTooltips = true;

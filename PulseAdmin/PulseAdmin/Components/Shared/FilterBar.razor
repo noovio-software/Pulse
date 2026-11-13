@@ -1,0 +1,101 @@
+@* Formulaire GET : chaque combinaison de filtres a son adresse. Rendu statique, sans script. *@
+<form class="filters" method="get" action="@Path">
+    <label>
+        <span>Période</span>
+        <select name="periode">
+            @foreach (var (key, label) in StatsFilter.Periods)
+            {
+                <option value="@key" selected="@(Filter.Period == key)">@label</option>
+            }
+        </select>
+    </label>
+    <label>
+        <span>Du</span>
+        <input type="date" name="du" value="@Filter.From?.ToString("yyyy-MM-dd")" />
+    </label>
+    <label>
+        <span>Au</span>
+        <input type="date" name="au" value="@Filter.To?.ToString("yyyy-MM-dd")" />
+    </label>
+    <label>
+        <span>Application</span>
+        <select name="app">
+            <option value="">Toutes</option>
+            @foreach (var app in UsageReport.AppNames)
+            {
+                <option value="@app" selected="@(Filter.App == app)">@app (@Labels.AppRole(app))</option>
+            }
+        </select>
+    </label>
+    <label>
+        <span>Classe</span>
+        <select name="classe">
+            <option value="">Toutes</option>
+            @foreach (var (id, name) in Options.Classes)
+            {
+                <option value="@id" selected="@(Filter.ClassId == id)">@name</option>
+            }
+        </select>
+    </label>
+    <label>
+        <span>Spécialisation</span>
+        <select name="spe">
+            <option value="">Toutes</option>
+            @foreach (var spec in Options.Specs.DistinctBy(s => s.Slug))
+            {
+                <option value="@spec.Slug" selected="@(Filter.Spec == spec.Slug)">@spec.Name — @spec.ClassName</option>
+            }
+        </select>
+    </label>
+    <label>
+        <span>Région</span>
+        <select name="region">
+            <option value="">Toutes</option>
+            @foreach (var region in Options.Regions)
+            {
+                <option value="@region" selected="@(Filter.Region == region)">@region.ToUpperInvariant()</option>
+            }
+        </select>
+    </label>
+    <label>
+        <span>Issue</span>
+        <select name="statut">
+            <option value="">Toutes</option>
+            @foreach (var status in new[] { BenchStatus.Ok, BenchStatus.CharacterNotFound, BenchStatus.NoMeta, BenchStatus.NoRoleSpec, BenchStatus.Error })
+            {
+                <option value="@status" selected="@(Filter.Status == status)">@Labels.Status(status)</option>
+            }
+        </select>
+    </label>
+    @if (ShowSearch)
+    {
+        <label>
+            <span>Perso ou royaume</span>
+            <input type="search" name="q" value="@Filter.Search" placeholder="Nom…" />
+        </label>
+    }
+    @if (Filter.User is { } user)
+    {
+        <input type="hidden" name="compte" value="@user" />
+    }
+    <label class="check" title="Par défaut, les moyennes de profil ne retiennent que le dernier bench abouti de chaque perso et spé.">
+        <input type="checkbox" name="tous" value="1" checked="@Filter.AllBenches" />
+        <span>Moyennes sur tous les benchs</span>
+    </label>
+    <div class="filter-actions">
+        <button class="btn" type="submit">Appliquer</button>
+        <a class="btn btn-ghost" href="@Path">Réinitialiser</a>
+        <a class="btn btn-ghost" href="@Filter.Url("/export.csv")">Export CSV</a>
+    </div>
+    @if (Filter.User is { } shown)
+    {
+        <p class="filter-note">Compte Battle.net <code>@shown</code> uniquement · <a href="@Filter.Url(Path, ("compte", null))">retirer</a></p>
+    }
+</form>
+
+@code {
+    [Parameter, EditorRequired] public StatsFilter Filter { get; set; } = default!;
+    [Parameter, EditorRequired] public FilterOptions Options { get; set; } = default!;
+    [Parameter, EditorRequired] public string Path { get; set; } = "/";
+    [Parameter] public bool ShowSearch { get; set; }
+}

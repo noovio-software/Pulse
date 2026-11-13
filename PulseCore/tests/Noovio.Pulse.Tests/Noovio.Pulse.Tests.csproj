@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Noovio.Pulse.Infrastructure\Noovio.Pulse.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Noovio.Pulse.Usage\Noovio.Pulse.Usage.csproj" />
   </ItemGroup>
 
   <ItemGroup>

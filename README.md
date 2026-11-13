@@ -10,6 +10,7 @@ Solution `Pulse.sln`, one folder per application:
 | [`BurstPulse/`](BurstPulse/README.md) | BurstPulse, Mythic+ DPS meta (top 100 per spec) |
 | [`PulseCore/`](PulseCore/README.md) | Engine shared by FrontPulse, LifePulse and BurstPulse (not deployed on its own) |
 | [`LandingPagePulse/`](LandingPagePulse/README.md) | Noovio presentation page, gives access to the four tools (https://www.noovio.fr) |
+| [`PulseAdmin/`](PulseAdmin/README.md) | Private usage statistics of the three meta sites (not linked from the Noovio page) |
 
 ## License
 

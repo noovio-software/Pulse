@@ -1,0 +1,62 @@
+name: PulseAdmin
+
+# Déploiement en prod sur un tag, ex. : git tag prod-pulseadmin-1.0.0 && git push origin prod-pulseadmin-1.0.0
+on:
+  push:
+    tags:
+      - 'prod-pulseadmin-[0-9]+.[0-9]+.[0-9]+'
+
+# Un seul déploiement à la fois : un tag poussé pendant un déploiement attend la fin du précédent.
+concurrency:
+  group: pulseadmin-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Extract version from tag
+        run: |
+          TAG_NAME="${GITHUB_REF##*/}"
+          VERSION="${TAG_NAME#prod-pulseadmin-}"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "::notice title=Build version::$VERSION"
+
+      # Les tests couvrent l'agrégation des statistiques (UsageReportTests).
+      - name: Tests
+        run: dotnet test PulseCore/tests/Noovio.Pulse.Tests -c Release
+
+      - name: Clean deploy directory
+        run: rm -rf deploy
+
+      # Pas de -p:Version : la variable VERSION posée ci-dessus est lue par le .csproj.
+      - name: Dotnet Publish
+        run: dotnet publish PulseAdmin/PulseAdmin/PulseAdmin.csproj -c Release -o deploy
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.REMOTE_KEY }}
+          known_hosts: 'pulseadmin-githubactions-known-hosts'
+
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy with rsync
+        run: rsync -avz --delete deploy/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_TARGET_PULSEADMIN }}
+
+      # Le site applique les migrations de la base d'usage au démarrage ; is-active échoue si le service n'a pas redémarré.
+      - name: Restart service
+        run: ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'sudo systemctl restart kestrel-pulseadmin.service && sleep 6 && systemctl is-active kestrel-pulseadmin.service'
+
+      # Sans session, la page d'accueil renvoie vers Battle.net (302) : on vérifie la page d'accès, publique.
+      - name: Smoke test
+        run: curl -fsS --retry 6 --retry-delay 5 --retry-all-errors -o /dev/null -w "HTTP %{http_code}\n" https://pulseadmin.noovio.fr/acces-refuse
