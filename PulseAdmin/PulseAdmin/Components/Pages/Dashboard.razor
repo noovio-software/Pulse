@@ -5,6 +5,15 @@
 
 <PageTitle>Tableau de bord · PulseAdmin</PageTitle>
 
+@* En rendu statique, un premier rendu a lieu pendant le chargement : rien à afficher encore. *@
+@if (report is null || options is null)
+{
+    <p class="empty">Chargement…</p>
+}
+else
+{
+<div class="content">
+
 <div class="page-head">
     <div>
         <h1>Usage des benchs</h1>
@@ -236,13 +245,15 @@ else
         <BenchTable Items="report.Recent.Take(20).ToList()" Filter="filter" />
     </section>
 }
+</div>
+}
 
 @code {
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
     private StatsFilter filter = default!;
-    private FilterOptions options = default!;
-    private UsageReport report = default!;
+    private FilterOptions? options;
+    private UsageReport? report;
     private DateTimeOffset from;
     private DateTimeOffset to;
     private List<ColumnData> dailyColumns = [];

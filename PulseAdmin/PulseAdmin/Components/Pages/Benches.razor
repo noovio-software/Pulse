@@ -4,6 +4,15 @@
 
 <PageTitle>Benchs · PulseAdmin</PageTitle>
 
+@* En rendu statique, un premier rendu a lieu pendant le chargement : rien à afficher encore. *@
+@if (benches is null || options is null)
+{
+    <p class="empty">Chargement…</p>
+}
+else
+{
+<div class="content">
+
 <div class="page-head">
     <div>
         <h1>Benchs</h1>
@@ -31,13 +40,15 @@
         </nav>
     }
 </section>
+</div>
+}
 
 @code {
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
     private StatsFilter filter = default!;
-    private FilterOptions options = default!;
-    private BenchPage benches = default!;
+    private FilterOptions? options;
+    private BenchPage? benches;
 
     protected override async Task OnInitializedAsync()
     {
