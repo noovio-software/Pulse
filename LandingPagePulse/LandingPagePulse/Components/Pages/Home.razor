@@ -4,7 +4,7 @@
 
 <HeadContent>
     <link rel="canonical" href="https://www.noovio.fr/" />
-    <meta name="description" content="Noovio réunit quatre outils World of Warcraft : AltPulse pour suivre tous tes personnages dans une seule grille, FrontPulse, LifePulse et BurstPulse pour jouer ton tank, ton soigneur ou ton DPS comme le top 100 en Mythique+." />
+    <meta name="description" content="Noovio réunit quatre outils World of Warcraft : AltPulse pour suivre tous tes personnages dans une seule grille, FrontPulse, LifePulse et BurstPulse pour jouer ton tank, ton soigneur ou ton DPS comme le top 100 en Mythique+, et l'addon NoovioPulse pour les nourrir depuis le jeu." />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Noovio" />
     <meta property="og:locale" content="fr_FR" />
@@ -215,6 +215,94 @@
                 <span class="door-note">Méta recalculée toutes les 6 h, comparaison via Battle.net</span>
             </footer>
         </article>
+    </section>
+
+    @* --- L'addon NoovioPulse : il nourrit les quatre outils depuis le jeu ------------------------------ *@
+    <section class="panel addon tool-addon" aria-labelledby="addon-title">
+        <div class="addon-text">
+            <header class="door-head">
+                <span class="tool-sigil addon-sigil" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" width="34" height="34" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="26" height="26" rx="7" stroke-width="2" />
+                        <path d="M7 17h5l2-6 4 11 2.5-7H25" stroke-width="2.2" />
+                    </svg>
+                </span>
+                <span class="door-wordmark">
+                    <span class="door-name">NoovioPulse</span>
+                    <span class="door-by">l'addon World of Warcraft</span>
+                </span>
+                <span class="door-badge">Nouveau · gratuit</span>
+            </header>
+            <h2 class="door-title" id="addon-title">Ton personnage tel qu'il est, à la minute</h2>
+            <p class="door-lead">
+                Tape <code>/noovio</code> en jeu, copie la chaîne, colle-la sur l'outil. Pas besoin d'attendre que Blizzard
+                mette ton profil à jour, ni de te connecter, et l'analyse voit enfin ce que Battle.net ignore :
+                tes sacs et ta Grande Chambre forte.
+            </p>
+
+            <ul class="addon-exports">
+                <li>
+                    <strong>Mon personnage</strong>
+                    <span>
+                        Équipement, talents, sacs, coffre et consommables, analysés face au top 100 sur
+                        <a class="tool-front" href="frontpulse">FrontPulse</a>, <a class="tool-life" href="lifepulse">LifePulse</a>
+                        ou <a class="tool-burst" href="burstpulse">BurstPulse</a>.
+                    </span>
+                </li>
+                <li>
+                    <strong>Mes alts</strong>
+                    <span>
+                        Coffre, clés de la semaine et clé en poche de tous tes personnages, en un seul collage sur
+                        <a class="tool-alt" href="altpulse">AltPulse</a>.
+                    </span>
+                </li>
+            </ul>
+
+            <footer class="door-foot">
+                <a class="door-link" href="addon">
+                    Télécharger l'addon
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14" /></svg>
+                </a>
+                <span class="door-note">Dossier à déposer dans Interface\AddOns · bientôt sur CurseForge</span>
+            </footer>
+        </div>
+
+        @* Aperçu : la chaîne copiée en jeu, puis le bloc « Sacs et coffre » du rapport (valeurs fictives). *@
+        <div class="preview addon-preview" aria-hidden="true">
+            <span class="preview-tag">Exemple</span>
+            <div class="addon-string">
+                <span class="addon-step">1</span>
+                <code>/noovio</code>
+                <span class="addon-arrow">→</span>
+                <code class="addon-code">NP1:D:eJzFWNtu4zYQ…</code>
+            </div>
+            <div class="addon-string">
+                <span class="addon-step">2</span>
+                <span>Collé sur l'outil, le rapport ajoute :</span>
+            </div>
+            <ul class="addon-items">
+                <li>
+                    <span>Bottes du coffre <small>Héros 2/6</small></span>
+                    <b>330 → 346</b>
+                    <i class="is-good">+22 au max</i>
+                </li>
+                <li>
+                    <span>Jambières des sacs <small>Héros 1/6</small></span>
+                    <b>327 → 346</b>
+                    <i class="is-good">+28 au max</i>
+                </li>
+                <li>
+                    <span>Flacon <small>×3</small></span>
+                    <b>prêt</b>
+                    <i class="is-good">✓</i>
+                </li>
+                <li>
+                    <span>Potion de combat <small>×2</small></span>
+                    <b>stock bas</b>
+                    <i class="is-warn">!</i>
+                </li>
+            </ul>
+        </div>
     </section>
 
     @* --- Lequel ouvrir ? -------------------------------------------------------------------------- *@

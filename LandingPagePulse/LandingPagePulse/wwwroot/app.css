@@ -69,6 +69,17 @@
     --on-accent: #FFFFFF;
 }
 
+/* L'addon NoovioPulse sert les quatre outils : le violet de son icône, et les quatre couleurs dans ses dégradés. */
+.tool-addon {
+    --accent: #C4B5FD;
+    --accent-2: #A78BFA;
+    --accent-3: #4FA8F7;
+    --fill: #8B5CF6;
+    --fill-2: #6D28D9;
+    --glow: rgba(139, 92, 246, 0.4);
+    --on-accent: #FFFFFF;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body {
