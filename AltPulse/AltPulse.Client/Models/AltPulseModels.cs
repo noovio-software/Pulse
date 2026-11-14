@@ -79,6 +79,12 @@ public sealed record CharacterSnapshot
     public IReadOnlyList<RaidLockout> Raids { get; init; } = [];
     public IReadOnlyList<EquippedItem> Equipment { get; init; } = [];
 
+    /// <summary>Clé en poche : connue seulement par l'addon NoovioPulse.</summary>
+    public OwnedKeystone? Keystone { get; init; }
+
+    /// <summary>Dernière relecture en jeu par l'addon, quand ses données complètent celles des API.</summary>
+    public DateTimeOffset? AddonSyncedAtUtc { get; init; }
+
     public DateTimeOffset FetchedAtUtc { get; init; }
     public IReadOnlyList<string> Warnings { get; init; } = [];
 

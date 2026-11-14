@@ -49,6 +49,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Noovio.BurstPulse.Web", "Bu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Noovio.BurstPulse.Worker", "BurstPulse\src\Noovio.BurstPulse.Worker\Noovio.BurstPulse.Worker.csproj", "{1BCA1327-CAB8-4648-A90A-57F697FF751F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NoovioPulseAddon", "NoovioPulseAddon", "{6E2B9D41-7C3A-4F58-B0E9-1D4A8C2F7E63}"
+	ProjectSection(SolutionItems) = preProject
+		NoovioPulseAddon\README.md = NoovioPulseAddon\README.md
+		NoovioPulseAddon\NoovioPulse\NoovioPulse.toc = NoovioPulseAddon\NoovioPulse\NoovioPulse.toc
+		NoovioPulseAddon\NoovioPulse\Locales.lua = NoovioPulseAddon\NoovioPulse\Locales.lua
+		NoovioPulseAddon\NoovioPulse\Json.lua = NoovioPulseAddon\NoovioPulse\Json.lua
+		NoovioPulseAddon\NoovioPulse\Export.lua = NoovioPulseAddon\NoovioPulse\Export.lua
+		NoovioPulseAddon\NoovioPulse\UI.lua = NoovioPulseAddon\NoovioPulse\UI.lua
+		NoovioPulseAddon\NoovioPulse\Inventory.lua = NoovioPulseAddon\NoovioPulse\Inventory.lua
+		NoovioPulseAddon\NoovioPulse\Alts.lua = NoovioPulseAddon\NoovioPulse\Alts.lua
+		NoovioPulseAddon\NoovioPulse\Minimap.lua = NoovioPulseAddon\NoovioPulse\Minimap.lua
+		NoovioPulseAddon\art\icon.svg = NoovioPulseAddon\art\icon.svg
+		NoovioPulseAddon\art\header.svg = NoovioPulseAddon\art\header.svg
+		NoovioPulseAddon\art\card-character.svg = NoovioPulseAddon\art\card-character.svg
+		NoovioPulseAddon\art\card-alts.svg = NoovioPulseAddon\art\card-alts.svg
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

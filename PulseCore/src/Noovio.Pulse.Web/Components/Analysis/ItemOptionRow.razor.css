@@ -1,0 +1,37 @@
+.item-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(11, 14, 20, 0.55);
+    border: 1px solid var(--line);
+    min-width: 0;
+}
+.item-option.is-recommended {
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.item-icon .wow-icon { width: 40px; height: 40px; border-color: #a335ee; box-shadow: 0 0 0 1px rgba(163, 53, 238, 0.5); }
+
+.option-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.option-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; color: #c99bff; }
+.option-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.option-tags > span {
+    padding: 0 7px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 18px;
+    border: 1px solid var(--line);
+    color: var(--text-dim);
+}
+.ilvl-tag { font-variant-numeric: tabular-nums; color: var(--text) !important; }
+.max-tag { font-variant-numeric: tabular-nums; color: #c99bff !important; border-color: rgba(201, 155, 255, 0.35) !important; }
+.max-tag small { font-weight: 600; color: var(--text-faint); }
+.gain-tag { font-variant-numeric: tabular-nums; }
+.gain-tag.is-high { color: #34D399 !important; border-color: rgba(52, 211, 153, 0.35) !important; }
+.gain-tag.is-low { color: #F87171 !important; border-color: rgba(248, 113, 113, 0.5) !important; }
+.meta-tag { color: var(--accent-text) !important; border-color: color-mix(in srgb, var(--accent) 35%, transparent) !important; }
+.set-tag { color: #34D399 !important; border-color: rgba(52, 211, 153, 0.35) !important; }

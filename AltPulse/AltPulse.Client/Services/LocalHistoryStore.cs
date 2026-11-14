@@ -38,6 +38,7 @@ public sealed class LocalHistoryStore(IJSRuntime js)
 {
     private const string HistoryKey = "altpulse.history";
     private const string SettingsKey = "altpulse.settings";
+    private const string AddonKey = "altpulse.addon";
     private const int MaxEntries = 30;
 
     /// <summary>Clés utilisées avant le renommage en AltPulse, migrées à la première lecture.</summary>
@@ -73,6 +74,45 @@ public sealed class LocalHistoryStore(IJSRuntime js)
         return history;
     }
 
+    /// <summary>Ajoute en tête de l'historique les personnages importés depuis l'addon, le plus récent d'abord.</summary>
+    public async Task<List<HistoryEntry>> AddOrTouchAsync(IReadOnlyList<AddonCharacter> characters)
+    {
+        var history = await GetHistoryAsync();
+        var keys = characters.Select(c => c.Key).ToHashSet();
+        history.RemoveAll(h => keys.Contains(h.Key));
+        history.InsertRange(0, characters
+            .OrderByDescending(c => c.SavedAtUtc)
+            .Select(c => new HistoryEntry(c.Region, c.RealmSlug, c.RealmName, c.Name, c.ClassId, DateTimeOffset.UtcNow)));
+
+        if (history.Count > MaxEntries)
+        {
+            history.RemoveRange(MaxEntries, history.Count - MaxEntries);
+        }
+
+        await WriteAsync(HistoryKey, history);
+        return history;
+    }
+
+    /// <summary>Dernières données de l'addon par personnage (clé <see cref="CharacterKey"/>).</summary>
+    public async Task<Dictionary<string, AddonCharacter>> GetAddonAsync() =>
+        await ReadAsync<Dictionary<string, AddonCharacter>>(AddonKey) ?? [];
+
+    /// <summary>Fusionne un import de l'addon : pour chaque personnage, la relecture la plus récente l'emporte.</summary>
+    public async Task<Dictionary<string, AddonCharacter>> SaveAddonAsync(IEnumerable<AddonCharacter> characters)
+    {
+        var saved = await GetAddonAsync();
+        foreach (var character in characters)
+        {
+            if (!saved.TryGetValue(character.Key, out var existing) || existing.SavedAtUtc <= character.SavedAtUtc)
+            {
+                saved[character.Key] = character;
+            }
+        }
+
+        await WriteAsync(AddonKey, saved);
+        return saved;
+    }
+
     public async Task<List<HistoryEntry>> RemoveAsync(string key)
     {
         var history = await GetHistoryAsync();
@@ -81,7 +121,11 @@ public sealed class LocalHistoryStore(IJSRuntime js)
         return history;
     }
 
-    public async Task ClearAsync() => await js.InvokeVoidAsync("localStorage.removeItem", HistoryKey);
+    public async Task ClearAsync()
+    {
+        await js.InvokeVoidAsync("localStorage.removeItem", HistoryKey);
+        await js.InvokeVoidAsync("localStorage.removeItem", AddonKey);
+    }
 
     public async Task<AltPulseSettings> GetSettingsAsync() =>
         await ReadAsync<AltPulseSettings>(SettingsKey) ?? new AltPulseSettings();

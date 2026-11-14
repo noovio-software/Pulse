@@ -218,7 +218,11 @@ public static class CharacterAnalyzer
 
         // Les talents héroïques ne se comparent que si le personnage joue le même arbre que le top.
         var sameHero = loadout.HeroTree is not null && loadout.HeroTree == topHero?.Name;
-        bool Comparable(TalentPickRate t) => t.Tree != TalentTree.Hero || sameHero;
+        // L'API compte aussi des talents absents de l'arbre de la spécialisation : nœuds offerts aux autres spécialisations
+        // de la classe (trois « Explosion de lave » pour le chaman), rangs d'un même nœud, nœuds techniques sans nom.
+        // Personne ne peut les choisir : seuls les talents de l'arbre se comparent.
+        var inTree = meta.TalentTree?.Sections.SelectMany(s => s.Nodes).SelectMany(n => n.Choices).Select(c => c.TalentId).ToHashSet();
+        bool Comparable(TalentPickRate t) => (t.Tree != TalentTree.Hero || sameHero) && (inTree is not { Count: > 0 } || inTree.Contains(t.TalentId));
 
         var missing = meta.Talents.Where(t => t.Share >= CoreShare && Comparable(t) && !selected.Contains((t.Tree, t.TalentId))).ToList();
         var shares = meta.Talents.ToDictionary(t => (t.Tree, t.TalentId));

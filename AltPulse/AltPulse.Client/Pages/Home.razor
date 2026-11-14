@@ -29,6 +29,13 @@
             <strong>@Ui.Countdown(season.NextResetUtc)</strong>
         </span>
     }
+    <button class="btn btn-ghost btn-addon" type="button" @onclick="OpenAddon" disabled="@(!ready)" aria-label="Mettre à jour depuis l'addon NoovioPulse"
+            title="Coffre, clés et clé en poche de tous tes alts, lus en jeu par l'addon NoovioPulse">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M3 12h4l2-5 4 10 2-5h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="btn-search-label">MàJ depuis l'addon</span>
+    </button>
     <button class="btn btn-primary btn-search" type="button" @onclick="OpenSearch" disabled="@(!ready)" aria-label="Rechercher un personnage">
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
             <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.4" />
@@ -105,6 +112,51 @@
 </div>
 }
 
+@if (addonOpen)
+{
+<div class="modal-backdrop" @onclick="CloseAddon">
+<section class="modal panel addon-modal" @onclick:stopPropagation @onkeydown="OnAddonKeyDown"
+         role="dialog" aria-modal="true" aria-labelledby="addon-title">
+    <header class="modal-head">
+        <div>
+            <h2 id="addon-title" class="title">Mise à jour depuis l'addon</h2>
+            <p class="subtitle">Grande Chambre forte, clés de la semaine et clé en poche de tous tes alts, tels qu'en jeu.</p>
+        </div>
+        <button type="button" class="btn btn-ghost close" @onclick="CloseAddon" aria-label="Fermer">✕</button>
+    </header>
+
+    <ol class="addon-steps">
+        <li><span class="step-num">1</span><div><strong>Installe l'addon NoovioPulse</strong><small>Puis connecte-toi une fois sur chaque alt : il retient leur avancement. <a href="@AddonDownloadUrl" target="_blank" rel="noopener">Télécharger</a></small></div></li>
+        <li><span class="step-num">2</span><div><strong>En jeu : /noovio, carte « Mes alts »</strong><small>La chaîne est sélectionnée : Ctrl+C.</small></div></li>
+        <li><span class="step-num">3</span><div><strong>Colle-la ci-dessous</strong><small>Les alts rejoignent la grille ; leurs données en jeu complètent raider.io.</small></div></li>
+    </ol>
+
+    <form class="addon-form" @onsubmit="ImportAddonAsync" @onsubmit:preventDefault>
+        <label class="field">
+            <span>Chaîne de l'addon</span>
+            <textarea @ref="addonInput" @bind="addonText" @bind:event="oninput" rows="5" spellcheck="false"
+                      placeholder="NP1:D:…" class="@(addonError is null ? "" : "invalid")"></textarea>
+        </label>
+        @if (addonError is not null)
+        {
+            <p class="alert">@addonError</p>
+        }
+        <div class="addon-actions">
+            <button class="btn btn-ghost" type="button" @onclick="CloseAddon">Annuler</button>
+            <button class="btn btn-primary" type="submit" disabled="@(importing || string.IsNullOrWhiteSpace(addonText))">
+                @(importing ? "Import…" : "Mettre à jour")
+            </button>
+        </div>
+    </form>
+</section>
+</div>
+}
+
+@if (addonMessage is not null)
+{
+    <div class="toast" role="status" @onclick="() => addonMessage = null">@addonMessage</div>
+}
+
 <main class="shell">
 @if (!ready)
 {
@@ -114,8 +166,11 @@ else if (columns.Count == 0)
 {
     <section class="panel empty-state">
         <h2>Aucun personnage suivi</h2>
-        <p>Lance une recherche : chaque personnage trouvé est mémorisé sur ce poste.</p>
-        <button class="btn btn-primary" type="button" @onclick="OpenSearch">Rechercher un personnage</button>
+        <p>Lance une recherche, ou importe tous tes alts d'un coup avec l'addon NoovioPulse : chaque personnage est mémorisé sur ce poste.</p>
+        <div class="empty-actions">
+            <button class="btn btn-primary" type="button" @onclick="OpenSearch">Rechercher un personnage</button>
+            <button class="btn btn-ghost" type="button" @onclick="OpenAddon">MàJ depuis l'addon</button>
+        </div>
     </section>
 }
 else

@@ -34,6 +34,20 @@ public interface ICharacterDetailsSource
     Task<CharacterDetails?> GetAsync(string region, string realmSlug, string name, WowSpec spec, CancellationToken ct);
 }
 
+/// <summary>
+/// Ce que l'addon ne peut pas lire en jeu, retrouvé par nom, royaume et région : portrait (Blizzard) et Mythique+ (Raider.io).
+/// Sert à compléter un import ; chaque partie peut manquer (personnage introuvable, service indisponible).
+/// </summary>
+public interface ICharacterExtrasSource
+{
+    Task<CharacterExtras> GetExtrasAsync(string region, string realmSlug, string name, CancellationToken ct);
+}
+
+public sealed record CharacterExtras(string? PortraitUrl, string? AvatarUrl, MythicPlusProfile? MythicPlus)
+{
+    public static readonly CharacterExtras None = new(null, null, null);
+}
+
 public sealed record CharacterDetails(
     string Name,
     string Region,

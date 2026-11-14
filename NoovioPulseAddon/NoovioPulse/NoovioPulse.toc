@@ -1,0 +1,23 @@
+## Interface: 120001, 120005, 120007, 120100, 120105, 120107
+## Title: |cff7c3aedNoovio|rPulse
+## Notes: Exporte ton personnage (équipement, talents, caractéristiques) vers FrontPulse, LifePulse et BurstPulse pour l'analyser face au top Mythique+.
+## Notes-frFR: Exporte ton personnage (équipement, talents, caractéristiques) vers FrontPulse, LifePulse et BurstPulse pour l'analyser face au top Mythique+.
+## Notes-enUS: Exports your character (gear, talents, stats) to FrontPulse, LifePulse and BurstPulse to compare it with the Mythic+ top players.
+## Author: Noovio
+## Version: @project-version@
+## X-Website: https://www.noovio.fr
+## X-License: AGPL-3.0-only
+## Category: Noovio
+## IconTexture: Interface\AddOns\NoovioPulse\Media\Icon
+## SavedVariables: NoovioPulseDB
+## AddonCompartmentFunc: NoovioPulse_OnAddonCompartmentClick
+## AddonCompartmentFuncOnEnter: NoovioPulse_OnAddonCompartmentEnter
+## AddonCompartmentFuncOnLeave: NoovioPulse_OnAddonCompartmentLeave
+
+Locales.lua
+Json.lua
+Export.lua
+Inventory.lua
+Alts.lua
+UI.lua
+Minimap.lua

@@ -1,0 +1,32 @@
+@page "/importer/{Key}"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>@(analysis?.Character.Name ?? "Analyse") · @Site.Name by Noovio</PageTitle>
+
+<TopBar Active="analysis?.Spec.Spec" />
+
+<main class="shell">
+    <a class="back-link" href="importer">‹ Nouvel import</a>
+
+@if (loading)
+{
+    <section class="panel empty-state">
+        <div class="spinner"></div>
+        <p>Analyse en cours : personnage exporté par l'addon, clés (Raider.io), méta du top…</p>
+    </section>
+}
+else if (error is not null)
+{
+    <section class="panel empty-state">
+        <h1>Analyse impossible</h1>
+        <p>@error</p>
+        <a class="btn" href="importer">Refaire un import</a>
+    </section>
+}
+else if (analysis is { } a)
+{
+    <AnalysisReport Analysis="a" BasePath="@($"importer/{Key}")" RealmName="@import?.Character?.Realm"
+                    Source="@SourceLabel" SourceTitle="@SourceTitle"
+                    OnRefresh="() => LoadAsync(force: true)" RefreshTitle="Recomparer cet export à la dernière méta (pour un personnage à jour, refais /noovio en jeu)" />
+}
+</main>

@@ -64,6 +64,12 @@ api.MapGet("/characters/{region}/{realm}/{name}", async (string region, string r
     return result.Character is null ? Results.NotFound(result) : Results.Ok(result);
 });
 
+api.MapPost("/addon", async (AddonImportRequest request, IAltPulseApi service, CancellationToken ct) =>
+{
+    var result = await service.ImportAddonAsync(request.Text, ct);
+    return result.Error is null ? Results.Ok(result) : Results.BadRequest(result);
+});
+
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

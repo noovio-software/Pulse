@@ -1,0 +1,73 @@
+@page "/importer"
+
+<PageTitle>Importer depuis l'addon · @Site.Name by Noovio</PageTitle>
+
+<TopBar />
+
+<main class="shell import-shell">
+    <section class="panel import-head">
+        <span class="eyebrow">Addon NoovioPulse</span>
+        <h1>Analyser un personnage depuis le jeu</h1>
+        <p class="import-lead">
+            L'addon lit ton personnage en jeu, à l'instant : équipement, gemmes, enchantements, talents et caractéristiques.
+            Pas besoin de te déconnecter pour que Blizzard mette son profil à jour, ni de compte Battle.net sur le site.
+        </p>
+
+        <ol class="import-steps">
+            <li>
+                <span class="step-number" aria-hidden="true">1</span>
+                <div>
+                    <strong>Installe l'addon</strong>
+                    <p>
+                        Télécharge <a href="@AddonInfo.DownloadUrl" target="_blank" rel="noopener">NoovioPulse</a>, puis dépose le dossier
+                        <code>NoovioPulse</code> dans <code>_retail_\Interface\AddOns</code>.
+                    </p>
+                </div>
+            </li>
+            <li>
+                <span class="step-number" aria-hidden="true">2</span>
+                <div>
+                    <strong>Exporte en jeu</strong>
+                    <p>Tape <code>/noovio</code> hors combat, dans la spécialisation à analyser. Aussi dans le menu des addons, sous la minicarte.</p>
+                </div>
+            </li>
+            <li>
+                <span class="step-number" aria-hidden="true">3</span>
+                <div>
+                    <strong>Copie, colle</strong>
+                    <p>La chaîne est déjà sélectionnée : <kbd>Ctrl</kbd> + <kbd>C</kbd> en jeu, puis <kbd>Ctrl</kbd> + <kbd>V</kbd> ci-dessous.</p>
+                </div>
+            </li>
+        </ol>
+    </section>
+
+    <section class="panel import-form">
+        <EditForm Model="Input!" FormName="import" OnSubmit="SubmitAsync" method="post">
+            <div class="import-label">
+                <label for="import-text">Chaîne NoovioPulse</label>
+                <span class="muted">commence par <code>NP1:</code></span>
+            </div>
+            <InputTextArea id="import-text" @bind-Value="Input!.Text" rows="7" spellcheck="false" autocomplete="off"
+                           class="@(error is null ? null : "is-invalid")" placeholder="Colle ici la chaîne copiée en jeu…"
+                           aria-describedby="import-hint" aria-invalid="@(error is not null)" />
+            @if (error is not null)
+            {
+                <p class="import-error" role="alert">
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9" /><path d="M12 8v5M12 16h.01" />
+                    </svg>
+                    @error
+                </p>
+            }
+            <div class="import-actions">
+                <p id="import-hint" class="muted">
+                    Le lien d'analyse obtenu reste valable @AddonInfo.Retention.TotalDays jours : tu peux le partager.
+                </p>
+                <button type="submit" class="btn btn-primary">
+                    <CompareIcon />
+                    Analyser
+                </button>
+            </div>
+        </EditForm>
+    </section>
+</main>

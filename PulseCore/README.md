@@ -32,6 +32,10 @@ The host's Web project sets `RequiresAspNetWebAssets` to `true`: its pages live 
 
 `PulseApp` also switches features on per application. `HasDungeonRoutes` (FrontPulse only) enables the Keystone.guru sync, the `/routes` pages and their links: see [the routes doc](docs/keystone-guru-routes.md). The `season_dungeons` table exists in every application's database, because the model is shared, but it stays empty elsewhere.
 
+
+## Import from the addon
+
+`/importer` takes the string copied in game from [NoovioPulse Addons](../NoovioPulseAddon/README.md) (no sign-in needed). The string is checked, kept under a random key for 7 days in the distributed cache, and `/importer/{key}` shows the same report as an account character (`AnalysisReport`). `CharacterImportParser` reads the string and `ImportedCharacterMapper` turns it into `CharacterDetails`: talents, hero tree and embellishments are matched to the meta by id, since the export is in the client's language.
 ## What a role defines
 
 `PulseRole` holds what differs between roles, as data:
