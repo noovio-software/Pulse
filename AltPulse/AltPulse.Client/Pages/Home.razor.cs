@@ -33,6 +33,18 @@ public partial class Home
     private SeasonInfo? season;
     private CharacterSnapshot? equipmentFor;
 
+    /// <summary>Releases GitHub de l'addon NoovioPulse.</summary>
+    private const string AddonDownloadUrl = "https://github.com/noovio-software/Pulse/releases?q=noovio-pulse-addon&expanded=true";
+
+    private bool addonOpen;
+    private bool focusAddonInput;
+    private bool importing;
+    private string? addonText;
+    private string? addonError;
+    private string? addonMessage;
+    private ElementReference addonInput;
+    private Dictionary<string, AddonCharacter> addon = [];
+
     private IReadOnlyList<CharacterColumn> SortedColumns => Ui.Sort(columns, settings.SortBy).ToList();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -43,6 +55,12 @@ public partial class Home
             await nameInput.FocusAsync(preventScroll: true);
         }
 
+        if (focusAddonInput && addonOpen)
+        {
+            focusAddonInput = false;
+            await addonInput.FocusAsync(preventScroll: true);
+        }
+
         if (!firstRender)
         {
             return;
@@ -51,6 +69,7 @@ public partial class Home
         // localStorage n'existe qu'une fois le circuit/WASM interactif : rien n'est lu pendant le prérendu.
         settings = await Store.GetSettingsAsync();
         history = await Store.GetHistoryAsync();
+        addon = await Store.GetAddonAsync();
         region = Regions.All.Contains(settings.LastRegion) ? settings.LastRegion : "eu";
         labelsCompact = settings.LabelsCompact ?? await JS.InvokeAsync<bool>("altpulse.isSmallScreen");
         columns.AddRange(history.Select(h => new CharacterColumn(h)));
@@ -114,8 +133,14 @@ public partial class Home
         try
         {
             var result = await Api.GetCharacterAsync(column.Entry.Region, column.Entry.RealmSlug, column.Entry.Name, forceRefresh);
-            column.Data = result.Character ?? column.Data;
+            column.Data = WithAddon(result.Character) ?? column.Data;
             column.Error = result.Error;
+            if (result.Character is null && addon.TryGetValue(column.Key, out var fromGame))
+            {
+                // Introuvable en ligne (bas niveau, API en panne) : la grille garde ce que l'addon a lu en jeu.
+                column.Data = AddonOverlay.Apply(null, fromGame, season, DateTimeOffset.UtcNow);
+                column.Error = null;
+            }
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
@@ -154,6 +179,7 @@ public partial class Home
                 return;
             }
 
+            character = WithAddon(character)!;
             history = await Store.AddOrTouchAsync(character);
             var entry = history[0];
             var column = columns.FirstOrDefault(c => c.Key == character.Key);
@@ -177,6 +203,101 @@ public partial class Home
         finally
         {
             searching = false;
+        }
+    }
+
+    /// <summary>Complète la fiche avec la dernière relecture en jeu par l'addon, s'il en existe une.</summary>
+    private CharacterSnapshot? WithAddon(CharacterSnapshot? character) =>
+        character is not null && addon.TryGetValue(character.Key, out var fromGame)
+            ? AddonOverlay.Apply(character, fromGame, season, DateTimeOffset.UtcNow)
+            : character;
+
+    private void OpenAddon()
+    {
+        searchOpen = false;
+        addonOpen = true;
+        addonError = null;
+        addonMessage = null;
+        focusAddonInput = true;
+    }
+
+    private void CloseAddon() => addonOpen = false;
+
+    private void OnAddonKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+        {
+            CloseAddon();
+        }
+    }
+
+    /// <summary>
+    /// « MàJ depuis l'addon » : les alts de la chaîne rejoignent l'historique et la grille, leurs données en jeu sont gardées
+    /// sur ce poste puis superposées à chaque chargement, jusqu'à la réinitialisation hebdomadaire.
+    /// </summary>
+    private async Task ImportAddonAsync()
+    {
+        importing = true;
+        addonError = null;
+        try
+        {
+            var result = await Api.ImportAddonAsync(addonText ?? "");
+            if (result.Error is not null)
+            {
+                addonError = result.Error;
+                return;
+            }
+
+            addon = await Store.SaveAddonAsync(result.Characters);
+            history = await Store.AddOrTouchAsync(result.Characters);
+
+            var touched = new List<CharacterColumn>();
+            foreach (var character in result.Characters)
+            {
+                var column = columns.FirstOrDefault(c => c.Key == character.Key);
+                var entry = history.FirstOrDefault(h => h.Key == character.Key);
+                if (column is null && entry is not null)
+                {
+                    column = new CharacterColumn(entry);
+                    columns.Add(column);
+                }
+
+                if (column is not null)
+                {
+                    // Affichage immédiat avec les données du jeu, puis complété par raider.io et Blizzard.
+                    column.Data = AddonOverlay.Apply(column.Data, character, season, DateTimeOffset.UtcNow);
+                    touched.Add(column);
+                }
+            }
+
+            addonOpen = false;
+            addonText = null;
+            addonMessage = result.Characters.Count == 1
+                ? $"{result.Characters[0].Name} mis à jour depuis l'addon."
+                : $"{result.Characters.Count} personnages mis à jour depuis l'addon.";
+            StateHasChanged();
+
+            using var throttle = new SemaphoreSlim(4);
+            await Task.WhenAll(touched.Select(async c =>
+            {
+                await throttle.WaitAsync();
+                try
+                {
+                    await LoadColumnAsync(c, forceRefresh: false);
+                }
+                finally
+                {
+                    throttle.Release();
+                }
+            }));
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+        {
+            addonError = "Impossible de joindre le serveur.";
+        }
+        finally
+        {
+            importing = false;
         }
     }
 
@@ -261,6 +382,7 @@ public partial class Home
     {
         await Store.ClearAsync();
         history.Clear();
+        addon.Clear();
         columns.Clear();
         selectedHistoryKey = "";
     }

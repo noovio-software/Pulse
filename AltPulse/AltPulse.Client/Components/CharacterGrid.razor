@@ -160,6 +160,29 @@
                         </td>
                     }
                 </tr>
+                <tr>
+                    <th class="label-col" title="Clé en poche (addon NoovioPulse)"><GridLabel Icon="keystone" Text="Clé en poche" /></th>
+                    @foreach (var col in Columns)
+                    {
+                        <td>
+                            @if (col.Data is { } c)
+                            {
+                                @if (c.Keystone is { } key)
+                                {
+                                    <span class="keystone" title="@key.Dungeon">+@key.Level <small>@key.ShortName</small></span>
+                                }
+                                else
+                                {
+                                    <span class="muted" title="@(c.AddonSyncedAtUtc is null ? "Connue grâce à l'addon NoovioPulse : bouton « MàJ depuis l'addon »" : "Pas de clé cette semaine")">-</span>
+                                }
+                            }
+                            else
+                            {
+                                <CellPlaceholder Loading="col.Loading" />
+                            }
+                        </td>
+                    }
+                </tr>
             }
 
             @* ───────── Grande Chambre forte ───────── *@
@@ -279,7 +302,13 @@
                 <th class="label-col" title="Mis à jour"><GridLabel Icon="clock" Text="Mis à jour" /></th>
                 @foreach (var col in Columns)
                 {
-                    <td><small class="muted">@(col.Data is { } c ? Ui.Ago(c.FetchedAtUtc) : "-")</small></td>
+                    <td>
+                        <small class="muted">@(col.Data is { } c ? Ui.Ago(c.FetchedAtUtc) : "-")</small>
+                        @if (col.Data?.AddonSyncedAtUtc is { } synced)
+                        {
+                            <small class="addon-sync" title="Coffre, clés et clé en poche lus en jeu par l'addon NoovioPulse">addon · @Ui.Ago(synced)</small>
+                        }
+                    </td>
                 }
             </tr>
         </tbody>

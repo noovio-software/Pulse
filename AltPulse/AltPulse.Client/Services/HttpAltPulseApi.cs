@@ -30,4 +30,18 @@ public sealed class HttpAltPulseApi(HttpClient http) : IAltPulseApi
 
         return new CharacterLookupResult(null, $"Erreur serveur ({(int)response.StatusCode}).");
     }
+
+    public async Task<AddonImportResult> ImportAddonAsync(string text, CancellationToken cancellationToken = default)
+    {
+        using var response = await http.PostAsJsonAsync("api/addon", new AddonImportRequest(text), cancellationToken);
+        if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.BadRequest)
+        {
+            return await response.Content.ReadFromJsonAsync<AddonImportResult>(cancellationToken)
+                   ?? new AddonImportResult([], "Réponse vide du serveur.");
+        }
+
+        return new AddonImportResult([], $"Erreur serveur ({(int)response.StatusCode}).");
+    }
 }
+
+public sealed record AddonImportRequest(string Text);

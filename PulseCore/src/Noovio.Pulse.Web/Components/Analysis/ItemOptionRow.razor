@@ -1,0 +1,47 @@
+@* Une pièce candidate (sac ou coffre) face à celle portée : écart d'ilvl, part du top, raison du conseil. *@
+
+<li class="item-option @(Option.Recommended ? "is-recommended" : null)">
+    <a class="item-icon" href="@Ui.ItemUrl(Option.ItemId)" data-wowhead="@Wowhead" target="_blank" rel="noopener">
+        @if (Option.IconUrl is not null)
+        {
+            <img class="wow-icon" src="@Option.IconUrl" alt="" loading="lazy" />
+        }
+        else
+        {
+            <span class="wow-icon"></span>
+        }
+    </a>
+    <div class="option-text">
+        <span class="eyebrow">@Ui.SlotLabel(Option.Slot)@(Option.Recommended ? " · conseillé" : "")</span>
+        <span class="option-name">@Option.Name</span>
+        <span class="option-tags">
+            <span class="ilvl-tag" title="Niveau d'objet actuel">@Option.ItemLevel</span>
+            @if (Option.MaxItemLevel > Option.ItemLevel || Option.Upgrade is not null)
+            {
+                <span class="max-tag" title="@(Option.MaxEstimated ? "Niveau max estimé (environ 3 niveaux par rang)" : "Niveau d'objet une fois améliorée au maximum")">
+                    max @(Option.MaxEstimated ? "≈" : "")@Option.MaxItemLevel @if (Option.Upgrade is not null) { <small>@Option.Upgrade</small> }
+                </span>
+            }
+            @if (Option.EquippedName is null)
+            {
+                <span class="gain-tag is-high" title="Emplacement vide">nouveau</span>
+            }
+            else
+            {
+                <span class="gain-tag @(Option.Gain > 0 ? "is-high" : Option.Gain < 0 ? "is-low" : null)"
+                      title="Au max, face à @Option.EquippedName (@Option.EquippedItemLevel, @Option.EquippedMaxItemLevel au max)">
+                    @(Option.Gain >= 0 ? "+" : "")@Option.Gain au max
+                </span>
+            }
+            @if (Option.TopShare >= 0.05)
+            {
+                <span class="meta-tag" title="Part du top portant cette pièce">Méta @Ui.Percent(Option.TopShare)</span>
+            }
+            @if (Option.IsSetPiece)
+            {
+                <span class="set-tag">Set</span>
+            }
+        </span>
+        <small class="muted">@Option.Reason</small>
+    </div>
+</li>

@@ -496,3 +496,6 @@ id_ed25519*
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Zip de l'addon construit en local
+NoovioPulseAddon/dist/

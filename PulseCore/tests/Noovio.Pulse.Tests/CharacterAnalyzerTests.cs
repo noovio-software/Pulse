@@ -52,6 +52,33 @@ public sealed class CharacterAnalyzerTests
         Assert.Equal(0, talents.Similarity);
     }
 
+    /// <summary>
+    /// L'API compte des talents hors de l'arbre de la spécialisation (nœuds offerts aux autres spécialisations, rangs d'un
+    /// même nœud) : tout le top les « a », personne ne peut les choisir. Ils ne sont jamais manquants.
+    /// </summary>
+    [Fact]
+    public void Talents_outside_the_spec_tree_are_never_missing()
+    {
+        var top = Top();
+        foreach (var p in top)
+        {
+            p.Talents = [.. p.Talents, new TalentPick(TalentTree.Class, 7, 70, "Explosion de lave (autre spécialisation)", 1)];
+        }
+
+        var mine = Player(top[0], talents: [new TalentPick(TalentTree.Spec, 1, 10, "Peau de fer", 1)]);
+        var meta = new MetaAggregatorService(Options.Create(new MetaOptions()), PulseRoles.Tank)
+            .Aggregate(WowSpec.BloodDeathKnight, "season-mn-2", top, Now) with
+            {
+                TalentTree = new TalentTreeLayout([new TalentTreeSection(TalentTree.Spec, "Sang", null, 1, 1, 1,
+                    [new TalentNodeView(100, 0, 0, TalentNodeKind.Passive, 1, [], [new TalentChoiceView(1, 10, "Peau de fer", null, 1)])])])
+            };
+
+        var talents = CharacterAnalyzer.Analyze(PulseRoles.Tank, Blood, meta, top, mine, new Dictionary<int, string>(), Now).Talents;
+
+        Assert.Empty(talents.MissingCore);
+        Assert.Equal(1, talents.Similarity);
+    }
+
     [Fact]
     public void Main_stat_below_the_top_range_is_a_problem()
     {

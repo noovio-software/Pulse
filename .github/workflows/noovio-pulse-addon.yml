@@ -1,0 +1,49 @@
+name: NoovioPulse Addons
+
+# Publication de l'addon sur un tag, ex. : git tag noovio-pulse-addon-1.0.0 && git push origin noovio-pulse-addon-1.0.0
+on:
+  push:
+    tags:
+      - 'noovio-pulse-addon-[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        run: |
+          TAG_NAME="${GITHUB_REF##*/}"
+          VERSION="${TAG_NAME#noovio-pulse-addon-}"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "::notice title=Addon version::$VERSION"
+
+      # Le format de la chaîne doit rester lisible par le site : les tests de l'import bloquent la publication.
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Tests
+        run: dotnet test PulseCore/tests/Noovio.Pulse.Tests -c Release --filter "FullyQualifiedName~AddonImportTests"
+
+      - name: Package
+        run: |
+          mkdir -p dist
+          cp -r NoovioPulseAddon/NoovioPulse dist/NoovioPulse
+          sed -i "s/@project-version@/$VERSION/" dist/NoovioPulse/NoovioPulse.toc
+          cp LICENSE dist/NoovioPulse/LICENSE
+          cd dist && zip -r "NoovioPulse-$VERSION.zip" NoovioPulse
+
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "dist/NoovioPulse-$VERSION.zip" \
+            --title "NoovioPulse Addons $VERSION" \
+            --notes "Addon World of Warcraft : dépose le dossier NoovioPulse dans Interface/AddOns, puis /noovio en jeu."

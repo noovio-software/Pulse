@@ -1,0 +1,107 @@
+@* Sacs et Grande Chambre forte (import de l'addon) : quoi prendre dans le coffre, quoi équiper depuis les sacs, consommables. *@
+
+<div class="inventory">
+    @if (Review.Vault is { } vault)
+    {
+        <div class="inv-block">
+            <h3 class="inv-title">Grande Chambre forte <small class="muted">@(vault.RewardsReady ? "objets proposés" : "progression de la semaine")</small></h3>
+            <div class="vault-tracks">
+                @foreach (var track in vault.Tracks)
+                {
+                    <div class="vault-track">
+                        <span class="eyebrow">@track.Label</span>
+                        <div class="vault-slots">
+                            @foreach (var slot in track.Slots)
+                            {
+                                <span class="vault-slot @(slot.Unlocked ? "is-open" : null)"
+                                      title="@(slot.Unlocked ? $"Débloquée{(slot.ItemLevel is { } i ? $" : niveau d'objet {i}" : "")}" : $"{slot.Progress}/{slot.Threshold} {track.Unit}(s)")">
+                                    @if (slot.Unlocked)
+                                    {
+                                        @(slot.ItemLevel?.ToString() ?? "✓")
+                                    }
+                                    else
+                                    {
+                                        <small>@slot.Progress/@slot.Threshold</small>
+                                    }
+                                </span>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+            <p class="inv-advice @(vault.RewardsReady ? "is-strong" : null)">@vault.Advice</p>
+            @if (vault.Choices.Count > 0)
+            {
+                <ul class="item-options">
+                    @foreach (var o in vault.Choices)
+                    {
+                        <ItemOptionRow Option="o" />
+                    }
+                </ul>
+            }
+        </div>
+    }
+
+    <div class="inv-block">
+        <h3 class="inv-title">Dans les sacs <small class="muted">@Review.BagGearCount pièce@(Review.BagGearCount > 1 ? "s" : "") d'équipement</small></h3>
+        @if (Review.BagUpgrades.Count == 0)
+        {
+            <p class="inv-advice">Rien à équiper : aucune pièce des sacs ne bat celle que tu portes.</p>
+        }
+        else
+        {
+            <ul class="item-options">
+                @foreach (var o in Review.BagUpgrades)
+                {
+                    <ItemOptionRow Option="o" />
+                }
+            </ul>
+        }
+    </div>
+
+    @if (Review.Consumables.Count > 0)
+    {
+        <div class="inv-block">
+            <h3 class="inv-title">Consommables <small class="muted">prêt pour la clé ?</small></h3>
+            <ul class="consumables">
+                @foreach (var c in Review.Consumables)
+                {
+                    <li class="@Ui.VerdictCss(c.Verdict)">
+                        @if (c.ItemId > 0)
+                        {
+                            <a href="@Ui.ItemUrl(c.ItemId)" data-wowhead="@Ui.ItemWowhead(c.ItemId)" target="_blank" rel="noopener">
+                                @if (c.IconUrl is not null)
+                                {
+                                    <img class="wow-icon" src="@c.IconUrl" alt="" loading="lazy" />
+                                }
+                                else
+                                {
+                                    <span class="wow-icon"></span>
+                                }
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="wow-icon is-empty"><VerdictIcon Verdict="c.Verdict" Size="22" /></span>
+                        }
+                        <div class="consumable-text">
+                            <span class="eyebrow">@c.Label</span>
+                            <span class="consumable-name">
+                                @(c.ItemName ?? "Rien en stock")
+                                @if (c.Quality is > 0)
+                                {
+                                    <span class="quality" title="Rang d'artisanat">@(new string('★', c.Quality.Value))</span>
+                                }
+                                @if (c.Count > 0)
+                                {
+                                    <small class="muted">×@c.Count</small>
+                                }
+                            </span>
+                            <small class="muted">@c.Advice</small>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>
