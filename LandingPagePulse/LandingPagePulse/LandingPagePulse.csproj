@@ -11,9 +11,11 @@
     <NeutralLanguage>fr</NeutralLanguage>
   </PropertyGroup>
 
-  <!-- Textes de la page, en français (neutre) et en anglais. La classe d'accès est générée à la compilation. -->
+  <!-- Textes de la page, en français (neutre) et en anglais. La classe d'accès LandingTexts.Designer.cs est versionnée
+       à côté du .resx ; l'IDE la régénère quand on enregistre le .resx. -->
   <ItemGroup>
-    <EmbeddedResource Update="Resources\LandingTexts.resx" StronglyTypedLanguage="CSharp" StronglyTypedClassName="LandingTexts" StronglyTypedNamespace="LandingPagePulse.Resources" StronglyTypedFileName="$(IntermediateOutputPath)LandingTexts.Designer.cs" />
+    <EmbeddedResource Update="Resources\LandingTexts.resx" Generator="ResXFileCodeGenerator" LastGenOutput="LandingTexts.Designer.cs" />
+    <Compile Update="Resources\LandingTexts.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="LandingTexts.resx" />
   </ItemGroup>
 
 </Project>
