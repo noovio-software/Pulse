@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Noovio.Pulse.Domain;
+using Noovio.Pulse.Web.Resources;
 
 namespace Noovio.Pulse.Web.Components.Shared;
 
@@ -11,7 +12,7 @@ public partial class CompareButton
     /// <summary>Version courte, pour les fiches de l'accueil.</summary>
     [Parameter] public bool Compact { get; set; }
 
-    private string Label => Compact ? "Comparer" : $"Comparer mon {Site.Words.Noun}";
+    private string Label => Compact ? WebTexts.Compare_Short : Ui.F(WebTexts.Compare_Long, Site.Words.Noun);
 
     private string AccountUrl => Spec is null ? "compte" : $"compte?spec={Spec.Slug}";
 }

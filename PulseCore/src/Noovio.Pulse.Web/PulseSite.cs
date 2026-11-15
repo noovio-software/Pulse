@@ -10,6 +10,7 @@ using Noovio.Pulse.Infrastructure.Persistence;
 using Noovio.Pulse.Usage;
 using Noovio.Pulse.Web.Auth;
 using Noovio.Pulse.Web.Components;
+using Noovio.Pulse.Web.Localization;
 
 namespace Noovio.Pulse.Web;
 
@@ -18,11 +19,12 @@ public static class PulseSite
 {
     public static async Task RunAsync<TContext>(string[] args, PulseApp pulse) where TContext : PulseDbContext
     {
-        // Pourcentages et décimales à la française (« 24,3 % ») dans tous les circuits.
-        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("fr-FR");
+        // Hors requête (démarrage, tâches de fond), le français ; chaque requête prend ensuite la langue du visiteur.
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(PulseLocalization.DefaultCulture);
 
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddPulseLocalization();
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
 
@@ -54,6 +56,8 @@ public static class PulseSite
         await app.Services.MigratePulseDatabaseAsync();
 
         app.UseForwardedHeaders();
+        // Avant tout le reste : les pages, l'API et le circuit Blazor (fixé à sa connexion) prennent la langue du visiteur.
+        app.UseRequestLocalization();
 
         if (!app.Environment.IsDevelopment())
         {
@@ -71,6 +75,7 @@ public static class PulseSite
         app.UseAuthorization();
         app.UseAntiforgery();
 
+        app.MapCultureEndpoint();
         app.MapAccountEndpoints();
         app.MapAdminEndpoints();
 

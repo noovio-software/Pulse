@@ -20,7 +20,7 @@ dotnet run --project AltPulse --launch-profile http
 
 Without a key, the app works on Raider.io alone. The Blizzard key adds:
 - the **raid lockouts for the week** (per boss and per difficulty) and therefore the **raid row of the Great Vault**;
-- level, French class and spec names, average item level, detailed gear with enchants;
+- level, class and spec names in the interface language, average item level, detailed gear with enchants;
 - autocomplete of the realm list.
 
 Create a client at https://develop.battle.net/access/clients, then:
@@ -81,6 +81,12 @@ The workflow restarts the service with `sudo`, so the deploy user needs to be al
 | `AltPulse` | Host, `/api/season/{region}`, `/api/realms/{region}` and `/api/characters/{region}/{realm}/{name}` endpoints, `RaiderIoClient`, `BlizzardClient` (cached OAuth token), `AltPulseService` (aggregation and in-memory cache) |
 
 `IAltPulseApi` is implemented twice: `AltPulseService` directly on the server side (prerendering and Interactive Server), and `HttpAltPulseApi` on the WebAssembly side.
+
+## Languages
+
+French (default) and English, in `AltPulse.Client/Resources/AltTexts(.en).resx` (public generated class, also used by the server for its messages). The server picks the language from the `.AspNetCore.Culture` cookie (`GET /culture/{fr|en}`, shared on `noovio.fr` in production) or `Accept-Language`, and writes it in `<html lang>`; the WebAssembly client reads it there at startup (`altpulse.culture()` in `app.js`) before `RunAsync`, which then loads the English satellite assembly. `BlazorWebAssemblyLoadAllGlobalizationData` keeps both cultures' formats available in the browser.
+
+Season and character caches are kept per language: the interface language also selects the Blizzard (`fr_FR` / `en_US`) and Raider.io locales, so class, spec, item and affix names follow it. The realm list stays in `Blizzard:Locale`, because the addon export gives the realm name as displayed in a French client.
 
 ## Known limits (public APIs)
 

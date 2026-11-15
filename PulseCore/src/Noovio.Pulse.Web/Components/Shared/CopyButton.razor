@@ -1,7 +1,7 @@
 @* Copie 1 clic dans le presse-papiers (code de talents, route MDT…), avec retour visuel. *@
 
 <button type="button" class="btn @(Primary ? "btn-primary" : "btn-ghost") btn-copy @(IconOnly ? "btn-icon" : null) @(copied ? "is-copied" : null)"
-        @onclick="CopyAsync" disabled="@string.IsNullOrEmpty(Text)" title="@(copied ? "Copié !" : Label)" aria-label="@Label">
+        @onclick="CopyAsync" disabled="@string.IsNullOrEmpty(Text)" title="@(copied ? WebTexts.Copy_Done : Label)" aria-label="@Label">
     <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         @if (copied)
         {
@@ -15,6 +15,6 @@
     </svg>
     @if (!IconOnly)
     {
-        <span>@(copied ? "Copié !" : failed ? "Copie impossible" : Label)</span>
+        <span>@(copied ? WebTexts.Copy_Done : failed ? WebTexts.Copy_Failed : Label)</span>
     }
 </button>

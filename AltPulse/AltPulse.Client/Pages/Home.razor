@@ -1,12 +1,12 @@
 @page "/"
 @rendermode InteractiveAuto
 
-<PageTitle>AltPulse by Noovio · Suivi de personnages</PageTitle>
+<PageTitle>@AltTexts.Home_Title</PageTitle>
 
 <TopBar>
     @if (season?.Affixes is { } affixes)
     {
-        <ul class="affixes" aria-label="Affixes de la semaine">
+        <ul class="affixes" aria-label="@AltTexts.Home_Affixes">
             @foreach (var a in affixes.Affixes)
             {
                 <li tabindex="0">
@@ -24,17 +24,24 @@
     }
     @if (season is not null)
     {
-        <span class="reset-info" title="Prochaine réinitialisation hebdomadaire (@season.Region.ToUpperInvariant())">
-            <span class="eyebrow">Réinitialisation</span>
+        <span class="reset-info" title="@AltLocalization.F(AltTexts.Home_ResetTitle, season.Region.ToUpperInvariant())">
+            <span class="eyebrow">@AltTexts.Home_Reset</span>
             <strong>@Ui.Countdown(season.NextResetUtc)</strong>
         </span>
     }
-    <button class="btn btn-primary btn-search" type="button" @onclick="OpenSearch" disabled="@(!ready)" aria-label="Rechercher un personnage">
+    <button class="btn btn-ghost btn-addon" type="button" @onclick="OpenAddon" disabled="@(!ready)" aria-label="@AltTexts.Home_AddonAria"
+            title="@AltTexts.Home_AddonTitle">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M3 12h4l2-5 4 10 2-5h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="btn-search-label">@AltTexts.Home_AddonButton</span>
+    </button>
+    <button class="btn btn-primary btn-search" type="button" @onclick="OpenSearch" disabled="@(!ready)" aria-label="@AltTexts.Home_SearchAria">
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
             <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.4" />
             <path d="m20 20-4-4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
         </svg>
-        <span class="btn-search-label">Rechercher</span>
+        <span class="btn-search-label">@AltTexts.Home_Search</span>
     </button>
 </TopBar>
 
@@ -45,15 +52,15 @@
          role="dialog" aria-modal="true" aria-labelledby="search-title">
     <header class="modal-head">
         <div>
-            <h2 id="search-title" class="title">Rechercher un personnage</h2>
-            <p class="subtitle">Il rejoint ton historique et la grille de suivi.</p>
+            <h2 id="search-title" class="title">@AltTexts.Search_Title</h2>
+            <p class="subtitle">@AltTexts.Search_Subtitle</p>
         </div>
-        <button type="button" class="btn btn-ghost close" @onclick="CloseSearch" aria-label="Fermer">✕</button>
+        <button type="button" class="btn btn-ghost close" @onclick="CloseSearch" aria-label="@AltTexts.Common_Close">✕</button>
     </header>
 
     <form class="search-form" @onsubmit="SearchAsync" @onsubmit:preventDefault>
         <label class="field field-region">
-            <span>Région</span>
+            <span>@AltTexts.Search_Region</span>
             <select value="@region" @onchange="OnRegionChangedAsync" disabled="@(!ready)">
                 @foreach (var r in Regions.All)
                 {
@@ -63,8 +70,8 @@
         </label>
 
         <label class="field field-realm">
-            <span>Royaume</span>
-            <input @bind="realm" list="realm-list" placeholder="Hyjal, Archimonde…" autocomplete="off" disabled="@(!ready)" />
+            <span>@AltTexts.Search_Realm</span>
+            <input @bind="realm" list="realm-list" placeholder="@AltTexts.Search_RealmPlaceholder" autocomplete="off" disabled="@(!ready)" />
             <datalist id="realm-list">
                 @foreach (var r in realms)
                 {
@@ -74,27 +81,27 @@
         </label>
 
         <label class="field field-name">
-            <span>Personnage</span>
-            <input @ref="nameInput" @bind="name" placeholder="Nom du personnage" autocomplete="off" disabled="@(!ready)" />
+            <span>@AltTexts.Search_Character</span>
+            <input @ref="nameInput" @bind="name" placeholder="@AltTexts.Search_NamePlaceholder" autocomplete="off" disabled="@(!ready)" />
         </label>
 
         <button class="btn btn-primary" type="submit" disabled="@(!ready || searching)">
-            @(searching ? "Recherche…" : "Rechercher")
+            @(searching ? AltTexts.Search_Searching : AltTexts.Home_Search)
         </button>
     </form>
 
     <div class="history-row">
         <label class="field field-history">
-            <span>Historique (@history.Count)</span>
+            <span>@AltLocalization.F(AltTexts.Search_History, history.Count)</span>
             <select value="@selectedHistoryKey" @onchange="OnHistorySelectedAsync" disabled="@(!ready || history.Count == 0)">
-                <option value="">@(history.Count == 0 ? "Aucune recherche pour l'instant" : "- Choisir un personnage -")</option>
+                <option value="">@(history.Count == 0 ? AltTexts.Search_NoHistory : AltTexts.Search_PickHistory)</option>
                 @foreach (var h in history)
                 {
                     <option value="@h.Key">@h.Label</option>
                 }
             </select>
         </label>
-        <button class="btn btn-ghost" type="button" @onclick="ClearHistoryAsync" disabled="@(history.Count == 0)">Vider l'historique</button>
+        <button class="btn btn-ghost" type="button" @onclick="ClearHistoryAsync" disabled="@(history.Count == 0)">@AltTexts.Search_ClearHistory</button>
     </div>
 
     @if (searchError is not null)
@@ -105,17 +112,65 @@
 </div>
 }
 
+@if (addonOpen)
+{
+<div class="modal-backdrop" @onclick="CloseAddon">
+<section class="modal panel addon-modal" @onclick:stopPropagation @onkeydown="OnAddonKeyDown"
+         role="dialog" aria-modal="true" aria-labelledby="addon-title">
+    <header class="modal-head">
+        <div>
+            <h2 id="addon-title" class="title">@AltTexts.Addon_Title</h2>
+            <p class="subtitle">@AltTexts.Addon_Subtitle</p>
+        </div>
+        <button type="button" class="btn btn-ghost close" @onclick="CloseAddon" aria-label="@AltTexts.Common_Close">✕</button>
+    </header>
+
+    <ol class="addon-steps">
+        <li><span class="step-num">1</span><div><strong>@AltTexts.Addon_Step1</strong><small>@AltTexts.Addon_Step1Detail <a href="@AddonCurseForgeUrl" target="_blank" rel="noopener">CurseForge</a> · <a href="@AddonDirectDownloadUrl" target="_blank" rel="noopener">@AltTexts.Addon_DirectDownload</a></small></div></li>
+        <li><span class="step-num">2</span><div><strong>@AltTexts.Addon_Step2</strong><small>@AltTexts.Addon_Step2Detail</small></div></li>
+        <li><span class="step-num">3</span><div><strong>@AltTexts.Addon_Step3</strong><small>@AltTexts.Addon_Step3Detail</small></div></li>
+    </ol>
+
+    <form class="addon-form" @onsubmit="ImportAddonAsync" @onsubmit:preventDefault>
+        <label class="field">
+            <span>@AltTexts.Addon_Field</span>
+            <textarea @ref="addonInput" @bind="addonText" @bind:event="oninput" rows="5" spellcheck="false"
+                      placeholder="NP1:D:…" class="@(addonError is null ? "" : "invalid")"></textarea>
+        </label>
+        @if (addonError is not null)
+        {
+            <p class="alert">@addonError</p>
+        }
+        <div class="addon-actions">
+            <button class="btn btn-ghost" type="button" @onclick="CloseAddon">@AltTexts.Common_Cancel</button>
+            <button class="btn btn-primary" type="submit" disabled="@(importing || string.IsNullOrWhiteSpace(addonText))">
+                @(importing ? AltTexts.Addon_Importing : AltTexts.Addon_Submit)
+            </button>
+        </div>
+    </form>
+</section>
+</div>
+}
+
+@if (addonMessage is not null)
+{
+    <div class="toast" role="status" @onclick="() => addonMessage = null">@addonMessage</div>
+}
+
 <main class="shell">
 @if (!ready)
 {
-    <section class="panel empty-state"><div class="spinner"></div><p>Ouverture de l'Abîme…</p></section>
+    <section class="panel empty-state"><div class="spinner"></div><p>@AltTexts.Home_Loading</p></section>
 }
 else if (columns.Count == 0)
 {
     <section class="panel empty-state">
-        <h2>Aucun personnage suivi</h2>
-        <p>Lance une recherche : chaque personnage trouvé est mémorisé sur ce poste.</p>
-        <button class="btn btn-primary" type="button" @onclick="OpenSearch">Rechercher un personnage</button>
+        <h2>@AltTexts.Home_EmptyTitle</h2>
+        <p>@AltTexts.Home_EmptyText</p>
+        <div class="empty-actions">
+            <button class="btn btn-primary" type="button" @onclick="OpenSearch">@AltTexts.Search_Title</button>
+            <button class="btn btn-ghost" type="button" @onclick="OpenAddon">@AltTexts.Home_AddonButton</button>
+        </div>
     </section>
 }
 else

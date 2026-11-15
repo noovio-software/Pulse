@@ -9,6 +9,9 @@ using Noovio.Pulse.Domain.Entities;
 using Noovio.Pulse.Usage;
 using Noovio.Pulse.Web.Auth;
 using Noovio.Pulse.Web.Usage;
+using Noovio.Pulse.Web.Components.Shared;
+using Noovio.Pulse.Web.Localization;
+using Noovio.Pulse.Web.Resources;
 
 namespace Noovio.Pulse.Web.Components.Pages;
 
@@ -38,30 +41,7 @@ public partial class CharacterReport
     private CharacterAnalysis? analysis;
     private string? error;
     private bool loading = true;
-    private bool treeOpen;
     private bool refreshTooltips;
-
-    private IReadOnlyList<AnalysisFinding> ToFix => analysis?.Findings.Where(f => f.Verdict != Verdict.Good).ToList() ?? [];
-    /// <summary>Le plan d'action par effort demandé : ce qui se règle ce soir, puis ce qui demande du craft, du farm, des clés.</summary>
-    private IReadOnlyList<PlanGroup> PlanGroups =>
-    [
-        .. new[]
-        {
-            new PlanGroup("À régler tout de suite", "gemmes, enchantements, talents : sans farmer", ToFix.Where(f => f.Area is AnalysisAreaKind.Stats or AnalysisAreaKind.Gems or AnalysisAreaKind.Enchantments or AnalysisAreaKind.Talents).ToList()),
-            new PlanGroup("À crafter", "commandes d'artisanat", ToFix.Where(f => f.Area is AnalysisAreaKind.Embellishments).ToList()),
-            new PlanGroup("À farmer", "détail dans la roadmap", ToFix.Where(f => f.Area is AnalysisAreaKind.ItemLevel or AnalysisAreaKind.Trinkets).ToList()),
-            new PlanGroup("À jouer", "clés à pousser", ToFix.Where(f => f.Area is AnalysisAreaKind.MythicPlus).ToList())
-        }.Where(g => g.Findings.Count > 0)
-    ];
-
-    private string Anchor(string section) => $"compte/personnages/{Id}/analyse?spec={analysis?.Spec.Slug}#{section}";
-
-    private static string PrimaryStatName(CharacterSheet sheet) =>
-        sheet.Intellect >= Math.Max(sheet.Strength, sheet.Agility) ? "Intelligence" : sheet.Strength >= sheet.Agility ? "Force" : "Agilité";
-
-    private sealed record PlanGroup(string Title, string Hint, IReadOnlyList<AnalysisFinding> Findings);
-
-    private IReadOnlyList<AnalysisFinding> Strengths => analysis?.Findings.Where(f => f.Verdict == Verdict.Good).ToList() ?? [];
 
     protected override Task OnParametersSetAsync() => LoadAsync(force: false);
 
@@ -85,13 +65,14 @@ public partial class CharacterReport
         if (character is null)
         {
             // Inexistant ou appartenant à un autre compte : même réponse, pour ne rien divulguer.
-            error = "Personnage introuvable dans ton compte. Synchronise tes personnages puis réessaie.";
+            error = WebTexts.Report_CharacterMissing;
             loading = false;
             return;
         }
 
         var requested = Site.Role.FromSlug(SpecSlug);
-        var key = $"analysis:{character.Id}:{requested?.Slug}";
+        // Les textes de l'analyse sont rédigés dans la langue du visiteur : une entrée par langue.
+        var key = $"analysis:{PulseLocalization.CurrentLanguage}:{character.Id}:{requested?.Slug}";
         if (force)
         {
             Cache.Remove(key);
@@ -115,16 +96,16 @@ public partial class CharacterReport
             analysis = result?.Analysis;
             error = result?.Status switch
             {
-                AnalysisStatus.NoRoleSpec => $"{character.ClassName} n'a pas de spécialisation {Site.Words.Noun}.",
-                AnalysisStatus.NoMeta => $"La méta {result.Spec?.SpecName} n'est pas encore calculée : réessaie après la prochaine mise à jour.",
-                AnalysisStatus.CharacterNotFound => "Blizzard ne renvoie pas ce personnage (renommé, transféré, ou pas reconnecté depuis la dernière mise à jour du jeu).",
+                AnalysisStatus.NoRoleSpec => Ui.F(WebTexts.Report_NoRoleSpec, WowClasses.Name(character.ClassId) is { Length: > 0 } name ? name : character.ClassName, Site.Words.Noun),
+                AnalysisStatus.NoMeta => Ui.F(WebTexts.Report_NoMeta, result.Spec?.SpecName),
+                AnalysisStatus.CharacterNotFound => WebTexts.Report_CharacterNotFound,
                 _ => null
             };
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
             failure = ex.GetType().Name;
-            error = "Blizzard ou Raider.io ne répond pas pour le moment. Réessaie dans un instant.";
+            error = WebTexts.Report_Unavailable;
         }
 
         Benches.Record(BenchEvents.Create(Site, bnetId!.Value, character, result, failure, fromCache, force, Time.GetElapsedTime(started), Time.GetUtcNow()));

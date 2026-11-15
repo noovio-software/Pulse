@@ -17,19 +17,19 @@
             <a class="target-name" href="@Ui.ItemUrl(Target.ItemId)" target="_blank" rel="noopener">@Target.Name</a>
             @if (Target.Boss is not null)
             {
-                <span class="target-boss">sur @Target.Boss</span>
+                <span class="target-boss">@Ui.F(WebTexts.Farm_OnBoss, Target.Boss)</span>
             }
             else if (Target.IsCrafted)
             {
-                <span class="target-boss">à crafter</span>
+                <span class="target-boss">@WebTexts.Farm_Crafted</span>
             }
         </span>
         <span class="target-line target-why">
-            <span>@Ui.Percent(Target.TopShare) du top</span>
-            <span>remplace @Target.CurrentName (@Target.CurrentItemLevel → @Target.TargetItemLevel)</span>
+            <span>@Ui.F(WebTexts.Common_OfTop, Ui.Percent(Target.TopShare))</span>
+            <span>@Ui.F(WebTexts.Farm_Replaces, Target.CurrentName, Target.CurrentItemLevel, Target.TargetItemLevel)</span>
             @foreach (var stat in Target.Fixes)
             {
-                <span class="stat-chip @Ui.StatCss(stat)">Corrige ta @Ui.StatLabel(stat)</span>
+                <span class="stat-chip @Ui.StatCss(stat)">@Ui.F(WebTexts.Farm_Fixes, Ui.StatLabel(stat))</span>
             }
         </span>
     </div>

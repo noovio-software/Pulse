@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using Microsoft.Extensions.Caching.Distributed;
 using Noovio.Pulse.Application.Abstractions;
+using Noovio.Pulse.Domain;
 using Noovio.Pulse.Domain.Entities;
 using Noovio.Pulse.Domain.Enums;
 using Noovio.Pulse.Domain.Roles;
@@ -12,8 +13,37 @@ namespace Noovio.Pulse.Infrastructure.Blizzard;
 /// Traduit les profils Blizzard (équipement, spécialisations, caractéristiques) en modèle Pulse :
 /// profils du top pour l'ingestion, et fiche complète (avec Raider.io) pour l'analyse d'un personnage.
 /// </summary>
-public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClient raiderIo, PulseRole role) : ICharacterLoadoutSource, ICharacterDetailsSource
+public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClient raiderIo, PulseRole role)
+    : ICharacterLoadoutSource, ICharacterDetailsSource, ICharacterExtrasSource
 {
+    public async Task<CharacterExtras> GetExtrasAsync(string region, string realmSlug, string name, CancellationToken ct)
+    {
+        var mediaTask = GetMediaAsync(region, realmSlug, name, ct);
+        var rioTask = GetMythicPlusAsync(region, realmSlug, name, ct);
+        await Task.WhenAll(mediaTask, rioTask);
+
+        var media = await mediaTask;
+        return new CharacterExtras(Portrait(media), Avatar(media), await rioTask);
+    }
+
+    /// <summary>Portrait facultatif : Blizzard indisponible ou personnage inconnu (import d'un personnage jamais déconnecté), l'analyse s'en passe.</summary>
+    private async Task<BzCharacterMedia?> GetMediaAsync(string region, string realmSlug, string name, CancellationToken ct)
+    {
+        try
+        {
+            return await client.GetCharacterMediaAsync(region, realmSlug, name, ct);
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException && !ct.IsCancellationRequested)
+        {
+            return null;
+        }
+    }
+
+    private static string? Portrait(BzCharacterMedia? media) =>
+        media?.Assets.FirstOrDefault(a => a.Key == "inset")?.Value ?? media?.Assets.FirstOrDefault(a => a.Key == "main-raw")?.Value;
+
+    private static string? Avatar(BzCharacterMedia? media) => media?.Assets.FirstOrDefault(a => a.Key == "avatar")?.Value;
+
     public async Task<CharacterLoadout?> GetLoadoutAsync(LeaderboardPlayer player, CancellationToken ct)
     {
         var equipmentTask = client.GetEquipmentAsync(player.Region, player.RealmSlug, player.Name, ct);
@@ -55,8 +85,8 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
             activeName,
             BuildLoadout(equipment, specs, stats, talentsOf: (int)spec, spec),
             ToSheet(stats, spec),
-            media?.Assets.FirstOrDefault(a => a.Key == "inset")?.Value ?? media?.Assets.FirstOrDefault(a => a.Key == "main-raw")?.Value,
-            media?.Assets.FirstOrDefault(a => a.Key == "avatar")?.Value,
+            Portrait(media),
+            Avatar(media),
             await rioTask);
     }
 
@@ -76,7 +106,7 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
 
         return new CharacterLoadout(
             specs?.ActiveSpecialization?.Id,
-            ItemLevel(gear),
+            GearRules.AverageItemLevel(gear),
             gear,
             ToStats(stats, statsOf),
             loadout is null ? [] : Talents(loadout),
@@ -145,24 +175,7 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
 
     internal static GearPiece? ToGear(BzEquippedItem item)
     {
-        GearSlot? slot = item.Slot.Type switch
-        {
-            "HEAD" => GearSlot.Head,
-            "NECK" => GearSlot.Neck,
-            "SHOULDER" => GearSlot.Shoulder,
-            "BACK" => GearSlot.Back,
-            "CHEST" => GearSlot.Chest,
-            "WRIST" => GearSlot.Wrist,
-            "HANDS" => GearSlot.Hands,
-            "WAIST" => GearSlot.Waist,
-            "LEGS" => GearSlot.Legs,
-            "FEET" => GearSlot.Feet,
-            "FINGER_1" or "FINGER_2" => GearSlot.Finger,
-            "TRINKET_1" or "TRINKET_2" => GearSlot.Trinket,
-            "MAIN_HAND" => GearSlot.MainHand,
-            "OFF_HAND" => GearSlot.OffHand,
-            _ => null // chemise, tabard
-        };
+        var slot = GearRules.SlotOf(item.Slot.Type);
 
         return slot is null
             ? null
@@ -174,7 +187,7 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
                 item.BonusList,
                 item.Enchantments.Where(IsPermanent).Select(e => e.DisplayString).OfType<string>().ToList(),
                 item.Spells.Select(s => new ItemEffect(s.Spell.Id, s.Spell.Name ?? "", s.Description)).ToList(),
-                IsEmbellished(item.LimitCategory),
+                GearRules.IsEmbellished(item.LimitCategory),
                 item.Sockets.Select(s => new GemSocket(s.SocketType?.Type, s.Item?.Id, s.Item?.Name, s.DisplayString)).ToList(),
                 item.Stats.Where(s => !s.IsNegated).Select(ToItemStat).OfType<ItemStat>().ToList());
     }
@@ -196,24 +209,6 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
             : type.Contains("CRIT", StringComparison.OrdinalIgnoreCase) ? SecondaryStat.Crit
             : null;
         return secondary is null ? null : new ItemStat(secondary.Value, stat.Value);
-    }
-
-    /// <summary>« Unique-Equipped: Embellished (2) » en anglais, « Unique - Équipé : Enjolivement (2) » en français.</summary>
-    private static bool IsEmbellished(string? limitCategory) =>
-        limitCategory is not null
-        && (limitCategory.Contains("Embellished", StringComparison.OrdinalIgnoreCase)
-            || limitCategory.Contains("Enjolivement", StringComparison.OrdinalIgnoreCase));
-
-    /// <summary>Comme le jeu : 16 emplacements, une arme à deux mains compte deux fois.</summary>
-    private static double ItemLevel(IReadOnlyList<GearPiece> gear)
-    {
-        var total = gear.Sum(g => g.ItemLevel);
-        if (gear.FirstOrDefault(g => g.Slot == GearSlot.MainHand) is { } mainHand && gear.All(g => g.Slot != GearSlot.OffHand))
-        {
-            total += mainHand.ItemLevel;
-        }
-
-        return Math.Round(total / 16.0, 1);
     }
 
     private StatSheet? ToStats(BzStatistics? stats, WowSpec spec) =>

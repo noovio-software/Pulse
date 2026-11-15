@@ -7,6 +7,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
 
+    <!-- Les ressources neutres (.resx sans suffixe) sont en français ; l'anglais vit dans les .en.resx. -->
+    <NeutralLanguage>fr</NeutralLanguage>
+
     <!-- Version d'EF Core et des extensions : les applications doivent rester alignées sur PulseCore. -->
     <PulseExtensionsVersion>10.0.14</PulseExtensionsVersion>
   </PropertyGroup>

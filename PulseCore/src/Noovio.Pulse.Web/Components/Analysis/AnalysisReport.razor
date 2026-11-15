@@ -1,0 +1,250 @@
+@* Rapport d'analyse d'un personnage face au top : commun au personnage du compte et à l'import de l'addon. *@
+
+@{
+    var a = Analysis;
+    var c = a.Character;
+}
+<section class="panel report-hero" style="--class-color: @a.Spec.Color; @(c.PortraitUrl is null ? null : $"--portrait: url('{c.PortraitUrl}')")">
+    <div class="report-identity">
+        @if (c.AvatarUrl is not null)
+        {
+            <img class="report-avatar" src="@c.AvatarUrl" alt="" width="72" height="72" />
+        }
+        <div>
+            <span class="eyebrow">@a.Spec.SpecName @a.Spec.ClassName · @RealmName (@c.Region.ToUpperInvariant())</span>
+            <h1>@c.Name</h1>
+            <div class="report-chips">
+                <span class="chip">
+                    <small>@WebTexts.Report_ItemLevel</small> @Ui.Ilvl(c.Loadout.ItemLevel)
+                    <em class="@(c.Loadout.ItemLevel >= a.Meta.MedianItemLevel ? "is-up" : "is-down")">
+                        @Ui.F(WebTexts.Report_VsTop, (c.Loadout.ItemLevel - a.Meta.MedianItemLevel).ToString("+0.#;-0.#;0"))
+                    </em>
+                </span>
+                @if (c.MythicPlus is { } m)
+                {
+                    <span class="chip"><small>@WebTexts.Report_ScoreMplus</small> <strong style="color: @(m.ScoreColor ?? "inherit")">@m.Score.ToString("0")</strong></span>
+                }
+                @if (a.Talents.HeroTree is not null)
+                {
+                    <HeroBadge Name="@a.Talents.HeroTree" IconUrl="@Ui.HeroIcon(a.Meta.TalentTree, a.Talents.HeroTree)" />
+                }
+                @if (!a.PlaysSpec)
+                {
+                    <span class="chip is-warn">@Ui.F(WebTexts.Report_PlayedAs, PlayedSpecName)</span>
+                }
+                @if (Source is not null)
+                {
+                    <span class="chip" title="@SourceTitle"><small>@WebTexts.Report_Source</small> @Source</span>
+                }
+                @foreach (var other in Site.Role.ForClass(a.Spec.ClassId).Where(s => s != a.Spec))
+                {
+                    <a class="chip" href="@BasePath?spec=@other.Slug">@Ui.F(WebTexts.Report_CompareAs, other.SpecName)</a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="report-score">
+        <ScoreRing Score="a.Score" />
+        <span class="eyebrow">@WebTexts.Report_MetaCompliance</span>
+        <button type="button" class="btn btn-ghost btn-refresh" @onclick="OnRefresh" title="@RefreshTitle">
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 0 1-15.5 6.2L3 16M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M3 21v-5h5" />
+            </svg>
+            @Ui.F(WebTexts.Report_Rerun, Ui.Ago(a.AnalyzedAtUtc))
+        </button>
+    </div>
+</section>
+
+<ul class="area-tiles" aria-label="@WebTexts.Report_AreasLabel">
+    @foreach (var area in a.Areas)
+    {
+        <li class="@Ui.VerdictCss(area.Verdict)">
+            <a href="@Anchor(Ui.AreaSection(area.Kind))">
+                <VerdictIcon Verdict="area.Verdict" Size="22" />
+                <span class="area-name">@Ui.AreaLabel(area.Kind)</span>
+                <strong>@area.Summary</strong>
+            </a>
+        </li>
+    }
+</ul>
+
+<nav class="report-nav" aria-label="@WebTexts.Report_SectionsLabel">
+    <a href="@Anchor("plan")">@WebTexts.Report_NavPlan</a>
+    <a href="@Anchor("optimiser")">@WebTexts.Report_NavOptimize</a>
+    <a href="@Anchor("farm")">@WebTexts.Report_NavFarm</a>
+    <a href="@Anchor("bijoux")">@WebTexts.Report_NavTrinkets</a>
+    <a href="@Anchor("talents")">@WebTexts.Report_NavTalents</a>
+    <a href="@Anchor("mythique")">@WebTexts.Report_NavMythicPlus</a>
+    <a href="@Anchor("equipement")">@WebTexts.Report_NavGear</a>
+    @if (a.Inventory is not null)
+    {
+        <a href="@Anchor("sacs")">@WebTexts.Report_NavBags</a>
+    }
+</nav>
+
+<section class="panel meta-section" id="plan">
+    <h2 class="section-title">@WebTexts.Report_NavPlan <small class="muted">@WebTexts.Report_PlanNote</small></h2>
+    @if (ToFix.Count == 0)
+    {
+        <p class="muted">@WebTexts.Report_NothingToFix</p>
+    }
+    else
+    {
+        <div class="plan-groups">
+            @foreach (var group in PlanGroups)
+            {
+                <div class="plan-group">
+                    <h3 class="plan-title">@group.Title <span class="plan-count">@group.Findings.Count</span> <small>@group.Hint</small></h3>
+                    <div class="findings">
+                        @foreach (var f in group.Findings)
+                        {
+                            <FindingCard Finding="f" />
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Strengths.Count > 0)
+    {
+        <details class="strengths">
+            <summary><VerdictIcon Verdict="Verdict.Good" Size="18" /> @Plural.Format(Strengths.Count, WebTexts.Report_Strengths_One, WebTexts.Report_Strengths_Other)</summary>
+            <div class="findings">
+                @foreach (var f in Strengths)
+                {
+                    <FindingCard Finding="f" />
+                }
+            </div>
+        </details>
+    }
+</section>
+
+<div class="meta-columns" id="optimiser">
+    <section class="panel meta-section">
+        <h2 class="section-title">@WebTexts.Report_StatsTitle <small class="muted">@WebTexts.Report_StatsNote</small></h2>
+        @if (a.Stats.Count == 0)
+        {
+            <p class="muted">@WebTexts.Report_StatsUnavailable</p>
+        }
+        else
+        {
+            <StatReviewList Stats="a.Stats" Projection="a.GemsAndEnchants.Projection" />
+        }
+    </section>
+
+    <section class="panel meta-section">
+        <h2 class="section-title">@WebTexts.Report_GemsTitle <small class="muted">@WebTexts.Report_GemsNote</small></h2>
+        <GemEnchantPanel Review="a.GemsAndEnchants" />
+    </section>
+</div>
+
+<section class="panel meta-section" id="farm">
+    <h2 class="section-title">@WebTexts.Report_NavFarm <small class="muted">@WebTexts.Report_FarmNote</small></h2>
+    <FarmRoadmapPanel Roadmap="a.Roadmap" />
+</section>
+
+<section class="panel meta-section" id="bijoux">
+    <h2 class="section-title">@WebTexts.Report_NavTrinkets <small class="muted">@WebTexts.Report_TrinketsNote</small></h2>
+    <TrinketPlanPanel Plan="a.TrinketPlan" />
+</section>
+
+<div class="meta-columns">
+    <section class="panel meta-section" id="talents">
+        <h2 class="section-title">@WebTexts.Report_NavTalents</h2>
+        <div class="talent-summary">
+            <div class="similarity">
+                <strong>@Ui.Percent(a.Talents.Similarity)</strong>
+                <span class="muted">@WebTexts.Report_Similarity</span>
+                <span class="share-bar" aria-hidden="true"><span style="width: @Ui.CssPercent(a.Talents.Similarity)"></span></span>
+            </div>
+            <div class="talent-actions">
+                <button type="button" class="btn btn-primary" @onclick="() => treeOpen = true" disabled="@(a.Meta.TalentTree is null)">@WebTexts.Report_SeeTree</button>
+                @if (a.Talents.LoadoutCode is { } mine)
+                {
+                    <a class="btn btn-ghost" href="@Ui.TalentCalculatorUrl(mine)" target="_blank" rel="noopener">@WebTexts.Report_MyBuild</a>
+                }
+                @if (a.Meta.TalentBuilds.FirstOrDefault() is { } topBuild)
+                {
+                    <a class="btn btn-ghost" href="@Ui.TalentCalculatorUrl(topBuild.LoadoutCode)" target="_blank" rel="noopener">@WebTexts.Report_TopBuild</a>
+                }
+            </div>
+        </div>
+
+        @if (a.Talents.MissingCore.Count > 0)
+        {
+            <h3 class="chip-title is-problem">@WebTexts.Report_MissingCore</h3>
+            <TalentChips Talents="a.Talents.MissingCore" Layout="a.Meta.TalentTree" />
+        }
+        @if (a.Talents.Atypical.Count > 0)
+        {
+            <h3 class="chip-title is-improve">@WebTexts.Report_Atypical</h3>
+            <TalentChips Talents="a.Talents.Atypical" Layout="a.Meta.TalentTree" />
+        }
+    </section>
+
+    <section class="panel meta-section" id="mythique">
+        <h2 class="section-title">@WebTexts.Report_NavMythicPlus</h2>
+        <MythicPlusPanel MythicPlus="c.MythicPlus" />
+    </section>
+</div>
+
+<section class="panel meta-section" id="equipement">
+    <h2 class="section-title">@WebTexts.Report_NavGear <small class="muted">@WebTexts.Report_GearNote</small></h2>
+    <GearReviewList Gear="a.Gear" />
+</section>
+
+@if (a.Inventory is { } inventory)
+{
+    <section class="panel meta-section" id="sacs">
+        <h2 class="section-title">
+            <VerdictIcon Verdict="inventory.Verdict" Size="24" />
+            @WebTexts.Report_NavBags <small class="muted">@inventory.Summary</small>
+        </h2>
+        <InventoryPanel Review="inventory" />
+    </section>
+}
+
+<details class="panel meta-section sheet-panel">
+    <summary class="section-title">@WebTexts.Report_SheetTitle</summary>
+        @if (c.Sheet is { } s)
+        {
+            <dl class="sheet">
+                <div><dt>@WebTexts.Sheet_Health</dt><dd>@s.Health.ToString("N0")</dd></div>
+                <div><dt>@WebTexts.Sheet_Stamina</dt><dd>@s.Stamina.ToString("N0")</dd></div>
+                <div><dt>@PrimaryStatName(s)</dt><dd>@(new[] { s.Strength, s.Agility, s.Intellect }.Max().ToString("N0"))</dd></div>
+                @if (s.Mana > 0)
+                {
+                    <div><dt>@WebTexts.Sheet_Mana</dt><dd>@s.Mana.ToString("N0")</dd></div>
+                }
+                <div><dt>@WebTexts.Sheet_Armor</dt><dd>@s.Armor.ToString("N0")</dd></div>
+                <div><dt>@Ui.StatLabel(SecondaryStat.Haste)</dt><dd>@Ui.PercentValue(s.Secondary.Haste.Percent, 1)</dd></div>
+                <div><dt>@Ui.StatLabel(SecondaryStat.Mastery)</dt><dd>@Ui.PercentValue(s.Secondary.Mastery.Percent, 1)</dd></div>
+                <div><dt>@Ui.StatLabel(SecondaryStat.Crit)</dt><dd>@Ui.PercentValue(s.Secondary.Crit.Percent, 1)</dd></div>
+                <div><dt>@Ui.StatLabel(SecondaryStat.Versatility)</dt><dd>@Ui.PercentValue(s.Secondary.Versatility.Percent, 1) <small>@Ui.F(WebTexts.Sheet_VersatilityTaken, Ui.PercentValue(s.VersatilityDamageTaken, 1))</small></dd></div>
+                @if (Site.Role.Kind == RoleKind.Tank)
+                {
+                    <div><dt>@WebTexts.Sheet_Dodge</dt><dd>@Ui.PercentValue(s.Dodge, 1)</dd></div>
+                    <div><dt>@WebTexts.Sheet_Parry</dt><dd>@Ui.PercentValue(s.Parry, 1)</dd></div>
+                    @if (s.Block > 0)
+                    {
+                        <div><dt>@WebTexts.Sheet_Block</dt><dd>@Ui.PercentValue(s.Block, 1)</dd></div>
+                    }
+                }
+                <div><dt>@WebTexts.Sheet_Leech</dt><dd>@Ui.PercentValue(s.Leech, 1)</dd></div>
+                <div><dt>@WebTexts.Sheet_Avoidance</dt><dd>@Ui.PercentValue(s.Avoidance, 1)</dd></div>
+                <div><dt>@WebTexts.Sheet_Speed</dt><dd>@Ui.PercentValue(s.Speed, 1)</dd></div>
+            </dl>
+        }
+        else
+        {
+            <p class="muted">@WebTexts.Report_SheetUnavailable</p>
+        }
+</details>
+
+@if (treeOpen && a.Meta.TalentTree is { } layout)
+{
+    <TalentCalculatorDialog Layout="layout" Spec="a.Spec" SampleSize="a.Meta.SampleSize" LoadoutCode="@a.Talents.LoadoutCode"
+                            Selected="a.Talents.SelectedTalentIds" InitialHero="@a.Talents.HeroTree" OnClose="() => treeOpen = false" />
+}
+

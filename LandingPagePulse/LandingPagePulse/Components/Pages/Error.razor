@@ -1,15 +1,15 @@
 @page "/Error"
 
-<PageTitle>Erreur · Noovio</PageTitle>
+<PageTitle>@LandingTexts.Error_Title</PageTitle>
 
 <main class="shell">
     <section class="panel empty-state">
-        <h1>Une erreur est survenue</h1>
-        <p>Le pouls a sauté un battement. Réessaie dans un instant.</p>
+        <h1>@LandingTexts.Error_Heading</h1>
+        <p>@LandingTexts.Error_Text</p>
         @if (ShowRequestId)
         {
-            <p class="muted">Identifiant de la requête : <code>@RequestId</code></p>
+            <p class="muted">@LandingTexts.Error_RequestId <code>@RequestId</code></p>
         }
-        <a class="btn" href="/">Retour</a>
+        <a class="btn" href="/">@LandingTexts.Common_Back</a>
     </section>
 </main>

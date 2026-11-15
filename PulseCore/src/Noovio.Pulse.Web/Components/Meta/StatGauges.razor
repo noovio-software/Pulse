@@ -3,11 +3,11 @@
 
 @if (Stats.Count == 0)
 {
-    <p class="muted">Caractéristiques indisponibles pour cet échantillon.</p>
+    <p class="muted">@WebTexts.StatGauges_Unavailable</p>
 }
 else
 {
-    <ol class="stat-priority" aria-label="Ordre de priorité">
+    <ol class="stat-priority" aria-label="@WebTexts.StatGauges_Priority">
         @foreach (var s in Stats)
         {
             @if (s != Stats[0])
@@ -28,19 +28,19 @@ else
                 <div class="stat-head">
                     <StatIcon Stat="s.Stat" />
                     <span class="stat-name">@Ui.StatLabel(s.Stat)</span>
-                    <strong class="stat-value">@Format(s.MedianPercent) %</strong>
+                    <strong class="stat-value">@Ui.PercentValue(s.MedianPercent)</strong>
                 </div>
                 <div class="stat-scale" role="img"
-                     aria-label="@($"{Ui.StatLabel(s.Stat)} : médiane {Format(s.MedianPercent)} %, la moitié du top entre {Format(s.P25Percent)} et {Format(s.P75Percent)} %")">
+                     aria-label="@Ui.F(WebTexts.StatGauges_ScaleLabel, Ui.StatLabel(s.Stat), Ui.PercentValue(s.MedianPercent), Ui.PercentValue(s.P25Percent), Ui.PercentValue(s.P75Percent))">
                     <span class="stat-band" style="left: @Pos(s.P25Percent); width: @Width(s)"></span>
                     <span class="stat-median" style="left: @Pos(s.MedianPercent)"></span>
                 </div>
-                <p class="stat-range">La moitié du top entre @Format(s.P25Percent) et @Format(s.P75Percent) %</p>
+                <p class="stat-range">@Ui.F(WebTexts.StatGauges_Range, Format(s.P25Percent), Ui.PercentValue(s.P75Percent))</p>
             </li>
         }
     </ul>
 
     <p class="stat-note muted">
-        Pourcentages de la feuille de personnage, médiane du top. La priorité suit les points investis dans chaque caractéristique.
+        @WebTexts.StatGauges_Note
     </p>
 }

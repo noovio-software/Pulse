@@ -19,12 +19,11 @@
     </div>
 
     <div class="compare-text">
-        <h2>@(Spec is null ? $"Compare ton {Site.Words.Noun} au top 100" : $"Ton {Spec.SpecName} face au top 100")</h2>
+        <h2>@(Spec is null ? Ui.F(WebTexts.Callout_TitleAny, Site.Words.Noun) : Ui.F(WebTexts.Callout_TitleSpec, Spec.SpecName))</h2>
         <p>
-            Score sur 100, plan d'action, et l'écart avec la méta sur l'équipement, les caractéristiques, les talents,
-            les bijoux et le Mythique+.
+            @WebTexts.Callout_Text
             <AuthorizeView>
-                <NotAuthorized><span class="compare-hint">Connexion Battle.net : seuls tes personnages sont lus.</span></NotAuthorized>
+                <NotAuthorized><span class="compare-hint">@WebTexts.Callout_Hint</span></NotAuthorized>
             </AuthorizeView>
         </p>
     </div>

@@ -39,6 +39,20 @@ public sealed class CharacterAnalyzerTests
         Assert.Equal(Verdict.Problem, analysis.Findings[0].Verdict); // les problèmes passent en tête du plan d'action
     }
 
+    /// <summary>L'analyse est rédigée dans la langue de l'interface : un visiteur anglophone reçoit un plan d'action en anglais.</summary>
+    [Fact]
+    public void Findings_are_written_in_the_interface_language()
+    {
+        var top = Top();
+        var mine = Player(top[0], gear: top[0].Gear.Select(g => g.Slot == GearSlot.Chest ? g with { Enchantments = [] } : g).ToList());
+
+        using var _ = TestCulture.Use("en");
+        var finding = Assert.Single(Analyze(top, mine).Findings, f => f.Area == AnalysisAreaKind.Enchantments && f.Verdict == Verdict.Problem);
+
+        Assert.Equal("Chest without enchantment", finding.Title);
+        Assert.StartsWith("Most common in the top:", finding.How);
+    }
+
     [Fact]
     public void Core_talents_not_taken_are_listed_as_missing()
     {
@@ -50,6 +64,33 @@ public sealed class CharacterAnalyzerTests
         Assert.Equal(["Peau de fer"], talents.MissingCore.Select(t => t.Name));
         Assert.Equal(["Choix exotique"], talents.Atypical.Select(t => t.Name));
         Assert.Equal(0, talents.Similarity);
+    }
+
+    /// <summary>
+    /// L'API compte des talents hors de l'arbre de la spécialisation (nœuds offerts aux autres spécialisations, rangs d'un
+    /// même nœud) : tout le top les « a », personne ne peut les choisir. Ils ne sont jamais manquants.
+    /// </summary>
+    [Fact]
+    public void Talents_outside_the_spec_tree_are_never_missing()
+    {
+        var top = Top();
+        foreach (var p in top)
+        {
+            p.Talents = [.. p.Talents, new TalentPick(TalentTree.Class, 7, 70, "Explosion de lave (autre spécialisation)", 1)];
+        }
+
+        var mine = Player(top[0], talents: [new TalentPick(TalentTree.Spec, 1, 10, "Peau de fer", 1)]);
+        var meta = new MetaAggregatorService(Options.Create(new MetaOptions()), PulseRoles.Tank)
+            .Aggregate(WowSpec.BloodDeathKnight, "season-mn-2", top, Now) with
+            {
+                TalentTree = new TalentTreeLayout([new TalentTreeSection(TalentTree.Spec, "Sang", null, 1, 1, 1,
+                    [new TalentNodeView(100, 0, 0, TalentNodeKind.Passive, 1, [], [new TalentChoiceView(1, 10, "Peau de fer", null, 1)])])])
+            };
+
+        var talents = CharacterAnalyzer.Analyze(PulseRoles.Tank, Blood, meta, top, mine, new Dictionary<int, string>(), Now).Talents;
+
+        Assert.Empty(talents.MissingCore);
+        Assert.Equal(1, talents.Similarity);
     }
 
     [Fact]

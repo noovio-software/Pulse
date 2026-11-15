@@ -1,0 +1,12 @@
+@using System.Globalization
+@* Bascule de langue : un lien par autre langue, rechargement complet pour que le circuit Blazor reparte dans la nouvelle. *@
+<nav class="language-switch" aria-label="@WebTexts.Language_Label">
+    @foreach (var culture in Others)
+    {
+        var info = CultureInfo.GetCultureInfo(culture);
+        <a class="language-link" href="@PulseLocalization.SwitchUrl(culture, Nav.ToBaseRelativePath(Nav.Uri))"
+           hreflang="@culture" lang="@culture" title="@Ui.Capitalized(info.NativeName)" rel="nofollow" data-enhance-nav="false">
+            @culture.ToUpperInvariant()
+        </a>
+    }
+</nav>

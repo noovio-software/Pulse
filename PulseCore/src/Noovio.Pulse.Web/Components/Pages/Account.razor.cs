@@ -50,5 +50,9 @@ public partial class Account
     private List<SpecInfo> SpecsOf(UserCharacter character) =>
         Site.Role.ForClass(character.ClassId).OrderByDescending(s => s == target).ToList();
 
+    /// <summary>La classe dans la langue de l'interface ; le nom enregistré (langue de l'API) pour une classe inconnue.</summary>
+    private static string ClassName(UserCharacter character) =>
+        WowClasses.Name(character.ClassId) is { Length: > 0 } name ? name : character.ClassName;
+
     private bool IsTarget(UserCharacter character) => target is not null && character.ClassId == target.ClassId;
 }

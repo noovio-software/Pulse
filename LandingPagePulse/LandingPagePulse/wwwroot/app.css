@@ -69,6 +69,17 @@
     --on-accent: #FFFFFF;
 }
 
+/* L'addon NoovioPulse sert les quatre outils : le violet de son icône, et les quatre couleurs dans ses dégradés. */
+.tool-addon {
+    --accent: #C4B5FD;
+    --accent-2: #A78BFA;
+    --accent-3: #4FA8F7;
+    --fill: #8B5CF6;
+    --fill-2: #6D28D9;
+    --glow: rgba(139, 92, 246, 0.4);
+    --on-accent: #FFFFFF;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body {
@@ -198,7 +209,27 @@ body:has(.tool-burst:hover) .noovio-backdrop::after { opacity: 0.25; }
     text-transform: uppercase;
 }
 
-.topbar-tools { display: flex; gap: 8px; }
+.topbar-tools { display: flex; gap: 8px; margin-left: auto; }
+
+/* Bascule de langue : code court, discret, mis en avant au survol */
+.language-switch { display: flex; gap: 4px; flex: none; }
+.language-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 8px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+}
+.language-link:hover, .language-link:focus-visible { color: var(--text); border-color: var(--line-strong); }
 
 .tool-link {
     display: inline-flex;

@@ -1,7 +1,10 @@
 using System.Globalization;
 using System.Text;
 using Microsoft.Extensions.Caching.Memory;
+using AltPulse.Client.Components;
+using AltPulse.Client.Localization;
 using AltPulse.Client.Models;
+using AltPulse.Client.Resources;
 using AltPulse.Client.Services;
 using AltPulse.Services.Blizzard;
 using AltPulse.Services.RaiderIo;
@@ -41,14 +44,6 @@ public sealed partial class AltPulseService(
         ["trinket2"] = "TRINKET_2", ["mainhand"] = "MAIN_HAND", ["offhand"] = "OFF_HAND"
     };
 
-    private static readonly Dictionary<string, string> SlotNames = new()
-    {
-        ["HEAD"] = "Tête", ["NECK"] = "Cou", ["SHOULDER"] = "Épaules", ["BACK"] = "Dos",
-        ["CHEST"] = "Torse", ["SHIRT"] = "Chemise", ["TABARD"] = "Tabard", ["WRIST"] = "Poignets",
-        ["HANDS"] = "Mains", ["WAIST"] = "Taille", ["LEGS"] = "Jambes", ["FEET"] = "Pieds",
-        ["FINGER_1"] = "Doigt 1", ["FINGER_2"] = "Doigt 2", ["TRINKET_1"] = "Bijou 1",
-        ["TRINKET_2"] = "Bijou 2", ["MAIN_HAND"] = "Main droite", ["OFF_HAND"] = "Main gauche"
-    };
 
     private static readonly Dictionary<string, int> ClassIds = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -62,7 +57,8 @@ public sealed partial class AltPulseService(
     public async Task<SeasonInfo?> GetSeasonAsync(string region, CancellationToken cancellationToken = default)
     {
         region = NormalizeRegion(region);
-        return await cache.GetOrCreateAsync($"season:{region}", async entry =>
+        // Noms d'affixes dans la langue de l'interface : une entrée par langue.
+        return await cache.GetOrCreateAsync($"season:{AltLocalization.CurrentLanguage}:{region}", async entry =>
         {
             entry.AbsoluteExpirationRelativeToNow = SeasonCacheDuration;
 
@@ -139,22 +135,23 @@ public sealed partial class AltPulseService(
 
         if (string.IsNullOrWhiteSpace(realmSlug) || string.IsNullOrWhiteSpace(name))
         {
-            return new CharacterLookupResult(null, "Royaume et nom du personnage sont obligatoires.");
+            return new CharacterLookupResult(null, AltTexts.Server_Required);
         }
 
-        var cacheKey = $"character:{CharacterKey.Of(region, realmSlug, name)}";
+        // La fiche porte des textes (avertissements, équipement, spécialisation) dans la langue de l'interface : une entrée par langue.
+        var cacheKey = $"character:{AltLocalization.CurrentLanguage}:{CharacterKey.Of(region, realmSlug, name)}";
         if (!forceRefresh && cache.TryGetValue(cacheKey, out CharacterSnapshot? cached) && cached is not null)
         {
             return new CharacterLookupResult(cached, null);
         }
 
         var warnings = new List<string>();
-        var seasonTask = SafeAsync(() => GetSeasonAsync(region, cancellationToken), "saison raider.io", warnings);
+        var seasonTask = SafeAsync(() => GetSeasonAsync(region, cancellationToken), AltTexts.Source_Season, warnings);
         var rioTask = SafeAsync(() => raiderIo.GetCharacterAsync(region, realmSlug, name, cancellationToken), "raider.io", warnings);
-        var profileTask = SafeAsync(() => blizzard.GetProfileAsync(region, realmSlug, name, cancellationToken), "profil Blizzard", warnings);
-        var equipmentTask = SafeAsync(() => blizzard.GetEquipmentAsync(region, realmSlug, name, cancellationToken), "équipement Blizzard", warnings);
-        var mediaTask = SafeAsync(() => blizzard.GetMediaAsync(region, realmSlug, name, cancellationToken), "médias Blizzard", warnings);
-        var raidsTask = SafeAsync(() => blizzard.GetRaidEncountersAsync(region, realmSlug, name, cancellationToken), "raids Blizzard", warnings);
+        var profileTask = SafeAsync(() => blizzard.GetProfileAsync(region, realmSlug, name, cancellationToken), AltTexts.Source_Profile, warnings);
+        var equipmentTask = SafeAsync(() => blizzard.GetEquipmentAsync(region, realmSlug, name, cancellationToken), AltTexts.Source_Equipment, warnings);
+        var mediaTask = SafeAsync(() => blizzard.GetMediaAsync(region, realmSlug, name, cancellationToken), AltTexts.Source_Media, warnings);
+        var raidsTask = SafeAsync(() => blizzard.GetRaidEncountersAsync(region, realmSlug, name, cancellationToken), AltTexts.Source_Raids, warnings);
         await Task.WhenAll(seasonTask, rioTask, profileTask, equipmentTask, mediaTask, raidsTask);
 
         var season = seasonTask.Result;
@@ -163,12 +160,12 @@ public sealed partial class AltPulseService(
 
         if (rio is null && profile is null)
         {
-            return new CharacterLookupResult(null, $"Personnage « {name} » introuvable sur {realm} ({region.ToUpperInvariant()}).");
+            return new CharacterLookupResult(null, AltLocalization.F(AltTexts.Server_NotFound, name, realm, region.ToUpperInvariant()));
         }
 
         if (!blizzard.IsConfigured)
         {
-            warnings.Add("API Blizzard non configurée : verrouillages de raid de la semaine, avatar HD et équipement détaillé indisponibles.");
+            warnings.Add(AltTexts.Server_NoBlizzard);
         }
 
         var media = mediaTask.Result?.Assets.ToDictionary(a => a.Key, a => a.Value, StringComparer.OrdinalIgnoreCase) ?? [];
@@ -194,7 +191,7 @@ public sealed partial class AltPulseService(
             AvatarUrl = media.GetValueOrDefault("avatar") ?? rio?.ThumbnailUrl,
             InsetUrl = media.GetValueOrDefault("inset"),
             RaiderIoUrl = rio?.ProfileUrl ?? $"https://raider.io/characters/{region}/{finalRealmSlug}/{Uri.EscapeDataString(finalName)}",
-            ArmoryUrl = $"https://worldofwarcraft.blizzard.com/fr-fr/character/{region}/{finalRealmSlug}/{Uri.EscapeDataString(finalName.ToLowerInvariant())}",
+            ArmoryUrl = $"https://worldofwarcraft.blizzard.com/{AltLocalization.ArmoryLocale(region)}/character/{region}/{finalRealmSlug}/{Uri.EscapeDataString(finalName.ToLowerInvariant())}",
             ItemLevelEquipped = profile?.EquippedItemLevel > 0 ? profile.EquippedItemLevel : rio?.Gear?.ItemLevelEquipped,
             ItemLevelAverage = profile?.AverageItemLevel > 0 ? profile.AverageItemLevel : null,
             Rating = score?.Score ?? 0,
@@ -302,7 +299,7 @@ public sealed partial class AltPulseService(
 
         bestPerBoss.Sort((a, b) => b.CompareTo(a));
         return RaidVaultThresholds
-            .Select(t => new VaultSlot(t, Math.Min(bestPerBoss.Count, t), bestPerBoss.Count >= t ? DifficultyLabel(bestPerBoss[t - 1]) : null))
+            .Select(t => new VaultSlot(t, Math.Min(bestPerBoss.Count, t), bestPerBoss.Count >= t ? Ui.DifficultyShort(bestPerBoss[t - 1]) : null))
             .ToList();
     }
 
@@ -350,7 +347,7 @@ public sealed partial class AltPulseService(
                 var rioItem = rioById.GetValueOrDefault(i.Item.Id);
                 return new EquippedItem(
                     slot,
-                    i.Slot.Name ?? SlotNames.GetValueOrDefault(slot, slot),
+                    i.Slot.Name ?? Ui.SlotName(slot),
                     i.Item.Id,
                     i.Name,
                     i.Level?.Value ?? rioItem?.ItemLevel ?? 0,
@@ -369,7 +366,7 @@ public sealed partial class AltPulseService(
                 var i = kv.Value;
                 return new EquippedItem(
                     slot,
-                    SlotNames.GetValueOrDefault(slot, slot),
+                    Ui.SlotName(slot),
                     i.ItemId,
                     i.Name,
                     i.ItemLevel,
@@ -422,14 +419,6 @@ public sealed partial class AltPulseService(
         "HEROIC" => RaidDifficulty.Heroic,
         "MYTHIC" => RaidDifficulty.Mythic,
         _ => null
-    };
-
-    private static string DifficultyLabel(RaidDifficulty difficulty) => difficulty switch
-    {
-        RaidDifficulty.Lfr => "RdR",
-        RaidDifficulty.Normal => "N",
-        RaidDifficulty.Heroic => "H",
-        _ => "M"
     };
 
     private static bool IsActive(RioRegionDates starts, RioRegionDates ends, string region, DateTimeOffset now) =>
@@ -492,7 +481,7 @@ public sealed partial class AltPulseService(
             {
                 lock (warnings)
                 {
-                    warnings.Add($"Source {source} indisponible pour le moment.");
+                    warnings.Add(AltLocalization.F(AltTexts.Server_SourceDown, source));
                 }
             }
 

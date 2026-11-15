@@ -1,0 +1,129 @@
+/* Un formulaire court : colonne centrée plutôt que toute la largeur du site. */
+.import-shell { max-width: 960px; }
+
+/* --- En-tête et étapes --------------------------------------------------- */
+.import-head { padding: 28px 32px 32px; }
+.import-head h1 {
+    margin: 6px 0 10px;
+    font-family: var(--font-title);
+    font-size: 1.9rem;
+    letter-spacing: 0.05em;
+    color: var(--accent-alt);
+}
+.import-lead { margin: 0; max-width: 68ch; color: var(--text-dim); line-height: 1.6; }
+
+.import-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin: 26px 0 0;
+    padding: 0;
+    list-style: none;
+}
+.import-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--panel-2) 70%, transparent);
+}
+.import-steps strong { display: block; margin-bottom: 6px; color: var(--text); }
+.import-steps p { margin: 0; color: var(--text-dim); font-size: 0.88rem; line-height: 1.6; }
+
+.step-number {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    color: var(--accent-ink);
+    font-weight: 700;
+    box-shadow: 0 0 14px var(--accent-glow);
+}
+
+code, kbd {
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+    padding: 1px 6px;
+    border-radius: 5px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    color: var(--text);
+    white-space: nowrap;
+}
+kbd { border-bottom-width: 2px; }
+
+/* --- Formulaire ---------------------------------------------------------- */
+.import-form { padding: 24px 32px 28px; }
+.import-form ::deep form { display: flex; flex-direction: column; gap: 14px; }
+
+.import-label { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.import-label label {
+    font-family: var(--font-title);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+}
+.import-label .muted { font-size: 0.82rem; }
+
+.import-form ::deep textarea {
+    width: 100%;
+    min-height: 170px;
+    resize: vertical;
+    padding: 14px 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    background: var(--bg-2);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    word-break: break-all;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.import-form ::deep textarea::placeholder { color: var(--text-faint); font-family: var(--font); font-size: 0.9rem; }
+.import-form ::deep textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.import-form ::deep textarea.is-invalid { border-color: var(--danger); }
+
+.import-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0;
+    padding: 10px 14px;
+    border: 1px solid color-mix(in srgb, var(--danger) 45%, transparent);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
+    color: var(--danger);
+    font-size: 0.9rem;
+}
+.import-error svg { flex: none; margin-top: 2px; }
+
+.import-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 20px;
+    padding-top: 4px;
+}
+.import-actions p { margin: 0; font-size: 0.85rem; }
+.import-actions .btn { min-width: 150px; justify-content: center; }
+
+/* --- Petits écrans ------------------------------------------------------- */
+@media (max-width: 760px) {
+    .import-head, .import-form { padding: 20px; }
+    .import-head h1 { font-size: 1.5rem; }
+    .import-steps { grid-template-columns: 1fr; }
+    .import-actions .btn { width: 100%; }
+}

@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Addon_DirectDownload" xml:space="preserve">
+    <value>Direct download</value>
+  </data>
+  <data name="Addon_Field" xml:space="preserve">
+    <value>Addon string</value>
+  </data>
+  <data name="Addon_Importing" xml:space="preserve">
+    <value>Importing…</value>
+  </data>
+  <data name="Addon_Step1" xml:space="preserve">
+    <value>Install the NoovioPulse addon</value>
+  </data>
+  <data name="Addon_Step1Detail" xml:space="preserve">
+    <value>Then log in once on each alt: it remembers their progress.</value>
+  </data>
+  <data name="Addon_Step2" xml:space="preserve">
+    <value>In game: /noovio, "My alts" card</value>
+  </data>
+  <data name="Addon_Step2Detail" xml:space="preserve">
+    <value>The string is selected: Ctrl+C.</value>
+  </data>
+  <data name="Addon_Step3" xml:space="preserve">
+    <value>Paste it below</value>
+  </data>
+  <data name="Addon_Step3Detail" xml:space="preserve">
+    <value>The alts join the grid; their in-game data complements raider.io.</value>
+  </data>
+  <data name="Addon_Submit" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Addon_Subtitle" xml:space="preserve">
+    <value>Great Vault, this week's keys and owned keystone of all your alts, as in game.</value>
+  </data>
+  <data name="Addon_Title" xml:space="preserve">
+    <value>Update from the addon</value>
+  </data>
+  <data name="Addon_UpdatedMany" xml:space="preserve">
+    <value>{0} characters updated from the addon.</value>
+  </data>
+  <data name="Addon_UpdatedOne" xml:space="preserve">
+    <value>{0} updated from the addon.</value>
+  </data>
+  <data name="Brand_Tag" xml:space="preserve">
+    <value>Character tracker · Curse of Ula'tek</value>
+  </data>
+  <data name="Common_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Difficulty_Heroic" xml:space="preserve">
+    <value>Heroic</value>
+  </data>
+  <data name="Difficulty_Lfr" xml:space="preserve">
+    <value>Raid Finder</value>
+  </data>
+  <data name="Difficulty_LfrShort" xml:space="preserve">
+    <value>LFR</value>
+  </data>
+  <data name="Difficulty_Mythic" xml:space="preserve">
+    <value>Mythic</value>
+  </data>
+  <data name="Difficulty_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="Equipment_Aria" xml:space="preserve">
+    <value>{0}'s equipment</value>
+  </data>
+  <data name="Equipment_Ilvl" xml:space="preserve">
+    <value>Item level</value>
+  </data>
+  <data name="Equipment_None" xml:space="preserve">
+    <value>No equipment available.</value>
+  </data>
+  <data name="Error_EmptyResponse" xml:space="preserve">
+    <value>Empty response from the server.</value>
+  </data>
+  <data name="Error_Server" xml:space="preserve">
+    <value>Server error ({0}).</value>
+  </data>
+  <data name="Error_ServerDown" xml:space="preserve">
+    <value>Server unreachable.</value>
+  </data>
+  <data name="Error_ServerUnreachable" xml:space="preserve">
+    <value>Unable to reach the server.</value>
+  </data>
+  <data name="ErrorPage_Heading" xml:space="preserve">
+    <value>An error occurred</value>
+  </data>
+  <data name="ErrorPage_RequestId" xml:space="preserve">
+    <value>Request ID:</value>
+  </data>
+  <data name="ErrorPage_Text" xml:space="preserve">
+    <value>The venom dripped in the wrong place. Try again in a moment.</value>
+  </data>
+  <data name="ErrorPage_Title" xml:space="preserve">
+    <value>Error · AltPulse by Noovio</value>
+  </data>
+  <data name="Grid_AddonSync" xml:space="preserve">
+    <value>addon · {0}</value>
+  </data>
+  <data name="Grid_AddonSyncTitle" xml:space="preserve">
+    <value>Vault, keys and owned keystone read in game by the NoovioPulse addon</value>
+  </data>
+  <data name="Grid_Characters" xml:space="preserve">
+    <value>Characters</value>
+  </data>
+  <data name="Grid_Collapse" xml:space="preserve">
+    <value>Collapse the column to icons</value>
+  </data>
+  <data name="Grid_Dungeons" xml:space="preserve">
+    <value>Mythic+ · {0}</value>
+  </data>
+  <data name="Grid_DungeonTitle" xml:space="preserve">
+    <value>{0} - timer {1}</value>
+  </data>
+  <data name="Grid_Equipment" xml:space="preserve">
+    <value>Equipment</value>
+  </data>
+  <data name="Grid_Expand" xml:space="preserve">
+    <value>Expand the column</value>
+  </data>
+  <data name="Grid_Ilvl" xml:space="preserve">
+    <value>Item level</value>
+  </data>
+  <data name="Grid_IlvlAverage" xml:space="preserve">
+    <value>Average item level (bags included)</value>
+  </data>
+  <data name="Grid_Keystone" xml:space="preserve">
+    <value>Owned keystone</value>
+  </data>
+  <data name="Grid_KeystoneTitle" xml:space="preserve">
+    <value>Owned keystone (NoovioPulse addon)</value>
+  </data>
+  <data name="Grid_KeystoneViaAddon" xml:space="preserve">
+    <value>Known through the NoovioPulse addon: "Update from addon" button</value>
+  </data>
+  <data name="Grid_Level" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="Grid_NoKeystone" xml:space="preserve">
+    <value>No keystone this week</value>
+  </data>
+  <data name="Grid_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Grid_Partial" xml:space="preserve">
+    <value>⚠ partial data</value>
+  </data>
+  <data name="Grid_Progress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="Grid_RaiderIo" xml:space="preserve">
+    <value>Raider.io profile</value>
+  </data>
+  <data name="Grid_Rating" xml:space="preserve">
+    <value>Mythic+ rating</value>
+  </data>
+  <data name="Grid_Refresh" xml:space="preserve">
+    <value>Refresh (skips the cache)</value>
+  </data>
+  <data name="Grid_Remove" xml:space="preserve">
+    <value>Remove from history</value>
+  </data>
+  <data name="Grid_RunTitle" xml:space="preserve">
+    <value>+{0} in {1} / {2} · {3} pts</value>
+  </data>
+  <data name="Grid_SlotProgress" xml:space="preserve">
+    <value>{0}/{1} {2}</value>
+  </data>
+  <data name="Grid_SlotUnlocked" xml:space="preserve">
+    <value>Unlocked: {0}</value>
+  </data>
+  <data name="Grid_SortBy" xml:space="preserve">
+    <value>Sort by</value>
+  </data>
+  <data name="Grid_SortTitle" xml:space="preserve">
+    <value>Sort by: {0}</value>
+  </data>
+  <data name="Grid_Summary" xml:space="preserve">
+    <value>Character</value>
+  </data>
+  <data name="Grid_TrackedTitle_One" xml:space="preserve">
+    <value>{0} tracked character</value>
+  </data>
+  <data name="Grid_TrackedTitle_Other" xml:space="preserve">
+    <value>{0} tracked characters</value>
+  </data>
+  <data name="Grid_UnitBoss_One" xml:space="preserve">
+    <value>boss</value>
+  </data>
+  <data name="Grid_UnitBoss_Other" xml:space="preserve">
+    <value>bosses</value>
+  </data>
+  <data name="Grid_UnitKey_One" xml:space="preserve">
+    <value>key</value>
+  </data>
+  <data name="Grid_UnitKey_Other" xml:space="preserve">
+    <value>keys</value>
+  </data>
+  <data name="Grid_Updated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+  <data name="Grid_Vault" xml:space="preserve">
+    <value>Great Vault</value>
+  </data>
+  <data name="Grid_VaultDungeons" xml:space="preserve">
+    <value>Dungeons</value>
+  </data>
+  <data name="Grid_VaultPrevious" xml:space="preserve">
+    <value>Last week (M+)</value>
+  </data>
+  <data name="Grid_VaultRaids" xml:space="preserve">
+    <value>Raids</value>
+  </data>
+  <data name="Grid_WeeklyKeys" xml:space="preserve">
+    <value>Keys this week</value>
+  </data>
+  <data name="Grid_WeeklyMax" xml:space="preserve">
+    <value>max</value>
+  </data>
+  <data name="Home_AddonAria" xml:space="preserve">
+    <value>Update from the NoovioPulse addon</value>
+  </data>
+  <data name="Home_AddonButton" xml:space="preserve">
+    <value>Update from addon</value>
+  </data>
+  <data name="Home_AddonTitle" xml:space="preserve">
+    <value>Vault, keys and owned keystone of all your alts, read in game by the NoovioPulse addon</value>
+  </data>
+  <data name="Home_Affixes" xml:space="preserve">
+    <value>This week's affixes</value>
+  </data>
+  <data name="Home_EmptyText" xml:space="preserve">
+    <value>Run a search, or import all your alts at once with the NoovioPulse addon: each character is remembered on this device.</value>
+  </data>
+  <data name="Home_EmptyTitle" xml:space="preserve">
+    <value>No tracked character</value>
+  </data>
+  <data name="Home_Loading" xml:space="preserve">
+    <value>Opening the Abyss…</value>
+  </data>
+  <data name="Home_Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Home_ResetTitle" xml:space="preserve">
+    <value>Next weekly reset ({0})</value>
+  </data>
+  <data name="Home_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Home_SearchAria" xml:space="preserve">
+    <value>Search for a character</value>
+  </data>
+  <data name="Home_Title" xml:space="preserve">
+    <value>AltPulse by Noovio · Character tracker</value>
+  </data>
+  <data name="Import_CharacterAnalysis" xml:space="preserve">
+    <value>This string is a character analysis: paste it on FrontPulse, LifePulse or BurstPulse. For AltPulse, choose "My alts" in the addon.</value>
+  </data>
+  <data name="Import_Empty" xml:space="preserve">
+    <value>Paste the string copied from the NoovioPulse addon (in game: /noovio, "My alts" card).</value>
+  </data>
+  <data name="Import_Newer" xml:space="preserve">
+    <value>Addon version too recent for this site: AltPulse will be updated shortly.</value>
+  </data>
+  <data name="Import_NewerOrIncomplete" xml:space="preserve">
+    <value>Addon version too recent for this site, or incomplete string: copy it again from the game.</value>
+  </data>
+  <data name="Import_NoCharacter" xml:space="preserve">
+    <value>No character in the export: log in once on each alt with the addon enabled.</value>
+  </data>
+  <data name="Import_NotNoovio" xml:space="preserve">
+    <value>This is not a NoovioPulse string: it starts with "NP1:".</value>
+  </data>
+  <data name="Import_TooLong" xml:space="preserve">
+    <value>String too long: this is not a NoovioPulse export.</value>
+  </data>
+  <data name="Import_Truncated" xml:space="preserve">
+    <value>Truncated or modified string: copy it entirely from the addon window (Ctrl+C).</value>
+  </data>
+  <data name="Import_Unreadable" xml:space="preserve">
+    <value>Unreadable content: update the NoovioPulse addon then export again.</value>
+  </data>
+  <data name="Language_Label" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Layout_BlizzardApi" xml:space="preserve">
+    <value>Blizzard API</value>
+  </data>
+  <data name="Layout_Data" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="Layout_Error" xml:space="preserve">
+    <value>An unexpected error occurred.</value>
+  </data>
+  <data name="Layout_Reload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="Layout_Version" xml:space="preserve">
+    <value>Deployed version</value>
+  </data>
+  <data name="NotFound_Heading" xml:space="preserve">
+    <value>Not found</value>
+  </data>
+  <data name="NotFound_Text" xml:space="preserve">
+    <value>This page dissolved into the Venomous Abyss.</value>
+  </data>
+  <data name="NotFound_Title" xml:space="preserve">
+    <value>Not found · AltPulse by Noovio</value>
+  </data>
+  <data name="Overlay_AddonOnly" xml:space="preserve">
+    <value>Not found on raider.io or the Armory: only the addon data is shown.</value>
+  </data>
+  <data name="Overlay_Dungeon" xml:space="preserve">
+    <value>Dungeon {0}</value>
+  </data>
+  <data name="Reconnect_Failed" xml:space="preserve">
+    <value>Failed to rejoin.</value>
+  </data>
+  <data name="Reconnect_FailedHint" xml:space="preserve">
+    <value>Please retry or reload the page.</value>
+  </data>
+  <data name="Reconnect_First" xml:space="preserve">
+    <value>Rejoining the server…</value>
+  </data>
+  <data name="Reconnect_Paused" xml:space="preserve">
+    <value>The session has been paused by the server.</value>
+  </data>
+  <data name="Reconnect_RepeatedAfter" xml:space="preserve">
+    <value>seconds.</value>
+  </data>
+  <data name="Reconnect_RepeatedBefore" xml:space="preserve">
+    <value>Rejoin failed… trying again in</value>
+  </data>
+  <data name="Reconnect_Resume" xml:space="preserve">
+    <value>Resume</value>
+  </data>
+  <data name="Reconnect_ResumeFailed" xml:space="preserve">
+    <value>Failed to resume the session.</value>
+  </data>
+  <data name="Reconnect_ResumeFailedHint" xml:space="preserve">
+    <value>Please reload the page.</value>
+  </data>
+  <data name="Reconnect_Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="Search_Character" xml:space="preserve">
+    <value>Character</value>
+  </data>
+  <data name="Search_ClearHistory" xml:space="preserve">
+    <value>Clear history</value>
+  </data>
+  <data name="Search_History" xml:space="preserve">
+    <value>History ({0})</value>
+  </data>
+  <data name="Search_Missing" xml:space="preserve">
+    <value>Enter a realm and a character name.</value>
+  </data>
+  <data name="Search_NamePlaceholder" xml:space="preserve">
+    <value>Character name</value>
+  </data>
+  <data name="Search_NoHistory" xml:space="preserve">
+    <value>No search yet</value>
+  </data>
+  <data name="Search_NotFound" xml:space="preserve">
+    <value>Character not found.</value>
+  </data>
+  <data name="Search_PickHistory" xml:space="preserve">
+    <value>- Choose a character -</value>
+  </data>
+  <data name="Search_Realm" xml:space="preserve">
+    <value>Realm</value>
+  </data>
+  <data name="Search_RealmPlaceholder" xml:space="preserve">
+    <value>Hyjal, Archimonde…</value>
+  </data>
+  <data name="Search_Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="Search_Searching" xml:space="preserve">
+    <value>Searching…</value>
+  </data>
+  <data name="Search_Subtitle" xml:space="preserve">
+    <value>It joins your history and the tracking grid.</value>
+  </data>
+  <data name="Search_Title" xml:space="preserve">
+    <value>Search for a character</value>
+  </data>
+  <data name="Server_NoBlizzard" xml:space="preserve">
+    <value>Blizzard API not configured: weekly raid lockouts, HD avatar and detailed equipment unavailable.</value>
+  </data>
+  <data name="Server_NotFound" xml:space="preserve">
+    <value>Character "{0}" not found on {1} ({2}).</value>
+  </data>
+  <data name="Server_Required" xml:space="preserve">
+    <value>Realm and character name are required.</value>
+  </data>
+  <data name="Server_SourceDown" xml:space="preserve">
+    <value>Source {0} unavailable for now.</value>
+  </data>
+  <data name="Slot_BACK" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Slot_CHEST" xml:space="preserve">
+    <value>Chest</value>
+  </data>
+  <data name="Slot_FEET" xml:space="preserve">
+    <value>Feet</value>
+  </data>
+  <data name="Slot_FINGER_1" xml:space="preserve">
+    <value>Finger 1</value>
+  </data>
+  <data name="Slot_FINGER_2" xml:space="preserve">
+    <value>Finger 2</value>
+  </data>
+  <data name="Slot_HANDS" xml:space="preserve">
+    <value>Hands</value>
+  </data>
+  <data name="Slot_HEAD" xml:space="preserve">
+    <value>Head</value>
+  </data>
+  <data name="Slot_LEGS" xml:space="preserve">
+    <value>Legs</value>
+  </data>
+  <data name="Slot_MAIN_HAND" xml:space="preserve">
+    <value>Main hand</value>
+  </data>
+  <data name="Slot_NECK" xml:space="preserve">
+    <value>Neck</value>
+  </data>
+  <data name="Slot_OFF_HAND" xml:space="preserve">
+    <value>Off hand</value>
+  </data>
+  <data name="Slot_SHIRT" xml:space="preserve">
+    <value>Shirt</value>
+  </data>
+  <data name="Slot_SHOULDER" xml:space="preserve">
+    <value>Shoulders</value>
+  </data>
+  <data name="Slot_TABARD" xml:space="preserve">
+    <value>Tabard</value>
+  </data>
+  <data name="Slot_TRINKET_1" xml:space="preserve">
+    <value>Trinket 1</value>
+  </data>
+  <data name="Slot_TRINKET_2" xml:space="preserve">
+    <value>Trinket 2</value>
+  </data>
+  <data name="Slot_WAIST" xml:space="preserve">
+    <value>Waist</value>
+  </data>
+  <data name="Slot_WRIST" xml:space="preserve">
+    <value>Wrists</value>
+  </data>
+  <data name="Sort_Class" xml:space="preserve">
+    <value>Class</value>
+  </data>
+  <data name="Sort_Ilvl" xml:space="preserve">
+    <value>Item level</value>
+  </data>
+  <data name="Sort_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Sort_Rating" xml:space="preserve">
+    <value>M+ rating</value>
+  </data>
+  <data name="Sort_Recent" xml:space="preserve">
+    <value>Recent search</value>
+  </data>
+  <data name="Source_Equipment" xml:space="preserve">
+    <value>Blizzard equipment</value>
+  </data>
+  <data name="Source_Media" xml:space="preserve">
+    <value>Blizzard media</value>
+  </data>
+  <data name="Source_Profile" xml:space="preserve">
+    <value>Blizzard profile</value>
+  </data>
+  <data name="Source_Raids" xml:space="preserve">
+    <value>Blizzard raids</value>
+  </data>
+  <data name="Source_Season" xml:space="preserve">
+    <value>raider.io season</value>
+  </data>
+  <data name="Time_DaysAgo" xml:space="preserve">
+    <value>{0} d ago</value>
+  </data>
+  <data name="Time_DaysHours" xml:space="preserve">
+    <value>{0}d {1}h</value>
+  </data>
+  <data name="Time_HoursAgo" xml:space="preserve">
+    <value>{0} h ago</value>
+  </data>
+  <data name="Time_HoursMinutes" xml:space="preserve">
+    <value>{0}h {1:00}m</value>
+  </data>
+  <data name="Time_Imminent" xml:space="preserve">
+    <value>imminent</value>
+  </data>
+  <data name="Time_JustNow" xml:space="preserve">
+    <value>just now</value>
+  </data>
+  <data name="Time_MinutesAgo" xml:space="preserve">
+    <value>{0} min ago</value>
+  </data>
+</root>

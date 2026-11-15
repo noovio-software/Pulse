@@ -6,23 +6,23 @@
             <tr>
                 <th class="label-col corner">
                     <div class="corner-head">
-                        <span class="corner-count" title="@Columns.Count personnage(s) suivi(s)">
+                        <span class="corner-count" title="@AltLocalization.Plural(Columns.Count, AltTexts.Grid_TrackedTitle_One, AltTexts.Grid_TrackedTitle_Other)">
                             <span class="label-icon"><GridIcon Name="users" /></span>
-                            <span class="label-text eyebrow">Personnages</span>
+                            <span class="label-text eyebrow">@AltTexts.Grid_Characters</span>
                             <strong>@Columns.Count</strong>
                         </span>
                         <button type="button" class="compact-toggle" @onclick="OnToggleCompact"
-                                title="@(Compact ? "Déplier la colonne" : "Réduire la colonne aux icônes")"
-                                aria-label="@(Compact ? "Déplier la colonne" : "Réduire la colonne aux icônes")"
+                                title="@(Compact ? AltTexts.Grid_Expand : AltTexts.Grid_Collapse)"
+                                aria-label="@(Compact ? AltTexts.Grid_Expand : AltTexts.Grid_Collapse)"
                                 aria-expanded="@(!Compact)">
                             <GridIcon Name="collapse" Size="16" />
                         </button>
                     </div>
-                    <label class="sort" title="Trier par : @SortLabel">
+                    <label class="sort" title="@AltLocalization.F(AltTexts.Grid_SortTitle, SortLabel)">
                         <span class="label-icon sort-icon"><GridIcon Name="sort" /></span>
-                        <span class="label-text eyebrow">Trier par</span>
+                        <span class="label-text eyebrow">@AltTexts.Grid_SortBy</span>
                         @* En mode réduit, le select est posé invisible sur l'icône : un tap ouvre la liste native. *@
-                        <select value="@SortBy" @onchange="OnSortSelected" aria-label="Trier par">
+                        <select value="@SortBy" @onchange="OnSortSelected" aria-label="@AltTexts.Grid_SortBy">
                             @foreach (var (value, label) in Ui.SortOptions)
                             {
                                 <option value="@value">@label</option>
@@ -61,16 +61,16 @@
                             }
                             else if (c is { Warnings.Count: > 0 })
                             {
-                                <span class="char-warning" title="@string.Join("\n", c.Warnings)">⚠ données partielles</span>
+                                <span class="char-warning" title="@string.Join("\n", c.Warnings)">@AltTexts.Grid_Partial</span>
                             }
                             <div class="char-actions">
-                                <button type="button" title="Rafraîchir (ignore le cache)" @onclick="() => OnRefresh.InvokeAsync(col)" disabled="@col.Loading">↻</button>
-                                <button type="button" title="Équipement" @onclick="() => OnShowEquipment.InvokeAsync(col)" disabled="@(c is null)">⚔</button>
+                                <button type="button" title="@AltTexts.Grid_Refresh" @onclick="() => OnRefresh.InvokeAsync(col)" disabled="@col.Loading">↻</button>
+                                <button type="button" title="@AltTexts.Grid_Equipment" @onclick="() => OnShowEquipment.InvokeAsync(col)" disabled="@(c is null)">⚔</button>
                                 @if (c?.RaiderIoUrl is not null)
                                 {
-                                    <a title="Profil Raider.io" href="@c.RaiderIoUrl" target="_blank" rel="noopener">R</a>
+                                    <a title="@AltTexts.Grid_RaiderIo" href="@c.RaiderIoUrl" target="_blank" rel="noopener">R</a>
                                 }
-                                <button type="button" title="Retirer de l'historique" class="danger" @onclick="() => OnRemove.InvokeAsync(col)">✕</button>
+                                <button type="button" title="@AltTexts.Grid_Remove" class="danger" @onclick="() => OnRemove.InvokeAsync(col)">✕</button>
                             </div>
                         </div>
                     </th>
@@ -80,11 +80,11 @@
 
         <tbody>
             @* ───────── Résumé ───────── *@
-            <SectionHeaderRow Id="summary" Title="Personnage" ColumnCount="@(Columns.Count + 1)" CollapsedSections="CollapsedSections" OnToggle="OnToggleSection" />
+            <SectionHeaderRow Id="summary" Title="@AltTexts.Grid_Summary" ColumnCount="@(Columns.Count + 1)" CollapsedSections="CollapsedSections" OnToggle="OnToggleSection" />
             @if (!IsCollapsed("summary"))
             {
                 <tr>
-                    <th class="label-col" title="Niveau"><GridLabel Icon="level" Text="Niveau" /></th>
+                    <th class="label-col" title="@AltTexts.Grid_Level"><GridLabel Icon="level" Text="@AltTexts.Grid_Level" /></th>
                     @foreach (var col in Columns)
                     {
                         <td>
@@ -100,7 +100,7 @@
                     }
                 </tr>
                 <tr>
-                    <th class="label-col" title="Niveau d'objet"><GridLabel Icon="ilvl" Text="Niveau d'objet" /></th>
+                    <th class="label-col" title="@AltTexts.Grid_Ilvl"><GridLabel Icon="ilvl" Text="@AltTexts.Grid_Ilvl" /></th>
                     @foreach (var col in Columns)
                     {
                         <td class="ilvl">
@@ -109,7 +109,7 @@
                                 <strong>@Ui.Ilvl(c.ItemLevelEquipped)</strong>
                                 @if (c.ItemLevelAverage is { } avg && avg > (c.ItemLevelEquipped ?? 0))
                                 {
-                                    <small title="Niveau d'objet moyen (sacs inclus)"> / @Ui.Ilvl(avg)</small>
+                                    <small title="@AltTexts.Grid_IlvlAverage"> / @Ui.Ilvl(avg)</small>
                                 }
                             }
                             else
@@ -120,7 +120,7 @@
                     }
                 </tr>
                 <tr>
-                    <th class="label-col" title="Score Mythique+"><GridLabel Icon="rating" Text="Score Mythique+" /></th>
+                    <th class="label-col" title="@AltTexts.Grid_Rating"><GridLabel Icon="rating" Text="@AltTexts.Grid_Rating" /></th>
                     @foreach (var col in Columns)
                     {
                         <td>
@@ -136,7 +136,7 @@
                     }
                 </tr>
                 <tr>
-                    <th class="label-col" title="Clés cette semaine"><GridLabel Icon="key" Text="Clés cette semaine" /></th>
+                    <th class="label-col" title="@AltTexts.Grid_WeeklyKeys"><GridLabel Icon="key" Text="@AltTexts.Grid_WeeklyKeys" /></th>
                     @foreach (var col in Columns)
                     {
                         <td>
@@ -144,13 +144,36 @@
                             {
                                 @if (c.WeeklyRuns.Count == 0)
                                 {
-                                    <span class="muted">Aucune</span>
+                                    <span class="muted">@AltTexts.Grid_None</span>
                                 }
                                 else
                                 {
                                     <span title="@string.Join("\n", c.WeeklyRuns.Select(r => $"+{r.Level} {r.Dungeon} {Ui.Stars(r.Upgrades)}"))">
-                                        @(c.WeeklyRuns.Count >= 10 ? "10+" : c.WeeklyRuns.Count.ToString()) · max <strong>+@c.WeeklyRuns[0].Level</strong>
+                                        @(c.WeeklyRuns.Count >= 10 ? "10+" : c.WeeklyRuns.Count.ToString()) · @AltTexts.Grid_WeeklyMax <strong>+@c.WeeklyRuns[0].Level</strong>
                                     </span>
+                                }
+                            }
+                            else
+                            {
+                                <CellPlaceholder Loading="col.Loading" />
+                            }
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <th class="label-col" title="@AltTexts.Grid_KeystoneTitle"><GridLabel Icon="keystone" Text="@AltTexts.Grid_Keystone" /></th>
+                    @foreach (var col in Columns)
+                    {
+                        <td>
+                            @if (col.Data is { } c)
+                            {
+                                @if (c.Keystone is { } key)
+                                {
+                                    <span class="keystone" title="@key.Dungeon">+@key.Level <small>@key.ShortName</small></span>
+                                }
+                                else
+                                {
+                                    <span class="muted" title="@(c.AddonSyncedAtUtc is null ? AltTexts.Grid_KeystoneViaAddon : AltTexts.Grid_NoKeystone)">-</span>
                                 }
                             }
                             else
@@ -163,12 +186,12 @@
             }
 
             @* ───────── Grande Chambre forte ───────── *@
-            <SectionHeaderRow Id="vault" Title="Grande Chambre forte" ColumnCount="@(Columns.Count + 1)" CollapsedSections="CollapsedSections" OnToggle="OnToggleSection" />
+            <SectionHeaderRow Id="vault" Title="@AltTexts.Grid_Vault" ColumnCount="@(Columns.Count + 1)" CollapsedSections="CollapsedSections" OnToggle="OnToggleSection" />
             @if (!IsCollapsed("vault"))
             {
-                <VaultRow Icon="raid" Label="Raids" Columns="Columns" Slots="RaidSlots" Unit="boss" />
-                <VaultRow Icon="dungeon" Label="Donjons" Columns="Columns" Slots="DungeonSlots" Unit="clé" />
-                <VaultRow Icon="history" Label="Semaine passée (M+)" Columns="Columns" Slots="PreviousWeekSlots" Unit="clé" Previous="true" />
+                <VaultRow Icon="raid" Label="@AltTexts.Grid_VaultRaids" Columns="Columns" Slots="RaidSlots" Unit="@AltTexts.Grid_UnitBoss_One" Units="@AltTexts.Grid_UnitBoss_Other" />
+                <VaultRow Icon="dungeon" Label="@AltTexts.Grid_VaultDungeons" Columns="Columns" Slots="DungeonSlots" Unit="@AltTexts.Grid_UnitKey_One" Units="@AltTexts.Grid_UnitKey_Other" />
+                <VaultRow Icon="history" Label="@AltTexts.Grid_VaultPrevious" Columns="Columns" Slots="PreviousWeekSlots" Unit="@AltTexts.Grid_UnitKey_One" Units="@AltTexts.Grid_UnitKey_Other" Previous="true" />
             }
 
             @* ───────── Mythique+ ───────── *@
@@ -180,7 +203,7 @@
                     @foreach (var dungeon in Season.Dungeons)
                     {
                         <tr>
-                            <th class="label-col dungeon-label" title="@dungeon.Name - chrono @Ui.Duration(dungeon.TimerSeconds * 1000L)">
+                            <th class="label-col dungeon-label" title="@AltLocalization.F(AltTexts.Grid_DungeonTitle, dungeon.Name, Ui.Duration(dungeon.TimerSeconds * 1000L))">
                                 @if (dungeon.IconUrl is not null)
                                 {
                                     <img src="@dungeon.IconUrl" alt="" loading="lazy" />
@@ -203,7 +226,7 @@
                                     else
                                     {
                                         <a class="run @Ui.RunCss(best.Upgrades)" href="@best.Url" target="_blank" rel="noopener"
-                                           title="@($"+{best.Level} en {Ui.Duration(best.ClearTimeMs)} / {Ui.Duration(best.ParTimeMs)} · {best.Score:0.#} pts")">
+                                           title="@AltLocalization.F(AltTexts.Grid_RunTitle, best.Level, Ui.Duration(best.ClearTimeMs), Ui.Duration(best.ParTimeMs), best.Score.ToString("0.#"))">
                                             +@best.Level<span class="stars">@Ui.Stars(best.Upgrades)</span>
                                         </a>
                                     }
@@ -221,7 +244,7 @@
                     @if (!IsCollapsed(sectionId))
                     {
                         <tr>
-                            <th class="label-col" title="Progression"><GridLabel Icon="progress" Text="Progression" /></th>
+                            <th class="label-col" title="@AltTexts.Grid_Progress"><GridLabel Icon="progress" Text="@AltTexts.Grid_Progress" /></th>
                             @foreach (var col in Columns)
                             {
                                 var lockout = col.Data?.Raids.FirstOrDefault(r => r.RaidSlug == raid.Slug);
@@ -237,10 +260,10 @@
                                 </td>
                             }
                         </tr>
-                        @foreach (var (difficulty, label, shortLabel) in Ui.Difficulties)
+                        @foreach (var (difficulty, label, shortLabel, css) in Ui.Difficulties)
                         {
                             <tr class="lockout-row">
-                                <th class="label-col" title="@label"><span class="diff diff-@shortLabel.ToLowerInvariant()">@shortLabel</span> <span class="label-text">@label</span></th>
+                                <th class="label-col" title="@label"><span class="diff diff-@css">@shortLabel</span> <span class="label-text">@label</span></th>
                                 @foreach (var col in Columns)
                                 {
                                     var kills = col.Data?.Raids.FirstOrDefault(r => r.RaidSlug == raid.Slug)?.KilledThisWeek.GetValueOrDefault(difficulty);
@@ -262,7 +285,7 @@
                                             <div class="bosses @(count == 0 ? "is-empty" : "")" title="@BossTooltip(raid, kills)">
                                                 @for (var i = 0; i < kills.Length; i++)
                                                 {
-                                                    <span class="boss @(kills[i] ? "killed" : "") diff-@shortLabel.ToLowerInvariant()"></span>
+                                                    <span class="boss @(kills[i] ? "killed" : "") diff-@css"></span>
                                                 }
                                                 <small>@count/@kills.Length</small>
                                             </div>
@@ -276,10 +299,16 @@
             }
 
             <tr class="footer-row">
-                <th class="label-col" title="Mis à jour"><GridLabel Icon="clock" Text="Mis à jour" /></th>
+                <th class="label-col" title="@AltTexts.Grid_Updated"><GridLabel Icon="clock" Text="@AltTexts.Grid_Updated" /></th>
                 @foreach (var col in Columns)
                 {
-                    <td><small class="muted">@(col.Data is { } c ? Ui.Ago(c.FetchedAtUtc) : "-")</small></td>
+                    <td>
+                        <small class="muted">@(col.Data is { } c ? Ui.Ago(c.FetchedAtUtc) : "-")</small>
+                        @if (col.Data?.AddonSyncedAtUtc is { } synced)
+                        {
+                            <small class="addon-sync" title="@AltTexts.Grid_AddonSyncTitle">@AltLocalization.F(AltTexts.Grid_AddonSync, Ui.Ago(synced))</small>
+                        }
+                    </td>
                 }
             </tr>
         </tbody>

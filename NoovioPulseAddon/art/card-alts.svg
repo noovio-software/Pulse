@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 256">
+  <!-- Carte « Mes alts » : grille de personnages et Grande Chambre forte. Source de Media/CardAlts.tga. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A2416" />
+      <stop offset="1" stop-color="#06110B" />
+    </linearGradient>
+    <radialGradient id="glow" cx="78%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#4DFF88" stop-opacity="0.35" />
+      <stop offset="1" stop-color="#4DFF88" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="chest" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE68A" />
+      <stop offset="1" stop-color="#B45309" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="256" fill="url(#bg)" />
+  <rect width="512" height="256" fill="url(#glow)" />
+  <!-- Colonnes de personnages, bande à la couleur de classe -->
+  <g>
+    <rect x="28" y="34" width="56" height="190" rx="8" fill="#0F2A1C" stroke="#1F4D33" />
+    <rect x="28" y="34" width="56" height="10" rx="4" fill="#C41E3A" />
+    <rect x="96" y="34" width="56" height="190" rx="8" fill="#0F2A1C" stroke="#1F4D33" />
+    <rect x="96" y="34" width="56" height="10" rx="4" fill="#3FC7EB" />
+    <rect x="164" y="34" width="56" height="190" rx="8" fill="#0F2A1C" stroke="#1F4D33" />
+    <rect x="164" y="34" width="56" height="10" rx="4" fill="#FF7C0A" />
+    <rect x="232" y="34" width="56" height="190" rx="8" fill="#0F2A1C" stroke="#1F4D33" />
+    <rect x="232" y="34" width="56" height="10" rx="4" fill="#AAD372" />
+  </g>
+  <!-- Cases : validées (vert) ou à faire -->
+  <g fill="#4DFF88">
+    <rect x="38" y="60" width="36" height="18" rx="4" /><rect x="38" y="88" width="36" height="18" rx="4" /><rect x="38" y="116" width="36" height="18" rx="4" />
+    <rect x="106" y="60" width="36" height="18" rx="4" /><rect x="106" y="88" width="36" height="18" rx="4" />
+    <rect x="174" y="60" width="36" height="18" rx="4" />
+    <rect x="242" y="60" width="36" height="18" rx="4" /><rect x="242" y="88" width="36" height="18" rx="4" /><rect x="242" y="116" width="36" height="18" rx="4" /><rect x="242" y="144" width="36" height="18" rx="4" />
+  </g>
+  <g fill="#173A27">
+    <rect x="38" y="144" width="36" height="18" rx="4" /><rect x="38" y="172" width="36" height="18" rx="4" />
+    <rect x="106" y="116" width="36" height="18" rx="4" /><rect x="106" y="144" width="36" height="18" rx="4" /><rect x="106" y="172" width="36" height="18" rx="4" />
+    <rect x="174" y="88" width="36" height="18" rx="4" /><rect x="174" y="116" width="36" height="18" rx="4" /><rect x="174" y="144" width="36" height="18" rx="4" /><rect x="174" y="172" width="36" height="18" rx="4" />
+    <rect x="242" y="172" width="36" height="18" rx="4" />
+  </g>
+  <!-- Grande Chambre forte -->
+  <g transform="translate(330 70)">
+    <ellipse cx="72" cy="128" rx="78" ry="12" fill="#000" opacity="0.35" />
+    <rect x="8" y="44" width="128" height="80" rx="8" fill="url(#chest)" stroke="#78350F" stroke-width="3" />
+    <path d="M8 52 Q72 -6 136 52 Z" fill="#FCD34D" stroke="#78350F" stroke-width="3" />
+    <rect x="8" y="58" width="128" height="10" fill="#92400E" />
+    <rect x="60" y="58" width="24" height="30" rx="4" fill="#FEF3C7" stroke="#78350F" stroke-width="2" />
+    <circle cx="72" cy="74" r="4" fill="#78350F" />
+    <g fill="#4DFF88">
+      <circle cx="20" cy="20" r="3" /><circle cx="128" cy="10" r="2.5" /><circle cx="148" cy="62" r="2" /><circle cx="0" cy="80" r="2" />
+    </g>
+  </g>
+</svg>

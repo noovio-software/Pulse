@@ -1,0 +1,32 @@
+@page "/importer/{Key}"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>@Ui.F(WebTexts.Report_PageTitle, analysis?.Character.Name ?? WebTexts.Report_Analysis, Site.Name)</PageTitle>
+
+<TopBar Active="analysis?.Spec.Spec" />
+
+<main class="shell">
+    <a class="back-link" href="importer">@WebTexts.Report_NewImport</a>
+
+@if (loading)
+{
+    <section class="panel empty-state">
+        <div class="spinner"></div>
+        <p>@WebTexts.Report_ImportLoading</p>
+    </section>
+}
+else if (error is not null)
+{
+    <section class="panel empty-state">
+        <h1>@WebTexts.Report_Failed</h1>
+        <p>@error</p>
+        <a class="btn" href="importer">@WebTexts.Report_RetryImport</a>
+    </section>
+}
+else if (analysis is { } a)
+{
+    <AnalysisReport Analysis="a" BasePath="@($"importer/{Key}")" RealmName="@import?.Character?.Realm"
+                    Source="@SourceLabel" SourceTitle="@SourceTitle"
+                    OnRefresh="() => LoadAsync(force: true)" RefreshTitle="@WebTexts.Report_ImportRefreshTitle" />
+}
+</main>

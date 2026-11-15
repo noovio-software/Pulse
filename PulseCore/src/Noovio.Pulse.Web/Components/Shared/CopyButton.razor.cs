@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Noovio.Pulse.Web.Resources;
 
 namespace Noovio.Pulse.Web.Components.Shared;
 
@@ -8,7 +9,7 @@ public partial class CopyButton
     [Inject] private IJSRuntime JS { get; set; } = default!;
 
     [Parameter, EditorRequired] public string? Text { get; set; }
-    [Parameter] public string Label { get; set; } = "Copier";
+    [Parameter] public string Label { get; set; } = WebTexts.Copy_Label;
     [Parameter] public bool Primary { get; set; }
 
     /// <summary>Bouton carré sans texte ; le libellé passe en infobulle.</summary>

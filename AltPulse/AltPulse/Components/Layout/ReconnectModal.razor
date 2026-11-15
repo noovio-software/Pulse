@@ -7,25 +7,25 @@
             <div></div>
         </div>
         <p class="components-reconnect-first-attempt-visible">
-            Rejoining the server...
+            @AltTexts.Reconnect_First
         </p>
         <p class="components-reconnect-repeated-attempt-visible">
-            Rejoin failed... trying again in <span id="components-seconds-to-next-attempt"></span> seconds.
+            @AltTexts.Reconnect_RepeatedBefore <span id="components-seconds-to-next-attempt"></span> @AltTexts.Reconnect_RepeatedAfter
         </p>
         <p class="components-reconnect-failed-visible">
-            Failed to rejoin.<br />Please retry or reload the page.
+            @AltTexts.Reconnect_Failed<br />@AltTexts.Reconnect_FailedHint
         </p>
         <button id="components-reconnect-button" class="components-reconnect-failed-visible">
-            Retry
+            @AltTexts.Reconnect_Retry
         </button>
         <p class="components-pause-visible">
-            The session has been paused by the server.
+            @AltTexts.Reconnect_Paused
         </p>
         <button id="components-resume-button" class="components-pause-visible">
-            Resume
+            @AltTexts.Reconnect_Resume
         </button>
         <p class="components-resume-failed-visible">
-            Failed to resume the session.<br />Please reload the page.
+            @AltTexts.Reconnect_ResumeFailed<br />@AltTexts.Reconnect_ResumeFailedHint
         </p>
     </div>
 </dialog>

@@ -1,6 +1,8 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Noovio.Pulse.Application.Analysis;
+using Noovio.Pulse.Web.Components.Shared;
+using Noovio.Pulse.Web.Resources;
 
 namespace Noovio.Pulse.Web.Components.Analysis;
 
@@ -14,9 +16,9 @@ public partial class StatReviewList
 
     /// <summary>Ce que le joueur doit faire de cette caractéristique, en quelques mots.</summary>
     private static string Action(StatReview s) =>
-        s.Percent < s.Top.P25Percent ? $"À monter de {s.Top.P25Percent - s.Percent:0.#} %"
-        : s.Percent > s.Top.P75Percent ? $"En surplus de {s.Percent - s.Top.P75Percent:0.#} %"
-        : "Dans la fourchette";
+        s.Percent < s.Top.P25Percent ? Ui.F(WebTexts.Stats_Raise, Ui.PercentValue(s.Top.P25Percent - s.Percent, 1))
+        : s.Percent > s.Top.P75Percent ? Ui.F(WebTexts.Stats_Excess, Ui.PercentValue(s.Percent - s.Top.P75Percent, 1))
+        : WebTexts.Stats_InRange;
 
     /// <summary>Réglette commune : de 0 au plus haut des valeurs affichées, arrondi à la dizaine supérieure.</summary>
     private double ScaleMax => Math.Max(10, Math.Ceiling(Stats.Max(s => Math.Max(s.Percent, s.Top.P75Percent)) * 1.05 / 10) * 10);

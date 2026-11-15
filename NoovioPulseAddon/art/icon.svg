@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Icône de l'addon (minicarte, liste des addons). Source de NoovioPulse/Media/Icon.tga.
+       Tracé large et épais : l'icône est affichée en 22 px, masquée en rond, dans l'anneau de la minicarte. -->
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.75" />
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0.1" />
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" fill="#120A24" />
+  <rect width="64" height="64" fill="url(#glow)" />
+  <path d="M5 34h12l5-12 9 24 6-17 3.5 5H59" fill="none" stroke="#EDE9FE" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

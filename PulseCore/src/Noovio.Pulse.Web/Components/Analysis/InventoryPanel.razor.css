@@ -1,0 +1,48 @@
+.inventory { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+.inv-block { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.inv-title { margin: 0; font-size: 1rem; }
+.inv-title small { font-weight: 400; font-size: 0.8rem; }
+.inv-advice { margin: 0; color: var(--text-dim); font-size: 0.9rem; }
+.inv-advice.is-strong { color: var(--text); font-weight: 600; }
+
+/* Grande Chambre forte : une rangée de cases par piste (raid, donjons, monde) */
+.vault-tracks { display: flex; flex-direction: column; gap: 8px; }
+.vault-track { display: grid; grid-template-columns: 80px 1fr; align-items: center; gap: 10px; }
+.vault-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.vault-slot {
+    display: grid;
+    place-items: center;
+    height: 34px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-faint);
+    background: rgba(11, 14, 20, 0.55);
+    border: 1px dashed var(--line-strong);
+}
+.vault-slot.is-open {
+    color: var(--accent-ink);
+    background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+    border: 1px solid transparent;
+    box-shadow: 0 0 14px var(--accent-glow);
+}
+
+.item-options { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+
+/* Consommables : une ligne par type attendu, bordure à la couleur du verdict */
+.consumables { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.consumables li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: rgba(11, 14, 20, 0.55);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--verdict);
+}
+.consumables .wow-icon { width: 34px; height: 34px; }
+.consumables .wow-icon.is-empty { display: grid; place-items: center; background: transparent; border-style: dashed; }
+.consumable-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.consumable-name { font-weight: 600; }
+.quality { margin-left: 4px; color: var(--accent-bright); font-size: 0.75rem; letter-spacing: 1px; }

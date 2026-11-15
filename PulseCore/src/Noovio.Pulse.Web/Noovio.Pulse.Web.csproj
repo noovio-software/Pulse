@@ -15,6 +15,15 @@
     <Using Include="Microsoft.Extensions.Logging" />
   </ItemGroup>
 
+  <!-- Textes de l'interface : français (neutre) et anglais. La classe d'accès WebTexts.Designer.cs est versionnée
+       à côté du .resx pour que l'IDE la voie ; Rider / Visual Studio la régénèrent quand on enregistre le .resx. -->
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\WebTexts.resx" Generator="ResXFileCodeGenerator" LastGenOutput="WebTexts.Designer.cs" />
+    <Compile Update="Resources\WebTexts.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="WebTexts.resx" />
+    <!-- Les tests vérifient que chaque texte existe dans les deux langues. -->
+    <InternalsVisibleTo Include="Noovio.Pulse.Tests" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Noovio.Pulse.Infrastructure\Noovio.Pulse.Infrastructure.csproj" />
     <ProjectReference Include="..\Noovio.Pulse.Usage\Noovio.Pulse.Usage.csproj" />

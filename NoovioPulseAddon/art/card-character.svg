@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 256">
+  <!-- Carte « Mon personnage » : score de conformité, caractéristiques face au top, pouls. Source de Media/CardCharacter.tga. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1B1036" />
+      <stop offset="1" stop-color="#0B0E14" />
+    </linearGradient>
+    <radialGradient id="glow" cx="30%" cy="45%" r="55%">
+      <stop offset="0" stop-color="#7C3AED" stop-opacity="0.55" />
+      <stop offset="1" stop-color="#7C3AED" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#C4B5FD" />
+      <stop offset="1" stop-color="#7C3AED" />
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7C3AED" />
+      <stop offset="1" stop-color="#A78BFA" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="256" fill="url(#bg)" />
+  <rect width="512" height="256" fill="url(#glow)" />
+  <g fill="#C4B5FD" opacity="0.5">
+    <circle cx="40" cy="30" r="1.5" /><circle cx="470" cy="40" r="1.2" /><circle cx="300" cy="22" r="1" />
+    <circle cx="480" cy="210" r="1.5" /><circle cx="250" cy="236" r="1" /><circle cx="22" cy="200" r="1.2" />
+  </g>
+  <!-- Anneau de score -->
+  <circle cx="140" cy="118" r="70" fill="none" stroke="#2A2150" stroke-width="16" />
+  <path d="M140 48 A70 70 0 1 1 75.3 144.8" fill="none" stroke="url(#ring)" stroke-width="16" stroke-linecap="round" />
+  <text x="140" y="134" text-anchor="middle" font-family="Segoe UI, Arial" font-weight="700" font-size="48" fill="#F5F3FF">92</text>
+  <text x="140" y="158" text-anchor="middle" font-family="Segoe UI, Arial" font-size="13" letter-spacing="2" fill="#A78BFA">MÉTA</text>
+  <!-- Caractéristiques : barre du joueur, fourchette du top -->
+  <g font-family="Segoe UI, Arial" font-size="13" fill="#C4B5FD">
+    <text x="262" y="62">Hâte</text><text x="262" y="102">Maîtrise</text><text x="262" y="142">Critique</text><text x="262" y="182">Polyvalence</text>
+  </g>
+  <g>
+    <rect x="262" y="68" width="210" height="8" rx="4" fill="#241C44" /><rect x="372" y="66" width="62" height="12" rx="6" fill="#4C1D95" opacity="0.7" /><rect x="262" y="68" width="150" height="8" rx="4" fill="url(#bar)" />
+    <rect x="262" y="108" width="210" height="8" rx="4" fill="#241C44" /><rect x="330" y="106" width="56" height="12" rx="6" fill="#4C1D95" opacity="0.7" /><rect x="262" y="108" width="104" height="8" rx="4" fill="url(#bar)" />
+    <rect x="262" y="148" width="210" height="8" rx="4" fill="#241C44" /><rect x="300" y="146" width="50" height="12" rx="6" fill="#4C1D95" opacity="0.7" /><rect x="262" y="148" width="70" height="8" rx="4" fill="url(#bar)" />
+    <rect x="262" y="188" width="210" height="8" rx="4" fill="#241C44" /><rect x="290" y="186" width="44" height="12" rx="6" fill="#4C1D95" opacity="0.7" /><rect x="262" y="188" width="46" height="8" rx="4" fill="url(#bar)" />
+  </g>
+  <!-- Pouls -->
+  <path d="M0 226 H180 l10 -16 14 30 12 -40 10 26 H512" fill="none" stroke="#A78BFA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.8" />
+</svg>

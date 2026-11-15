@@ -46,7 +46,8 @@ public sealed record CharacterAnalysis(
     GemEnchantReview GemsAndEnchants,
     FarmRoadmap Roadmap,
     TrinketPlan TrinketPlan,
-    DateTimeOffset AnalyzedAtUtc);
+    DateTimeOffset AnalyzedAtUtc,
+    InventoryReview? Inventory = null);
 
 /// <summary>Un domaine analysé (niveau d'objet, talents…) et son verdict d'ensemble.</summary>
 public sealed record AnalysisArea(AnalysisAreaKind Kind, Verdict Verdict, string Summary);

@@ -370,6 +370,17 @@ h1:focus { outline: none; }
 
 .topbar-actions { display: flex; align-items: center; gap: 18px; flex: none; }
 
+/* Bascule de langue : code court, discret, mis en avant au survol */
+.language-switch { display: flex; gap: 4px; }
+.language-link {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 36px; height: 36px; padding: 0 8px;
+    border: 1px solid var(--line); border-radius: 8px;
+    color: var(--text-dim); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+}
+.language-link:hover, .language-link:focus-visible { color: var(--text); border-color: var(--line-strong); }
+
 /* Connexion : bleu Battle.net, compte connecté : BattleTag */
 /* .btn.btn-bnet : déclaré avant .btn dans ce fichier, il doit l'emporter sur son fond transparent */
 .btn.btn-bnet {

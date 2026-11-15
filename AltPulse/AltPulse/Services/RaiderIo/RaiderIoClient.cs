@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using AltPulse.Client.Localization;
 
 namespace AltPulse.Services.RaiderIo;
 
@@ -33,7 +34,7 @@ public sealed class RaiderIoClient(HttpClient http)
         GetAsync<RioRaidStaticData>($"api/v1/raiding/static-data?expansion_id={ExpansionId}", ct);
 
     public Task<RioAffixes?> GetAffixesAsync(string region, CancellationToken ct) =>
-        GetAsync<RioAffixes>($"api/v1/mythic-plus/affixes?region={region}&locale=fr", ct);
+        GetAsync<RioAffixes>($"api/v1/mythic-plus/affixes?region={region}&locale={AltLocalization.CurrentLanguage}", ct);
 
     public Task<RioCharacterProfile?> GetCharacterAsync(string region, string realm, string name, CancellationToken ct) =>
         GetAsync<RioCharacterProfile>(

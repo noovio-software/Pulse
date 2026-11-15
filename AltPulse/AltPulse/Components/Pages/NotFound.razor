@@ -2,12 +2,14 @@
 @layout MainLayout
 @using AltPulse.Client.Components
 
+<PageTitle>@AltTexts.NotFound_Title</PageTitle>
+
 <TopBar />
 
 <main class="shell">
     <section class="panel empty-state">
-        <h1>Introuvable</h1>
-        <p>Cette page s'est dissoute dans l'Abîme Venimeux.</p>
-        <a class="btn" href="/">Retour</a>
+        <h1>@AltTexts.NotFound_Heading</h1>
+        <p>@AltTexts.NotFound_Text</p>
+        <a class="btn" href="/">@AltTexts.Common_Back</a>
     </section>
 </main>

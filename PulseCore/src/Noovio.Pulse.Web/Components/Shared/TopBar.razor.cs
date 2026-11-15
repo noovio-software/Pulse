@@ -1,4 +1,6 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Components;
+using Noovio.Pulse.Domain;
 using Noovio.Pulse.Domain.Enums;
 
 namespace Noovio.Pulse.Web.Components.Shared;
@@ -20,6 +22,10 @@ public partial class TopBar
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
     private DateTimeOffset? nextRefresh;
+
+    /// <summary>Les spécialisations par classe, classes triées dans la langue de l'interface.</summary>
+    private IEnumerable<IGrouping<int, SpecInfo>> ClassGroups =>
+        Site.Role.Specs.GroupBy(s => s.ClassId).OrderBy(g => g.First().ClassName, StringComparer.Create(CultureInfo.CurrentCulture, ignoreCase: true));
 
     protected override async Task OnInitializedAsync() => nextRefresh = await Schedule.GetNextAsync();
 }

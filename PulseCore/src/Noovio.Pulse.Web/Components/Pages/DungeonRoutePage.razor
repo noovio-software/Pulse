@@ -1,6 +1,6 @@
 @page "/routes/{Slug}"
 
-<PageTitle>@(dungeon is null ? "Donjon inconnu" : $"Routes {dungeon.Name}") · @Site.Name by Noovio</PageTitle>
+<PageTitle>@Ui.F(WebTexts.Report_PageTitle, dungeon is null ? WebTexts.Dungeon_Unknown : Ui.F(WebTexts.Dungeon_PageTitle, dungeon.Name), Site.Name)</PageTitle>
 
 <TopBar RoutesActive />
 
@@ -8,9 +8,9 @@
     @if (dungeon is null)
     {
         <section class="panel empty-state">
-            <h1>Donjon inconnu</h1>
-            <p>Ce donjon n'est pas dans la saison en cours, ou ses routes ne sont pas encore synchronisées.</p>
-            <a class="btn" href="routes">Toutes les routes</a>
+            <h1>@WebTexts.Dungeon_Unknown</h1>
+            <p>@WebTexts.Dungeon_UnknownText</p>
+            <a class="btn" href="routes">@WebTexts.Home_AllRoutes</a>
         </section>
     }
     else
@@ -21,15 +21,15 @@
                 <img class="dungeon-hero-art" src="@image" alt="" />
             }
             <div class="dungeon-hero-text">
-                <a class="dungeon-back" href="routes">← Toutes les routes</a>
+                <a class="dungeon-back" href="routes">@WebTexts.Dungeon_AllRoutes</a>
                 <h1>@dungeon.Name</h1>
                 <p>
                     <span>@Ui.SeasonLabel(dungeon.Season)</span>
-                    <span>Clé en @Ui.KeyTimer(dungeon.TimerSeconds)</span>
-                    <span>@dungeon.Routes.Count routes</span>
+                    <span>@Ui.F(WebTexts.Dungeon_Timer, Ui.KeyTimer(dungeon.TimerSeconds))</span>
+                    <span>@Ui.F(WebTexts.Dungeon_RouteCount, dungeon.Routes.Count)</span>
                 </p>
             </div>
-            <nav class="dungeon-switch" aria-label="Donjons de la saison">
+            <nav class="dungeon-switch" aria-label="@WebTexts.Dungeon_Switch">
                 @foreach (var other in dungeons)
                 {
                     var isCurrent = other.Slug == dungeon.Slug;
@@ -49,7 +49,7 @@
         </section>
 
         <div class="route-layout">
-            <ol class="route-list" aria-label="Routes, de la plus populaire à la moins populaire">
+            <ol class="route-list" aria-label="@WebTexts.Dungeon_RouteList">
                 @for (var i = 0; i < dungeon.Routes.Count; i++)
                 {
                     var route = dungeon.Routes[i];
@@ -60,11 +60,11 @@
                             <span class="route-rank" aria-hidden="true">@(i + 1)</span>
                             <span class="route-row-text">
                                 <strong>@route.Title</strong>
-                                <span class="muted">@(route.Author ?? "Auteur inconnu")</span>
+                                <span class="muted">@(route.Author ?? WebTexts.Dungeon_UnknownAuthor)</span>
                                 <span class="route-row-facts">
-                                    <span>@route.PullSizes.Count pulls</span>
-                                    <span>@route.LargestPull au plus gros</span>
-                                    <span>@Ui.ForcesPercent(route) mobs</span>
+                                    <span>@Ui.F(WebTexts.Dungeon_Pulls, route.PullSizes.Count)</span>
+                                    <span>@Ui.F(WebTexts.Dungeon_LargestPull, route.LargestPull)</span>
+                                    <span>@Ui.F(WebTexts.Dungeon_Forces, Ui.ForcesPercent(route))</span>
                                 </span>
                                 @if (highlights.GetValueOrDefault(route.PublicKey) is { Count: > 0 } tags)
                                 {
@@ -88,20 +88,20 @@
                         <div>
                             <h2>@current.Title</h2>
                             <p class="muted">
-                                Par
+                                @WebTexts.Dungeon_By
                                 @if (current.AuthorUrl is { } authorUrl)
                                 {
                                     <a href="@authorUrl" target="_blank" rel="noopener">@current.Author</a>
                                 }
                                 else
                                 {
-                                    @(current.Author ?? "un auteur inconnu")
+                                    @(current.Author ?? WebTexts.Dungeon_UnknownAuthorLower)
                                 }
-                                sur Keystone.guru
+                                @WebTexts.Dungeon_OnKeystoneGuru
                             </p>
                         </div>
                         <a class="btn btn-primary" href="@current.ViewUrl" target="_blank" rel="noopener">
-                            Ouvrir sur Keystone.guru
+                            @WebTexts.Dungeon_Open
                             <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
                             </svg>
@@ -109,18 +109,18 @@
                     </header>
 
                     <dl class="route-stats">
-                        <div><dt>Pulls</dt><dd>@current.PullSizes.Count</dd></div>
-                        <div><dt>Plus gros pull</dt><dd>@current.LargestPull <small>ennemis</small></dd></div>
-                        <div><dt>Moyenne par pull</dt><dd>@current.AveragePull.ToString("0.#")</dd></div>
-                        <div><dt>Mobs de la route</dt><dd>@Ui.ForcesPercent(current)</dd></div>
+                        <div><dt>@WebTexts.Dungeon_StatPulls</dt><dd>@current.PullSizes.Count</dd></div>
+                        <div><dt>@WebTexts.Dungeon_StatLargest</dt><dd>@current.LargestPull <small>@WebTexts.Dungeon_Enemies</small></dd></div>
+                        <div><dt>@WebTexts.Dungeon_StatAverage</dt><dd>@current.AveragePull.ToString("0.#")</dd></div>
+                        <div><dt>@WebTexts.Dungeon_StatForces</dt><dd>@Ui.ForcesPercent(current)</dd></div>
                     </dl>
 
                     <PullRhythm Route="current" />
 
                     <div class="route-map">
-                        <iframe src="@current.EmbedUrl" title="Carte de la route @current.Title" loading="lazy" allowfullscreen></iframe>
+                        <iframe src="@current.EmbedUrl" title="@Ui.F(WebTexts.Dungeon_MapTitle, current.Title)" loading="lazy" allowfullscreen></iframe>
                     </div>
-                    <p class="route-mdt muted">Pour Mythic Dungeon Tools : bouton « Copy MDT » en haut de la carte. Route et carte fournies par l'API de <a href="https://keystone.guru" target="_blank" rel="noopener">Keystone.guru</a>.</p>
+                    <p class="route-mdt muted">@WebTexts.Dungeon_Mdt <a href="https://keystone.guru" target="_blank" rel="noopener">Keystone.guru</a>.</p>
                 </article>
             }
         </div>

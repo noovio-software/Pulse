@@ -24,24 +24,7 @@ public static class PulseRoles
             ],
             ["importants", "lourds", "croissants", "vulnérabilité", "subis", "heavy", "massive", "increasing", "vulnerab"],
             Threshold: 2),
-        new RoleWording(
-            Noun: "tank",
-            NounPlural: "tanks",
-            Verb: "tanker",
-            SpecCount: "six",
-            Classes: "guerrier, paladin, chevalier de la mort, druide, moine, chasseur de démons",
-            ItemLevelImpact: "ta survie et tes dégâts",
-            RoleTrinkets: "Défensifs",
-            RoleTrinket: "défensif",
-            DamageTrinkets: "Offensifs",
-            DamageTrinket: "offensif",
-            NoRoleTrinket: "Aucun bijou défensif dans le top : les deux emplacements servent aux dégâts.",
-            RoleTrinketAdvice: "à activer juste avant les gros coups{0}, plutôt qu'à chaque recharge.",
-            DamageTrinketAdvice: "à activer dès qu'il est prêt{0}, avec tes temps de recharge offensifs, sur un boss ou un gros pack.",
-            HitsTitle: "Coups de boss à anticiper",
-            HitsWithTrinket: "Active ton bijou défensif juste avant ces coups.",
-            HitsWithoutTrinket: "Aucun de tes bijoux n'est défensif : aucun boss n'est à privilégier pour eux. Ces coups servent à placer tes propres temps de recharge défensifs.",
-            ServerError: "Le tank est tombé. Réessaie dans un instant."));
+        new RoleWording("Tank"));
 
     public static readonly PulseRole Healer = new(
         "healer",
@@ -64,24 +47,7 @@ public static class PulseRoles
             ],
             ["importants", "lourds", "croissants", "continus", "heavy", "massive", "increasing", "constant"],
             Threshold: 1),
-        new RoleWording(
-            Noun: "soigneur",
-            NounPlural: "soigneurs",
-            Verb: "soigner",
-            SpecCount: "sept",
-            Classes: "chaman, druide, évocateur, moine, paladin, prêtre",
-            ItemLevelImpact: "tes soins et ta survie",
-            RoleTrinkets: "Soins",
-            RoleTrinket: "de soin",
-            DamageTrinkets: "Dégâts et caractéristiques",
-            DamageTrinket: "de dégâts",
-            NoRoleTrinket: "Aucun bijou de soin dans le top : les deux emplacements servent aux caractéristiques et aux dégâts.",
-            RoleTrinketAdvice: "à activer juste avant les gros dégâts de groupe{0}, plutôt qu'à chaque recharge.",
-            DamageTrinketAdvice: "à activer dès qu'il est prêt{0}, avec tes temps de recharge, sur un boss ou un gros pack.",
-            HitsTitle: "Moments de boss à anticiper",
-            HitsWithTrinket: "Active ton bijou de soin juste avant ces moments.",
-            HitsWithoutTrinket: "Aucun de tes bijoux n'est un bijou de soin à activer : ces moments servent à placer tes propres temps de recharge.",
-            ServerError: "Le soigneur est à court de mana. Réessaie dans un instant."));
+        new RoleWording("Healer"));
 
     /// <summary>
     /// Les bijoux du rôle sont ceux qui infligent des dégâts eux-mêmes ; les autres donnent des caractéristiques.
@@ -107,22 +73,5 @@ public static class PulseRoles
             ],
             ["avant", "rapidement", "grandement", "puissant", "before", "quickly", "greatly", "powerful"],
             Threshold: 1),
-        new RoleWording(
-            Noun: "DPS",
-            NounPlural: "DPS",
-            Verb: "jouer DPS",
-            SpecCount: "vingt-sept",
-            Classes: "chaman, chasseur, chasseur de démons, chevalier de la mort, démoniste, druide, évocateur, guerrier, mage, moine, paladin, prêtre, voleur",
-            ItemLevelImpact: "tes dégâts et ta survie",
-            RoleTrinkets: "Dégâts",
-            RoleTrinket: "de dégâts",
-            DamageTrinkets: "Caractéristiques",
-            DamageTrinket: "de caractéristiques",
-            NoRoleTrinket: "Aucun bijou de dégâts dans le top : les deux emplacements servent aux caractéristiques.",
-            RoleTrinketAdvice: "à activer avec tes temps de recharge offensifs{0}, sur un gros pack ou un moment de burst du boss.",
-            DamageTrinketAdvice: "à activer dès qu'il est prêt{0}, en l'alignant sur tes temps de recharge offensifs.",
-            HitsTitle: "Moments de burst à préparer",
-            HitsWithTrinket: "Garde ton bijou de dégâts et tes temps de recharge offensifs pour ces moments.",
-            HitsWithoutTrinket: "Aucun de tes bijoux n'est un bijou de dégâts à activer : ces moments servent à placer tes propres temps de recharge offensifs.",
-            ServerError: "Le DPS a pris l'aggro. Réessaie dans un instant."));
+        new RoleWording("Damage"));
 }
