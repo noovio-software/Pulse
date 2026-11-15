@@ -463,11 +463,20 @@ namespace LandingPagePulse.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Caractéristiques, talents, équipement et bijoux des 100 meilleurs tanks de chaque spécialisation. Compare ton personnage et repars avec ce qu&apos;il faut changer en premier..
+        ///   Looks up a localized string similar to Caractéristiques, talents, équipement et bijoux des 100 meilleurs tanks de chaque spécialisation. Compare ton personnage et repars avec ce qu&apos;il faut changer en premier. Avant ta prochaine clé, retrouve les routes Midnight les plus populaires de chaque donjon, avec la taille de chaque pull..
         /// </summary>
         internal static string Front_Lead {
             get {
                 return ResourceManager.GetString("Front_Lead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Méta recalculée toutes les 6 h, comparaison via Battle.net, routes issues de Keystone.guru.
+        /// </summary>
+        internal static string Front_Note {
+            get {
+                return ResourceManager.GetString("Front_Note", resourceCulture);
             }
         }
         
@@ -508,7 +517,7 @@ namespace LandingPagePulse.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Noovio réunit quatre outils World of Warcraft : AltPulse pour suivre tous tes personnages dans une seule grille, FrontPulse, LifePulse et BurstPulse pour jouer ton tank, ton soigneur ou ton DPS comme le top 100 en Mythique+, et l&apos;addon NoovioPulse pour les nourrir depuis le jeu..
+        ///   Looks up a localized string similar to Noovio réunit quatre outils World of Warcraft : AltPulse pour suivre tous tes personnages dans une seule grille, FrontPulse, LifePulse et BurstPulse pour jouer ton tank, ton soigneur ou ton DPS comme le top 100 en Mythique+ (avec les routes Midnight de chaque donjon sur FrontPulse), et l&apos;addon NoovioPulse pour les nourrir depuis le jeu..
         /// </summary>
         internal static string Home_Description {
             get {

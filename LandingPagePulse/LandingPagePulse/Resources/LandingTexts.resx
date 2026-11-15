@@ -148,7 +148,10 @@
     <value>Ton tank en Mythique+</value>
   </data>
   <data name="Front_Lead" xml:space="preserve">
-    <value>Caractéristiques, talents, équipement et bijoux des 100 meilleurs tanks de chaque spécialisation. Compare ton personnage et repars avec ce qu'il faut changer en premier.</value>
+    <value>Caractéristiques, talents, équipement et bijoux des 100 meilleurs tanks de chaque spécialisation. Compare ton personnage et repars avec ce qu'il faut changer en premier. Avant ta prochaine clé, retrouve les routes Midnight les plus populaires de chaque donjon, avec la taille de chaque pull.</value>
+  </data>
+  <data name="Front_Note" xml:space="preserve">
+    <value>Méta recalculée toutes les 6 h, comparaison via Battle.net, routes issues de Keystone.guru</value>
   </data>
   <data name="Front_Title" xml:space="preserve">
     <value>Joue ton tank comme le top 100</value>
@@ -163,7 +166,7 @@
     <value>de tes personnages</value>
   </data>
   <data name="Home_Description" xml:space="preserve">
-    <value>Noovio réunit quatre outils World of Warcraft : AltPulse pour suivre tous tes personnages dans une seule grille, FrontPulse, LifePulse et BurstPulse pour jouer ton tank, ton soigneur ou ton DPS comme le top 100 en Mythique+, et l'addon NoovioPulse pour les nourrir depuis le jeu.</value>
+    <value>Noovio réunit quatre outils World of Warcraft : AltPulse pour suivre tous tes personnages dans une seule grille, FrontPulse, LifePulse et BurstPulse pour jouer ton tank, ton soigneur ou ton DPS comme le top 100 en Mythique+ (avec les routes Midnight de chaque donjon sur FrontPulse), et l'addon NoovioPulse pour les nourrir depuis le jeu.</value>
   </data>
   <data name="Home_OgDescription" xml:space="preserve">
     <value>AltPulse pour suivre tous tes personnages, FrontPulse, LifePulse et BurstPulse pour jouer ton tank, ton soigneur ou ton DPS comme le top 100 en Mythique+.</value>

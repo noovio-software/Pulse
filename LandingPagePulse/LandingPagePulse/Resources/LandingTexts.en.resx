@@ -148,7 +148,10 @@
     <value>Your tank in Mythic+</value>
   </data>
   <data name="Front_Lead" xml:space="preserve">
-    <value>Stats, talents, gear and trinkets of the 100 best tanks of each spec. Compare your character and leave knowing what to change first.</value>
+    <value>Stats, talents, gear and trinkets of the 100 best tanks of each spec. Compare your character and leave knowing what to change first. Before your next key, find the most popular Midnight routes for each dungeon, with the size of every pull.</value>
+  </data>
+  <data name="Front_Note" xml:space="preserve">
+    <value>Meta recomputed every 6 h, comparison through Battle.net, routes from Keystone.guru</value>
   </data>
   <data name="Front_Title" xml:space="preserve">
     <value>Play your tank like the top 100</value>
@@ -163,7 +166,7 @@
     <value>of your characters</value>
   </data>
   <data name="Home_Description" xml:space="preserve">
-    <value>Noovio brings together four World of Warcraft tools: AltPulse to track all your characters in a single grid, FrontPulse, LifePulse and BurstPulse to play your tank, healer or DPS like the top 100 in Mythic+, and the NoovioPulse addon to feed them from the game.</value>
+    <value>Noovio brings together four World of Warcraft tools: AltPulse to track all your characters in a single grid, FrontPulse, LifePulse and BurstPulse to play your tank, healer or DPS like the top 100 in Mythic+ (with the Midnight routes of every dungeon on FrontPulse), and the NoovioPulse addon to feed them from the game.</value>
   </data>
   <data name="Home_OgDescription" xml:space="preserve">
     <value>AltPulse to track all your characters, FrontPulse, LifePulse and BurstPulse to play your tank, healer or DPS like the top 100 in Mythic+.</value>
