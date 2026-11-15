@@ -58,11 +58,11 @@ namespace AltPulse.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Télécharger.
+        ///   Looks up a localized string similar to Téléchargement direct.
         /// </summary>
-        public static string Addon_Download {
+        public static string Addon_DirectDownload {
             get {
-                return ResourceManager.GetString("Addon_Download", resourceCulture);
+                return ResourceManager.GetString("Addon_DirectDownload", resourceCulture);
             }
         }
         

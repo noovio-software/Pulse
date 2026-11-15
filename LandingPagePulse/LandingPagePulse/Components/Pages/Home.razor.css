@@ -353,6 +353,7 @@
 .addon .door-link:hover { box-shadow: 0 0 32px var(--glow); }
 .addon .door-link:hover svg { transform: translateY(2px); }
 .addon .door-link::after { content: none; }
+.addon .door-note a { color: var(--accent); font-weight: 700; }
 
 .addon-preview { margin: 0; gap: 12px; }
 .addon-string { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--text-dim); }

@@ -27,8 +27,11 @@
   <data name="Addon_CombatPotion" xml:space="preserve">
     <value>Potion de combat</value>
   </data>
+  <data name="Addon_DirectDownload" xml:space="preserve">
+    <value>téléchargement direct</value>
+  </data>
   <data name="Addon_Download" xml:space="preserve">
-    <value>Télécharger l'addon</value>
+    <value>Télécharger sur CurseForge</value>
   </data>
   <data name="Addon_Flask" xml:space="preserve">
     <value>Flacon</value>
@@ -55,7 +58,7 @@
     <value>Équipement, talents, sacs, coffre et consommables, analysés face au top 100 sur</value>
   </data>
   <data name="Addon_Note" xml:space="preserve">
-    <value>Dossier à déposer dans Interface\AddOns · bientôt sur CurseForge</value>
+    <value>Ou en {0} : dossier à déposer dans Interface\AddOns</value>
   </data>
   <data name="Addon_Or" xml:space="preserve">
     <value>ou</value>

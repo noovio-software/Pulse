@@ -474,6 +474,9 @@
   <data name="Import_Analyse" xml:space="preserve">
     <value>Analyse</value>
   </data>
+  <data name="Import_DirectDownload" xml:space="preserve">
+    <value>direct download</value>
+  </data>
   <data name="Import_Eyebrow" xml:space="preserve">
     <value>NoovioPulse addon</value>
   </data>
@@ -498,11 +501,8 @@
   <data name="Import_Step1" xml:space="preserve">
     <value>Install the addon</value>
   </data>
-  <data name="Import_Step1After" xml:space="preserve">
-    <value>, then drop the {0} folder into {1}.</value>
-  </data>
-  <data name="Import_Step1Before" xml:space="preserve">
-    <value>Download</value>
+  <data name="Import_Step1Text" xml:space="preserve">
+    <value>From {0}, or as a {1}: then drop the {2} folder into {3}.</value>
   </data>
   <data name="Import_Step2" xml:space="preserve">
     <value>Export in game</value>

@@ -12,8 +12,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Addon_Download" xml:space="preserve">
-    <value>Télécharger</value>
+  <data name="Addon_DirectDownload" xml:space="preserve">
+    <value>Téléchargement direct</value>
   </data>
   <data name="Addon_Field" xml:space="preserve">
     <value>Chaîne de l'addon</value>

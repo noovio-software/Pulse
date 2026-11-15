@@ -103,7 +103,16 @@ namespace LandingPagePulse.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Télécharger l&apos;addon.
+        ///   Looks up a localized string similar to téléchargement direct.
+        /// </summary>
+        internal static string Addon_DirectDownload {
+            get {
+                return ResourceManager.GetString("Addon_DirectDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Télécharger sur CurseForge.
         /// </summary>
         internal static string Addon_Download {
             get {
@@ -184,7 +193,7 @@ namespace LandingPagePulse.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dossier à déposer dans Interface\AddOns · bientôt sur CurseForge.
+        ///   Looks up a localized string similar to Ou en {0} : dossier à déposer dans Interface\AddOns.
         /// </summary>
         internal static string Addon_Note {
             get {

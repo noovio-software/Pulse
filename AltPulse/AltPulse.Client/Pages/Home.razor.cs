@@ -35,8 +35,9 @@ public partial class Home
     private SeasonInfo? season;
     private CharacterSnapshot? equipmentFor;
 
-    /// <summary>Releases GitHub de l'addon NoovioPulse.</summary>
-    private const string AddonDownloadUrl = "https://github.com/noovio-software/Pulse/releases?q=noovio-pulse-addon&expanded=true";
+    /// <summary>L'addon NoovioPulse sur CurseForge, et en téléchargement direct sur les releases GitHub.</summary>
+    private const string AddonCurseForgeUrl = "https://www.curseforge.com/wow/addons/nooviopulse";
+    private const string AddonDirectDownloadUrl = "https://github.com/noovio-software/Pulse/releases";
 
     private bool addonOpen;
     private bool focusAddonInput;
