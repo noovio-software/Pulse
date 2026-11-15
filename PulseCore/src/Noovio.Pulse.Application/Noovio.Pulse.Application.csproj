@@ -4,9 +4,11 @@
     <ProjectReference Include="..\Noovio.Pulse.Domain\Noovio.Pulse.Domain.csproj" />
   </ItemGroup>
 
-  <!-- Textes de l'analyse et de l'import : français (neutre) et anglais. La classe d'accès est générée à la compilation. -->
+  <!-- Textes de l'analyse et de l'import : français (neutre) et anglais. La classe d'accès AnalysisTexts.Designer.cs
+       est versionnée à côté du .resx ; l'IDE la régénère quand on enregistre le .resx. -->
   <ItemGroup>
-    <EmbeddedResource Update="Resources\AnalysisTexts.resx" StronglyTypedLanguage="CSharp" StronglyTypedClassName="AnalysisTexts" StronglyTypedNamespace="Noovio.Pulse.Application.Resources" StronglyTypedFileName="$(IntermediateOutputPath)AnalysisTexts.Designer.cs" />
+    <EmbeddedResource Update="Resources\AnalysisTexts.resx" Generator="ResXFileCodeGenerator" LastGenOutput="AnalysisTexts.Designer.cs" />
+    <Compile Update="Resources\AnalysisTexts.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="AnalysisTexts.resx" />
     <!-- Les tests vérifient que chaque texte existe dans les deux langues. -->
     <InternalsVisibleTo Include="Noovio.Pulse.Tests" />
   </ItemGroup>

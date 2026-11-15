@@ -15,7 +15,9 @@
 
   <!-- Textes de l'interface, en français (neutre) et en anglais. Classe publique : le serveur s'en sert pour ses messages. -->
   <ItemGroup>
-    <EmbeddedResource Update="Resources\AltTexts.resx" StronglyTypedLanguage="CSharp" StronglyTypedClassName="AltTexts" StronglyTypedNamespace="AltPulse.Client.Resources" StronglyTypedFileName="$(IntermediateOutputPath)AltTexts.Designer.cs" PublicClass="true" />
+    <!-- AltTexts.Designer.cs est versionné à côté du .resx ; l'IDE le régénère quand on enregistre le .resx. -->
+    <EmbeddedResource Update="Resources\AltTexts.resx" Generator="PublicResXFileCodeGenerator" LastGenOutput="AltTexts.Designer.cs" />
+    <Compile Update="Resources\AltTexts.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="AltTexts.resx" />
   </ItemGroup>
 
   <ItemGroup>
