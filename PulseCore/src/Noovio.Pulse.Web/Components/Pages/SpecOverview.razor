@@ -1,7 +1,7 @@
 @page "/specs/{Slug}"
 @rendermode InteractiveServer
 
-<PageTitle>@(info is null ? "Spécialisation inconnue" : $"{info.SpecName} {info.ClassName}") · @Site.Name by Noovio</PageTitle>
+<PageTitle>@(info is null ? Ui.F(WebTexts.Report_PageTitle, WebTexts.Spec_Unknown, Site.Name) : Ui.F(WebTexts.Spec_PageTitle, info.SpecName, info.ClassName, Site.Name))</PageTitle>
 
 <TopBar Active="info?.Spec" />
 
@@ -9,16 +9,16 @@
 @if (info is null)
 {
     <section class="panel empty-state">
-        <h1>Spécialisation inconnue</h1>
-        <p>@Site.Name ne suit que les @Site.Words.SpecCount spécialisations @Site.Words.Noun.</p>
-        <a class="btn" href="/">Retour</a>
+        <h1>@WebTexts.Spec_Unknown</h1>
+        <p>@Ui.F(WebTexts.Spec_UnknownText, Site.Name, Site.Words.SpecCount, Site.Words.Noun)</p>
+        <a class="btn" href="/">@WebTexts.Common_Back</a>
     </section>
 }
 else if (Meta is null)
 {
     <section class="panel empty-state">
         <h1>@info.SpecName <span class="muted">@info.ClassName</span></h1>
-        <p>Pas encore de données : la prochaine ingestion (toutes les 6 h) remplira cette page.</p>
+        <p>@WebTexts.Spec_NoData</p>
     </section>
 }
 else
@@ -34,13 +34,13 @@ else
         </div>
 
         <dl class="hero-facts">
-            <div><dt>Échantillon</dt><dd>@Meta.SampleSize <small>@Site.Words.NounPlural</small></dd></div>
-            <div><dt>Niv. d'objet médian</dt><dd>@Ui.Ilvl(Meta.MedianItemLevel)</dd></div>
-            <div><dt>Clé médiane</dt><dd>+@Meta.MedianKeyLevel</dd></div>
+            <div><dt>@WebTexts.Spec_Sample</dt><dd>@Meta.SampleSize <small>@Site.Words.NounPlural</small></dd></div>
+            <div><dt>@WebTexts.Spec_MedianIlvl</dt><dd>@Ui.Ilvl(Meta.MedianItemLevel)</dd></div>
+            <div><dt>@WebTexts.Spec_MedianKey</dt><dd>+@Meta.MedianKeyLevel</dd></div>
             @if (Meta.HeroTrees.FirstOrDefault() is { } hero)
             {
                 <div>
-                    <dt>Arbre héroïque</dt>
+                    <dt>@WebTexts.Spec_HeroTree</dt>
                     <dd class="hero-fact">
                         @if (Ui.HeroIcon(Meta.TalentTree, hero.Name) is { } heroIcon)
                         {
@@ -50,30 +50,30 @@ else
                     </dd>
                 </div>
             }
-            <div><dt>Mise à jour</dt><dd title="@Meta.ComputedAtUtc.ToLocalTime().ToString("g")">@Ui.Ago(Meta.ComputedAtUtc)</dd></div>
+            <div><dt>@WebTexts.Spec_Updated</dt><dd title="@Meta.ComputedAtUtc.ToLocalTime().ToString("g")">@Ui.Ago(Meta.ComputedAtUtc)</dd></div>
         </dl>
     </section>
 
     <div class="meta-columns">
         <section class="panel meta-section">
-            <h2 class="section-title">Caractéristiques secondaires</h2>
+            <h2 class="section-title">@WebTexts.Spec_SecondaryStats</h2>
             <StatGauges Stats="Meta.Stats" />
         </section>
 
         <section class="panel meta-section">
-            <h2 class="section-title">Talents</h2>
+            <h2 class="section-title">@WebTexts.Spec_Talents</h2>
             <TalentBuildPanel Spec="info" Builds="Meta.TalentBuilds" HeroTrees="Meta.HeroTrees" Layout="Meta.TalentTree" SampleSize="Meta.SampleSize" />
         </section>
     </div>
 
     <section class="panel meta-section">
-        <h2 class="section-title">Équipement <small class="muted">part du top portant chaque objet</small></h2>
+        <h2 class="section-title">@WebTexts.Spec_Gear <small class="muted">@WebTexts.Spec_GearNote</small></h2>
         <GearSlotGrid Slots="GearSlots" />
     </section>
 
     <div class="meta-columns">
         <section class="panel meta-section">
-            <h2 class="section-title">Bijoux</h2>
+            <h2 class="section-title">@WebTexts.Spec_Trinkets</h2>
             <div class="trinket-columns">
                 <div>
                     <h3 class="trinket-head is-role">@Site.Words.RoleTrinkets</h3>
@@ -94,17 +94,17 @@ else
                     }
                     @if (Meta.DamageTrinkets.Count == 0)
                     {
-                        <p class="muted">Aucun bijou @Site.Words.DamageTrinket dans le top.</p>
+                        <p class="muted">@Ui.F(WebTexts.Spec_NoDamageTrinket, Site.Words.DamageTrinket)</p>
                     }
                 </div>
             </div>
         </section>
 
         <section class="panel meta-section">
-            <h2 class="section-title">Embellissements</h2>
+            <h2 class="section-title">@WebTexts.Spec_Embellishments</h2>
             @if (Meta.Embellishments.Count == 0)
             {
-                <p class="muted">Aucun embellissement relevé.</p>
+                <p class="muted">@WebTexts.Spec_NoEmbellishment</p>
             }
             else
             {
@@ -116,8 +116,8 @@ else
                                 @* Parts vaut null dans un snapshot écrit avant l'ajout des icônes. *@
                                 @foreach (var part in combo.Parts ?? [])
                                 {
-                                    <a class="combo-chip" href="@(part.SpellId > 0 ? Ui.SpellUrl(part.SpellId) : $"https://www.wowhead.com/fr/item={part.ItemId}")"
-                                       data-wowhead="@(part.SpellId > 0 ? Ui.SpellWowhead(part.SpellId) : $"item={part.ItemId}&domain=fr")"
+                                    <a class="combo-chip" href="@(part.SpellId > 0 ? Ui.SpellUrl(part.SpellId) : Ui.ItemUrl(part.ItemId))"
+                                       data-wowhead="@(part.SpellId > 0 ? Ui.SpellWowhead(part.SpellId) : Ui.ItemWowhead(part.ItemId))"
                                        target="_blank" rel="noopener">
                                         @if (part.IconUrl is not null)
                                         {
@@ -140,9 +140,9 @@ else
     </div>
 
     <section class="panel meta-section">
-        <h2 class="section-title">Les @Meta.Players.Count meilleurs @Site.Words.NounPlural <small class="muted">classés sur leur meilleure clé de la saison</small></h2>
+        <h2 class="section-title">@Ui.F(WebTexts.Spec_TopPlayers, Meta.Players.Count, Site.Words.NounPlural) <small class="muted">@WebTexts.Spec_TopPlayersNote</small></h2>
         <div class="players-head" aria-hidden="true">
-            <span>#</span><span>Joueur</span><span>Clé</span><span>Score</span><span>Niv.</span>
+            <span>#</span><span>@WebTexts.Spec_ColPlayer</span><span>@WebTexts.Spec_ColKey</span><span>@WebTexts.Spec_ColScore</span><span>@WebTexts.Spec_ColIlvl</span>
         </div>
         <div class="players" tabindex="0">
             <Virtualize Items="players" Context="p" ItemSize="38" OverscanCount="8">

@@ -4,7 +4,7 @@
     @if (Review.Vault is { } vault)
     {
         <div class="inv-block">
-            <h3 class="inv-title">Grande Chambre forte <small class="muted">@(vault.RewardsReady ? "objets proposés" : "progression de la semaine")</small></h3>
+            <h3 class="inv-title">@WebTexts.Inventory_Vault <small class="muted">@(vault.RewardsReady ? WebTexts.Inventory_VaultOffered : WebTexts.Inventory_VaultProgress)</small></h3>
             <div class="vault-tracks">
                 @foreach (var track in vault.Tracks)
                 {
@@ -14,7 +14,7 @@
                             @foreach (var slot in track.Slots)
                             {
                                 <span class="vault-slot @(slot.Unlocked ? "is-open" : null)"
-                                      title="@(slot.Unlocked ? $"Débloquée{(slot.ItemLevel is { } i ? $" : niveau d'objet {i}" : "")}" : $"{slot.Progress}/{slot.Threshold} {track.Unit}(s)")">
+                                      title="@SlotTitle(track, slot)">
                                     @if (slot.Unlocked)
                                     {
                                         @(slot.ItemLevel?.ToString() ?? "✓")
@@ -43,10 +43,10 @@
     }
 
     <div class="inv-block">
-        <h3 class="inv-title">Dans les sacs <small class="muted">@Review.BagGearCount pièce@(Review.BagGearCount > 1 ? "s" : "") d'équipement</small></h3>
+        <h3 class="inv-title">@WebTexts.Inventory_Bags <small class="muted">@Plural.Format(Review.BagGearCount, WebTexts.Inventory_BagPieces_One, WebTexts.Inventory_BagPieces_Other)</small></h3>
         @if (Review.BagUpgrades.Count == 0)
         {
-            <p class="inv-advice">Rien à équiper : aucune pièce des sacs ne bat celle que tu portes.</p>
+            <p class="inv-advice">@WebTexts.Inventory_NothingToEquip</p>
         }
         else
         {
@@ -62,7 +62,7 @@
     @if (Review.Consumables.Count > 0)
     {
         <div class="inv-block">
-            <h3 class="inv-title">Consommables <small class="muted">prêt pour la clé ?</small></h3>
+            <h3 class="inv-title">@WebTexts.Inventory_Consumables <small class="muted">@WebTexts.Inventory_ConsumablesNote</small></h3>
             <ul class="consumables">
                 @foreach (var c in Review.Consumables)
                 {
@@ -87,10 +87,10 @@
                         <div class="consumable-text">
                             <span class="eyebrow">@c.Label</span>
                             <span class="consumable-name">
-                                @(c.ItemName ?? "Rien en stock")
+                                @(c.ItemName ?? WebTexts.Inventory_NoStock)
                                 @if (c.Quality is > 0)
                                 {
-                                    <span class="quality" title="Rang d'artisanat">@(new string('★', c.Quality.Value))</span>
+                                    <span class="quality" title="@WebTexts.Inventory_CraftRank">@(new string('★', c.Quality.Value))</span>
                                 }
                                 @if (c.Count > 0)
                                 {

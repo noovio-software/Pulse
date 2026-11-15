@@ -1,4 +1,6 @@
+using System.Runtime.CompilerServices;
 using Noovio.Pulse.Domain.Enums;
+using Noovio.Pulse.Domain.Resources;
 
 namespace Noovio.Pulse.Domain.Roles;
 
@@ -84,40 +86,74 @@ public sealed record BossHitRule(
     private static bool Has(string text, IReadOnlyList<string> words) => words.Any(w => text.Contains(w, StringComparison.OrdinalIgnoreCase));
 }
 
-/// <summary>Le vocabulaire du rôle dans les textes affichés.</summary>
-/// <param name="Noun">« tank », « soigneur », « DPS » : masculin, après « ton » ou « un ».</param>
-/// <param name="SpecCount">Nombre de spécialisations en toutes lettres, dans les titres.</param>
-/// <param name="Classes">Classes qui ont le rôle, pour le compte sans personnage éligible.</param>
-/// <param name="ItemLevelImpact">Ce que le niveau d'objet fait gagner, après « pèse directement sur ».</param>
-/// <param name="RoleTrinkets">Titre de la colonne des bijoux qui servent le rôle.</param>
-/// <param name="RoleTrinket">« bijou {RoleTrinket} » : « défensif », « de soin », « de dégâts ».</param>
-/// <param name="DamageTrinkets">Titre de la colonne des autres bijoux.</param>
-/// <param name="DamageTrinket">« bijou {DamageTrinket} » : « offensif », « de dégâts », « de caractéristiques ».</param>
-/// <param name="NoRoleTrinket">Le top ne joue aucun bijou du rôle.</param>
-/// <param name="RoleTrinketAdvice">Quand activer un bijou du rôle ; {0} : sa recharge.</param>
-/// <param name="DamageTrinketAdvice">Quand activer un autre bijou ; {0} : sa recharge.</param>
-/// <param name="HitsTitle">Titre de la liste des moments de boss.</param>
-/// <param name="HitsWithTrinket">Note de cette liste, quand le joueur a un bijou du rôle à activer.</param>
-/// <param name="HitsWithoutTrinket">Note de cette liste, sinon.</param>
-/// <param name="ServerError">Page d'erreur, pour la touche d'humour.</param>
-public sealed record RoleWording(
-    string Noun,
-    string NounPlural,
-    string Verb,
-    string SpecCount,
-    string Classes,
-    string ItemLevelImpact,
-    string RoleTrinkets,
-    string RoleTrinket,
-    string DamageTrinkets,
-    string DamageTrinket,
-    string NoRoleTrinket,
-    string RoleTrinketAdvice,
-    string DamageTrinketAdvice,
-    string HitsTitle,
-    string HitsWithTrinket,
-    string HitsWithoutTrinket,
-    string ServerError);
+/// <summary>
+/// Le vocabulaire du rôle dans les textes affichés, dans la langue de l'interface : ressources <c>Role_{Key}_{Membre}</c> de
+/// <see cref="GameTexts"/>. Chaque langue place ces mots dans ses propres phrases (en français, « ton {Noun} », « bijou {RoleTrinket} »).
+/// </summary>
+/// <param name="Key">« Tank », « Healer », « Damage » : préfixe des ressources.</param>
+public sealed class RoleWording(string Key)
+{
+    /// <summary>« tank », « soigneur », « DPS » : en français, masculin, après « ton » ou « un ».</summary>
+    public string Noun => Text();
+
+    public string NounPlural => Text();
+
+    /// <summary>« tanker », « soigner » : après « peut ».</summary>
+    public string Verb => Text();
+
+    /// <summary>Nombre de spécialisations en toutes lettres, dans les titres.</summary>
+    public string SpecCount => Text();
+
+    /// <summary>Classes qui ont le rôle, pour le compte sans personnage éligible.</summary>
+    public string Classes => Text();
+
+    /// <summary>Ce que le niveau d'objet fait gagner, après « pèse directement sur ».</summary>
+    public string ItemLevelImpact => Text();
+
+    /// <summary>Titre de la colonne des bijoux qui servent le rôle.</summary>
+    public string RoleTrinkets => Text();
+
+    /// <summary>Qualificatif d'un bijou du rôle : « défensif », « de soin », « de dégâts ».</summary>
+    public string RoleTrinket => Text();
+
+    /// <summary>Titre de la colonne des autres bijoux.</summary>
+    public string DamageTrinkets => Text();
+
+    /// <summary>Qualificatif d'un autre bijou : « offensif », « de dégâts », « de caractéristiques ».</summary>
+    public string DamageTrinket => Text();
+
+    /// <summary>Le top ne joue aucun bijou du rôle.</summary>
+    public string NoRoleTrinket => Text();
+
+    /// <summary>Quand activer un bijou du rôle ; {0} : sa recharge.</summary>
+    public string RoleTrinketAdvice => Text();
+
+    /// <summary>Quand activer un autre bijou ; {0} : sa recharge.</summary>
+    public string DamageTrinketAdvice => Text();
+
+    /// <summary>Titre de la liste des moments de boss.</summary>
+    public string HitsTitle => Text();
+
+    /// <summary>Note de cette liste, quand le joueur a un bijou du rôle à activer.</summary>
+    public string HitsWithTrinket => Text();
+
+    /// <summary>Note de cette liste, sinon.</summary>
+    public string HitsWithoutTrinket => Text();
+
+    /// <summary>Page d'erreur, pour la touche d'humour.</summary>
+    public string ServerError => Text();
+
+    /// <summary>Le nom de ressource de chaque membre, pour vérifier qu'aucune langue n'en oublie.</summary>
+    public IEnumerable<string> ResourceNames =>
+        typeof(RoleWording).GetProperties()
+            .Where(p => p.PropertyType == typeof(string))
+            .Select(p => ResourceName(p.Name));
+
+    private string ResourceName(string member) => $"Role_{Key}_{member}";
+
+    private string Text([CallerMemberName] string member = "") =>
+        GameTexts.ResourceManager.GetString(ResourceName(member), GameTexts.Culture) ?? ResourceName(member);
+}
 
 /// <summary>Une application Pulse : un nom, et le rôle dont elle suit la méta. Le nom donne les clés de configuration, de cache et de cookie.</summary>
 /// <param name="Name">« FrontPulse » : section de configuration et chaîne de connexion.</param>

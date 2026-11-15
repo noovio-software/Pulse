@@ -6,29 +6,29 @@
         var projection = Projection.FirstOrDefault(p => p.Stat == s.Stat);
         <li class="@Ui.StatCss(s.Stat) @Ui.VerdictCss(s.Verdict)">
             <div class="stat-head">
-                <span class="stat-rank" title="Ordre de priorité dans le top">@(index + 1)</span>
+                <span class="stat-rank" title="@WebTexts.Stats_PriorityTitle">@(index + 1)</span>
                 <StatIcon Stat="s.Stat" />
                 <span class="stat-name">@Ui.StatLabel(s.Stat)</span>
                 <span class="stat-action">@Action(s)</span>
-                <strong class="stat-mine">@s.Percent.ToString("0") %</strong>
+                <strong class="stat-mine">@Ui.PercentValue(s.Percent)</strong>
                 <VerdictIcon Verdict="s.Verdict" Size="20" />
             </div>
             <div class="stat-scale" role="img"
-                 aria-label="@($"{Ui.StatLabel(s.Stat)} : toi {s.Percent:0} %, la moitié du top entre {s.Top.P25Percent:0} et {s.Top.P75Percent:0} %")">
+                 aria-label="@Ui.F(WebTexts.Stats_ScaleLabel, Ui.StatLabel(s.Stat), Ui.PercentValue(s.Percent), Ui.PercentValue(s.Top.P25Percent), Ui.PercentValue(s.Top.P75Percent))">
                 <span class="stat-band" style="left: @Pos(s.Top.P25Percent); width: @Width(s)"></span>
                 <span class="stat-median" style="left: @Pos(s.Top.MedianPercent)"></span>
                 <span class="stat-you" style="left: @Pos(s.Percent)"></span>
             </div>
-            <p class="stat-range">Top : @s.Top.P25Percent.ToString("0")–@s.Top.P75Percent.ToString("0") % (médiane @s.Top.MedianPercent.ToString("0") %)</p>
+            <p class="stat-range">@Ui.F(WebTexts.Stats_Range, s.Top.P25Percent.ToString("0"), Ui.PercentValue(s.Top.P75Percent), Ui.PercentValue(s.Top.MedianPercent))</p>
             @if (projection is not null && Math.Abs(projection.Projected - projection.Current) >= 0.5)
             {
-                <p class="stat-next">Avec les changements proposés : @projection.Current.ToString("0") → <strong>@projection.Projected.ToString("0") %</strong></p>
+                <p class="stat-next">@Ui.F(WebTexts.Stats_WithChanges, projection.Current.ToString("0")) <strong>@Ui.PercentValue(projection.Projected)</strong></p>
             }
             @if (projection is not null && Math.Abs(projection.RemainingPercent) >= 0.5)
             {
                 <p class="stat-next">
-                    @(projection.RemainingPercent > 0 ? "Reste à gagner" : "Reste en trop") sur l'équipement :
-                    @Math.Abs(projection.RemainingPercent).ToString("0.#") % (≈ @Math.Abs(projection.RemainingRating).ToString("N0") d'indice)
+                    @Ui.F(projection.RemainingPercent > 0 ? WebTexts.Stats_RemainingGain : WebTexts.Stats_RemainingExcess,
+                        Ui.PercentValue(Math.Abs(projection.RemainingPercent), 1), Math.Abs(projection.RemainingRating).ToString("N0"))
                 </p>
             }
         </li>

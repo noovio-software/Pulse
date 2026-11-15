@@ -1,4 +1,7 @@
+using System.Globalization;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Localization;
+using AltPulse.Client.Localization;
 using AltPulse.Client.Services;
 using AltPulse.Components;
 using AltPulse.Services;
@@ -6,6 +9,19 @@ using AltPulse.Services.Blizzard;
 using AltPulse.Services.RaiderIo;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Hors requête (démarrage, tâches de fond) : français, comme le site par défaut.
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(AltLocalization.DefaultCulture);
+
+// Langue : le choix explicite (cookie) d'abord, puis le navigateur. Pas de paramètre d'URL : les adresses restent stables.
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.SetDefaultCulture(AltLocalization.DefaultCulture)
+        .AddSupportedCultures([.. AltLocalization.Cultures])
+        .AddSupportedUICultures([.. AltLocalization.Cultures]);
+    options.RequestCultureProviders = [new CookieRequestCultureProvider(), new AcceptLanguageHeaderRequestCultureProvider()];
+    options.ApplyCurrentCultureToResponseHeaders = true;
+});
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
@@ -35,6 +51,7 @@ builder.Services.AddScoped<LocalHistoryStore>();
 var app = builder.Build();
 
 app.UseForwardedHeaders();
+app.UseRequestLocalization();
 
 if (app.Environment.IsDevelopment())
 {
@@ -49,6 +66,32 @@ app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages:
 app.UseHttpsRedirection();
 
 app.UseAntiforgery();
+
+// GET /culture/en?returnUrl=/ : enregistre le choix de langue et revient sur la page. Le cookie peut être partagé
+// entre les sites Noovio (Localization:CookieDomain) : une langue choisie sur l'un vaut pour tous.
+app.MapGet("/culture/{culture}", (string culture, string? returnUrl, HttpContext http, IConfiguration configuration) =>
+{
+    if (!AltLocalization.Cultures.Contains(culture, StringComparer.OrdinalIgnoreCase))
+    {
+        return Results.NotFound();
+    }
+
+    http.Response.Cookies.Append(
+        CookieRequestCultureProvider.DefaultCookieName,
+        CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture.ToLowerInvariant())),
+        new CookieOptions
+        {
+            Expires = DateTimeOffset.UtcNow.AddYears(1),
+            Domain = configuration["Localization:CookieDomain"] is { Length: > 0 } domain ? domain : null,
+            Path = "/",
+            // Une préférence d'affichage, pas un traceur : elle n'a pas besoin de consentement.
+            IsEssential = true,
+            SameSite = SameSiteMode.Lax,
+            Secure = http.Request.IsHttps
+        });
+
+    return Results.LocalRedirect(AltLocalization.SafeReturnUrl(returnUrl));
+});
 
 var api = app.MapGroup("/api");
 

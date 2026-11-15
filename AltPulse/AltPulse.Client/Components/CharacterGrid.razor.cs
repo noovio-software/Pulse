@@ -1,4 +1,6 @@
+using AltPulse.Client.Localization;
 using AltPulse.Client.Models;
+using AltPulse.Client.Resources;
 using Microsoft.AspNetCore.Components;
 
 namespace AltPulse.Client.Components;
@@ -24,7 +26,7 @@ public partial class CharacterGrid
     private static readonly Func<CharacterSnapshot, IReadOnlyList<VaultSlot>> DungeonSlots = c => c.Vault.Dungeons;
     private static readonly Func<CharacterSnapshot, IReadOnlyList<VaultSlot>> PreviousWeekSlots = c => c.Vault.PreviousWeekDungeons;
 
-    private string DungeonsTitle => $"Mythique+ · {Season?.Name}";
+    private string DungeonsTitle => AltLocalization.F(AltTexts.Grid_Dungeons, Season?.Name);
 
     private string SortLabel => Ui.SortOptions.FirstOrDefault(o => o.Value == SortBy).Label ?? "";
 

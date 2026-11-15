@@ -2,24 +2,24 @@
 
 @if (MythicPlus is null)
 {
-    <p class="muted">Raider.io ne connaît pas encore ce personnage pour la saison.</p>
+    <p class="muted">@WebTexts.Mplus_Unknown</p>
 }
 else
 {
     <div class="mplus-head">
         <div class="mplus-score" style="color: @(MythicPlus.ScoreColor ?? "var(--amber)")">
             <strong>@MythicPlus.Score.ToString("0")</strong>
-            <span class="eyebrow">Score M+</span>
+            <span class="eyebrow">@WebTexts.Report_ScoreMplus</span>
         </div>
         <dl class="mplus-facts">
-            <div><dt>Score @Site.Words.Noun</dt><dd>@MythicPlus.RoleScore.ToString("0")</dd></div>
+            <div><dt>@Ui.F(WebTexts.Mplus_RoleScore, Site.Words.Noun)</dt><dd>@MythicPlus.RoleScore.ToString("0")</dd></div>
             @if (MythicPlus.RoleRankWorld is > 0)
             {
-                <div><dt>Rang @Site.Words.Noun mondial</dt><dd>@MythicPlus.RoleRankWorld.Value.ToString("N0")</dd></div>
+                <div><dt>@Ui.F(WebTexts.Mplus_RoleRank, Site.Words.Noun)</dt><dd>@MythicPlus.RoleRankWorld.Value.ToString("N0")</dd></div>
             }
             @if (MythicPlus.ClassRoleRankWorld is > 0)
             {
-                <div><dt>Rang de la classe</dt><dd>@MythicPlus.ClassRoleRankWorld.Value.ToString("N0")</dd></div>
+                <div><dt>@WebTexts.Mplus_ClassRank</dt><dd>@MythicPlus.ClassRoleRankWorld.Value.ToString("N0")</dd></div>
             }
         </dl>
         @if (MythicPlus.ProfileUrl is not null)
@@ -35,16 +35,16 @@ else
                 <a href="@run.Url" target="_blank" rel="noopener" title="@run.Dungeon">
                     <span class="run-short">@run.ShortName</span>
                     <strong class="run-level">+@run.Level</strong>
-                    <span class="run-stars">@(run.Upgrades > 0 ? new string('★', Math.Min(run.Upgrades, 3)) : "hors temps")</span>
+                    <span class="run-stars">@(run.Upgrades > 0 ? new string('★', Math.Min(run.Upgrades, 3)) : WebTexts.Mplus_Depleted)</span>
                 </a>
             </li>
         }
         @foreach (var dungeon in MythicPlus.MissingDungeons)
         {
-            <li class="is-missing" title="@dungeon : jamais fait cette saison">
+            <li class="is-missing" title="@Ui.F(WebTexts.Mplus_NeverTitle, dungeon)">
                 <span class="run-short">@dungeon</span>
                 <strong class="run-level">—</strong>
-                <span class="run-stars">à faire</span>
+                <span class="run-stars">@WebTexts.Mplus_ToDo</span>
             </li>
         }
     </ul>

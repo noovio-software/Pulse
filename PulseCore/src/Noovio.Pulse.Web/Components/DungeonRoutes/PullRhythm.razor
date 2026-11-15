@@ -2,8 +2,8 @@
 
 <figure class="rhythm">
     <figcaption>
-        <span class="eyebrow">Rythme des pulls</span>
-        <span class="rhythm-note muted">Ennemis par pull, dans l'ordre de la route</span>
+        <span class="eyebrow">@WebTexts.Rhythm_Title</span>
+        <span class="rhythm-note muted">@WebTexts.Rhythm_Note</span>
     </figcaption>
     <ol class="rhythm-bars" style="--rhythm-count: @Route.PullSizes.Count">
         @for (var i = 0; i < Route.PullSizes.Count; i++)
@@ -16,13 +16,13 @@
                     <span class="rhythm-peak" aria-hidden="true">@size</span>
                 }
                 <span class="rhythm-bar" style="height: @Ui.CssPercent(Share(size))"></span>
-                <span class="rhythm-tip" role="note">Pull @(i + 1) : @EnemyCount(size)</span>
+                <span class="rhythm-tip" role="note">@Ui.F(WebTexts.Rhythm_Tip, i + 1, EnemyCount(size))</span>
             </li>
         }
     </ol>
     <div class="rhythm-axis" aria-hidden="true">
-        <span>Pull 1</span>
-        <span>Pull @Route.PullSizes.Count</span>
+        <span>@Ui.F(WebTexts.Rhythm_Axis, 1)</span>
+        <span>@Ui.F(WebTexts.Rhythm_Axis, Route.PullSizes.Count)</span>
     </div>
 </figure>
 
@@ -38,8 +38,7 @@
 
     private static string EnemyCount(int size) => size switch
     {
-        0 => "aucun ennemi compté",
-        1 => "1 ennemi",
-        _ => $"{size} ennemis"
+        0 => WebTexts.Rhythm_NoEnemy,
+        _ => Plural.Format(size, WebTexts.Rhythm_Enemies_One, WebTexts.Rhythm_Enemies_Other)
     };
 }

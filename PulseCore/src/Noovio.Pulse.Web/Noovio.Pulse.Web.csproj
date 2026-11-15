@@ -15,6 +15,13 @@
     <Using Include="Microsoft.Extensions.Logging" />
   </ItemGroup>
 
+  <!-- Textes de l'interface : français (neutre) et anglais. La classe d'accès est générée à la compilation. -->
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\WebTexts.resx" StronglyTypedLanguage="CSharp" StronglyTypedClassName="WebTexts" StronglyTypedNamespace="Noovio.Pulse.Web.Resources" StronglyTypedFileName="$(IntermediateOutputPath)WebTexts.Designer.cs" />
+    <!-- Les tests vérifient que chaque texte existe dans les deux langues. -->
+    <InternalsVisibleTo Include="Noovio.Pulse.Tests" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Noovio.Pulse.Infrastructure\Noovio.Pulse.Infrastructure.csproj" />
   </ItemGroup>

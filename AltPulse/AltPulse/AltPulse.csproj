@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+    <NeutralLanguage>fr</NeutralLanguage>
     <UserSecretsId>bb509a77-9119-4e31-bf17-b7b40a958a37</UserSecretsId>
 
     <!-- Ces valeurs sont injectées dynamiquement via GitHub Actions : le workflow écrit

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Noovio.Pulse.Application.Analysis;
+using Noovio.Pulse.Web.Components.Shared;
 
 namespace Noovio.Pulse.Web.Components.Analysis;
 
@@ -9,5 +10,5 @@ public partial class ItemOptionRow
 
     /// <summary>Infobulle Wowhead de la pièce exacte : niveau d'objet et bonus (qualité, châsse, piste d'amélioration).</summary>
     private string Wowhead =>
-        $"item={Option.ItemId}&ilvl={Option.ItemLevel}" + (Option.Bonus.Count > 0 ? $"&bonus={string.Join(':', Option.Bonus)}" : "") + "&domain=fr";
+        $"item={Option.ItemId}&ilvl={Option.ItemLevel}" + (Option.Bonus.Count > 0 ? $"&bonus={string.Join(':', Option.Bonus)}" : "") + Ui.WowheadDomain;
 }

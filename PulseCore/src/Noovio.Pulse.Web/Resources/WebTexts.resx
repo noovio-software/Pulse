@@ -1,0 +1,1341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account_BattleNet" xml:space="preserve">
+    <value>Compte Battle.net</value>
+  </data>
+  <data name="Account_CompareMeta" xml:space="preserve">
+    <value>Comparer à la méta {0}</value>
+  </data>
+  <data name="Account_Eligible" xml:space="preserve">
+    <value>Personnages pouvant {0}</value>
+  </data>
+  <data name="Account_ImportTitle" xml:space="preserve">
+    <value>Analyser un personnage lu en jeu par l'addon NoovioPulse</value>
+  </data>
+  <data name="Account_Level" xml:space="preserve">
+    <value>niv. {0}</value>
+  </data>
+  <data name="Account_LowLevel" xml:space="preserve">
+    <value>Niveau maximum requis pour une analyse pertinente</value>
+  </data>
+  <data name="Account_NoneText" xml:space="preserve">
+    <value>Aucun personnage d'une classe qui peut {0} ({1}) sur ce compte.</value>
+  </data>
+  <data name="Account_NoneTitle" xml:space="preserve">
+    <value>Aucun personnage {0}</value>
+  </data>
+  <data name="Account_NotSynced" xml:space="preserve">
+    <value>Personnages pas encore synchronisés</value>
+  </data>
+  <data name="Account_Others" xml:space="preserve">
+    <value>{0} autres personnages (classes sans spécialisation {1})</value>
+  </data>
+  <data name="Account_PageTitle" xml:space="preserve">
+    <value>Mes personnages · {0} by Noovio</value>
+  </data>
+  <data name="Account_SignOut" xml:space="preserve">
+    <value>Déconnexion</value>
+  </data>
+  <data name="Account_Sync" xml:space="preserve">
+    <value>Synchroniser</value>
+  </data>
+  <data name="Account_Synced" xml:space="preserve">
+    <value>{0} personnages · synchronisés {1}</value>
+  </data>
+  <data name="Account_TargetFirst" xml:space="preserve">
+    <value>tes personnages {0} en premier : choisis celui à comparer au top {1}</value>
+  </data>
+  <data name="Build_Calculator" xml:space="preserve">
+    <value>Calculateur de talents</value>
+  </data>
+  <data name="Build_CopyCode" xml:space="preserve">
+    <value>Copier le code de talents</value>
+  </data>
+  <data name="Build_Figures" xml:space="preserve">
+    <value>du top · {0} joueurs</value>
+  </data>
+  <data name="Build_HeroTrees" xml:space="preserve">
+    <value>Arbres héroïques</value>
+  </data>
+  <data name="Build_MostPlayed" xml:space="preserve">
+    <value>Configuration la plus jouée</value>
+  </data>
+  <data name="Build_None" xml:space="preserve">
+    <value>Aucune configuration de talents dans l'échantillon.</value>
+  </data>
+  <data name="Build_OpenWowhead" xml:space="preserve">
+    <value>Ouvrir dans Wowhead</value>
+  </data>
+  <data name="Build_OpenWowheadTitle" xml:space="preserve">
+    <value>Ouvrir cette configuration dans le calculateur Wowhead</value>
+  </data>
+  <data name="Build_Others" xml:space="preserve">
+    <value>Autres configurations</value>
+  </data>
+  <data name="Build_TreeLater" xml:space="preserve">
+    <value>Arbre disponible à la prochaine mise à jour</value>
+  </data>
+  <data name="Callout_Hint" xml:space="preserve">
+    <value>Connexion Battle.net : seuls tes personnages sont lus.</value>
+  </data>
+  <data name="Callout_Text" xml:space="preserve">
+    <value>Score sur 100, plan d'action, et l'écart avec la méta sur l'équipement, les caractéristiques, les talents, les bijoux et le Mythique+.</value>
+  </data>
+  <data name="Callout_TitleAny" xml:space="preserve">
+    <value>Compare ton {0} au top 100</value>
+  </data>
+  <data name="Callout_TitleSpec" xml:space="preserve">
+    <value>Ton {0} face au top 100</value>
+  </data>
+  <data name="Common_Back" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="Common_MythicPlus" xml:space="preserve">
+    <value>Mythique+</value>
+  </data>
+  <data name="Common_OfTop" xml:space="preserve">
+    <value>{0} du top</value>
+  </data>
+  <data name="Compare_Long" xml:space="preserve">
+    <value>Comparer mon {0}</value>
+  </data>
+  <data name="Compare_Short" xml:space="preserve">
+    <value>Comparer</value>
+  </data>
+  <data name="Compare_SignInTitle" xml:space="preserve">
+    <value>Connexion Battle.net, puis choix du personnage à comparer</value>
+  </data>
+  <data name="Compare_TitleAny" xml:space="preserve">
+    <value>Comparer un de mes personnages au top</value>
+  </data>
+  <data name="Compare_TitleSpec" xml:space="preserve">
+    <value>Comparer mon {0} au top</value>
+  </data>
+  <data name="Compare_ViaBattleNet" xml:space="preserve">
+    <value>via Battle.net</value>
+  </data>
+  <data name="Copy_Done" xml:space="preserve">
+    <value>Copié !</value>
+  </data>
+  <data name="Copy_Failed" xml:space="preserve">
+    <value>Copie impossible</value>
+  </data>
+  <data name="Copy_Label" xml:space="preserve">
+    <value>Copier</value>
+  </data>
+  <data name="Dungeon_AllRoutes" xml:space="preserve">
+    <value>← Toutes les routes</value>
+  </data>
+  <data name="Dungeon_By" xml:space="preserve">
+    <value>Par</value>
+  </data>
+  <data name="Dungeon_Enemies" xml:space="preserve">
+    <value>ennemis</value>
+  </data>
+  <data name="Dungeon_Forces" xml:space="preserve">
+    <value>{0} mobs</value>
+  </data>
+  <data name="Dungeon_LargestPull" xml:space="preserve">
+    <value>{0} au plus gros</value>
+  </data>
+  <data name="Dungeon_MapTitle" xml:space="preserve">
+    <value>Carte de la route {0}</value>
+  </data>
+  <data name="Dungeon_Mdt" xml:space="preserve">
+    <value>Pour Mythic Dungeon Tools : bouton « Copy MDT » en haut de la carte. Route et carte fournies par l'API de</value>
+  </data>
+  <data name="Dungeon_OnKeystoneGuru" xml:space="preserve">
+    <value>sur Keystone.guru</value>
+  </data>
+  <data name="Dungeon_Open" xml:space="preserve">
+    <value>Ouvrir sur Keystone.guru</value>
+  </data>
+  <data name="Dungeon_PageTitle" xml:space="preserve">
+    <value>Routes {0}</value>
+  </data>
+  <data name="Dungeon_Pulls" xml:space="preserve">
+    <value>{0} pulls</value>
+  </data>
+  <data name="Dungeon_RouteCount" xml:space="preserve">
+    <value>{0} routes</value>
+  </data>
+  <data name="Dungeon_RouteList" xml:space="preserve">
+    <value>Routes, de la plus populaire à la moins populaire</value>
+  </data>
+  <data name="Dungeon_StatAverage" xml:space="preserve">
+    <value>Moyenne par pull</value>
+  </data>
+  <data name="Dungeon_StatForces" xml:space="preserve">
+    <value>Mobs de la route</value>
+  </data>
+  <data name="Dungeon_StatLargest" xml:space="preserve">
+    <value>Plus gros pull</value>
+  </data>
+  <data name="Dungeon_StatPulls" xml:space="preserve">
+    <value>Pulls</value>
+  </data>
+  <data name="Dungeon_Switch" xml:space="preserve">
+    <value>Donjons de la saison</value>
+  </data>
+  <data name="Dungeon_Timer" xml:space="preserve">
+    <value>Clé en {0}</value>
+  </data>
+  <data name="Dungeon_Unknown" xml:space="preserve">
+    <value>Donjon inconnu</value>
+  </data>
+  <data name="Dungeon_UnknownAuthor" xml:space="preserve">
+    <value>Auteur inconnu</value>
+  </data>
+  <data name="Dungeon_UnknownAuthorLower" xml:space="preserve">
+    <value>un auteur inconnu</value>
+  </data>
+  <data name="Dungeon_UnknownText" xml:space="preserve">
+    <value>Ce donjon n'est pas dans la saison en cours, ou ses routes ne sont pas encore synchronisées.</value>
+  </data>
+  <data name="Error_PageTitle" xml:space="preserve">
+    <value>Erreur · {0} by Noovio</value>
+  </data>
+  <data name="Error_RequestId" xml:space="preserve">
+    <value>Identifiant de la requête :</value>
+  </data>
+  <data name="Error_Title" xml:space="preserve">
+    <value>Une erreur est survenue</value>
+  </data>
+  <data name="Farm_BestKey" xml:space="preserve">
+    <value>Ta meilleure clé : +{0}</value>
+  </data>
+  <data name="Farm_Crafted" xml:space="preserve">
+    <value>à crafter</value>
+  </data>
+  <data name="Farm_Elsewhere" xml:space="preserve">
+    <value>Hors donjons et raids listés</value>
+  </data>
+  <data name="Farm_ElsewhereNote" xml:space="preserve">
+    <value>craft, catalyseur… : le journal ne donne pas de source</value>
+  </data>
+  <data name="Farm_Fixes" xml:space="preserve">
+    <value>Corrige ta {0}</value>
+  </data>
+  <data name="Farm_KeyMissing" xml:space="preserve">
+    <value>Jamais fait : compte aussi pour ton score</value>
+  </data>
+  <data name="Farm_KeyWeak" xml:space="preserve">
+    <value>Clé en retard (+{0}) : compte aussi pour ton score</value>
+  </data>
+  <data name="Farm_NoJournal" xml:space="preserve">
+    <value>Le Journal d'aventure n'a pas pu être lu : les pièces visées sont listées sans leur source. Relance l'analyse dans un instant.</value>
+  </data>
+  <data name="Farm_Nothing" xml:space="preserve">
+    <value>Rien à farmer : tes pièces sont celles du top, à un niveau d'objet comparable.</value>
+  </data>
+  <data name="Farm_OnBoss" xml:space="preserve">
+    <value>sur {0}</value>
+  </data>
+  <data name="Farm_Replaces" xml:space="preserve">
+    <value>remplace {0} ({1} → {2})</value>
+  </data>
+  <data name="Farm_Upgrades" xml:space="preserve">
+    <value>Bonnes pièces, à améliorer</value>
+  </data>
+  <data name="Farm_UpgradesNote" xml:space="preserve">
+    <value>même pièce, avec des écus ou la Grande chambre forte</value>
+  </data>
+  <data name="Gear_Enchanted" xml:space="preserve">
+    <value>Enchanté</value>
+  </data>
+  <data name="Gear_Meta" xml:space="preserve">
+    <value>Méta {0}</value>
+  </data>
+  <data name="Gear_MetaShareTitle" xml:space="preserve">
+    <value>Part du top portant cette pièce</value>
+  </data>
+  <data name="Gear_NoEnchant" xml:space="preserve">
+    <value>Sans enchantement</value>
+  </data>
+  <data name="Gear_NoEnchantTitle" xml:space="preserve">
+    <value>Sans enchantement — top : {0}</value>
+  </data>
+  <data name="Gear_TopMedianTitle" xml:space="preserve">
+    <value>Médiane du top sur cet emplacement : {0}</value>
+  </data>
+  <data name="Gear_TopPickTitle" xml:space="preserve">
+    <value>Le plus porté par le top : {0} ({1})</value>
+  </data>
+  <data name="Gems_ColEnchants" xml:space="preserve">
+    <value>Enchants</value>
+  </data>
+  <data name="Gems_ColGems" xml:space="preserve">
+    <value>Gemmes</value>
+  </data>
+  <data name="Gems_ColItems" xml:space="preserve">
+    <value>Pièces</value>
+  </data>
+  <data name="Gems_Details" xml:space="preserve">
+    <value>Détail pièce par pièce ({0})</value>
+  </data>
+  <data name="Gems_EmptySocket" xml:space="preserve">
+    <value>Châsse vide</value>
+  </data>
+  <data name="Gems_NoChange" xml:space="preserve">
+    <value>Aucun changement de gemme ou d'enchantement ne rapprocherait tes caractéristiques du top.</value>
+  </data>
+  <data name="Gems_Origin" xml:space="preserve">
+    <value>D'où viennent tes stats</value>
+  </data>
+  <data name="Gems_OriginNote" xml:space="preserve">
+    <value>indice : toi / médiane du top</value>
+  </data>
+  <data name="Gems_ToDo" xml:space="preserve">
+    <value>À faire</value>
+  </data>
+  <data name="Gems_ToDoNote" xml:space="preserve">
+    <value>estimations, d'après la conversion indice → % mesurée sur le top</value>
+  </data>
+  <data name="Gems_TopChoice" xml:space="preserve">
+    <value>Top : {0} ({1})</value>
+  </data>
+  <data name="Gems_TopGems" xml:space="preserve">
+    <value>Gemmes les plus posées par le top</value>
+  </data>
+  <data name="Gems_TopPending" xml:space="preserve">
+    <value>Les gemmes du top seront disponibles après la prochaine mise à jour de la méta : seules tes pièces sont lues pour l'instant.</value>
+  </data>
+  <data name="Home_AllRoutes" xml:space="preserve">
+    <value>Toutes les routes</value>
+  </data>
+  <data name="Home_AwaitingIngestion" xml:space="preserve">
+    <value>En attente de la première ingestion</value>
+  </data>
+  <data name="Home_BoardLabel" xml:space="preserve">
+    <value>Le dernier calcul en chiffres</value>
+  </data>
+  <data name="Home_FactIlvl" xml:space="preserve">
+    <value>Niv.</value>
+  </data>
+  <data name="Home_FactKey" xml:space="preserve">
+    <value>Clé</value>
+  </data>
+  <data name="Home_FeatureGear" xml:space="preserve">
+    <value>Équipement et bijoux</value>
+  </data>
+  <data name="Home_FeatureGearText" xml:space="preserve">
+    <value>Les objets portés emplacement par emplacement, et les bijoux {0} ou {1} qui reviennent le plus.</value>
+  </data>
+  <data name="Home_FeaturesLabel" xml:space="preserve">
+    <value>Ce que {0} décortique</value>
+  </data>
+  <data name="Home_FeatureStats" xml:space="preserve">
+    <value>Caractéristiques</value>
+  </data>
+  <data name="Home_FeatureStatsText" xml:space="preserve">
+    <value>L'ordre de priorité du top et le pourcentage à viser, avec la fourchette où se situe la moitié des joueurs.</value>
+  </data>
+  <data name="Home_FeatureTalents" xml:space="preserve">
+    <value>Talents</value>
+  </data>
+  <data name="Home_FeatureTalentsText" xml:space="preserve">
+    <value>Les configurations les plus jouées, l'arbre héroïque dominant et un calculateur, chaîne d'export prête à copier.</value>
+  </data>
+  <data name="Home_FeatureYou" xml:space="preserve">
+    <value>Ton personnage</value>
+  </data>
+  <data name="Home_FeatureYouAfter" xml:space="preserve">
+    <value> : un score sur 100 et un plan d'action pour te rapprocher du top.</value>
+  </data>
+  <data name="Home_FeatureYouBefore" xml:space="preserve">
+    <value>Connecte-toi avec Battle.net, ou</value>
+  </data>
+  <data name="Home_FeatureYouLink" xml:space="preserve">
+    <value>importe-le depuis l'addon NoovioPulse</value>
+  </data>
+  <data name="Home_HighestKey" xml:space="preserve">
+    <value>Plus haute clé du top</value>
+  </data>
+  <data name="Home_Import" xml:space="preserve">
+    <value>Importer depuis l'addon</value>
+  </data>
+  <data name="Home_ImportTitle" xml:space="preserve">
+    <value>Coller la chaîne de l'addon NoovioPulse, sans connexion</value>
+  </data>
+  <data name="Home_LastRun" xml:space="preserve">
+    <value>Dernier calcul</value>
+  </data>
+  <data name="Home_Lead" xml:space="preserve">
+    <value>{0} lit les 100 meilleurs {1} de chaque spécialisation en Mythique+ et en tire la méta : caractéristiques à viser, talents, équipement, bijoux et embellissements. Puis compare ton personnage à ce top, point par point.</value>
+  </data>
+  <data name="Home_MedianIlvl" xml:space="preserve">
+    <value>Niv. d'objet médian</value>
+  </data>
+  <data name="Home_MedianKey" xml:space="preserve">
+    <value>Clé médiane du top</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>{0} by Noovio · Méta {1} Mythique+</value>
+  </data>
+  <data name="Home_Pending" xml:space="preserve">
+    <value>en attente</value>
+  </data>
+  <data name="Home_PlayersAnalysed" xml:space="preserve">
+    <value>{0} analysés</value>
+  </data>
+  <data name="Home_ProofBlizzard" xml:space="preserve">
+    <value>Profils de l'API Blizzard</value>
+  </data>
+  <data name="Home_ProofKeystoneGuru" xml:space="preserve">
+    <value>Routes Keystone.guru</value>
+  </data>
+  <data name="Home_ProofRaiderIo" xml:space="preserve">
+    <value>Classements Raider.io</value>
+  </data>
+  <data name="Home_ProofRefresh" xml:space="preserve">
+    <value>Recalculé toutes les 6 h</value>
+  </data>
+  <data name="Home_RoutesButton" xml:space="preserve">
+    <value>Routes Midnight</value>
+  </data>
+  <data name="Home_RoutesHeading" xml:space="preserve">
+    <value>Les routes Midnight</value>
+  </data>
+  <data name="Home_RoutesLead" xml:space="preserve">
+    <value>Les routes les plus populaires de chaque donjon, avec la taille de leurs pulls.</value>
+  </data>
+  <data name="Home_SeeMeta" xml:space="preserve">
+    <value>Voir la méta</value>
+  </data>
+  <data name="Home_SourcesHeading" xml:space="preserve">
+    <value>D'où viennent les chiffres</value>
+  </data>
+  <data name="Home_SourcesLead" xml:space="preserve">
+    <value>Aucune opinion, aucun guide recopié : uniquement ce que jouent les meilleurs.</value>
+  </data>
+  <data name="Home_Specs" xml:space="preserve">
+    <value>Spécialisations</value>
+  </data>
+  <data name="Home_SpecsHeading" xml:space="preserve">
+    <value>Les {0} spécialisations</value>
+  </data>
+  <data name="Home_SpecsLead" xml:space="preserve">
+    <value>Le top 100 de chaque spécialisation, classé sur la meilleure clé de la saison.</value>
+  </data>
+  <data name="Home_StatPriority" xml:space="preserve">
+    <value>Priorité des caractéristiques</value>
+  </data>
+  <data name="Home_StatTitle" xml:space="preserve">
+    <value>{0} : {1} (médiane du top)</value>
+  </data>
+  <data name="Home_Step1" xml:space="preserve">
+    <value>Le classement</value>
+  </data>
+  <data name="Home_Step1Text" xml:space="preserve">
+    <value>Les meilleurs {0} de chaque spécialisation, donjon par donjon et région par région, d'après Raider.io.</value>
+  </data>
+  <data name="Home_Step2" xml:space="preserve">
+    <value>Les profils</value>
+  </data>
+  <data name="Home_Step2Text" xml:space="preserve">
+    <value>Équipement, caractéristiques et talents de chaque joueur, lus sur l'API Blizzard.</value>
+  </data>
+  <data name="Home_Step3" xml:space="preserve">
+    <value>La méta</value>
+  </data>
+  <data name="Home_Step3Text" xml:space="preserve">
+    <value>Médianes, taux de sélection et combinaisons les plus jouées, recalculés toutes les 6 heures.</value>
+  </data>
+  <data name="Home_Step4" xml:space="preserve">
+    <value>Ta comparaison</value>
+  </data>
+  <data name="Home_Step4Text" xml:space="preserve">
+    <value>Ton personnage face à cette méta : ce qui est bon, ce qui est à améliorer, par ordre d'importance.</value>
+  </data>
+  <data name="Home_Title" xml:space="preserve">
+    <value>Joue ton {0}</value>
+  </data>
+  <data name="Home_TitleEmphasis" xml:space="preserve">
+    <value>comme le top 100</value>
+  </data>
+  <data name="Home_Updated" xml:space="preserve">
+    <value>Mis à jour {0}</value>
+  </data>
+  <data name="Import_Analyse" xml:space="preserve">
+    <value>Analyser</value>
+  </data>
+  <data name="Import_Eyebrow" xml:space="preserve">
+    <value>Addon NoovioPulse</value>
+  </data>
+  <data name="Import_Label" xml:space="preserve">
+    <value>Chaîne NoovioPulse</value>
+  </data>
+  <data name="Import_Lead" xml:space="preserve">
+    <value>L'addon lit ton personnage en jeu, à l'instant : équipement, gemmes, enchantements, talents et caractéristiques. Pas besoin de te déconnecter pour que Blizzard mette son profil à jour, ni de compte Battle.net sur le site.</value>
+  </data>
+  <data name="Import_PageTitle" xml:space="preserve">
+    <value>Importer depuis l'addon · {0} by Noovio</value>
+  </data>
+  <data name="Import_Placeholder" xml:space="preserve">
+    <value>Colle ici la chaîne copiée en jeu…</value>
+  </data>
+  <data name="Import_Retention" xml:space="preserve">
+    <value>Le lien d'analyse obtenu reste valable {0} jours : tu peux le partager.</value>
+  </data>
+  <data name="Import_StartsWith" xml:space="preserve">
+    <value>commence par</value>
+  </data>
+  <data name="Import_Step1" xml:space="preserve">
+    <value>Installe l'addon</value>
+  </data>
+  <data name="Import_Step1After" xml:space="preserve">
+    <value>, puis dépose le dossier {0} dans {1}.</value>
+  </data>
+  <data name="Import_Step1Before" xml:space="preserve">
+    <value>Télécharge</value>
+  </data>
+  <data name="Import_Step2" xml:space="preserve">
+    <value>Exporte en jeu</value>
+  </data>
+  <data name="Import_Step2After" xml:space="preserve">
+    <value>hors combat, dans la spécialisation à analyser. Aussi dans le menu des addons, sous la minicarte.</value>
+  </data>
+  <data name="Import_Step2Before" xml:space="preserve">
+    <value>Tape</value>
+  </data>
+  <data name="Import_Step3" xml:space="preserve">
+    <value>Copie, colle</value>
+  </data>
+  <data name="Import_Step3After" xml:space="preserve">
+    <value>ci-dessous.</value>
+  </data>
+  <data name="Import_Step3Before" xml:space="preserve">
+    <value>La chaîne est déjà sélectionnée :</value>
+  </data>
+  <data name="Import_Step3Middle" xml:space="preserve">
+    <value>en jeu, puis</value>
+  </data>
+  <data name="Import_Title" xml:space="preserve">
+    <value>Analyser un personnage depuis le jeu</value>
+  </data>
+  <data name="Inventory_BagPieces_One" xml:space="preserve">
+    <value>{0} pièce d'équipement</value>
+  </data>
+  <data name="Inventory_BagPieces_Other" xml:space="preserve">
+    <value>{0} pièces d'équipement</value>
+  </data>
+  <data name="Inventory_Bags" xml:space="preserve">
+    <value>Dans les sacs</value>
+  </data>
+  <data name="Inventory_Consumables" xml:space="preserve">
+    <value>Consommables</value>
+  </data>
+  <data name="Inventory_ConsumablesNote" xml:space="preserve">
+    <value>prêt pour la clé ?</value>
+  </data>
+  <data name="Inventory_CraftRank" xml:space="preserve">
+    <value>Rang d'artisanat</value>
+  </data>
+  <data name="Inventory_NoStock" xml:space="preserve">
+    <value>Rien en stock</value>
+  </data>
+  <data name="Inventory_NothingToEquip" xml:space="preserve">
+    <value>Rien à équiper : aucune pièce des sacs ne bat celle que tu portes.</value>
+  </data>
+  <data name="Inventory_SlotProgress" xml:space="preserve">
+    <value>{0}/{1} {2}</value>
+  </data>
+  <data name="Inventory_SlotUnlocked" xml:space="preserve">
+    <value>Débloquée</value>
+  </data>
+  <data name="Inventory_SlotUnlockedIlvl" xml:space="preserve">
+    <value>Débloquée : niveau d'objet {0}</value>
+  </data>
+  <data name="Inventory_Vault" xml:space="preserve">
+    <value>Grande Chambre forte</value>
+  </data>
+  <data name="Inventory_VaultOffered" xml:space="preserve">
+    <value>objets proposés</value>
+  </data>
+  <data name="Inventory_VaultProgress" xml:space="preserve">
+    <value>progression de la semaine</value>
+  </data>
+  <data name="Language_Label" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="Layout_BlizzardApi" xml:space="preserve">
+    <value>API Blizzard</value>
+  </data>
+  <data name="Layout_Data" xml:space="preserve">
+    <value>Données</value>
+  </data>
+  <data name="Layout_Reload" xml:space="preserve">
+    <value>Recharger</value>
+  </data>
+  <data name="Layout_UnexpectedError" xml:space="preserve">
+    <value>Une erreur inattendue est survenue.</value>
+  </data>
+  <data name="Layout_Version" xml:space="preserve">
+    <value>Version déployée</value>
+  </data>
+  <data name="Meta_Alternatives" xml:space="preserve">
+    <value>Alternatives</value>
+  </data>
+  <data name="Meta_ItemCount" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="Meta_MedianIlvl" xml:space="preserve">
+    <value>Niveau d'objet médian</value>
+  </data>
+  <data name="Mplus_ClassRank" xml:space="preserve">
+    <value>Rang de la classe</value>
+  </data>
+  <data name="Mplus_Depleted" xml:space="preserve">
+    <value>hors temps</value>
+  </data>
+  <data name="Mplus_NeverTitle" xml:space="preserve">
+    <value>{0} : jamais fait cette saison</value>
+  </data>
+  <data name="Mplus_RoleRank" xml:space="preserve">
+    <value>Rang {0} mondial</value>
+  </data>
+  <data name="Mplus_RoleScore" xml:space="preserve">
+    <value>Score {0}</value>
+  </data>
+  <data name="Mplus_ToDo" xml:space="preserve">
+    <value>à faire</value>
+  </data>
+  <data name="Mplus_Unknown" xml:space="preserve">
+    <value>Raider.io ne connaît pas encore ce personnage pour la saison.</value>
+  </data>
+  <data name="NotFound_Text" xml:space="preserve">
+    <value>Cette page n'a pas tenu l'aggro.</value>
+  </data>
+  <data name="NotFound_Title" xml:space="preserve">
+    <value>Introuvable</value>
+  </data>
+  <data name="Option_CurrentIlvl" xml:space="preserve">
+    <value>Niveau d'objet actuel</value>
+  </data>
+  <data name="Option_EmptySlotTitle" xml:space="preserve">
+    <value>Emplacement vide</value>
+  </data>
+  <data name="Option_GainAtMax" xml:space="preserve">
+    <value>{0} au max</value>
+  </data>
+  <data name="Option_GainTitle" xml:space="preserve">
+    <value>Au max, face à {0} ({1}, {2} au max)</value>
+  </data>
+  <data name="Option_Max" xml:space="preserve">
+    <value>max</value>
+  </data>
+  <data name="Option_MaxEstimated" xml:space="preserve">
+    <value>Niveau max estimé (environ 3 niveaux par rang)</value>
+  </data>
+  <data name="Option_MaxReal" xml:space="preserve">
+    <value>Niveau d'objet une fois améliorée au maximum</value>
+  </data>
+  <data name="Option_New" xml:space="preserve">
+    <value>nouveau</value>
+  </data>
+  <data name="Option_Recommended" xml:space="preserve">
+    <value> · conseillé</value>
+  </data>
+  <data name="Option_Set" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="Plan_Craft" xml:space="preserve">
+    <value>À crafter</value>
+  </data>
+  <data name="Plan_CraftHint" xml:space="preserve">
+    <value>commandes d'artisanat</value>
+  </data>
+  <data name="Plan_Farm" xml:space="preserve">
+    <value>À farmer</value>
+  </data>
+  <data name="Plan_FarmHint" xml:space="preserve">
+    <value>détail dans la roadmap</value>
+  </data>
+  <data name="Plan_Now" xml:space="preserve">
+    <value>À régler tout de suite</value>
+  </data>
+  <data name="Plan_NowHint" xml:space="preserve">
+    <value>gemmes, enchantements, talents : sans farmer</value>
+  </data>
+  <data name="Plan_Play" xml:space="preserve">
+    <value>À jouer</value>
+  </data>
+  <data name="Plan_PlayHint" xml:space="preserve">
+    <value>clés à pousser</value>
+  </data>
+  <data name="Reconnect_Failed" xml:space="preserve">
+    <value>Reconnexion impossible.</value>
+  </data>
+  <data name="Reconnect_FailedHint" xml:space="preserve">
+    <value>Réessaie ou recharge la page.</value>
+  </data>
+  <data name="Reconnect_First" xml:space="preserve">
+    <value>Reconnexion au serveur…</value>
+  </data>
+  <data name="Reconnect_Paused" xml:space="preserve">
+    <value>La session a été mise en pause par le serveur.</value>
+  </data>
+  <data name="Reconnect_RepeatedAfter" xml:space="preserve">
+    <value>secondes.</value>
+  </data>
+  <data name="Reconnect_RepeatedBefore" xml:space="preserve">
+    <value>Reconnexion impossible… nouvel essai dans</value>
+  </data>
+  <data name="Reconnect_Resume" xml:space="preserve">
+    <value>Reprendre</value>
+  </data>
+  <data name="Reconnect_ResumeFailed" xml:space="preserve">
+    <value>Impossible de reprendre la session.</value>
+  </data>
+  <data name="Reconnect_ResumeFailedHint" xml:space="preserve">
+    <value>Recharge la page.</value>
+  </data>
+  <data name="Reconnect_Retry" xml:space="preserve">
+    <value>Réessayer</value>
+  </data>
+  <data name="Report_AccountLoading" xml:space="preserve">
+    <value>Analyse en cours : équipement, talents et caractéristiques (Blizzard), clés (Raider.io), méta du top…</value>
+  </data>
+  <data name="Report_AccountRefreshTitle" xml:space="preserve">
+    <value>Relire le personnage chez Blizzard et Raider.io</value>
+  </data>
+  <data name="Report_Analysis" xml:space="preserve">
+    <value>Analyse</value>
+  </data>
+  <data name="Report_AreasLabel" xml:space="preserve">
+    <value>Synthèse par domaine</value>
+  </data>
+  <data name="Report_Atypical" xml:space="preserve">
+    <value>Choix atypiques (&lt; 10 % du top)</value>
+  </data>
+  <data name="Report_CharacterMissing" xml:space="preserve">
+    <value>Personnage introuvable dans ton compte. Synchronise tes personnages puis réessaie.</value>
+  </data>
+  <data name="Report_CharacterNotFound" xml:space="preserve">
+    <value>Blizzard ne renvoie pas ce personnage (renommé, transféré, ou pas reconnecté depuis la dernière mise à jour du jeu).</value>
+  </data>
+  <data name="Report_CompareAs" xml:space="preserve">
+    <value>Comparer en {0}</value>
+  </data>
+  <data name="Report_Failed" xml:space="preserve">
+    <value>Analyse impossible</value>
+  </data>
+  <data name="Report_FarmNote" xml:space="preserve">
+    <value>où aller, dans l'ordre, et quoi y chercher</value>
+  </data>
+  <data name="Report_GearNote" xml:space="preserve">
+    <value>niveau d'objet comparé à la médiane du top sur chaque emplacement</value>
+  </data>
+  <data name="Report_GemsNote" xml:space="preserve">
+    <value>ce qui change tes stats sans changer de pièce</value>
+  </data>
+  <data name="Report_GemsTitle" xml:space="preserve">
+    <value>Gemmes et enchantements</value>
+  </data>
+  <data name="Report_ImportExpired" xml:space="preserve">
+    <value>Import introuvable : il a expiré (les imports sont gardés {0} jours) ou le lien est incomplet.</value>
+  </data>
+  <data name="Report_ImportLoading" xml:space="preserve">
+    <value>Analyse en cours : personnage exporté par l'addon, clés (Raider.io), méta du top…</value>
+  </data>
+  <data name="Report_ImportNoRoleSpec" xml:space="preserve">
+    <value>Cette classe n'a pas de spécialisation {0} : importe ce personnage sur le site de son rôle.</value>
+  </data>
+  <data name="Report_ImportRefreshTitle" xml:space="preserve">
+    <value>Recomparer cet export à la dernière méta (pour un personnage à jour, refais /noovio en jeu)</value>
+  </data>
+  <data name="Report_ItemLevel" xml:space="preserve">
+    <value>Niv. d'objet</value>
+  </data>
+  <data name="Report_MetaCompliance" xml:space="preserve">
+    <value>Conformité à la méta</value>
+  </data>
+  <data name="Report_MissingCore" xml:space="preserve">
+    <value>Incontournables manquants</value>
+  </data>
+  <data name="Report_MyBuild" xml:space="preserve">
+    <value>Mon build sur Wowhead</value>
+  </data>
+  <data name="Report_MyCharacters" xml:space="preserve">
+    <value>‹ Mes personnages</value>
+  </data>
+  <data name="Report_NavBags" xml:space="preserve">
+    <value>Sacs et coffre</value>
+  </data>
+  <data name="Report_NavFarm" xml:space="preserve">
+    <value>Roadmap de farm</value>
+  </data>
+  <data name="Report_NavGear" xml:space="preserve">
+    <value>Équipement</value>
+  </data>
+  <data name="Report_NavMythicPlus" xml:space="preserve">
+    <value>Mythique+</value>
+  </data>
+  <data name="Report_NavOptimize" xml:space="preserve">
+    <value>Stats, gemmes, enchants</value>
+  </data>
+  <data name="Report_NavPlan" xml:space="preserve">
+    <value>Plan d'action</value>
+  </data>
+  <data name="Report_NavTalents" xml:space="preserve">
+    <value>Talents</value>
+  </data>
+  <data name="Report_NavTrinkets" xml:space="preserve">
+    <value>Bijoux</value>
+  </data>
+  <data name="Report_NewImport" xml:space="preserve">
+    <value>‹ Nouvel import</value>
+  </data>
+  <data name="Report_NoMeta" xml:space="preserve">
+    <value>La méta {0} n'est pas encore calculée : réessaie après la prochaine mise à jour.</value>
+  </data>
+  <data name="Report_NoRoleSpec" xml:space="preserve">
+    <value>{0} n'a pas de spécialisation {1}.</value>
+  </data>
+  <data name="Report_NothingToFix" xml:space="preserve">
+    <value>Rien à corriger : ton personnage suit la méta du top sur tous les points analysés.</value>
+  </data>
+  <data name="Report_OtherSpec" xml:space="preserve">
+    <value>autre spécialisation</value>
+  </data>
+  <data name="Report_PageTitle" xml:space="preserve">
+    <value>{0} · {1} by Noovio</value>
+  </data>
+  <data name="Report_PlanNote" xml:space="preserve">
+    <value>par effort, du plus immédiat au plus long ; les problèmes en tête de chaque groupe</value>
+  </data>
+  <data name="Report_PlayedAs" xml:space="preserve">
+    <value>Joué en {0}</value>
+  </data>
+  <data name="Report_Rerun" xml:space="preserve">
+    <value>Relancer · {0}</value>
+  </data>
+  <data name="Report_RerunTitle" xml:space="preserve">
+    <value>Relancer l'analyse</value>
+  </data>
+  <data name="Report_RetryImport" xml:space="preserve">
+    <value>Refaire un import</value>
+  </data>
+  <data name="Report_ScoreMplus" xml:space="preserve">
+    <value>Score M+</value>
+  </data>
+  <data name="Report_SectionsLabel" xml:space="preserve">
+    <value>Sections du rapport</value>
+  </data>
+  <data name="Report_SeeTree" xml:space="preserve">
+    <value>Voir mon arbre</value>
+  </data>
+  <data name="Report_SheetTitle" xml:space="preserve">
+    <value>Fiche complète</value>
+  </data>
+  <data name="Report_SheetUnavailable" xml:space="preserve">
+    <value>Fiche indisponible.</value>
+  </data>
+  <data name="Report_Similarity" xml:space="preserve">
+    <value>des talents majoritaires du top</value>
+  </data>
+  <data name="Report_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Report_SourceAddon" xml:space="preserve">
+    <value>Addon</value>
+  </data>
+  <data name="Report_SourceAddonAgo" xml:space="preserve">
+    <value>Addon · {0}</value>
+  </data>
+  <data name="Report_SourceClient" xml:space="preserve">
+    <value>, client {0}</value>
+  </data>
+  <data name="Report_SourceTitle" xml:space="preserve">
+    <value>Lu en jeu par l'addon NoovioPulse{0}{1}</value>
+  </data>
+  <data name="Report_StatsNote" xml:space="preserve">
+    <value>par priorité du top ; toi (◆) face à sa fourchette</value>
+  </data>
+  <data name="Report_StatsTitle" xml:space="preserve">
+    <value>Caractéristiques</value>
+  </data>
+  <data name="Report_StatsUnavailable" xml:space="preserve">
+    <value>Caractéristiques indisponibles.</value>
+  </data>
+  <data name="Report_Strengths_One" xml:space="preserve">
+    <value>{0} point fort</value>
+  </data>
+  <data name="Report_Strengths_Other" xml:space="preserve">
+    <value>{0} points forts</value>
+  </data>
+  <data name="Report_TopBuild" xml:space="preserve">
+    <value>Build du top</value>
+  </data>
+  <data name="Report_TrinketsNote" xml:space="preserve">
+    <value>quoi garder, quoi viser et comment les jouer</value>
+  </data>
+  <data name="Report_Unavailable" xml:space="preserve">
+    <value>Blizzard ou Raider.io ne répond pas pour le moment. Réessaie dans un instant.</value>
+  </data>
+  <data name="Report_VsTop" xml:space="preserve">
+    <value>{0} vs top</value>
+  </data>
+  <data name="Rhythm_Axis" xml:space="preserve">
+    <value>Pull {0}</value>
+  </data>
+  <data name="Rhythm_Enemies_One" xml:space="preserve">
+    <value>{0} ennemi</value>
+  </data>
+  <data name="Rhythm_Enemies_Other" xml:space="preserve">
+    <value>{0} ennemis</value>
+  </data>
+  <data name="Rhythm_NoEnemy" xml:space="preserve">
+    <value>aucun ennemi compté</value>
+  </data>
+  <data name="Rhythm_Note" xml:space="preserve">
+    <value>Ennemis par pull, dans l'ordre de la route</value>
+  </data>
+  <data name="Rhythm_Tip" xml:space="preserve">
+    <value>Pull {0} : {1}</value>
+  </data>
+  <data name="Rhythm_Title" xml:space="preserve">
+    <value>Rythme des pulls</value>
+  </data>
+  <data name="Routes_CardLargest" xml:space="preserve">
+    <value>au plus gros</value>
+  </data>
+  <data name="Routes_CardPulls" xml:space="preserve">
+    <value>pulls</value>
+  </data>
+  <data name="Routes_CardRoutes" xml:space="preserve">
+    <value>routes</value>
+  </data>
+  <data name="Routes_Lead" xml:space="preserve">
+    <value>Les routes les plus populaires de chaque donjon de la saison, avec ce qui compte pour ouvrir la marche : la taille de chaque pull, et le moment où ils sont les plus gros.</value>
+  </data>
+  <data name="Routes_MostPopular" xml:space="preserve">
+    <value>Route la plus populaire</value>
+  </data>
+  <data name="Routes_None" xml:space="preserve">
+    <value>Pas encore de routes</value>
+  </data>
+  <data name="Routes_NoneText" xml:space="preserve">
+    <value>La prochaine synchronisation avec Keystone.guru remplira cette page.</value>
+  </data>
+  <data name="Routes_PageTitle" xml:space="preserve">
+    <value>Routes Midnight · {0} by Noovio</value>
+  </data>
+  <data name="Routes_SourceAfter" xml:space="preserve">
+    <value>, mises à jour {0}.</value>
+  </data>
+  <data name="Routes_SourceBefore" xml:space="preserve">
+    <value>Routes publiées par la communauté de</value>
+  </data>
+  <data name="Routes_Title" xml:space="preserve">
+    <value>Les routes</value>
+  </data>
+  <data name="Routes_TitleAfter" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="Routes_TitleEmphasis" xml:space="preserve">
+    <value>Midnight</value>
+  </data>
+  <data name="Score_Label" xml:space="preserve">
+    <value>Conformité à la méta : {0} sur 100</value>
+  </data>
+  <data name="Sheet_Agility" xml:space="preserve">
+    <value>Agilité</value>
+  </data>
+  <data name="Sheet_Armor" xml:space="preserve">
+    <value>Armure</value>
+  </data>
+  <data name="Sheet_Avoidance" xml:space="preserve">
+    <value>Évitement</value>
+  </data>
+  <data name="Sheet_Block" xml:space="preserve">
+    <value>Blocage</value>
+  </data>
+  <data name="Sheet_Dodge" xml:space="preserve">
+    <value>Esquive</value>
+  </data>
+  <data name="Sheet_Health" xml:space="preserve">
+    <value>Points de vie</value>
+  </data>
+  <data name="Sheet_Intellect" xml:space="preserve">
+    <value>Intelligence</value>
+  </data>
+  <data name="Sheet_Leech" xml:space="preserve">
+    <value>Ponction</value>
+  </data>
+  <data name="Sheet_Mana" xml:space="preserve">
+    <value>Mana</value>
+  </data>
+  <data name="Sheet_Parry" xml:space="preserve">
+    <value>Parade</value>
+  </data>
+  <data name="Sheet_Speed" xml:space="preserve">
+    <value>Vitesse</value>
+  </data>
+  <data name="Sheet_Stamina" xml:space="preserve">
+    <value>Endurance</value>
+  </data>
+  <data name="Sheet_Strength" xml:space="preserve">
+    <value>Force</value>
+  </data>
+  <data name="Sheet_VersatilityTaken" xml:space="preserve">
+    <value>/ {0} subis</value>
+  </data>
+  <data name="Spec_ColIlvl" xml:space="preserve">
+    <value>Niv.</value>
+  </data>
+  <data name="Spec_ColKey" xml:space="preserve">
+    <value>Clé</value>
+  </data>
+  <data name="Spec_ColPlayer" xml:space="preserve">
+    <value>Joueur</value>
+  </data>
+  <data name="Spec_ColScore" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="Spec_Embellishments" xml:space="preserve">
+    <value>Embellissements</value>
+  </data>
+  <data name="Spec_Gear" xml:space="preserve">
+    <value>Équipement</value>
+  </data>
+  <data name="Spec_GearNote" xml:space="preserve">
+    <value>part du top portant chaque objet</value>
+  </data>
+  <data name="Spec_HeroTree" xml:space="preserve">
+    <value>Arbre héroïque</value>
+  </data>
+  <data name="Spec_MedianIlvl" xml:space="preserve">
+    <value>Niv. d'objet médian</value>
+  </data>
+  <data name="Spec_MedianKey" xml:space="preserve">
+    <value>Clé médiane</value>
+  </data>
+  <data name="Spec_NoDamageTrinket" xml:space="preserve">
+    <value>Aucun bijou {0} dans le top.</value>
+  </data>
+  <data name="Spec_NoData" xml:space="preserve">
+    <value>Pas encore de données : la prochaine ingestion (toutes les 6 h) remplira cette page.</value>
+  </data>
+  <data name="Spec_NoEmbellishment" xml:space="preserve">
+    <value>Aucun embellissement relevé.</value>
+  </data>
+  <data name="Spec_PageTitle" xml:space="preserve">
+    <value>{0} {1} · {2} by Noovio</value>
+  </data>
+  <data name="Spec_Sample" xml:space="preserve">
+    <value>Échantillon</value>
+  </data>
+  <data name="Spec_SecondaryStats" xml:space="preserve">
+    <value>Caractéristiques secondaires</value>
+  </data>
+  <data name="Spec_Talents" xml:space="preserve">
+    <value>Talents</value>
+  </data>
+  <data name="Spec_TopPlayers" xml:space="preserve">
+    <value>Les {0} meilleurs {1}</value>
+  </data>
+  <data name="Spec_TopPlayersNote" xml:space="preserve">
+    <value>classés sur leur meilleure clé de la saison</value>
+  </data>
+  <data name="Spec_Trinkets" xml:space="preserve">
+    <value>Bijoux</value>
+  </data>
+  <data name="Spec_Unknown" xml:space="preserve">
+    <value>Spécialisation inconnue</value>
+  </data>
+  <data name="Spec_UnknownText" xml:space="preserve">
+    <value>{0} ne suit que les {1} spécialisations {2}.</value>
+  </data>
+  <data name="Spec_Updated" xml:space="preserve">
+    <value>Mise à jour</value>
+  </data>
+  <data name="StatGauges_Note" xml:space="preserve">
+    <value>Pourcentages de la feuille de personnage, médiane du top. La priorité suit les points investis dans chaque caractéristique.</value>
+  </data>
+  <data name="StatGauges_Priority" xml:space="preserve">
+    <value>Ordre de priorité</value>
+  </data>
+  <data name="StatGauges_Range" xml:space="preserve">
+    <value>La moitié du top entre {0} et {1}</value>
+  </data>
+  <data name="StatGauges_ScaleLabel" xml:space="preserve">
+    <value>{0} : médiane {1}, la moitié du top entre {2} et {3}</value>
+  </data>
+  <data name="StatGauges_Unavailable" xml:space="preserve">
+    <value>Caractéristiques indisponibles pour cet échantillon.</value>
+  </data>
+  <data name="Stats_Excess" xml:space="preserve">
+    <value>En surplus de {0}</value>
+  </data>
+  <data name="Stats_InRange" xml:space="preserve">
+    <value>Dans la fourchette</value>
+  </data>
+  <data name="Stats_PriorityTitle" xml:space="preserve">
+    <value>Ordre de priorité dans le top</value>
+  </data>
+  <data name="Stats_Raise" xml:space="preserve">
+    <value>À monter de {0}</value>
+  </data>
+  <data name="Stats_Range" xml:space="preserve">
+    <value>Top : {0}–{1} (médiane {2})</value>
+  </data>
+  <data name="Stats_RemainingExcess" xml:space="preserve">
+    <value>Reste en trop sur l'équipement : {0} (≈ {1} d'indice)</value>
+  </data>
+  <data name="Stats_RemainingGain" xml:space="preserve">
+    <value>Reste à gagner sur l'équipement : {0} (≈ {1} d'indice)</value>
+  </data>
+  <data name="Stats_ScaleLabel" xml:space="preserve">
+    <value>{0} : toi {1}, la moitié du top entre {2} et {3}</value>
+  </data>
+  <data name="Stats_WithChanges" xml:space="preserve">
+    <value>Avec les changements proposés : {0} →</value>
+  </data>
+  <data name="Talents_Atypical" xml:space="preserve">
+    <value>Ton choix, rare dans le top (&lt; 10 %)</value>
+  </data>
+  <data name="Talents_CalculatorTitle" xml:space="preserve">
+    <value>Calculateur de talents</value>
+  </data>
+  <data name="Talents_Common" xml:space="preserve">
+    <value>Courant (≥ 50 %)</value>
+  </data>
+  <data name="Talents_Core" xml:space="preserve">
+    <value>Incontournable (≥ 90 %)</value>
+  </data>
+  <data name="Talents_Legend" xml:space="preserve">
+    <value>Légende</value>
+  </data>
+  <data name="Talents_Match" xml:space="preserve">
+    <value>Ton choix, comme la majorité du top</value>
+  </data>
+  <data name="Talents_Missing" xml:space="preserve">
+    <value>Incontournable que tu ne prends pas</value>
+  </data>
+  <data name="Talents_NoteMeta" xml:space="preserve">
+    <value>Chaque nœud affiche l'option la plus choisie et la part du top qui la prend. Pour un build exact, ouvre la configuration la plus jouée dans Wowhead.</value>
+  </data>
+  <data name="Talents_NotePlayer" xml:space="preserve">
+    <value>Le chiffre sur chaque nœud est la part du top qui le prend. Ouvre ta configuration dans Wowhead pour la modifier.</value>
+  </data>
+  <data name="Talents_Picked" xml:space="preserve">
+    <value>Ton choix, partagé par une partie du top</value>
+  </data>
+  <data name="Talents_Situational" xml:space="preserve">
+    <value>Situationnel</value>
+  </data>
+  <data name="Talents_Subtitle" xml:space="preserve">
+    <value>méta des {0} meilleurs {1}</value>
+  </data>
+  <data name="Talents_Unpicked" xml:space="preserve">
+    <value>Jamais pris</value>
+  </data>
+  <data name="Talents_YoursTitle" xml:space="preserve">
+    <value>Tes talents face au top</value>
+  </data>
+  <data name="TopBar_Imminent" xml:space="preserve">
+    <value>Imminente</value>
+  </data>
+  <data name="TopBar_MyCharacters" xml:space="preserve">
+    <value>Mes personnages</value>
+  </data>
+  <data name="TopBar_NextRefresh" xml:space="preserve">
+    <value>Prochaine mise à jour</value>
+  </data>
+  <data name="TopBar_RefreshTime" xml:space="preserve">
+    <value>{0:HH'h'mm}</value>
+  </data>
+  <data name="TopBar_RefreshTitle" xml:space="preserve">
+    <value>Données recalculées toutes les 6 h depuis Raider.io et l'API Blizzard. Prochaine ingestion prévue le {0:dddd d MMMM 'à' HH:mm} (heure de Paris).</value>
+  </data>
+  <data name="TopBar_Routes" xml:space="preserve">
+    <value>Routes</value>
+  </data>
+  <data name="TopBar_SignIn" xml:space="preserve">
+    <value>Connexion</value>
+  </data>
+  <data name="TopBar_Specs" xml:space="preserve">
+    <value>Spécialisations</value>
+  </data>
+  <data name="TopBar_SpecsTotal" xml:space="preserve">
+    <value>{0} au total</value>
+  </data>
+  <data name="TopBar_Tagline" xml:space="preserve">
+    <value>Méta {0} · Mythique+</value>
+  </data>
+  <data name="Trinket_Bosses_One" xml:space="preserve">
+    <value>{0} boss</value>
+  </data>
+  <data name="Trinket_Bosses_Other" xml:space="preserve">
+    <value>{0} boss</value>
+  </data>
+  <data name="Trinket_ChangeOne" xml:space="preserve">
+    <value>Un bijou à changer : {0} → {1}.</value>
+  </data>
+  <data name="Trinket_ChangeTwo" xml:space="preserve">
+    <value>Deux bijoux à changer : vise {0}.</value>
+  </data>
+  <data name="Trinket_InGame" xml:space="preserve">
+    <value>En jeu :</value>
+  </data>
+  <data name="Trinket_JournalNote" xml:space="preserve">
+    <value>Texte du Journal d'aventure, sans mesure de dégâts ; certaines techniques peuvent dépendre de la difficulté.</value>
+  </data>
+  <data name="Trinket_Keep" xml:space="preserve">
+    <value>À garder</value>
+  </data>
+  <data name="Trinket_KeepBoth" xml:space="preserve">
+    <value>Garde tes deux bijoux : le top joue les mêmes.</value>
+  </data>
+  <data name="Trinket_KeepOne" xml:space="preserve">
+    <value>Garde ce bijou : le top le joue.</value>
+  </data>
+  <data name="Trinket_Level" xml:space="preserve">
+    <value>Niveau {0}</value>
+  </data>
+  <data name="Trinket_NoJournal" xml:space="preserve">
+    <value>Le Journal d'aventure n'a pas pu être lu : ni sources de butin, ni moments de boss pour l'instant.</value>
+  </data>
+  <data name="Trinket_None" xml:space="preserve">
+    <value>Aucun bijou équipé.</value>
+  </data>
+  <data name="Trinket_OnceEquipped" xml:space="preserve">
+    <value>Une fois équipé :</value>
+  </data>
+  <data name="Trinket_Pairs" xml:space="preserve">
+    <value>Paires les plus jouées par le top</value>
+  </data>
+  <data name="Trinket_Passive" xml:space="preserve">
+    <value>effet automatique, rien à déclencher.</value>
+  </data>
+  <data name="Trinket_Replace" xml:space="preserve">
+    <value>À remplacer</value>
+  </data>
+  <data name="Trinket_Source" xml:space="preserve">
+    <value>Tombe sur {0}, {1} ({2})</value>
+  </data>
+  <data name="Trinket_SourceUnknown" xml:space="preserve">
+    <value>Source non listée dans le journal</value>
+  </data>
+  <data name="Trinket_TargetFacts" xml:space="preserve">
+    <value>{0} du top · niveau {1}</value>
+  </data>
+  <data name="Trinket_TopLevel" xml:space="preserve">
+    <value> (top : {0})</value>
+  </data>
+  <data name="Trinket_YourPair" xml:space="preserve">
+    <value>ta paire</value>
+  </data>
+  <data name="Ui_AgoDays" xml:space="preserve">
+    <value>il y a {0} j</value>
+  </data>
+  <data name="Ui_AgoHours" xml:space="preserve">
+    <value>il y a {0} h</value>
+  </data>
+  <data name="Ui_AgoMinutes" xml:space="preserve">
+    <value>il y a {0} min</value>
+  </data>
+  <data name="Ui_Area_Embellishments" xml:space="preserve">
+    <value>Embellissements</value>
+  </data>
+  <data name="Ui_Area_Enchantments" xml:space="preserve">
+    <value>Enchantements</value>
+  </data>
+  <data name="Ui_Area_Gems" xml:space="preserve">
+    <value>Gemmes</value>
+  </data>
+  <data name="Ui_Area_ItemLevel" xml:space="preserve">
+    <value>Niveau d'objet</value>
+  </data>
+  <data name="Ui_Area_MythicPlus" xml:space="preserve">
+    <value>Mythique+</value>
+  </data>
+  <data name="Ui_Area_Stats" xml:space="preserve">
+    <value>Caractéristiques</value>
+  </data>
+  <data name="Ui_Area_Talents" xml:space="preserve">
+    <value>Talents</value>
+  </data>
+  <data name="Ui_Area_Trinkets" xml:space="preserve">
+    <value>Bijoux</value>
+  </data>
+  <data name="Ui_DurationHours" xml:space="preserve">
+    <value>{0} h {1:00}</value>
+  </data>
+  <data name="Ui_DurationMinutes" xml:space="preserve">
+    <value>{0} min</value>
+  </data>
+  <data name="Ui_DurationUnderMinute" xml:space="preserve">
+    <value>moins d'une minute</value>
+  </data>
+  <data name="Ui_Highlight_BiggestPulls" xml:space="preserve">
+    <value>Plus gros pulls en moyenne</value>
+  </data>
+  <data name="Ui_Highlight_LowestPeak" xml:space="preserve">
+    <value>Pic de pull le plus bas</value>
+  </data>
+  <data name="Ui_Highlight_MostPopular" xml:space="preserve">
+    <value>La plus populaire</value>
+  </data>
+  <data name="Ui_Highlight_TankAuthored" xml:space="preserve">
+    <value>Par un tank</value>
+  </data>
+  <data name="Ui_InHours" xml:space="preserve">
+    <value>dans {0} h</value>
+  </data>
+  <data name="Ui_InHoursMinutes" xml:space="preserve">
+    <value>dans {0} h {1:00}</value>
+  </data>
+  <data name="Ui_InMinutes" xml:space="preserve">
+    <value>dans {0} min</value>
+  </data>
+  <data name="Ui_Instance_Dungeon" xml:space="preserve">
+    <value>Donjon</value>
+  </data>
+  <data name="Ui_Instance_Raid" xml:space="preserve">
+    <value>Raid</value>
+  </data>
+  <data name="Ui_JustNow" xml:space="preserve">
+    <value>à l'instant</value>
+  </data>
+  <data name="Ui_Season" xml:space="preserve">
+    <value>Saison {0}</value>
+  </data>
+  <data name="Ui_StatDelta" xml:space="preserve">
+    <value>{0:+0.0;-0.0} % {1}</value>
+  </data>
+  <data name="Ui_Tree_Class" xml:space="preserve">
+    <value>Classe</value>
+  </data>
+  <data name="Ui_Tree_Hero" xml:space="preserve">
+    <value>Héros</value>
+  </data>
+  <data name="Ui_Tree_Spec" xml:space="preserve">
+    <value>Spécialisation</value>
+  </data>
+  <data name="Ui_Verdict_Good" xml:space="preserve">
+    <value>Bon</value>
+  </data>
+  <data name="Ui_Verdict_Improve" xml:space="preserve">
+    <value>À améliorer</value>
+  </data>
+  <data name="Ui_Verdict_Problem" xml:space="preserve">
+    <value>Problème</value>
+  </data>
+</root>

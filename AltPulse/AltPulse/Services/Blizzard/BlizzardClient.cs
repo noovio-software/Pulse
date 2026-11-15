@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using AltPulse.Client.Localization;
 using Microsoft.Extensions.Options;
 
 namespace AltPulse.Services.Blizzard;
@@ -12,6 +13,7 @@ public sealed class BlizzardOptions
 
     public string? ClientId { get; set; }
     public string? ClientSecret { get; set; }
+    /// <summary>Langue des données pour l'interface en français ; l'interface anglaise lit en en_US.</summary>
     public string Locale { get; set; } = "fr_FR";
 
     public bool IsConfigured => !string.IsNullOrWhiteSpace(ClientId) && !string.IsNullOrWhiteSpace(ClientSecret);
@@ -31,19 +33,23 @@ public sealed class BlizzardClient(HttpClient http, IOptions<BlizzardOptions> op
 
     public bool IsConfigured => _options.IsConfigured;
 
+    /// <summary>Noms (classe, spécialisation, objets, enchantements) dans la langue de l'interface en cours.</summary>
+    private string ContentLocale => AltLocalization.IsEnglish ? "en_US" : _options.Locale;
+
     public Task<BzCharacterProfile?> GetProfileAsync(string region, string realmSlug, string name, CancellationToken ct) =>
-        GetProfileResourceAsync<BzCharacterProfile>(region, realmSlug, name, "", _options.Locale, ct);
+        GetProfileResourceAsync<BzCharacterProfile>(region, realmSlug, name, "", ContentLocale, ct);
 
     public Task<BzEquipment?> GetEquipmentAsync(string region, string realmSlug, string name, CancellationToken ct) =>
-        GetProfileResourceAsync<BzEquipment>(region, realmSlug, name, "/equipment", _options.Locale, ct);
+        GetProfileResourceAsync<BzEquipment>(region, realmSlug, name, "/equipment", ContentLocale, ct);
 
     public Task<BzCharacterMedia?> GetMediaAsync(string region, string realmSlug, string name, CancellationToken ct) =>
-        GetProfileResourceAsync<BzCharacterMedia>(region, realmSlug, name, "/character-media", _options.Locale, ct);
+        GetProfileResourceAsync<BzCharacterMedia>(region, realmSlug, name, "/character-media", ContentLocale, ct);
 
     /// <summary>Toujours en en_US : les noms d'instances/boss sont rapprochés de ceux de Raider.io.</summary>
     public Task<BzRaidEncounters?> GetRaidEncountersAsync(string region, string realmSlug, string name, CancellationToken ct) =>
         GetProfileResourceAsync<BzRaidEncounters>(region, realmSlug, name, "/encounters/raids", "en_US", ct);
 
+    /// <summary>Toujours dans la langue configurée : le jeu de l'addon donne le nom affiché du royaume, rapproché de cette liste.</summary>
     public Task<BzRealmIndex?> GetRealmsAsync(string region, CancellationToken ct) =>
         GetAsync<BzRealmIndex>(region, $"/data/wow/realm/index?namespace=dynamic-{region}&locale={_options.Locale}", ct);
 

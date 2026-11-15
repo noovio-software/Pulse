@@ -1,3 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- Noms de classes et de spécialisations, vocabulaire des rôles : français (neutre) et anglais. La classe d'accès est générée à la compilation. -->
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\GameTexts.resx" StronglyTypedLanguage="CSharp" StronglyTypedClassName="GameTexts" StronglyTypedNamespace="Noovio.Pulse.Domain.Resources" StronglyTypedFileName="$(IntermediateOutputPath)GameTexts.Designer.cs" />
+    <!-- Les tests vérifient que chaque texte existe dans les deux langues. -->
+    <InternalsVisibleTo Include="Noovio.Pulse.Tests" />
+  </ItemGroup>
+
 </Project>

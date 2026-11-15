@@ -1,5 +1,7 @@
 using AltPulse.Client.Components;
+using AltPulse.Client.Localization;
 using AltPulse.Client.Models;
+using AltPulse.Client.Resources;
 using AltPulse.Client.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -144,7 +146,7 @@ public partial class Home
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
-            column.Error = "Serveur injoignable.";
+            column.Error = AltTexts.Error_ServerDown;
         }
         finally
         {
@@ -157,7 +159,7 @@ public partial class Home
     {
         if (string.IsNullOrWhiteSpace(realm) || string.IsNullOrWhiteSpace(name))
         {
-            searchError = "Indique un royaume et un nom de personnage.";
+            searchError = AltTexts.Search_Missing;
             return;
         }
 
@@ -175,7 +177,7 @@ public partial class Home
             var result = await Api.GetCharacterAsync(region, realmSlug, name!.Trim());
             if (result.Character is not { } character)
             {
-                searchError = result.Error ?? "Personnage introuvable.";
+                searchError = result.Error ?? AltTexts.Search_NotFound;
                 return;
             }
 
@@ -198,7 +200,7 @@ public partial class Home
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
-            searchError = "Impossible de joindre le serveur.";
+            searchError = AltTexts.Error_ServerUnreachable;
         }
         finally
         {
@@ -273,8 +275,8 @@ public partial class Home
             addonOpen = false;
             addonText = null;
             addonMessage = result.Characters.Count == 1
-                ? $"{result.Characters[0].Name} mis à jour depuis l'addon."
-                : $"{result.Characters.Count} personnages mis à jour depuis l'addon.";
+                ? AltLocalization.F(AltTexts.Addon_UpdatedOne, result.Characters[0].Name)
+                : AltLocalization.F(AltTexts.Addon_UpdatedMany, result.Characters.Count);
             StateHasChanged();
 
             using var throttle = new SemaphoreSlim(4);
@@ -293,7 +295,7 @@ public partial class Home
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
-            addonError = "Impossible de joindre le serveur.";
+            addonError = AltTexts.Error_ServerUnreachable;
         }
         finally
         {

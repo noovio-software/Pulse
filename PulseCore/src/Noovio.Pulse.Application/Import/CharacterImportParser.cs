@@ -1,6 +1,7 @@
 using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
+using Noovio.Pulse.Application.Resources;
 
 namespace Noovio.Pulse.Application.Import;
 
@@ -27,12 +28,12 @@ public static class CharacterImportParser
     {
         if (string.IsNullOrWhiteSpace(text))
         {
-            return Fail("Colle la chaîne copiée depuis l'addon NoovioPulse (commande /noovio en jeu).");
+            return Fail(AnalysisTexts.Import_Empty);
         }
 
         if (text.Length > MaxLength)
         {
-            return Fail("Chaîne trop longue : ce n'est pas un export NoovioPulse.");
+            return Fail(AnalysisTexts.Import_TooLong);
         }
 
         var compact = new string(text.Where(c => !char.IsWhiteSpace(c)).ToArray());
@@ -40,8 +41,8 @@ public static class CharacterImportParser
         if (start < 0 || compact.Length < start + Prefix.Length + 2 || compact[start + Prefix.Length + 1] != ':')
         {
             return Fail(compact.StartsWith("NP", StringComparison.OrdinalIgnoreCase)
-                ? "Version de l'addon trop récente pour ce site, ou chaîne incomplète : recopie-la depuis le jeu."
-                : "Ce n'est pas une chaîne NoovioPulse : elle commence par « NP1: ». Une chaîne SimulationCraft ne convient pas.");
+                ? AnalysisTexts.Import_UnknownVersion
+                : AnalysisTexts.Import_NotNoovio);
         }
 
         var mode = char.ToUpperInvariant(compact[start + Prefix.Length]);
@@ -54,7 +55,7 @@ public static class CharacterImportParser
         }
         catch (FormatException)
         {
-            return Fail("Chaîne tronquée ou modifiée : recopie-la entièrement depuis la fenêtre de l'addon (Ctrl+A, Ctrl+C).");
+            return Fail(AnalysisTexts.Import_Truncated);
         }
 
         string json;
@@ -69,7 +70,7 @@ public static class CharacterImportParser
         }
         catch (InvalidDataException)
         {
-            return Fail("Chaîne illisible : recopie-la entièrement depuis la fenêtre de l'addon.");
+            return Fail(AnalysisTexts.Import_Unreadable);
         }
 
         CharacterImport? import;
@@ -79,7 +80,7 @@ public static class CharacterImportParser
         }
         catch (JsonException)
         {
-            return Fail("Contenu illisible : mets l'addon NoovioPulse à jour puis refais l'export.");
+            return Fail(AnalysisTexts.Import_BadContent);
         }
 
         return Validate(import);
@@ -89,27 +90,27 @@ public static class CharacterImportParser
     {
         if (import is null || import.V < 1)
         {
-            return Fail("Contenu illisible : mets l'addon NoovioPulse à jour puis refais l'export.");
+            return Fail(AnalysisTexts.Import_BadContent);
         }
 
         if (import.V > 1)
         {
-            return Fail("Cet export vient d'une version de l'addon plus récente que le site : réessaie après la prochaine mise à jour du site.");
+            return Fail(AnalysisTexts.Import_NewerAddon);
         }
 
         if (string.Equals(import.Kind, "alts", StringComparison.OrdinalIgnoreCase))
         {
-            return Fail("Cette chaîne est l'avancement de tes alts : colle-la sur AltPulse (altpulse.noovio.fr), bouton « MàJ depuis l'addon ». Ici, choisis « Mon personnage » dans l'addon.");
+            return Fail(AnalysisTexts.Import_AltsString);
         }
 
         if (import.Character is not { Name.Length: > 0, Class: > 0, Spec: > 0 })
         {
-            return Fail("L'export ne contient pas de personnage : connecte-toi avec lui en jeu et refais /noovio.");
+            return Fail(AnalysisTexts.Import_NoCharacter);
         }
 
         if (import.Gear is not { Count: > 0 })
         {
-            return Fail("L'export ne contient aucun équipement : refais /noovio une fois en jeu, pas sur l'écran de sélection.");
+            return Fail(AnalysisTexts.Import_NoGear);
         }
 
         return new CharacterImportResult(import, null);

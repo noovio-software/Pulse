@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Class_1" xml:space="preserve">
+    <value>Guerrier</value>
+  </data>
+  <data name="Class_10" xml:space="preserve">
+    <value>Moine</value>
+  </data>
+  <data name="Class_11" xml:space="preserve">
+    <value>Druide</value>
+  </data>
+  <data name="Class_12" xml:space="preserve">
+    <value>Chasseur de démons</value>
+  </data>
+  <data name="Class_13" xml:space="preserve">
+    <value>Évocateur</value>
+  </data>
+  <data name="Class_2" xml:space="preserve">
+    <value>Paladin</value>
+  </data>
+  <data name="Class_3" xml:space="preserve">
+    <value>Chasseur</value>
+  </data>
+  <data name="Class_4" xml:space="preserve">
+    <value>Voleur</value>
+  </data>
+  <data name="Class_5" xml:space="preserve">
+    <value>Prêtre</value>
+  </data>
+  <data name="Class_6" xml:space="preserve">
+    <value>Chevalier de la mort</value>
+  </data>
+  <data name="Class_7" xml:space="preserve">
+    <value>Chaman</value>
+  </data>
+  <data name="Class_8" xml:space="preserve">
+    <value>Mage</value>
+  </data>
+  <data name="Class_9" xml:space="preserve">
+    <value>Démoniste</value>
+  </data>
+  <data name="List_And" xml:space="preserve">
+    <value>et</value>
+  </data>
+  <data name="List_Or" xml:space="preserve">
+    <value>ou</value>
+  </data>
+  <data name="Role_Damage_Classes" xml:space="preserve">
+    <value>chaman, chasseur, chasseur de démons, chevalier de la mort, démoniste, druide, évocateur, guerrier, mage, moine, paladin, prêtre, voleur</value>
+  </data>
+  <data name="Role_Damage_DamageTrinket" xml:space="preserve">
+    <value>de caractéristiques</value>
+  </data>
+  <data name="Role_Damage_DamageTrinketAdvice" xml:space="preserve">
+    <value>à activer dès qu'il est prêt{0}, en l'alignant sur tes temps de recharge offensifs.</value>
+  </data>
+  <data name="Role_Damage_DamageTrinkets" xml:space="preserve">
+    <value>Caractéristiques</value>
+  </data>
+  <data name="Role_Damage_HitsTitle" xml:space="preserve">
+    <value>Moments de burst à préparer</value>
+  </data>
+  <data name="Role_Damage_HitsWithoutTrinket" xml:space="preserve">
+    <value>Aucun de tes bijoux n'est un bijou de dégâts à activer : ces moments servent à placer tes propres temps de recharge offensifs.</value>
+  </data>
+  <data name="Role_Damage_HitsWithTrinket" xml:space="preserve">
+    <value>Garde ton bijou de dégâts et tes temps de recharge offensifs pour ces moments.</value>
+  </data>
+  <data name="Role_Damage_ItemLevelImpact" xml:space="preserve">
+    <value>tes dégâts et ta survie</value>
+  </data>
+  <data name="Role_Damage_NoRoleTrinket" xml:space="preserve">
+    <value>Aucun bijou de dégâts dans le top : les deux emplacements servent aux caractéristiques.</value>
+  </data>
+  <data name="Role_Damage_Noun" xml:space="preserve">
+    <value>DPS</value>
+  </data>
+  <data name="Role_Damage_NounPlural" xml:space="preserve">
+    <value>DPS</value>
+  </data>
+  <data name="Role_Damage_RoleTrinket" xml:space="preserve">
+    <value>de dégâts</value>
+  </data>
+  <data name="Role_Damage_RoleTrinketAdvice" xml:space="preserve">
+    <value>à activer avec tes temps de recharge offensifs{0}, sur un gros pack ou un moment de burst du boss.</value>
+  </data>
+  <data name="Role_Damage_RoleTrinkets" xml:space="preserve">
+    <value>Dégâts</value>
+  </data>
+  <data name="Role_Damage_ServerError" xml:space="preserve">
+    <value>Le DPS a pris l'aggro. Réessaie dans un instant.</value>
+  </data>
+  <data name="Role_Damage_SpecCount" xml:space="preserve">
+    <value>vingt-sept</value>
+  </data>
+  <data name="Role_Damage_Verb" xml:space="preserve">
+    <value>jouer DPS</value>
+  </data>
+  <data name="Role_Healer_Classes" xml:space="preserve">
+    <value>chaman, druide, évocateur, moine, paladin, prêtre</value>
+  </data>
+  <data name="Role_Healer_DamageTrinket" xml:space="preserve">
+    <value>de dégâts</value>
+  </data>
+  <data name="Role_Healer_DamageTrinketAdvice" xml:space="preserve">
+    <value>à activer dès qu'il est prêt{0}, avec tes temps de recharge, sur un boss ou un gros pack.</value>
+  </data>
+  <data name="Role_Healer_DamageTrinkets" xml:space="preserve">
+    <value>Dégâts et caractéristiques</value>
+  </data>
+  <data name="Role_Healer_HitsTitle" xml:space="preserve">
+    <value>Moments de boss à anticiper</value>
+  </data>
+  <data name="Role_Healer_HitsWithoutTrinket" xml:space="preserve">
+    <value>Aucun de tes bijoux n'est un bijou de soin à activer : ces moments servent à placer tes propres temps de recharge.</value>
+  </data>
+  <data name="Role_Healer_HitsWithTrinket" xml:space="preserve">
+    <value>Active ton bijou de soin juste avant ces moments.</value>
+  </data>
+  <data name="Role_Healer_ItemLevelImpact" xml:space="preserve">
+    <value>tes soins et ta survie</value>
+  </data>
+  <data name="Role_Healer_NoRoleTrinket" xml:space="preserve">
+    <value>Aucun bijou de soin dans le top : les deux emplacements servent aux caractéristiques et aux dégâts.</value>
+  </data>
+  <data name="Role_Healer_Noun" xml:space="preserve">
+    <value>soigneur</value>
+  </data>
+  <data name="Role_Healer_NounPlural" xml:space="preserve">
+    <value>soigneurs</value>
+  </data>
+  <data name="Role_Healer_RoleTrinket" xml:space="preserve">
+    <value>de soin</value>
+  </data>
+  <data name="Role_Healer_RoleTrinketAdvice" xml:space="preserve">
+    <value>à activer juste avant les gros dégâts de groupe{0}, plutôt qu'à chaque recharge.</value>
+  </data>
+  <data name="Role_Healer_RoleTrinkets" xml:space="preserve">
+    <value>Soins</value>
+  </data>
+  <data name="Role_Healer_ServerError" xml:space="preserve">
+    <value>Le soigneur est à court de mana. Réessaie dans un instant.</value>
+  </data>
+  <data name="Role_Healer_SpecCount" xml:space="preserve">
+    <value>sept</value>
+  </data>
+  <data name="Role_Healer_Verb" xml:space="preserve">
+    <value>soigner</value>
+  </data>
+  <data name="Role_Tank_Classes" xml:space="preserve">
+    <value>guerrier, paladin, chevalier de la mort, druide, moine, chasseur de démons</value>
+  </data>
+  <data name="Role_Tank_DamageTrinket" xml:space="preserve">
+    <value>offensif</value>
+  </data>
+  <data name="Role_Tank_DamageTrinketAdvice" xml:space="preserve">
+    <value>à activer dès qu'il est prêt{0}, avec tes temps de recharge offensifs, sur un boss ou un gros pack.</value>
+  </data>
+  <data name="Role_Tank_DamageTrinkets" xml:space="preserve">
+    <value>Offensifs</value>
+  </data>
+  <data name="Role_Tank_HitsTitle" xml:space="preserve">
+    <value>Coups de boss à anticiper</value>
+  </data>
+  <data name="Role_Tank_HitsWithoutTrinket" xml:space="preserve">
+    <value>Aucun de tes bijoux n'est défensif : aucun boss n'est à privilégier pour eux. Ces coups servent à placer tes propres temps de recharge défensifs.</value>
+  </data>
+  <data name="Role_Tank_HitsWithTrinket" xml:space="preserve">
+    <value>Active ton bijou défensif juste avant ces coups.</value>
+  </data>
+  <data name="Role_Tank_ItemLevelImpact" xml:space="preserve">
+    <value>ta survie et tes dégâts</value>
+  </data>
+  <data name="Role_Tank_NoRoleTrinket" xml:space="preserve">
+    <value>Aucun bijou défensif dans le top : les deux emplacements servent aux dégâts.</value>
+  </data>
+  <data name="Role_Tank_Noun" xml:space="preserve">
+    <value>tank</value>
+  </data>
+  <data name="Role_Tank_NounPlural" xml:space="preserve">
+    <value>tanks</value>
+  </data>
+  <data name="Role_Tank_RoleTrinket" xml:space="preserve">
+    <value>défensif</value>
+  </data>
+  <data name="Role_Tank_RoleTrinketAdvice" xml:space="preserve">
+    <value>à activer juste avant les gros coups{0}, plutôt qu'à chaque recharge.</value>
+  </data>
+  <data name="Role_Tank_RoleTrinkets" xml:space="preserve">
+    <value>Défensifs</value>
+  </data>
+  <data name="Role_Tank_ServerError" xml:space="preserve">
+    <value>Le tank est tombé. Réessaie dans un instant.</value>
+  </data>
+  <data name="Role_Tank_SpecCount" xml:space="preserve">
+    <value>six</value>
+  </data>
+  <data name="Role_Tank_Verb" xml:space="preserve">
+    <value>tanker</value>
+  </data>
+  <data name="Slot_Back" xml:space="preserve">
+    <value>Dos</value>
+  </data>
+  <data name="Slot_Chest" xml:space="preserve">
+    <value>Torse</value>
+  </data>
+  <data name="Slot_Feet" xml:space="preserve">
+    <value>Pieds</value>
+  </data>
+  <data name="Slot_Finger" xml:space="preserve">
+    <value>Anneau</value>
+  </data>
+  <data name="Slot_Hands" xml:space="preserve">
+    <value>Mains</value>
+  </data>
+  <data name="Slot_Head" xml:space="preserve">
+    <value>Tête</value>
+  </data>
+  <data name="Slot_Legs" xml:space="preserve">
+    <value>Jambes</value>
+  </data>
+  <data name="Slot_MainHand" xml:space="preserve">
+    <value>Main droite</value>
+  </data>
+  <data name="Slot_Neck" xml:space="preserve">
+    <value>Cou</value>
+  </data>
+  <data name="Slot_OffHand" xml:space="preserve">
+    <value>Main gauche</value>
+  </data>
+  <data name="Slot_Shoulder" xml:space="preserve">
+    <value>Épaules</value>
+  </data>
+  <data name="Slot_Trinket" xml:space="preserve">
+    <value>Bijou</value>
+  </data>
+  <data name="Slot_Waist" xml:space="preserve">
+    <value>Taille</value>
+  </data>
+  <data name="Slot_Wrist" xml:space="preserve">
+    <value>Poignets</value>
+  </data>
+  <data name="SlotGroup_Finger" xml:space="preserve">
+    <value>Anneaux</value>
+  </data>
+  <data name="SlotGroup_Trinket" xml:space="preserve">
+    <value>Bijoux</value>
+  </data>
+  <data name="Spec_AfflictionWarlock" xml:space="preserve">
+    <value>Affliction</value>
+  </data>
+  <data name="Spec_ArcaneMage" xml:space="preserve">
+    <value>Arcanes</value>
+  </data>
+  <data name="Spec_ArmsWarrior" xml:space="preserve">
+    <value>Armes</value>
+  </data>
+  <data name="Spec_AssassinationRogue" xml:space="preserve">
+    <value>Assassinat</value>
+  </data>
+  <data name="Spec_AugmentationEvoker" xml:space="preserve">
+    <value>Augmentation</value>
+  </data>
+  <data name="Spec_BalanceDruid" xml:space="preserve">
+    <value>Équilibre</value>
+  </data>
+  <data name="Spec_BeastMasteryHunter" xml:space="preserve">
+    <value>Maîtrise des bêtes</value>
+  </data>
+  <data name="Spec_BloodDeathKnight" xml:space="preserve">
+    <value>Sang</value>
+  </data>
+  <data name="Spec_BrewmasterMonk" xml:space="preserve">
+    <value>Maître brasseur</value>
+  </data>
+  <data name="Spec_DemonologyWarlock" xml:space="preserve">
+    <value>Démonologie</value>
+  </data>
+  <data name="Spec_DestructionWarlock" xml:space="preserve">
+    <value>Destruction</value>
+  </data>
+  <data name="Spec_DevastationEvoker" xml:space="preserve">
+    <value>Dévastation</value>
+  </data>
+  <data name="Spec_DevourerDemonHunter" xml:space="preserve">
+    <value>Dévoration</value>
+  </data>
+  <data name="Spec_DisciplinePriest" xml:space="preserve">
+    <value>Discipline</value>
+  </data>
+  <data name="Spec_ElementalShaman" xml:space="preserve">
+    <value>Élémentaire</value>
+  </data>
+  <data name="Spec_EnhancementShaman" xml:space="preserve">
+    <value>Amélioration</value>
+  </data>
+  <data name="Spec_FeralDruid" xml:space="preserve">
+    <value>Farouche</value>
+  </data>
+  <data name="Spec_FireMage" xml:space="preserve">
+    <value>Feu</value>
+  </data>
+  <data name="Spec_FrostDeathKnight" xml:space="preserve">
+    <value>Givre</value>
+  </data>
+  <data name="Spec_FrostMage" xml:space="preserve">
+    <value>Givre</value>
+  </data>
+  <data name="Spec_FuryWarrior" xml:space="preserve">
+    <value>Fureur</value>
+  </data>
+  <data name="Spec_GuardianDruid" xml:space="preserve">
+    <value>Gardien</value>
+  </data>
+  <data name="Spec_HavocDemonHunter" xml:space="preserve">
+    <value>Dévastation</value>
+  </data>
+  <data name="Spec_HolyPaladin" xml:space="preserve">
+    <value>Sacré</value>
+  </data>
+  <data name="Spec_HolyPriest" xml:space="preserve">
+    <value>Sacré</value>
+  </data>
+  <data name="Spec_MarksmanshipHunter" xml:space="preserve">
+    <value>Précision</value>
+  </data>
+  <data name="Spec_MistweaverMonk" xml:space="preserve">
+    <value>Tisse-brume</value>
+  </data>
+  <data name="Spec_OutlawRogue" xml:space="preserve">
+    <value>Hors-la-loi</value>
+  </data>
+  <data name="Spec_PreservationEvoker" xml:space="preserve">
+    <value>Préservation</value>
+  </data>
+  <data name="Spec_ProtectionPaladin" xml:space="preserve">
+    <value>Protection</value>
+  </data>
+  <data name="Spec_ProtectionWarrior" xml:space="preserve">
+    <value>Protection</value>
+  </data>
+  <data name="Spec_RestorationDruid" xml:space="preserve">
+    <value>Restauration</value>
+  </data>
+  <data name="Spec_RestorationShaman" xml:space="preserve">
+    <value>Restauration</value>
+  </data>
+  <data name="Spec_RetributionPaladin" xml:space="preserve">
+    <value>Vindicte</value>
+  </data>
+  <data name="Spec_ShadowPriest" xml:space="preserve">
+    <value>Ombre</value>
+  </data>
+  <data name="Spec_SubtletyRogue" xml:space="preserve">
+    <value>Finesse</value>
+  </data>
+  <data name="Spec_SurvivalHunter" xml:space="preserve">
+    <value>Survie</value>
+  </data>
+  <data name="Spec_UnholyDeathKnight" xml:space="preserve">
+    <value>Impie</value>
+  </data>
+  <data name="Spec_VengeanceDemonHunter" xml:space="preserve">
+    <value>Vengeance</value>
+  </data>
+  <data name="Spec_WindwalkerMonk" xml:space="preserve">
+    <value>Marche-vent</value>
+  </data>
+  <data name="Stat_Crit" xml:space="preserve">
+    <value>Critique</value>
+  </data>
+  <data name="Stat_Haste" xml:space="preserve">
+    <value>Hâte</value>
+  </data>
+  <data name="Stat_Mastery" xml:space="preserve">
+    <value>Maîtrise</value>
+  </data>
+  <data name="Stat_Versatility" xml:space="preserve">
+    <value>Polyvalence</value>
+  </data>
+</root>

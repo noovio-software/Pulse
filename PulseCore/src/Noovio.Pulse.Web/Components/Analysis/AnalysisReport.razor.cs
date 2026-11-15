@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Components;
 using Noovio.Pulse.Application.Abstractions;
 using Noovio.Pulse.Application.Analysis;
+using Noovio.Pulse.Domain;
+using Noovio.Pulse.Domain.Enums;
+using Noovio.Pulse.Web.Resources;
 
 namespace Noovio.Pulse.Web.Components.Analysis;
 
@@ -24,7 +27,7 @@ public partial class AnalysisReport
 
     [Parameter] public EventCallback OnRefresh { get; set; }
 
-    [Parameter] public string RefreshTitle { get; set; } = "Relancer l'analyse";
+    [Parameter] public string RefreshTitle { get; set; } = WebTexts.Report_RerunTitle;
 
     private bool treeOpen;
 
@@ -37,17 +40,22 @@ public partial class AnalysisReport
     [
         .. new[]
         {
-            new PlanGroup("À régler tout de suite", "gemmes, enchantements, talents : sans farmer", ToFix.Where(f => f.Area is AnalysisAreaKind.Stats or AnalysisAreaKind.Gems or AnalysisAreaKind.Enchantments or AnalysisAreaKind.Talents).ToList()),
-            new PlanGroup("À crafter", "commandes d'artisanat", ToFix.Where(f => f.Area is AnalysisAreaKind.Embellishments).ToList()),
-            new PlanGroup("À farmer", "détail dans la roadmap", ToFix.Where(f => f.Area is AnalysisAreaKind.ItemLevel or AnalysisAreaKind.Trinkets).ToList()),
-            new PlanGroup("À jouer", "clés à pousser", ToFix.Where(f => f.Area is AnalysisAreaKind.MythicPlus).ToList())
+            new PlanGroup(WebTexts.Plan_Now, WebTexts.Plan_NowHint, ToFix.Where(f => f.Area is AnalysisAreaKind.Stats or AnalysisAreaKind.Gems or AnalysisAreaKind.Enchantments or AnalysisAreaKind.Talents).ToList()),
+            new PlanGroup(WebTexts.Plan_Craft, WebTexts.Plan_CraftHint, ToFix.Where(f => f.Area is AnalysisAreaKind.Embellishments).ToList()),
+            new PlanGroup(WebTexts.Plan_Farm, WebTexts.Plan_FarmHint, ToFix.Where(f => f.Area is AnalysisAreaKind.ItemLevel or AnalysisAreaKind.Trinkets).ToList()),
+            new PlanGroup(WebTexts.Plan_Play, WebTexts.Plan_PlayHint, ToFix.Where(f => f.Area is AnalysisAreaKind.MythicPlus).ToList())
         }.Where(g => g.Findings.Count > 0)
     ];
 
     private string Anchor(string section) => $"{BasePath}?spec={Analysis.Spec.Slug}#{section}";
 
     private static string PrimaryStatName(CharacterSheet sheet) =>
-        sheet.Intellect >= Math.Max(sheet.Strength, sheet.Agility) ? "Intelligence" : sheet.Strength >= sheet.Agility ? "Force" : "Agilité";
+        sheet.Intellect >= Math.Max(sheet.Strength, sheet.Agility) ? WebTexts.Sheet_Intellect : sheet.Strength >= sheet.Agility ? WebTexts.Sheet_Strength : WebTexts.Sheet_Agility;
+
+    /// <summary>La spécialisation jouée, nommée dans la langue de l'interface plutôt que dans celle de l'API.</summary>
+    private string PlayedSpecName =>
+        Analysis.Character.ActiveSpecId is { } id && Enum.IsDefined((WowSpec)id) ? ((WowSpec)id).Info().SpecName
+        : Analysis.Character.ActiveSpecName ?? WebTexts.Report_OtherSpec;
 
     private sealed record PlanGroup(string Title, string Hint, IReadOnlyList<AnalysisFinding> Findings);
 }

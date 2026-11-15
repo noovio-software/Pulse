@@ -3,17 +3,17 @@
 <AuthorizeView>
     <Authorized>
         <a class="btn btn-compare @(Compact ? "is-compact" : null)" href="@AccountUrl"
-           title="@(Spec is null ? "Comparer un de mes personnages au top" : $"Comparer mon {Spec.SpecName} au top")">
+           title="@(Spec is null ? WebTexts.Compare_TitleAny : Ui.F(WebTexts.Compare_TitleSpec, Spec.SpecName))">
             <CompareIcon />
             <span>@Label</span>
         </a>
     </Authorized>
     <NotAuthorized>
         <a class="btn btn-compare @(Compact ? "is-compact" : null)" href="compte/connexion?returnUrl=@Uri.EscapeDataString("/" + AccountUrl)"
-           data-enhance-nav="false" title="Connexion Battle.net, puis choix du personnage à comparer">
+           data-enhance-nav="false" title="@WebTexts.Compare_SignInTitle">
             <CompareIcon />
             <span>@Label</span>
-            <span class="compare-bnet" aria-label="via Battle.net"><BattleNetLogo Size="14" /></span>
+            <span class="compare-bnet" aria-label="@WebTexts.Compare_ViaBattleNet"><BattleNetLogo Size="14" /></span>
         </a>
     </NotAuthorized>
 </AuthorizeView>

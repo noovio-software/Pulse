@@ -7,6 +7,13 @@
 
     <!-- Comme AltPulse : VERSION est posée par GitHub Actions et lue ici ; 1.0.0 en local. -->
     <Version>$(Version)</Version>
+    <!-- Textes neutres en français, anglais en assembly satellite. -->
+    <NeutralLanguage>fr</NeutralLanguage>
   </PropertyGroup>
+
+  <!-- Textes de la page, en français (neutre) et en anglais. La classe d'accès est générée à la compilation. -->
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\LandingTexts.resx" StronglyTypedLanguage="CSharp" StronglyTypedClassName="LandingTexts" StronglyTypedNamespace="LandingPagePulse.Resources" StronglyTypedFileName="$(IntermediateOutputPath)LandingTexts.Designer.cs" />
+  </ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
+using System.Globalization;
 using Noovio.Pulse.Application.Import;
+using Noovio.Pulse.Application.Resources;
 using Noovio.Pulse.Domain;
 using Noovio.Pulse.Domain.Entities;
 using Noovio.Pulse.Domain.Enums;
@@ -49,7 +51,12 @@ public sealed record ItemOption(
 /// </summary>
 public sealed record VaultReview(bool RewardsReady, IReadOnlyList<VaultTrack> Tracks, IReadOnlyList<ItemOption> Choices, string Advice);
 
-public sealed record VaultTrack(string Label, string Unit, IReadOnlyList<VaultSlotView> Slots);
+/// <param name="Unit">Ce qui débloque une case, au singulier (« clé ») ; <paramref name="Units"/> au pluriel.</param>
+public sealed record VaultTrack(string Label, string Unit, string Units, IReadOnlyList<VaultSlotView> Slots)
+{
+    /// <summary>L'unité accordée à <paramref name="count"/> : « 1 clé », « 3 clés ».</summary>
+    public string UnitFor(int count) => Plural.IsOne(count) ? Unit : Units;
+}
 
 public sealed record VaultSlotView(int Threshold, int Progress, int? ItemLevel)
 {
@@ -126,23 +133,23 @@ public static class InventoryAnalyzer
         var parts = new List<string>();
         if (bagOptions.Count > 0)
         {
-            parts.Add($"{bagOptions.Count} amélioration{Plural(bagOptions.Count)} dans les sacs");
+            parts.Add(Plural.Format(bagOptions.Count, AnalysisTexts.Inventory_BagUpgrades_One, AnalysisTexts.Inventory_BagUpgrades_Other));
         }
 
         if (vault?.RewardsReady == true)
         {
-            parts.Add("coffre à ouvrir");
+            parts.Add(AnalysisTexts.Inventory_VaultReady);
         }
 
         var missing = consumables.Where(c => c.Count == 0 && c.Verdict != Verdict.Good).ToList();
         if (missing.Count > 0)
         {
-            parts.Add($"{missing.Count} consommable{Plural(missing.Count)} manquant{Plural(missing.Count)}");
+            parts.Add(Plural.Format(missing.Count, AnalysisTexts.Inventory_MissingConsumables_One, AnalysisTexts.Inventory_MissingConsumables_Other));
         }
 
         return new InventoryReview(
             verdict,
-            parts.Count == 0 ? "Sacs prêts pour la clé" : string.Join(" · ", parts),
+            parts.Count == 0 ? AnalysisTexts.Inventory_Ready : string.Join(" · ", parts),
             bagOptions,
             bagGear.Count,
             vault,
@@ -175,52 +182,52 @@ public static class InventoryAnalyzer
 
         if (current is null)
         {
-            return Option(true, "Emplacement vide : à équiper.");
+            return Option(true, AnalysisTexts.Option_EmptySlot);
         }
 
         if (current.Id == candidate.Id && max.Level <= currentMax.Level)
         {
-            return Option(false, "Même pièce que celle portée.");
+            return Option(false, AnalysisTexts.Option_SameItem);
         }
 
         // Comparées au maximum de leur piste : une pièce Héros 1/6 bat une Champion 6/6 qui ne montera plus.
         var gain = max.Level - currentMax.Level;
-        var atMax = max.Label is null ? "" : $" au max ({max.Label})";
+        var atMax = max.Label is null ? "" : Fmt.Of(AnalysisTexts.Option_AtMax, max.Label);
         var currentShare = ShareOf(current.Id);
         if (slot is GearSlot.Trinket or GearSlot.MainHand or GearSlot.OffHand)
         {
             // Un net écart de popularité vaut quelques niveaux d'objet : l'effet compte plus que l'ilvl.
             if (share >= MetaShare && share > currentShare + 0.05 && gain >= (share - currentShare >= 0.25 ? -BigGain : -6))
             {
-                return Option(true, $"Plus jouée par le top ({Percent(share)}) que {current.Name} ({Percent(currentShare)}).");
+                return Option(true, Fmt.Of(AnalysisTexts.Option_MorePopular, share, current.Name, currentShare));
             }
 
             if (gain >= BigGain && share >= currentShare)
             {
-                return Option(true, $"+{gain} niveaux d'objet{atMax} sur {current.Name}, et au moins aussi jouée par le top.");
+                return Option(true, Fmt.Of(AnalysisTexts.Option_BigGainPopular, gain, atMax, current.Name));
             }
 
-            return Option(false, share >= MetaShare ? "Jouée par le top, mais pas au-dessus de ta pièce." : "Peu jouée par le top.");
+            return Option(false, share >= MetaShare ? AnalysisTexts.Option_PopularNotBetter : AnalysisTexts.Option_Unpopular);
         }
 
         if (gain <= 0)
         {
-            return Option(false, "Pas plus haute que la pièce portée, une fois les deux améliorées au max.");
+            return Option(false, AnalysisTexts.Option_NotHigher);
         }
 
         if (current.SetId is > 0 && !isSet && gain < BigGain)
         {
-            return Option(false, $"+{gain}, mais {current.Name} compte pour ton bonus de set.");
+            return Option(false, Fmt.Of(AnalysisTexts.Option_SetBonus, gain, current.Name));
         }
 
         if (current.Embellished && !candidate.Embellished && gain < BigGain)
         {
-            return Option(false, $"+{gain}, mais {current.Name} porte un embellissement.");
+            return Option(false, Fmt.Of(AnalysisTexts.Option_Embellished, gain, current.Name));
         }
 
         return Option(true, isSet && current.SetId is not > 0
-            ? $"+{gain} niveaux d'objet{atMax}, et pièce de set."
-            : $"+{gain} niveaux d'objet{atMax} sur {current.Name}.");
+            ? Fmt.Of(AnalysisTexts.Option_GainSet, gain, atMax)
+            : Fmt.Of(AnalysisTexts.Option_Gain, gain, atMax, current.Name));
     }
 
     private static VaultReview Vault(ImportedVault vault, IReadOnlyList<ImportedGear> equipped, SpecMetaSnapshot meta, IReadOnlyDictionary<int, string> icons, UpgradeScale scale)
@@ -232,14 +239,14 @@ public static class InventoryAnalyzer
             .OrderBy(g => g.Key switch { 3 => 0, 1 => 1, _ => 2 })
             .Select(g =>
             {
-                var (label, unit) = g.Key switch
+                var (label, unit, units) = g.Key switch
                 {
-                    1 => ("Donjons", "clé"),
-                    3 => ("Raid", "boss"),
-                    6 => ("Monde", "activité"),
-                    _ => ("Autre", "activité")
+                    1 => (AnalysisTexts.Vault_Dungeons, AnalysisTexts.Vault_Unit_Key_One, AnalysisTexts.Vault_Unit_Key_Other),
+                    3 => (AnalysisTexts.Vault_Raid, AnalysisTexts.Vault_Unit_Boss_One, AnalysisTexts.Vault_Unit_Boss_Other),
+                    6 => (AnalysisTexts.Vault_World, AnalysisTexts.Vault_Unit_Activity_One, AnalysisTexts.Vault_Unit_Activity_Other),
+                    _ => (AnalysisTexts.Vault_Other, AnalysisTexts.Vault_Unit_Activity_One, AnalysisTexts.Vault_Unit_Activity_Other)
                 };
-                return new VaultTrack(label, unit, g.OrderBy(a => a.Index)
+                return new VaultTrack(label, unit, units, g.OrderBy(a => a.Index)
                     .Select(a => new VaultSlotView(a.Threshold, Math.Min(a.Progress, a.Threshold), a.Progress >= a.Threshold ? a.ExampleIlvl : null))
                     .ToList());
             })
@@ -259,13 +266,15 @@ public static class InventoryAnalyzer
         {
             var best = choices[0];
             advice = best.Recommended
-                ? $"À prendre : {best.Name} ({best.ItemLevel}{(best.MaxItemLevel > best.ItemLevel ? $", {best.MaxItemLevel} au max" : "")}). {best.Reason}"
-                : "Aucune option n'améliore ton équipement : prends la plus haute pour la recycler en écus, ou la plus jouée par le top.";
+                ? Fmt.Of(AnalysisTexts.Vault_Take, best.Name,
+                    best.MaxItemLevel > best.ItemLevel ? Fmt.Of(AnalysisTexts.Vault_TakeMax, best.ItemLevel, best.MaxItemLevel) : best.ItemLevel.ToString(),
+                    best.Reason)
+                : AnalysisTexts.Vault_NoUpgrade;
             choices = choices.Select((c, i) => i == 0 ? c : c with { Recommended = false }).ToList();
         }
         else if (vault.HasRewards)
         {
-            advice = "Ton coffre de la semaine passée t'attend : ouvre-le en jeu, puis refais l'export pour savoir quoi choisir.";
+            advice = AnalysisTexts.Vault_Waiting;
         }
         else
         {
@@ -278,8 +287,8 @@ public static class InventoryAnalyzer
                 .OrderBy(x => x.Left)
                 .FirstOrDefault();
             var best = tracks.SelectMany(t => t.Slots).Max(s => s.ItemLevel);
-            advice = $"{unlocked}/{total} cases débloquées" + (best is { } ilvl ? $", jusqu'au niveau d'objet {ilvl}" : "") + "."
-                     + (next.Track is { } track ? $" Prochaine case : encore {next.Left} {track.Unit}{Plural(next.Left)} ({track.Label.ToLowerInvariant()})." : "");
+            advice = (best is { } ilvl ? Fmt.Of(AnalysisTexts.Vault_ProgressIlvl, unlocked, total, ilvl) : Fmt.Of(AnalysisTexts.Vault_Progress, unlocked, total)) + "."
+                     + (next.Track is { } track ? Fmt.Of(AnalysisTexts.Vault_Next, next.Left, track.UnitFor(next.Left), track.Label.ToLower(CultureInfo.CurrentCulture)) : "");
         }
 
         return new VaultReview(choices.Count > 0, tracks, choices, advice);
@@ -296,24 +305,24 @@ public static class InventoryAnalyzer
 
         var checks = new List<ConsumableCheck>
         {
-            Check(ConsumableKind.Flask, "Flacon", Verdict.Problem, "Un flacon tient toute la clé : c'est la stat la moins chère du jeu."),
-            Check(ConsumableKind.CombatPotion, "Potion de combat", Verdict.Problem, "Une potion par combat de boss au minimum, à coupler avec tes temps forts.", LowPotionStock),
-            Check(ConsumableKind.HealthPotion, "Potion de soins", Verdict.Improve, "Elle sauve une clé sur un mauvais placement.", 3),
-            Check(ConsumableKind.Food, "Nourriture", Verdict.Improve, "Repas de stats avant la clé (ou festin du groupe).")
+            Check(ConsumableKind.Flask, AnalysisTexts.Consumable_Flask, Verdict.Problem, AnalysisTexts.Consumable_FlaskWhy),
+            Check(ConsumableKind.CombatPotion, AnalysisTexts.Consumable_CombatPotion, Verdict.Problem, AnalysisTexts.Consumable_CombatPotionWhy, LowPotionStock),
+            Check(ConsumableKind.HealthPotion, AnalysisTexts.Consumable_HealthPotion, Verdict.Improve, AnalysisTexts.Consumable_HealthPotionWhy, 3),
+            Check(ConsumableKind.Food, AnalysisTexts.Consumable_Food, Verdict.Improve, AnalysisTexts.Consumable_FoodWhy)
         };
 
         // Chaman et voleur ont leurs propres améliorations d'arme (imprégnations, poisons).
         if (classId is not (ShamanClass or RogueClass))
         {
-            checks.Add(Check(ConsumableKind.WeaponBuff, "Huile ou pierre d'arme", Verdict.Improve, "Bonus d'arme d'une heure, à refaire après une mort."));
+            checks.Add(Check(ConsumableKind.WeaponBuff, AnalysisTexts.Consumable_WeaponBuff, Verdict.Improve, AnalysisTexts.Consumable_WeaponBuffWhy));
         }
 
         if (role.Kind == RoleKind.Healer)
         {
-            checks.Add(Check(ConsumableKind.ManaPotion, "Potion de mana", Verdict.Improve, "Pour les fins de combat longues."));
+            checks.Add(Check(ConsumableKind.ManaPotion, AnalysisTexts.Consumable_ManaPotion, Verdict.Improve, AnalysisTexts.Consumable_ManaPotionWhy));
         }
 
-        checks.Add(Check(ConsumableKind.AugmentRune, "Rune d'augmentation", Verdict.Good, "Petit bonus de stat principale, facultatif."));
+        checks.Add(Check(ConsumableKind.AugmentRune, AnalysisTexts.Consumable_AugmentRune, Verdict.Good, AnalysisTexts.Consumable_AugmentRuneWhy));
         return checks;
 
         ConsumableCheck Check(ConsumableKind kind, string label, Verdict ifMissing, string why, int lowStock = 0)
@@ -321,17 +330,17 @@ public static class InventoryAnalyzer
             if (!byKind.TryGetValue(kind, out var found))
             {
                 return new ConsumableCheck(kind, label, ifMissing, 0, null, null, 0, null,
-                    $"Rien dans les sacs. {why}");
+                    Fmt.Of(AnalysisTexts.Consumable_None, why));
             }
 
             var current = found.Where(i => i.Current != false).ToList();
             var best = (current.Count > 0 ? current : found).OrderByDescending(i => i.Quality ?? 0).ThenByDescending(i => i.Count).First();
             var count = found.Sum(i => i.Count);
             var (verdict, advice) = current.Count == 0
-                ? (Verdict.Improve, "D'une ancienne extension : bien plus faible que l'actuelle.")
+                ? (Verdict.Improve, AnalysisTexts.Consumable_Outdated)
                 : lowStock > 0 && count < lowStock
-                    ? (Verdict.Improve, $"Stock bas ({count}) : prévois-en au moins {lowStock}.")
-                    : (Verdict.Good, count > 1 ? $"{count} en stock." : "En stock.");
+                    ? (Verdict.Improve, Fmt.Of(AnalysisTexts.Consumable_LowStock, count, lowStock))
+                    : (Verdict.Good, count > 1 ? Fmt.Of(AnalysisTexts.Consumable_Stock, count) : AnalysisTexts.Consumable_InStock);
             return new ConsumableCheck(kind, label, verdict, best.Id, best.Name, icons.GetValueOrDefault(best.Id), count, best.Quality, advice);
         }
     }
@@ -355,8 +364,4 @@ public static class InventoryAnalyzer
             _ => null
         };
     }
-
-    private static string Percent(double share) => $"{Math.Round(share * 100):0} %";
-
-    private static string Plural(int count) => count > 1 ? "s" : "";
 }

@@ -1,4 +1,6 @@
+using AltPulse.Client.Localization;
 using AltPulse.Client.Models;
+using AltPulse.Client.Resources;
 
 namespace AltPulse.Client.Services;
 
@@ -83,13 +85,13 @@ public static class AddonOverlay
         RaceName = addon.RaceName,
         Faction = addon.Faction?.ToLowerInvariant(),
         RaiderIoUrl = $"https://raider.io/characters/{addon.Region}/{addon.RealmSlug}/{Uri.EscapeDataString(addon.Name)}",
-        ArmoryUrl = $"https://worldofwarcraft.blizzard.com/fr-fr/character/{addon.Region}/{addon.RealmSlug}/{Uri.EscapeDataString(addon.Name.ToLowerInvariant())}",
+        ArmoryUrl = $"https://worldofwarcraft.blizzard.com/{AltLocalization.ArmoryLocale(addon.Region)}/character/{addon.Region}/{addon.RealmSlug}/{Uri.EscapeDataString(addon.Name.ToLowerInvariant())}",
         ItemLevelEquipped = addon.ItemLevelEquipped,
         ItemLevelAverage = addon.ItemLevelAverage,
         Rating = addon.Rating,
         RatingColor = addon.RatingColor,
         FetchedAtUtc = addon.SavedAtUtc,
-        Warnings = ["Introuvable sur raider.io et l'armurerie : seules les données de l'addon sont affichées."]
+        Warnings = [AltTexts.Overlay_AddonOnly]
     };
 
     private static bool Newer(CharacterSnapshot snapshot, AddonCharacter addon) => addon.SavedAtUtc > snapshot.FetchedAtUtc;
@@ -104,7 +106,7 @@ public static class AddonOverlay
     /// <summary>Niveau d'une case de raid = identifiant de difficulté du jeu.</summary>
     private static string DifficultyLabel(int difficultyId) => difficultyId switch
     {
-        17 or 7 => "RdR",
+        17 or 7 => AltTexts.Difficulty_LfrShort,
         14 or 3 or 4 => "N",
         15 or 5 or 6 => "H",
         16 => "M",
@@ -114,14 +116,14 @@ public static class AddonOverlay
     private static WeeklyRun ToRun(AddonRun run, SeasonInfo? season, DateTimeOffset at)
     {
         var dungeon = season?.Dungeons.FirstOrDefault(d => d.ChallengeModeId == run.MapId);
-        var name = dungeon?.Name ?? run.MapName ?? $"Donjon {run.MapId}";
+        var name = dungeon?.Name ?? run.MapName ?? AltLocalization.F(AltTexts.Overlay_Dungeon, run.MapId);
         return new WeeklyRun(dungeon?.ShortName ?? Short(name), name, run.Level, run.Completed ? 1 : 0, at);
     }
 
     private static OwnedKeystone ToKeystone(AddonKeystone key, SeasonInfo? season)
     {
         var dungeon = season?.Dungeons.FirstOrDefault(d => d.ChallengeModeId == key.MapId);
-        var name = dungeon?.Name ?? key.MapName ?? $"Donjon {key.MapId}";
+        var name = dungeon?.Name ?? key.MapName ?? AltLocalization.F(AltTexts.Overlay_Dungeon, key.MapId);
         return new OwnedKeystone(dungeon?.ShortName ?? Short(name), name, key.Level);
     }
 

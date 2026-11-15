@@ -2,7 +2,7 @@
 
 @if (Plan.Trinkets.Count == 0)
 {
-    <p class="muted">Aucun bijou équipé.</p>
+    <p class="muted">@WebTexts.Trinket_None</p>
 }
 else
 {
@@ -17,7 +17,7 @@ else
             var usage = trinket.ReplaceWith?.Usage ?? trinket.Usage;
             <li class="@Ui.VerdictCss(trinket.ReplaceWith is null ? Verdict.Good : Verdict.Improve)">
                 <div class="trinket-now">
-                    <a href="@Ui.ItemUrl(trinket.ItemId)" data-wowhead="item=@trinket.ItemId&ilvl=@trinket.ItemLevel&domain=fr" target="_blank" rel="noopener">
+                    <a href="@Ui.ItemUrl(trinket.ItemId)" data-wowhead="@($"item={trinket.ItemId}&ilvl={trinket.ItemLevel}{Ui.WowheadDomain}")" target="_blank" rel="noopener">
                         @if (trinket.IconUrl is not null)
                         {
                             <img class="wow-icon" src="@trinket.IconUrl" alt="" loading="lazy" />
@@ -30,11 +30,11 @@ else
                     <div>
                         <strong class="trinket-name @(trinket.ReplaceWith is null ? null : "is-out")">@trinket.Name</strong>
                         <span class="trinket-facts">
-                            Niveau @trinket.ItemLevel@(trinket.TopItemLevel is { } ilvl && ilvl > trinket.ItemLevel ? $" (top : {ilvl})" : "")
-                            · @Ui.Percent(trinket.TopShare) du top
+                            @Ui.F(WebTexts.Trinket_Level, trinket.ItemLevel)@(trinket.TopItemLevel is { } ilvl && ilvl > trinket.ItemLevel ? Ui.F(WebTexts.Trinket_TopLevel, ilvl) : "")
+                            · @Ui.F(WebTexts.Common_OfTop, Ui.Percent(trinket.TopShare))
                         </span>
                     </div>
-                    <span class="trinket-state">@(trinket.ReplaceWith is null ? "À garder" : "À remplacer")</span>
+                    <span class="trinket-state">@(trinket.ReplaceWith is null ? WebTexts.Trinket_Keep : WebTexts.Trinket_Replace)</span>
                 </div>
 
                 @if (trinket.ReplaceWith is { } target)
@@ -49,7 +49,7 @@ else
                         </a>
                         <div>
                             <strong class="trinket-name">@target.Name</strong>
-                            <span class="trinket-facts">@Ui.Percent(target.TopShare) du top · niveau @target.ItemLevel</span>
+                            <span class="trinket-facts">@Ui.F(WebTexts.Trinket_TargetFacts, Ui.Percent(target.TopShare), target.ItemLevel)</span>
                             <span class="trinket-source">@Source(target)</span>
                         </div>
                     </div>
@@ -58,7 +58,7 @@ else
                 @if (usage is not null)
                 {
                     <p class="trinket-play">
-                        <strong>@(trinket.ReplaceWith is null ? "En jeu" : "Une fois équipé") :</strong> @Advice(usage)
+                        <strong>@(trinket.ReplaceWith is null ? WebTexts.Trinket_InGame : WebTexts.Trinket_OnceEquipped)</strong> @Advice(usage)
                     </p>
                     @if (usage.Effect is not null)
                     {
@@ -71,7 +71,7 @@ else
 
     @if (Plan.Pairs.Count > 0)
     {
-        <h3 class="trinket-title">Paires les plus jouées par le top</h3>
+        <h3 class="trinket-title">@WebTexts.Trinket_Pairs</h3>
         <ul class="trinket-pairs">
             @foreach (var pair in Plan.Pairs)
             {
@@ -80,7 +80,7 @@ else
                     <span class="pair-items">@string.Join(" + ", pair.Items.Select(i => i.Name))</span>
                     @if (pair.IsWorn)
                     {
-                        <span class="pair-mine">ta paire</span>
+                        <span class="pair-mine">@WebTexts.Trinket_YourPair</span>
                     }
                 </li>
             }
@@ -91,10 +91,10 @@ else
 @if (Plan.BossHits.Count > 0)
 {
     <details class="boss-hits" open="@HasRoleTrinket">
-        <summary>@Site.Words.HitsTitle <small>@Plan.BossHits.Sum(i => i.Bosses.Count) boss</small></summary>
+        <summary>@Site.Words.HitsTitle <small>@Plural.Format(Plan.BossHits.Sum(i => i.Bosses.Count), WebTexts.Trinket_Bosses_One, WebTexts.Trinket_Bosses_Other)</small></summary>
         <p class="hits-note">
             @(HasRoleTrinket ? Site.Words.HitsWithTrinket : Site.Words.HitsWithoutTrinket)
-            Texte du Journal d'aventure, sans mesure de dégâts ; certaines techniques peuvent dépendre de la difficulté.
+            @WebTexts.Trinket_JournalNote
         </p>
         <table class="hits-table">
             <tbody>
@@ -117,5 +117,5 @@ else
 }
 else if (!Plan.HasJournal)
 {
-    <p class="muted hits-empty">Le Journal d'aventure n'a pas pu être lu : ni sources de butin, ni moments de boss pour l'instant.</p>
+    <p class="muted hits-empty">@WebTexts.Trinket_NoJournal</p>
 }

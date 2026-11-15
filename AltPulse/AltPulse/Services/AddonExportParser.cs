@@ -2,6 +2,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using AltPulse.Client.Resources;
 
 namespace AltPulse.Services;
 
@@ -29,12 +30,12 @@ public static class AddonExportParser
     {
         if (string.IsNullOrWhiteSpace(text))
         {
-            return Fail("Colle la chaîne copiée depuis l'addon NoovioPulse (en jeu : /noovio, carte « Mes alts »).");
+            return Fail(AltTexts.Import_Empty);
         }
 
         if (text.Length > MaxLength)
         {
-            return Fail("Chaîne trop longue : ce n'est pas un export NoovioPulse.");
+            return Fail(AltTexts.Import_TooLong);
         }
 
         var compact = new string(text.Where(c => !char.IsWhiteSpace(c)).ToArray());
@@ -42,8 +43,8 @@ public static class AddonExportParser
         if (start < 0 || compact.Length < start + Prefix.Length + 2 || compact[start + Prefix.Length + 1] != ':')
         {
             return Fail(compact.StartsWith("NP", StringComparison.OrdinalIgnoreCase)
-                ? "Version de l'addon trop récente pour ce site, ou chaîne incomplète : recopie-la depuis le jeu."
-                : "Ce n'est pas une chaîne NoovioPulse : elle commence par « NP1: ».");
+                ? AltTexts.Import_NewerOrIncomplete
+                : AltTexts.Import_NotNoovio);
         }
 
         var mode = char.ToUpperInvariant(compact[start + Prefix.Length]);
@@ -62,7 +63,7 @@ public static class AddonExportParser
         }
         catch (Exception ex) when (ex is FormatException or InvalidDataException)
         {
-            return Fail("Chaîne tronquée ou modifiée : recopie-la entièrement depuis la fenêtre de l'addon (Ctrl+C).");
+            return Fail(AltTexts.Import_Truncated);
         }
 
         AddonAltsExport? export;
@@ -72,29 +73,29 @@ public static class AddonExportParser
         }
         catch (JsonException)
         {
-            return Fail("Contenu illisible : mets l'addon NoovioPulse à jour puis refais l'export.");
+            return Fail(AltTexts.Import_Unreadable);
         }
 
         if (export is null || export.V < 1)
         {
-            return Fail("Contenu illisible : mets l'addon NoovioPulse à jour puis refais l'export.");
+            return Fail(AltTexts.Import_Unreadable);
         }
 
         if (export.V > 1)
         {
-            return Fail("Version de l'addon trop récente pour ce site : AltPulse sera mis à jour sous peu.");
+            return Fail(AltTexts.Import_Newer);
         }
 
         if (!string.Equals(export.Kind, "alts", StringComparison.OrdinalIgnoreCase))
         {
-            return Fail("Cette chaîne est l'analyse d'un personnage : colle-la sur FrontPulse, LifePulse ou BurstPulse. Pour AltPulse, choisis « Mes alts » dans l'addon.");
+            return Fail(AltTexts.Import_CharacterAnalysis);
         }
 
         var characters = (export.Characters ?? [])
             .Where(c => !string.IsNullOrWhiteSpace(c.Name) && !string.IsNullOrWhiteSpace(c.Realm))
             .ToList();
         return characters.Count == 0
-            ? Fail("Aucun personnage dans l'export : connecte-toi une fois sur chaque alt avec l'addon activé.")
+            ? Fail(AltTexts.Import_NoCharacter)
             : new AddonAltsParseResult(characters, null);
     }
 

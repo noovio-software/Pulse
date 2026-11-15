@@ -5,6 +5,7 @@ using Noovio.Pulse.Application.Routes;
 using Noovio.Pulse.Domain;
 using Noovio.Pulse.Domain.Entities;
 using Noovio.Pulse.Domain.Enums;
+using Noovio.Pulse.Web.Resources;
 
 namespace Noovio.Pulse.Web.Components.Shared;
 
@@ -12,7 +13,7 @@ public static class Ui
 {
     /// <summary>Slug Raider.io de la saison (« season-mn-1 ») → « Saison 1 » ; tel quel s'il a une autre forme.</summary>
     public static string SeasonLabel(string season) =>
-        season.Split('-') is [.., var last] && int.TryParse(last, out var number) ? $"Saison {number}" : season;
+        season.Split('-') is [.., var last] && int.TryParse(last, out var number) ? F(WebTexts.Ui_Season, number) : season;
 
     /// <summary>Forces ennemies de la route par rapport au minimum du donjon → « 101 % ».</summary>
     public static string ForcesPercent(DungeonRoute route) =>
@@ -23,10 +24,10 @@ public static class Ui
 
     public static string HighlightLabel(RouteHighlight highlight) => highlight switch
     {
-        RouteHighlight.MostPopular => "La plus populaire",
-        RouteHighlight.TankAuthored => "Par un tank",
-        RouteHighlight.BiggestPulls => "Plus gros pulls en moyenne",
-        _ => "Pic de pull le plus bas"
+        RouteHighlight.MostPopular => WebTexts.Ui_Highlight_MostPopular,
+        RouteHighlight.TankAuthored => WebTexts.Ui_Highlight_TankAuthored,
+        RouteHighlight.BiggestPulls => WebTexts.Ui_Highlight_BiggestPulls,
+        _ => WebTexts.Ui_Highlight_LowestPeak
     };
 
     public static string HighlightCss(RouteHighlight highlight) => highlight switch
@@ -36,46 +37,31 @@ public static class Ui
         _ => "is-pulls"
     };
 
-    public static string SlotLabel(GearSlot slot) => slot switch
-    {
-        GearSlot.Head => "Tête",
-        GearSlot.Neck => "Cou",
-        GearSlot.Shoulder => "Épaules",
-        GearSlot.Back => "Dos",
-        GearSlot.Chest => "Torse",
-        GearSlot.Wrist => "Poignets",
-        GearSlot.Hands => "Mains",
-        GearSlot.Waist => "Taille",
-        GearSlot.Legs => "Jambes",
-        GearSlot.Feet => "Pieds",
-        GearSlot.Finger => "Anneaux",
-        GearSlot.Trinket => "Bijoux",
-        GearSlot.MainHand => "Main droite",
-        _ => "Main gauche"
-    };
+    /// <summary>En-tête d'un emplacement : « Tête », « Anneaux ».</summary>
+    public static string SlotLabel(GearSlot slot) => GameLabels.SlotGroup(slot);
 
-    public static string StatLabel(SecondaryStat stat) => stat switch
-    {
-        SecondaryStat.Haste => "Hâte",
-        SecondaryStat.Versatility => "Polyvalence",
-        SecondaryStat.Mastery => "Maîtrise",
-        _ => "Critique"
-    };
+    public static string StatLabel(SecondaryStat stat) => GameLabels.Stat(stat);
 
     public static string StatCss(SecondaryStat stat) => $"stat-{stat.ToString().ToLowerInvariant()}";
 
     public static string TreeLabel(TalentTree tree) => tree switch
     {
-        TalentTree.Class => "Classe",
-        TalentTree.Spec => "Spécialisation",
-        _ => "Héros"
+        TalentTree.Class => WebTexts.Ui_Tree_Class,
+        TalentTree.Spec => WebTexts.Ui_Tree_Spec,
+        _ => WebTexts.Ui_Tree_Hero
     };
 
     /// <summary>« soigneurs » → « Soigneurs ».</summary>
-    public static string Capitalized(string word) => word.Length == 0 ? word : char.ToUpperInvariant(word[0]) + word[1..];
+    public static string Capitalized(string word) => word.Length == 0 ? word : char.ToUpper(word[0], CultureInfo.CurrentCulture) + word[1..];
 
-    /// <summary>Part dans [0, 1] → « 42 % ».</summary>
-    public static string Percent(double share) => $"{share * 100:0} %";
+    /// <summary>Part dans [0, 1] → « 42 % » en français, « 42% » en anglais.</summary>
+    public static string Percent(double share, int decimals = 0) => share.ToString("P" + decimals, CultureInfo.CurrentCulture);
+
+    /// <summary>Valeur déjà en pourcentage (24.3) → « 24,3 % » / « 24.3% ».</summary>
+    public static string PercentValue(double percent, int decimals = 0) => Percent(percent / 100, decimals);
+
+    /// <summary>Formate une ressource dans la culture de l'interface.</summary>
+    public static string F(string format, params object?[] args) => string.Format(CultureInfo.CurrentCulture, format, args);
 
     /// <summary>Part dans [0, 1] → « 42.5% », pour une largeur CSS (indépendant de la culture).</summary>
     public static string CssPercent(double share) => (share * 100).ToString("0.#", CultureInfo.InvariantCulture) + "%";
@@ -89,29 +75,29 @@ public static class Ui
     public static string Ago(DateTimeOffset at)
     {
         var elapsed = DateTimeOffset.UtcNow - at;
-        return elapsed.TotalMinutes < 1 ? "à l'instant"
-            : elapsed.TotalHours < 1 ? $"il y a {(int)elapsed.TotalMinutes} min"
-            : elapsed.TotalDays < 1 ? $"il y a {(int)elapsed.TotalHours} h"
-            : $"il y a {(int)elapsed.TotalDays} j";
+        return elapsed.TotalMinutes < 1 ? WebTexts.Ui_JustNow
+            : elapsed.TotalHours < 1 ? F(WebTexts.Ui_AgoMinutes, (int)elapsed.TotalMinutes)
+            : elapsed.TotalDays < 1 ? F(WebTexts.Ui_AgoHours, (int)elapsed.TotalHours)
+            : F(WebTexts.Ui_AgoDays, (int)elapsed.TotalDays);
     }
 
     /// <summary>Durée → « 2 h 15 », « 40 min », « moins d'une minute ».</summary>
     public static string Duration(TimeSpan duration) =>
-        duration.TotalMinutes < 1 ? "moins d'une minute"
-            : duration.TotalHours < 1 ? $"{(int)duration.TotalMinutes} min"
-            : $"{(int)duration.TotalHours} h {duration.Minutes:00}";
+        duration.TotalMinutes < 1 ? WebTexts.Ui_DurationUnderMinute
+            : duration.TotalHours < 1 ? F(WebTexts.Ui_DurationMinutes, (int)duration.TotalMinutes)
+            : F(WebTexts.Ui_DurationHours, (int)duration.TotalHours, duration.Minutes);
 
     /// <summary>Durée restante → « dans 2 h 15 », « dans 40 min ».</summary>
     public static string In(TimeSpan remaining) =>
-        remaining.TotalHours < 1 ? $"dans {Math.Max(1, (int)remaining.TotalMinutes)} min"
-            : remaining.Minutes == 0 ? $"dans {(int)remaining.TotalHours} h"
-            : $"dans {(int)remaining.TotalHours} h {remaining.Minutes:00}";
+        remaining.TotalHours < 1 ? F(WebTexts.Ui_InMinutes, Math.Max(1, (int)remaining.TotalMinutes))
+            : remaining.Minutes == 0 ? F(WebTexts.Ui_InHours, (int)remaining.TotalHours)
+            : F(WebTexts.Ui_InHoursMinutes, (int)remaining.TotalHours, remaining.Minutes);
 
     /// <summary>Nombre de pixels CSS, indépendant de la culture (« 12.5px »).</summary>
     public static string Px(double value) => value.ToString("0.#", CultureInfo.InvariantCulture) + "px";
 
     /// <summary>Le calculateur Wowhead importe directement une chaîne d'export Blizzard.</summary>
-    public static string TalentCalculatorUrl(string loadoutCode) => $"https://www.wowhead.com/fr/talent-calc/blizzard/{loadoutCode}";
+    public static string TalentCalculatorUrl(string loadoutCode) => $"{WowheadSite}/talent-calc/blizzard/{loadoutCode}";
 
     /// <summary>Quasi incontournable (≥ 90 %), courant (≥ 50 %), situationnel, jamais pris.</summary>
     public static string PickTier(double share) => share switch
@@ -131,21 +117,21 @@ public static class Ui
 
     public static string VerdictLabel(Verdict verdict) => verdict switch
     {
-        Verdict.Good => "Bon",
-        Verdict.Improve => "À améliorer",
-        _ => "Problème"
+        Verdict.Good => WebTexts.Ui_Verdict_Good,
+        Verdict.Improve => WebTexts.Ui_Verdict_Improve,
+        _ => WebTexts.Ui_Verdict_Problem
     };
 
     public static string AreaLabel(AnalysisAreaKind area) => area switch
     {
-        AnalysisAreaKind.ItemLevel => "Niveau d'objet",
-        AnalysisAreaKind.Stats => "Caractéristiques",
-        AnalysisAreaKind.Talents => "Talents",
-        AnalysisAreaKind.Trinkets => "Bijoux",
-        AnalysisAreaKind.Embellishments => "Embellissements",
-        AnalysisAreaKind.Enchantments => "Enchantements",
-        AnalysisAreaKind.Gems => "Gemmes",
-        _ => "Mythique+"
+        AnalysisAreaKind.ItemLevel => WebTexts.Ui_Area_ItemLevel,
+        AnalysisAreaKind.Stats => WebTexts.Ui_Area_Stats,
+        AnalysisAreaKind.Talents => WebTexts.Ui_Area_Talents,
+        AnalysisAreaKind.Trinkets => WebTexts.Ui_Area_Trinkets,
+        AnalysisAreaKind.Embellishments => WebTexts.Ui_Area_Embellishments,
+        AnalysisAreaKind.Enchantments => WebTexts.Ui_Area_Enchantments,
+        AnalysisAreaKind.Gems => WebTexts.Ui_Area_Gems,
+        _ => WebTexts.Ui_Area_MythicPlus
     };
 
     /// <summary>Section du rapport qui détaille un domaine.</summary>
@@ -159,24 +145,37 @@ public static class Ui
         _ => "plan"
     };
 
-    public static string InstanceKindLabel(InstanceKind kind) => kind == InstanceKind.Raid ? "Raid" : "Donjon";
+    public static string InstanceKindLabel(InstanceKind kind) => kind == InstanceKind.Raid ? WebTexts.Ui_Instance_Raid : WebTexts.Ui_Instance_Dungeon;
 
     /// <summary>« +1,2 % Hâte ».</summary>
-    public static string StatDelta(StatDelta delta) => $"{delta.Percent:+0.0;-0.0} % {StatLabel(delta.Stat)}";
+    public static string StatDelta(StatDelta delta) => F(WebTexts.Ui_StatDelta, delta.Percent, StatLabel(delta.Stat));
 
     /// <summary>« +70 Hâte · +30 Maîtrise » ; null si le texte ne donne aucune secondaire.</summary>
     public static string? StatList(IReadOnlyList<ItemStat> stats) =>
         stats.Count == 0 ? null : string.Join(" · ", stats.Select(s => $"+{s.Value} {StatLabel(s.Stat)}"));
 
-    public static string ItemUrl(int itemId) => $"https://www.wowhead.com/fr/item={itemId}";
+    /// <summary>Wowhead dans la langue de l'interface : « https://www.wowhead.com/fr » ou « https://www.wowhead.com ».</summary>
+    public static string WowheadSite => WowheadLocale is { } locale ? $"https://www.wowhead.com/{locale}" : "https://www.wowhead.com";
+
+    /// <summary>Sous-domaine de langue de Wowhead pour les infobulles ; aucun pour l'anglais (le site par défaut).</summary>
+    private static string? WowheadLocale => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName switch
+    {
+        "fr" => "fr",
+        _ => null
+    };
+
+    /// <summary>Paramètre <c>domain</c> des infobulles Wowhead (vide en anglais), à la suite des autres.</summary>
+    public static string WowheadDomain => WowheadLocale is { } locale ? $"&domain={locale}" : "";
+
+    public static string ItemUrl(int itemId) => $"{WowheadSite}/item={itemId}";
 
     public static string ItemUrl(ItemStatSnapshot item) => ItemUrl(item.ItemId);
 
-    public static string SpellUrl(int spellId) => $"https://www.wowhead.com/fr/spell={spellId}";
+    public static string SpellUrl(int spellId) => $"{WowheadSite}/spell={spellId}";
 
-    public static string ItemWowhead(int itemId) => $"item={itemId}&domain=fr";
+    public static string ItemWowhead(int itemId) => $"item={itemId}{WowheadDomain}";
 
-    public static string ItemWowhead(ItemStatSnapshot item) => $"item={item.ItemId}&ilvl={item.MedianItemLevel}&domain=fr";
+    public static string ItemWowhead(ItemStatSnapshot item) => $"item={item.ItemId}&ilvl={item.MedianItemLevel}{WowheadDomain}";
 
-    public static string SpellWowhead(int spellId) => $"spell={spellId}&domain=fr";
+    public static string SpellWowhead(int spellId) => $"spell={spellId}{WowheadDomain}";
 }

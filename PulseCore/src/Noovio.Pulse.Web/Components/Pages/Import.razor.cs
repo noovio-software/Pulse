@@ -2,6 +2,8 @@ using System.Security.Cryptography;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Caching.Distributed;
 using Noovio.Pulse.Application.Import;
+using Noovio.Pulse.Web.Components.Shared;
+using Noovio.Pulse.Web.Resources;
 
 namespace Noovio.Pulse.Web.Components.Pages;
 
@@ -18,6 +20,10 @@ public partial class Import
     [SupplyParameterFromForm(FormName = "import")] private ImportInput? Input { get; set; }
 
     private string? error;
+
+    /// <summary>« , puis dépose le dossier NoovioPulse dans _retail_\Interface\AddOns. », noms de dossiers en code.</summary>
+    private static MarkupString StepFolders => new(Ui.F(
+        System.Net.WebUtility.HtmlEncode(WebTexts.Import_Step1After), "<code>NoovioPulse</code>", @"<code>_retail_\Interface\AddOns</code>"));
 
     protected override void OnInitialized() => Input ??= new();
 

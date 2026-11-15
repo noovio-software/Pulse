@@ -1,5 +1,6 @@
 using Noovio.Pulse.Application.Abstractions;
 using Noovio.Pulse.Application.Meta;
+using Noovio.Pulse.Application.Resources;
 using Noovio.Pulse.Domain;
 using Noovio.Pulse.Domain.Entities;
 using Noovio.Pulse.Domain.Enums;
@@ -49,9 +50,9 @@ public static class CharacterAnalyzer
         if (!playsSpec)
         {
             findings.Add(new(AnalysisAreaKind.ItemLevel, Verdict.Improve,
-                $"Personnage joué en {character.ActiveSpecName ?? "autre spécialisation"}",
-                $"L'équipement et les caractéristiques lus sont ceux de ta spécialisation actuelle, pas forcément de ton set {spec.SpecName}.",
-                $"Passe en {spec.SpecName} avec ton équipement de {role.Wording.Noun} et déconnecte-toi, puis relance l'analyse pour un résultat fidèle."));
+                Fmt.Of(AnalysisTexts.OffSpec_Title, PlayedSpecName(character)),
+                Fmt.Of(AnalysisTexts.OffSpec_Detail, spec.SpecName),
+                Fmt.Of(AnalysisTexts.OffSpec_Advice, spec.SpecName, role.Wording.Noun)));
         }
 
         var gearReviews = ReviewGear(gear, meta, top, itemIcons);
@@ -133,19 +134,19 @@ public static class CharacterAnalyzer
 
         if (verdict == Verdict.Good)
         {
-            findings.Add(new(AnalysisAreaKind.ItemLevel, Verdict.Good, $"Niveau d'objet {ilvl:0.#} : au niveau du top",
-                $"La médiane du top est à {meta.MedianItemLevel:0.#}.", "Rien à faire ici : concentre-toi sur les autres points."));
+            findings.Add(new(AnalysisAreaKind.ItemLevel, Verdict.Good, Fmt.Of(AnalysisTexts.ItemLevel_GoodTitle, ilvl),
+                Fmt.Of(AnalysisTexts.ItemLevel_TopMedian, meta.MedianItemLevel), AnalysisTexts.ItemLevel_GoodAdvice));
         }
         else
         {
-            findings.Add(new(AnalysisAreaKind.ItemLevel, verdict, $"Niveau d'objet {ilvl:0.#} : {-gap:0.#} sous le top",
-                $"La médiane du top est à {meta.MedianItemLevel:0.#}. Le niveau d'objet pèse directement sur {role.Wording.ItemLevelImpact}.",
+            findings.Add(new(AnalysisAreaKind.ItemLevel, verdict, Fmt.Of(AnalysisTexts.ItemLevel_LowTitle, ilvl, -gap),
+                Fmt.Of(AnalysisTexts.ItemLevel_LowDetail, meta.MedianItemLevel, role.Wording.ItemLevelImpact),
                 weakest.Count == 0
-                    ? "Améliore tes pièces les plus basses via la Grande chambre forte et les écus."
-                    : "Remplace ou améliore en priorité : " + string.Join(", ", weakest.Select(w => $"{SlotName(w.Slot)} ({w.ItemLevel} contre {w.TopItemLevel})")) + "."));
+                    ? AnalysisTexts.ItemLevel_LowAdviceGeneric
+                    : Fmt.Of(AnalysisTexts.ItemLevel_LowAdvicePieces, string.Join(", ", weakest.Select(w => Fmt.Of(AnalysisTexts.ItemLevel_Piece, GameLabels.Slot(w.Slot), w.ItemLevel, w.TopItemLevel))))));
         }
 
-        return new AnalysisArea(AnalysisAreaKind.ItemLevel, verdict, $"{ilvl:0.#} / {meta.MedianItemLevel:0.#}");
+        return new AnalysisArea(AnalysisAreaKind.ItemLevel, verdict, Fmt.Of("{0:0.#} / {1:0.#}", ilvl, meta.MedianItemLevel));
     }
 
     // --- Caractéristiques secondaires ------------------------------------
@@ -154,7 +155,7 @@ public static class CharacterAnalyzer
     {
         if (sheet is null || meta.Stats.Count == 0)
         {
-            areas.Add(new AnalysisArea(AnalysisAreaKind.Stats, Verdict.Improve, "Indisponibles"));
+            areas.Add(new AnalysisArea(AnalysisAreaKind.Stats, Verdict.Improve, AnalysisTexts.Stats_Unavailable));
             return [];
         }
 
@@ -175,28 +176,28 @@ public static class CharacterAnalyzer
         foreach (var r in low)
         {
             findings.Add(new(AnalysisAreaKind.Stats, r == main ? Verdict.Problem : Verdict.Improve,
-                $"{StatName(r.Stat)} trop basse : {r.Percent:0} %",
-                $"La moitié du top est entre {r.Top.P25Percent:0} et {r.Top.P75Percent:0} % (médiane {r.Top.MedianPercent:0} %).",
+                Fmt.Of(AnalysisTexts.Stats_LowTitle, GameLabels.Stat(r.Stat), r.Percent),
+                Fmt.Of(AnalysisTexts.Stats_Range, r.Top.P25Percent, r.Top.P75Percent, r.Top.MedianPercent),
                 high.Count > 0
-                    ? $"Réoriente tes gemmes, enchantements et pièces craftées : prends de la {StatName(r.Stat)} à la place de {string.Join(" ou ", high.Select(h => StatName(h.Stat)))}."
-                    : $"Privilégie la {StatName(r.Stat)} sur tes gemmes, enchantements et pièces craftées."));
+                    ? Fmt.Of(AnalysisTexts.Stats_LowAdviceSwap, GameLabels.Stat(r.Stat), string.Join($" {GameLabels.Or} ", high.Select(h => GameLabels.Stat(h.Stat))))
+                    : Fmt.Of(AnalysisTexts.Stats_LowAdvice, GameLabels.Stat(r.Stat))));
         }
 
         if (low.Count == 0 && high.Count > 0)
         {
             findings.Add(new(AnalysisAreaKind.Stats, Verdict.Improve,
-                $"Surplus de {string.Join(" et ", high.Select(h => StatName(h.Stat)))}",
-                "Tu dépasses la fourchette du top : ces points rapporteraient davantage ailleurs.",
-                $"Rééquilibre vers la {StatName(main.Stat)}, caractéristique prioritaire du top."));
+                Fmt.Of(AnalysisTexts.Stats_SurplusTitle, string.Join($" {GameLabels.And} ", high.Select(h => GameLabels.Stat(h.Stat)))),
+                AnalysisTexts.Stats_SurplusDetail,
+                Fmt.Of(AnalysisTexts.Stats_SurplusAdvice, GameLabels.Stat(main.Stat))));
         }
 
         if (verdict == Verdict.Good)
         {
-            findings.Add(new(AnalysisAreaKind.Stats, Verdict.Good, "Caractéristiques alignées sur le top",
-                "Tes quatre secondaires sont dans la fourchette de la moitié centrale du top.", "Garde cet équilibre en changeant de pièces."));
+            findings.Add(new(AnalysisAreaKind.Stats, Verdict.Good, AnalysisTexts.Stats_GoodTitle,
+                AnalysisTexts.Stats_GoodDetail, AnalysisTexts.Stats_GoodAdvice));
         }
 
-        areas.Add(new AnalysisArea(AnalysisAreaKind.Stats, verdict, $"{reviews.Count(r => r.Verdict == Verdict.Good)}/4 dans la fourchette"));
+        areas.Add(new AnalysisArea(AnalysisAreaKind.Stats, verdict, Fmt.Of(AnalysisTexts.Stats_Summary, reviews.Count(r => r.Verdict == Verdict.Good))));
         return reviews;
     }
 
@@ -209,10 +210,10 @@ public static class CharacterAnalyzer
 
         if (selected.Count == 0)
         {
-            findings.Add(new(AnalysisAreaKind.Talents, Verdict.Problem, $"Aucune configuration {spec.SpecName} trouvée",
-                $"Blizzard ne renvoie pas de talents pour ta spécialisation {spec.SpecName}.",
-                "Passe en jeu dans cette spécialisation et importe la configuration la plus jouée du top (bouton Wowhead ou copie du code)."));
-            areas.Add(new AnalysisArea(AnalysisAreaKind.Talents, Verdict.Problem, "Aucune configuration"));
+            findings.Add(new(AnalysisAreaKind.Talents, Verdict.Problem, Fmt.Of(AnalysisTexts.Talents_NoneTitle, spec.SpecName),
+                Fmt.Of(AnalysisTexts.Talents_NoneDetail, spec.SpecName),
+                AnalysisTexts.Talents_NoneAdvice));
+            areas.Add(new AnalysisArea(AnalysisAreaKind.Talents, Verdict.Problem, AnalysisTexts.Talents_NoneSummary));
             return new TalentReview(null, null, topHero?.Name, [], [], [], 0);
         }
 
@@ -242,33 +243,33 @@ public static class CharacterAnalyzer
 
         if (heroDiffers)
         {
-            findings.Add(new(AnalysisAreaKind.Talents, Verdict.Improve, $"Arbre héroïque : {loadout.HeroTree ?? "aucun"}",
-                $"{topHero!.Share:P0} du top joue {topHero.Name}.",
-                $"Essaie {topHero.Name} : ouvre la configuration la plus jouée dans le calculateur pour voir les différences."));
+            findings.Add(new(AnalysisAreaKind.Talents, Verdict.Improve, Fmt.Of(AnalysisTexts.Talents_HeroTitle, loadout.HeroTree ?? AnalysisTexts.Talents_HeroNone),
+                Fmt.Of(AnalysisTexts.Talents_HeroDetail, topHero!.Share, topHero.Name),
+                Fmt.Of(AnalysisTexts.Talents_HeroAdvice, topHero.Name)));
         }
 
         if (missing.Count > 0)
         {
             findings.Add(new(AnalysisAreaKind.Talents, missing.Count >= 3 ? Verdict.Problem : Verdict.Improve,
-                $"{missing.Count} talent{(missing.Count > 1 ? "s" : "")} incontournable{(missing.Count > 1 ? "s" : "")} manquant{(missing.Count > 1 ? "s" : "")}",
-                "Pris par au moins 90 % du top : " + string.Join(", ", missing.Take(5).Select(t => t.Name)) + (missing.Count > 5 ? "…" : "") + ".",
-                "Récupère les points sur tes choix atypiques, ou importe directement la configuration la plus jouée."));
+                Plural.Format(missing.Count, AnalysisTexts.Talents_MissingTitle_One, AnalysisTexts.Talents_MissingTitle_Other),
+                Fmt.Of(AnalysisTexts.Talents_MissingDetail, Excerpt(missing.Select(t => t.Name))),
+                AnalysisTexts.Talents_MissingAdvice));
         }
 
         if (atypical.Count >= 3)
         {
-            findings.Add(new(AnalysisAreaKind.Talents, Verdict.Improve, $"{atypical.Count} choix atypiques",
-                "Pris par moins de 10 % du top : " + string.Join(", ", atypical.Take(5).Select(t => t.Name)) + (atypical.Count > 5 ? "…" : "") + ".",
-                "Garde-les seulement s'ils répondent à un besoin précis (affixe, donjon) ; sinon, suis la méta."));
+            findings.Add(new(AnalysisAreaKind.Talents, Verdict.Improve, Fmt.Of(AnalysisTexts.Talents_AtypicalTitle, atypical.Count),
+                Fmt.Of(AnalysisTexts.Talents_AtypicalDetail, Excerpt(atypical.Select(t => t.Name))),
+                AnalysisTexts.Talents_AtypicalAdvice));
         }
 
         if (verdict == Verdict.Good)
         {
-            findings.Add(new(AnalysisAreaKind.Talents, Verdict.Good, $"Talents proches de la méta ({similarity:P0})",
-                "Tu prends les talents choisis par la majorité du top.", "Rien à changer, sauf adaptation ponctuelle à un donjon."));
+            findings.Add(new(AnalysisAreaKind.Talents, Verdict.Good, Fmt.Of(AnalysisTexts.Talents_GoodTitle, similarity),
+                AnalysisTexts.Talents_GoodDetail, AnalysisTexts.Talents_GoodAdvice));
         }
 
-        areas.Add(new AnalysisArea(AnalysisAreaKind.Talents, verdict, $"{similarity:P0} de la méta"));
+        areas.Add(new AnalysisArea(AnalysisAreaKind.Talents, verdict, Fmt.Of(AnalysisTexts.Talents_Summary, similarity)));
         return new TalentReview(
             loadout.LoadoutCode,
             loadout.HeroTree,
@@ -295,22 +296,23 @@ public static class CharacterAnalyzer
         foreach (var (piece, share) in rare)
         {
             var alternatives = popular.Where(p => trinkets.All(t => t.ItemId != p.ItemId)).Take(2).ToList();
-            findings.Add(new(AnalysisAreaKind.Trinkets, Verdict.Improve, $"{piece.Name} : bijou marginal",
-                $"Seulement {share:P0} du top le porte.",
+            findings.Add(new(AnalysisAreaKind.Trinkets, Verdict.Improve, Fmt.Of(AnalysisTexts.Trinkets_RareTitle, piece.Name),
+                Fmt.Of(AnalysisTexts.Trinkets_RareDetail, share),
                 alternatives.Count == 0
-                    ? "Vise un des bijoux les plus portés du top."
-                    : "Les plus portés : " + string.Join(", ", alternatives.Select(a => $"{a.Name} ({a.Share:P0})")) + ".",
+                    ? AnalysisTexts.Trinkets_RareAdviceGeneric
+                    : Fmt.Of(AnalysisTexts.Trinkets_RareAdvice, string.Join(", ", alternatives.Select(a => Fmt.Of("{0} ({1:P0})", a.Name, a.Share)))),
                 icons.GetValueOrDefault(piece.ItemId)));
         }
 
         var verdict = rare.Count == 0 ? Verdict.Good : Verdict.Improve;
         if (verdict == Verdict.Good && trinkets.Count > 0)
         {
-            findings.Add(new(AnalysisAreaKind.Trinkets, Verdict.Good, "Bijoux joués par le top",
-                string.Join(" et ", trinkets.Select(t => t.Name)) + " font partie des choix courants.", "Rien à changer."));
+            findings.Add(new(AnalysisAreaKind.Trinkets, Verdict.Good, AnalysisTexts.Trinkets_GoodTitle,
+                Fmt.Of(AnalysisTexts.Trinkets_GoodDetail, string.Join($" {GameLabels.And} ", trinkets.Select(t => t.Name))), AnalysisTexts.Common_NothingToChange));
         }
 
-        return new AnalysisArea(AnalysisAreaKind.Trinkets, verdict, rare.Count == 0 ? "Choix courants" : $"{rare.Count} marginal{(rare.Count > 1 ? "aux" : "")}");
+        return new AnalysisArea(AnalysisAreaKind.Trinkets, verdict,
+            rare.Count == 0 ? AnalysisTexts.Trinkets_SummaryGood : Plural.Format(rare.Count, AnalysisTexts.Trinkets_Summary_One, AnalysisTexts.Trinkets_Summary_Other));
     }
 
     private static AnalysisArea Embellishments(IReadOnlyList<GearPiece> gear, SpecMetaSnapshot meta, List<AnalysisFinding> findings)
@@ -325,9 +327,10 @@ public static class CharacterAnalyzer
         if (mine.Count < 2)
         {
             verdict = Verdict.Problem;
-            findings.Add(new(AnalysisAreaKind.Embellishments, Verdict.Problem, $"{2 - mine.Count} embellissement{(mine.Count == 0 ? "s" : "")} manquant{(mine.Count == 0 ? "s" : "")}",
-                "Deux pièces embellies sont permises : c'est un gain gratuit que presque tout le top exploite.",
-                $"Fais crafter une pièce embellie. Combinaison la plus jouée : {topNames} ({topCombo?.Share ?? 0:P0} du top)."));
+            findings.Add(new(AnalysisAreaKind.Embellishments, Verdict.Problem,
+                Plural.Format(2 - mine.Count, AnalysisTexts.Embellishments_MissingTitle_One, AnalysisTexts.Embellishments_MissingTitle_Other),
+                AnalysisTexts.Embellishments_MissingDetail,
+                Fmt.Of(AnalysisTexts.Embellishments_MissingAdvice, topNames, topCombo?.Share ?? 0)));
         }
         else
         {
@@ -336,10 +339,11 @@ public static class CharacterAnalyzer
                 string.Join("|", c.Parts.SelectMany(p => Enumerable.Repeat(p.Name, p.Count)).Order(StringComparer.Ordinal)) == key);
             verdict = played is null || played.Share < 0.1 ? Verdict.Improve : Verdict.Good;
             findings.Add(verdict == Verdict.Good
-                ? new(AnalysisAreaKind.Embellishments, Verdict.Good, "Embellissements de la méta",
-                    $"{string.Join(" + ", mine)} : joué par {played!.Share:P0} du top.", "Rien à changer.")
-                : new(AnalysisAreaKind.Embellishments, Verdict.Improve, "Embellissements peu joués",
-                    $"{string.Join(" + ", mine)} est rare dans le top.", $"Combinaison la plus jouée : {topNames} ({topCombo?.Share ?? 0:P0} du top)."));
+                ? new(AnalysisAreaKind.Embellishments, Verdict.Good, AnalysisTexts.Embellishments_GoodTitle,
+                    Fmt.Of(AnalysisTexts.Embellishments_GoodDetail, string.Join(" + ", mine), played!.Share), AnalysisTexts.Common_NothingToChange)
+                : new(AnalysisAreaKind.Embellishments, Verdict.Improve, AnalysisTexts.Embellishments_RareTitle,
+                    Fmt.Of(AnalysisTexts.Embellishments_RareDetail, string.Join(" + ", mine)),
+                    Fmt.Of(AnalysisTexts.Embellishments_RareAdvice, topNames, topCombo?.Share ?? 0)));
         }
 
         return new AnalysisArea(AnalysisAreaKind.Embellishments, verdict, $"{mine.Count}/2");
@@ -350,20 +354,20 @@ public static class CharacterAnalyzer
         var missing = gear.Where(g => g.EnchantExpected && !g.HasEnchant).ToList();
         foreach (var g in missing)
         {
-            findings.Add(new(AnalysisAreaKind.Enchantments, Verdict.Problem, $"{SlotName(g.Slot)} sans enchantement",
-                "La majorité du top enchante cet emplacement.",
-                g.SuggestedEnchant is null ? "Ajoute l'enchantement adapté." : $"Le plus courant dans le top : {g.SuggestedEnchant}.",
+            findings.Add(new(AnalysisAreaKind.Enchantments, Verdict.Problem, Fmt.Of(AnalysisTexts.Enchants_MissingTitle, GameLabels.Slot(g.Slot)),
+                AnalysisTexts.Enchants_MissingDetail,
+                g.SuggestedEnchant is null ? AnalysisTexts.Enchants_MissingAdviceGeneric : Fmt.Of(AnalysisTexts.Enchants_MissingAdvice, g.SuggestedEnchant),
                 g.IconUrl));
         }
 
         if (missing.Count == 0)
         {
-            findings.Add(new(AnalysisAreaKind.Enchantments, Verdict.Good, "Tous les enchantements attendus",
-                "Chaque emplacement enchanté par la majorité du top l'est aussi chez toi.", "Rien à faire."));
+            findings.Add(new(AnalysisAreaKind.Enchantments, Verdict.Good, AnalysisTexts.Enchants_GoodTitle,
+                AnalysisTexts.Enchants_GoodDetail, AnalysisTexts.Common_NothingToDo));
         }
 
         return new AnalysisArea(AnalysisAreaKind.Enchantments, missing.Count == 0 ? Verdict.Good : Verdict.Problem,
-            missing.Count == 0 ? "Complets" : $"{missing.Count} manquant{(missing.Count > 1 ? "s" : "")}");
+            missing.Count == 0 ? AnalysisTexts.Enchants_SummaryGood : Plural.Format(missing.Count, AnalysisTexts.Enchants_Summary_One, AnalysisTexts.Enchants_Summary_Other));
     }
 
     private static AnalysisArea Gems(GemEnchantReview review, List<AnalysisFinding> findings)
@@ -373,37 +377,37 @@ public static class CharacterAnalyzer
 
         if (empty > 0)
         {
-            findings.Add(new(AnalysisAreaKind.Gems, Verdict.Problem, $"{empty} châsse{(empty > 1 ? "s" : "")} vide{(empty > 1 ? "s" : "")}",
-                "Une châsse vide, c'est de l'indice perdu pour le prix d'une gemme.",
-                "À remplir : " + string.Join(", ", review.Sockets.Where(s => s.GemId is null).Select(s => s.Swap is { } fill ? $"{SlotName(s.Slot)} → {fill.To}" : SlotName(s.Slot))) + "."));
+            findings.Add(new(AnalysisAreaKind.Gems, Verdict.Problem, Plural.Format(empty, AnalysisTexts.Gems_EmptyTitle_One, AnalysisTexts.Gems_EmptyTitle_Other),
+                AnalysisTexts.Gems_EmptyDetail,
+                Fmt.Of(AnalysisTexts.Gems_EmptyAdvice, string.Join(", ", review.Sockets.Where(s => s.GemId is null).Select(s => s.Swap is { } fill ? $"{GameLabels.Slot(s.Slot)} → {fill.To}" : GameLabels.Slot(s.Slot))))));
         }
 
         if (review.MissingSockets.Count > 0)
         {
-            findings.Add(new(AnalysisAreaKind.Gems, Verdict.Improve, $"Pas de châsse sur : {string.Join(", ", review.MissingSockets.Select(SlotName))}",
-                "La majorité du top a une châsse sur ces emplacements.",
-                "Vise une pièce avec châsse, ou ajoutes-en une si l'emplacement le permet."));
+            findings.Add(new(AnalysisAreaKind.Gems, Verdict.Improve, Fmt.Of(AnalysisTexts.Gems_MissingSocketsTitle, string.Join(", ", review.MissingSockets.Select(GameLabels.Slot))),
+                AnalysisTexts.Gems_MissingSocketsDetail,
+                AnalysisTexts.Gems_MissingSocketsAdvice));
         }
 
         if (swaps.Count > 0)
         {
-            findings.Add(new(AnalysisAreaKind.Gems, Verdict.Improve, $"{swaps.Count} gemme{(swaps.Count > 1 ? "s" : "")} ou enchantement{(swaps.Count > 1 ? "s" : "")} à réorienter",
-                "Ces changements rapprochent tes caractéristiques de la fourchette du top, sans changer de pièce.",
-                string.Join(" ; ", swaps.Take(3).Select(s => $"{SlotName(s.Slot)} : {s.To}")) + (swaps.Count > 3 ? "…" : "") + "."));
+            findings.Add(new(AnalysisAreaKind.Gems, Verdict.Improve, Plural.Format(swaps.Count, AnalysisTexts.Gems_SwapsTitle_One, AnalysisTexts.Gems_SwapsTitle_Other),
+                AnalysisTexts.Gems_SwapsDetail,
+                string.Join(" ; ", swaps.Take(3).Select(s => $"{GameLabels.Slot(s.Slot)} → {s.To}")) + (swaps.Count > 3 ? "…" : "") + "."));
         }
 
         var verdict = empty > 0 ? Verdict.Problem : swaps.Count + review.MissingSockets.Count > 0 ? Verdict.Improve : Verdict.Good;
         if (verdict == Verdict.Good && review.Sockets.Count > 0)
         {
-            findings.Add(new(AnalysisAreaKind.Gems, Verdict.Good, "Gemmes cohérentes avec le top",
-                "Aucune châsse vide, et aucun changement de gemme ne rapprocherait tes caractéristiques du top.", "Rien à faire."));
+            findings.Add(new(AnalysisAreaKind.Gems, Verdict.Good, AnalysisTexts.Gems_GoodTitle,
+                AnalysisTexts.Gems_GoodDetail, AnalysisTexts.Common_NothingToDo));
         }
 
         return new AnalysisArea(AnalysisAreaKind.Gems, verdict,
-            empty > 0 ? $"{empty} vide{(empty > 1 ? "s" : "")}"
-            : swaps.Count > 0 ? $"{swaps.Count} à revoir"
-            : review.Sockets.Count == 0 ? "Aucune châsse"
-            : $"{review.Sockets.Count} posée{(review.Sockets.Count > 1 ? "s" : "")}");
+            empty > 0 ? Plural.Format(empty, AnalysisTexts.Gems_SummaryEmpty_One, AnalysisTexts.Gems_SummaryEmpty_Other)
+            : swaps.Count > 0 ? Fmt.Of(AnalysisTexts.Gems_SummarySwaps, swaps.Count)
+            : review.Sockets.Count == 0 ? AnalysisTexts.Gems_SummaryNone
+            : Plural.Format(review.Sockets.Count, AnalysisTexts.Gems_SummaryFilled_One, AnalysisTexts.Gems_SummaryFilled_Other));
     }
 
     // --- Mythique+ --------------------------------------------------------
@@ -412,7 +416,7 @@ public static class CharacterAnalyzer
     {
         if (mplus is null || (mplus.BestRuns.Count == 0 && mplus.MissingDungeons.Count == 0))
         {
-            return new AnalysisArea(AnalysisAreaKind.MythicPlus, Verdict.Improve, "Aucune clé cette saison");
+            return new AnalysisArea(AnalysisAreaKind.MythicPlus, Verdict.Improve, AnalysisTexts.MythicPlus_NoKeys);
         }
 
         var median = MetaAggregatorService.Median(mplus.BestRuns.Select(r => (double)r.Level));
@@ -421,57 +425,45 @@ public static class CharacterAnalyzer
 
         if (mplus.MissingDungeons.Count > 0)
         {
-            findings.Add(new(AnalysisAreaKind.MythicPlus, Verdict.Problem, $"{mplus.MissingDungeons.Count} donjon{(mplus.MissingDungeons.Count > 1 ? "s" : "")} jamais fait{(mplus.MissingDungeons.Count > 1 ? "s" : "")}",
-                "Chaque donjon compte dans le score : un donjon absent vaut 0.", "Fais au moins une clé dans : " + string.Join(", ", mplus.MissingDungeons) + "."));
+            findings.Add(new(AnalysisAreaKind.MythicPlus, Verdict.Problem,
+                Plural.Format(mplus.MissingDungeons.Count, AnalysisTexts.MythicPlus_MissingTitle_One, AnalysisTexts.MythicPlus_MissingTitle_Other),
+                AnalysisTexts.MythicPlus_MissingDetail, Fmt.Of(AnalysisTexts.MythicPlus_MissingAdvice, string.Join(", ", mplus.MissingDungeons))));
         }
 
         if (weak.Count > 0)
         {
-            findings.Add(new(AnalysisAreaKind.MythicPlus, Verdict.Improve, "Donjons en retard",
-                string.Join(", ", weak.Select(r => $"{r.Dungeon} (+{r.Level})")) + $" : sous ton niveau habituel (+{median:0}).",
-                "Pousse ces donjons en premier : c'est là que ton score progressera le plus vite."));
+            findings.Add(new(AnalysisAreaKind.MythicPlus, Verdict.Improve, AnalysisTexts.MythicPlus_WeakTitle,
+                Fmt.Of(AnalysisTexts.MythicPlus_WeakDetail, string.Join(", ", weak.Select(r => $"{r.Dungeon} (+{r.Level})")), median),
+                AnalysisTexts.MythicPlus_WeakAdvice));
         }
 
         if (depleted.Count > 0)
         {
-            findings.Add(new(AnalysisAreaKind.MythicPlus, Verdict.Improve, $"{depleted.Count} meilleure{(depleted.Count > 1 ? "s" : "")} clé{(depleted.Count > 1 ? "s" : "")} hors temps",
-                string.Join(", ", depleted.Select(r => $"{r.Dungeon} +{r.Level}")) + " : une clé dans le temps rapporte plus de score.",
-                "Retente ces donjons au même niveau en visant le chrono plutôt qu'un niveau plus haut."));
+            findings.Add(new(AnalysisAreaKind.MythicPlus, Verdict.Improve,
+                Plural.Format(depleted.Count, AnalysisTexts.MythicPlus_DepletedTitle_One, AnalysisTexts.MythicPlus_DepletedTitle_Other),
+                Fmt.Of(AnalysisTexts.MythicPlus_DepletedDetail, string.Join(", ", depleted.Select(r => $"{r.Dungeon} +{r.Level}"))),
+                AnalysisTexts.MythicPlus_DepletedAdvice));
         }
 
         var verdict = mplus.MissingDungeons.Count > 0 ? Verdict.Problem : weak.Count + depleted.Count > 0 ? Verdict.Improve : Verdict.Good;
         if (verdict == Verdict.Good)
         {
-            findings.Add(new(AnalysisAreaKind.MythicPlus, Verdict.Good, "Progression homogène",
-                "Tous tes donjons sont dans le temps et à un niveau proche.", "Monte les clés une par une, en commençant par la plus basse."));
+            findings.Add(new(AnalysisAreaKind.MythicPlus, Verdict.Good, AnalysisTexts.MythicPlus_GoodTitle,
+                AnalysisTexts.MythicPlus_GoodDetail, AnalysisTexts.MythicPlus_GoodAdvice));
         }
 
-        return new AnalysisArea(AnalysisAreaKind.MythicPlus, verdict, $"Score {mplus.Score:0}");
+        return new AnalysisArea(AnalysisAreaKind.MythicPlus, verdict, Fmt.Of(AnalysisTexts.MythicPlus_Summary, mplus.Score));
     }
 
-    private static string SlotName(GearSlot slot) => slot switch
-    {
-        GearSlot.Head => "Tête",
-        GearSlot.Neck => "Cou",
-        GearSlot.Shoulder => "Épaules",
-        GearSlot.Back => "Dos",
-        GearSlot.Chest => "Torse",
-        GearSlot.Wrist => "Poignets",
-        GearSlot.Hands => "Mains",
-        GearSlot.Waist => "Taille",
-        GearSlot.Legs => "Jambes",
-        GearSlot.Feet => "Pieds",
-        GearSlot.Finger => "Anneau",
-        GearSlot.Trinket => "Bijou",
-        GearSlot.MainHand => "Main droite",
-        _ => "Main gauche"
-    };
+    /// <summary>La spécialisation jouée, nommée dans la langue de l'interface plutôt que dans celle de l'API.</summary>
+    private static string PlayedSpecName(CharacterDetails character) =>
+        character.ActiveSpecId is { } id && Enum.IsDefined((WowSpec)id) ? ((WowSpec)id).Info().SpecName
+        : character.ActiveSpecName ?? AnalysisTexts.OffSpec_Other;
 
-    private static string StatName(SecondaryStat stat) => stat switch
+    /// <summary>Les cinq premiers noms, suivis de « … » s'il y en a d'autres.</summary>
+    private static string Excerpt(IEnumerable<string> names)
     {
-        SecondaryStat.Haste => "Hâte",
-        SecondaryStat.Versatility => "Polyvalence",
-        SecondaryStat.Mastery => "Maîtrise",
-        _ => "Critique"
-    };
+        var list = names.ToList();
+        return string.Join(", ", list.Take(5)) + (list.Count > 5 ? "…" : "");
+    }
 }
