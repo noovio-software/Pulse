@@ -1,0 +1,34 @@
+@inherits LayoutComponentBase
+
+<header class="topbar">
+    <div class="topbar-inner">
+        <a class="brand" href="/">
+            <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><path d="M2 17h7l3-8 5 15 4-11 2 4h7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <span>PulseAdmin</span>
+        </a>
+        <nav class="nav">
+            <NavLink href="/" Match="NavLinkMatch.All">Tableau de bord</NavLink>
+            <NavLink href="/benchs">Benchs</NavLink>
+        </nav>
+        <AuthorizeView>
+            <Authorized>
+                <span class="who">@context.User.Identity?.Name</span>
+                <a class="btn btn-ghost" href="/deconnexion">Déconnexion</a>
+            </Authorized>
+            <NotAuthorized>
+                <span class="who">Accès local (développement)</span>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</header>
+
+<main class="page">
+    @Body
+</main>
+
+<footer class="footer">PulseAdmin v@(AppVersion) · statistiques d'usage de FrontPulse, LifePulse et BurstPulse · réservé, non référencé</footer>
+
+@code {
+    private static readonly string AppVersion =
+        string.Join('.', (typeof(MainLayout).Assembly.GetName().Version?.ToString() ?? "0.0.0").Split('.').Take(3));
+}

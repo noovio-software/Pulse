@@ -1,12 +1,16 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.JSInterop;
 using Noovio.Pulse.Application.Analysis;
 using Noovio.Pulse.Application.Import;
+using Noovio.Pulse.Usage;
+using Noovio.Pulse.Web.Auth;
 using Noovio.Pulse.Web.Components.Shared;
 using Noovio.Pulse.Web.Localization;
 using Noovio.Pulse.Web.Resources;
+using Noovio.Pulse.Web.Usage;
 
 namespace Noovio.Pulse.Web.Components.Pages;
 
@@ -22,6 +26,11 @@ public partial class ImportReport
     [Inject] private CharacterAnalysisService Analyzer { get; set; } = default!;
     [Inject] private IMemoryCache Cache { get; set; } = default!;
     [Inject] private IJSRuntime JS { get; set; } = default!;
+    [Inject] private IUsageRecorder Benches { get; set; } = default!;
+    [Inject] private TimeProvider Time { get; set; } = default!;
+
+    /// <summary>L'import se fait sans connexion : le compte n'est noté que si le visiteur est connecté.</summary>
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationState { get; set; }
 
     [Parameter] public string Key { get; set; } = "";
 
@@ -76,10 +85,15 @@ public partial class ImportReport
             Cache.Remove(key);
         }
 
+        var started = Time.GetTimestamp();
+        var fromCache = true;
+        AnalysisResult? result = null;
+        string? failure = null;
         try
         {
-            var result = await Cache.GetOrCreateAsync(key, async entry =>
+            result = await Cache.GetOrCreateAsync(key, async entry =>
             {
+                fromCache = false;
                 var computed = await Analyzer.AnalyzeImportAsync(import, requested, CancellationToken.None);
                 entry.AbsoluteExpirationRelativeToNow = computed.Status == AnalysisStatus.Ok ? CacheDuration : TimeSpan.FromSeconds(1);
                 return computed;
@@ -95,8 +109,12 @@ public partial class ImportReport
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
+            failure = ex.GetType().Name;
             error = WebTexts.Report_Unavailable;
         }
+
+        var account = AuthenticationState is null ? null : (await AuthenticationState).User.BattleNetId();
+        Benches.Record(BenchEvents.CreateImport(Site, account, import, result, failure, fromCache, force, Time.GetElapsedTime(started), Time.GetUtcNow()));
 
         loading = false;
         refreshTooltips = true;

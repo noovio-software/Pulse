@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Statistiques d'usage communes à FrontPulse, LifePulse et BurstPulse : chaque bench de personnage y est écrit,
+    dans une base à part (pulseusage) que PulseAdmin lit. Ne dépend d'aucun autre projet Pulse : PulseAdmin n'embarque que ça.
+  -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="Noovio.Pulse.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="$(PulseExtensionsVersion)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(PulseExtensionsVersion)">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="$(PulseExtensionsVersion)" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,5 @@
+<Project>
+
+  <Import Project="..\PulseCore\Directory.Build.props" />
+
+</Project>

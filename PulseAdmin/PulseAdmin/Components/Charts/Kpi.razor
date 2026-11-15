@@ -1,0 +1,14 @@
+<div class="kpi">
+    <span class="kpi-label">@Label</span>
+    <span class="kpi-value">@Value</span>
+    @if (Hint is not null)
+    {
+        <span class="kpi-hint">@Hint</span>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public string Label { get; set; } = "";
+    [Parameter, EditorRequired] public string Value { get; set; } = "";
+    [Parameter] public string? Hint { get; set; }
+}

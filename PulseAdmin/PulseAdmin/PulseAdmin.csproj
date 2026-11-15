@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <UserSecretsId>5d0f7a8e-3c41-4b8e-9d4a-2a6c1f0b7e95</UserSecretsId>
+
+    <!-- Comme AltPulse : VERSION est posée par GitHub Actions et lue ici ; 1.0.0 en local. -->
+    <Version>$(Version)</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\PulseCore\src\Noovio.Pulse.Usage\Noovio.Pulse.Usage.csproj" />
+  </ItemGroup>
+
+</Project>

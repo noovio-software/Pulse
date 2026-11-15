@@ -1,0 +1,43 @@
+@if (Items.Count == 0)
+{
+    <p class="empty">Aucune donnée sur la période.</p>
+}
+else
+{
+    var max = Max ?? Items.Max(i => i.Value);
+    var min = Min ?? 0;
+    <ul class="barlist">
+        @foreach (var item in Items)
+        {
+            var width = max <= min ? 0 : Math.Clamp((item.Value - min) / (max - min) * 100, 0, 100);
+            <li title="@(item.Title ?? $"{item.Label} : {item.Display}")">
+                <span class="barlist-label">
+                    @if (item.Swatch is not null)
+                    {
+                        <i class="swatch" style="background:@item.Swatch"></i>
+                    }
+                    @if (item.Href is not null)
+                    {
+                        <a href="@item.Href">@item.Label</a>
+                    }
+                    else
+                    {
+                        @item.Label
+                    }
+                </span>
+                <span class="barlist-track"><span class="barlist-bar @(item.CssClass ?? "seq")" style="width:@(width.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))%"></span></span>
+                <span class="barlist-value">@item.Display</span>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<BarItem> Items { get; set; } = [];
+
+    /// <summary>Fin d'échelle ; par défaut, la plus grande valeur.</summary>
+    [Parameter] public double? Max { get; set; }
+
+    /// <summary>Début d'échelle ; 0 par défaut. Un niveau d'objet part d'un plancher, sinon toutes les barres seraient pleines.</summary>
+    [Parameter] public double? Min { get; set; }
+}
