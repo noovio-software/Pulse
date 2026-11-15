@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common_NothingToChange" xml:space="preserve">
+    <value>Nothing to change.</value>
+  </data>
+  <data name="Common_NothingToDo" xml:space="preserve">
+    <value>Nothing to do.</value>
+  </data>
+  <data name="Consumable_AugmentRune" xml:space="preserve">
+    <value>Augment rune</value>
+  </data>
+  <data name="Consumable_AugmentRuneWhy" xml:space="preserve">
+    <value>Small primary stat bonus, optional.</value>
+  </data>
+  <data name="Consumable_CombatPotion" xml:space="preserve">
+    <value>Combat potion</value>
+  </data>
+  <data name="Consumable_CombatPotionWhy" xml:space="preserve">
+    <value>At least one potion per boss fight, lined up with your big moments.</value>
+  </data>
+  <data name="Consumable_Flask" xml:space="preserve">
+    <value>Flask</value>
+  </data>
+  <data name="Consumable_FlaskWhy" xml:space="preserve">
+    <value>A flask lasts the whole key: the cheapest stats in the game.</value>
+  </data>
+  <data name="Consumable_Food" xml:space="preserve">
+    <value>Food</value>
+  </data>
+  <data name="Consumable_FoodWhy" xml:space="preserve">
+    <value>A stat meal before the key (or the group feast).</value>
+  </data>
+  <data name="Consumable_HealthPotion" xml:space="preserve">
+    <value>Healing potion</value>
+  </data>
+  <data name="Consumable_HealthPotionWhy" xml:space="preserve">
+    <value>It saves a key after a bad positioning.</value>
+  </data>
+  <data name="Consumable_InStock" xml:space="preserve">
+    <value>In stock.</value>
+  </data>
+  <data name="Consumable_LowStock" xml:space="preserve">
+    <value>Low stock ({0}): plan for at least {1}.</value>
+  </data>
+  <data name="Consumable_ManaPotion" xml:space="preserve">
+    <value>Mana potion</value>
+  </data>
+  <data name="Consumable_ManaPotionWhy" xml:space="preserve">
+    <value>For long fight endings.</value>
+  </data>
+  <data name="Consumable_None" xml:space="preserve">
+    <value>Nothing in your bags. {0}</value>
+  </data>
+  <data name="Consumable_Outdated" xml:space="preserve">
+    <value>From an older expansion: much weaker than the current one.</value>
+  </data>
+  <data name="Consumable_Stock" xml:space="preserve">
+    <value>{0} in stock.</value>
+  </data>
+  <data name="Consumable_WeaponBuff" xml:space="preserve">
+    <value>Weapon oil or stone</value>
+  </data>
+  <data name="Consumable_WeaponBuffWhy" xml:space="preserve">
+    <value>One-hour weapon bonus, to reapply after a death.</value>
+  </data>
+  <data name="Embellishments_GoodDetail" xml:space="preserve">
+    <value>{0}: played by {1:P0} of the top.</value>
+  </data>
+  <data name="Embellishments_GoodTitle" xml:space="preserve">
+    <value>Meta embellishments</value>
+  </data>
+  <data name="Embellishments_MissingAdvice" xml:space="preserve">
+    <value>Get an embellished piece crafted. Most played combination: {0} ({1:P0} of the top).</value>
+  </data>
+  <data name="Embellishments_MissingDetail" xml:space="preserve">
+    <value>Two embellished pieces are allowed: a free gain that almost all of the top uses.</value>
+  </data>
+  <data name="Embellishments_MissingTitle_One" xml:space="preserve">
+    <value>{0} embellishment missing</value>
+  </data>
+  <data name="Embellishments_MissingTitle_Other" xml:space="preserve">
+    <value>{0} embellishments missing</value>
+  </data>
+  <data name="Embellishments_RareAdvice" xml:space="preserve">
+    <value>Most played combination: {0} ({1:P0} of the top).</value>
+  </data>
+  <data name="Embellishments_RareDetail" xml:space="preserve">
+    <value>{0} is rare in the top.</value>
+  </data>
+  <data name="Embellishments_RareTitle" xml:space="preserve">
+    <value>Rarely played embellishments</value>
+  </data>
+  <data name="Enchants_GoodDetail" xml:space="preserve">
+    <value>Every slot enchanted by most of the top is enchanted on yours too.</value>
+  </data>
+  <data name="Enchants_GoodTitle" xml:space="preserve">
+    <value>All expected enchantments</value>
+  </data>
+  <data name="Enchants_MissingAdvice" xml:space="preserve">
+    <value>Most common in the top: {0}.</value>
+  </data>
+  <data name="Enchants_MissingAdviceGeneric" xml:space="preserve">
+    <value>Add the right enchantment.</value>
+  </data>
+  <data name="Enchants_MissingDetail" xml:space="preserve">
+    <value>Most of the top enchants this slot.</value>
+  </data>
+  <data name="Enchants_MissingTitle" xml:space="preserve">
+    <value>{0} without enchantment</value>
+  </data>
+  <data name="Enchants_Summary_One" xml:space="preserve">
+    <value>{0} missing</value>
+  </data>
+  <data name="Enchants_Summary_Other" xml:space="preserve">
+    <value>{0} missing</value>
+  </data>
+  <data name="Enchants_SummaryGood" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="Gems_EmptyAdvice" xml:space="preserve">
+    <value>To fill: {0}.</value>
+  </data>
+  <data name="Gems_EmptyDetail" xml:space="preserve">
+    <value>An empty socket is rating lost for the price of a gem.</value>
+  </data>
+  <data name="Gems_EmptyTitle_One" xml:space="preserve">
+    <value>{0} empty socket</value>
+  </data>
+  <data name="Gems_EmptyTitle_Other" xml:space="preserve">
+    <value>{0} empty sockets</value>
+  </data>
+  <data name="Gems_GoodDetail" xml:space="preserve">
+    <value>No empty socket, and no gem change would bring your stats closer to the top.</value>
+  </data>
+  <data name="Gems_GoodTitle" xml:space="preserve">
+    <value>Gems consistent with the top</value>
+  </data>
+  <data name="Gems_MissingSocketsAdvice" xml:space="preserve">
+    <value>Aim for a piece with a socket, or add one if the slot allows it.</value>
+  </data>
+  <data name="Gems_MissingSocketsDetail" xml:space="preserve">
+    <value>Most of the top has a socket on these slots.</value>
+  </data>
+  <data name="Gems_MissingSocketsTitle" xml:space="preserve">
+    <value>No socket on: {0}</value>
+  </data>
+  <data name="Gems_SummaryEmpty_One" xml:space="preserve">
+    <value>{0} empty</value>
+  </data>
+  <data name="Gems_SummaryEmpty_Other" xml:space="preserve">
+    <value>{0} empty</value>
+  </data>
+  <data name="Gems_SummaryFilled_One" xml:space="preserve">
+    <value>{0} filled</value>
+  </data>
+  <data name="Gems_SummaryFilled_Other" xml:space="preserve">
+    <value>{0} filled</value>
+  </data>
+  <data name="Gems_SummaryNone" xml:space="preserve">
+    <value>No sockets</value>
+  </data>
+  <data name="Gems_SummarySwaps" xml:space="preserve">
+    <value>{0} to review</value>
+  </data>
+  <data name="Gems_SwapsDetail" xml:space="preserve">
+    <value>These changes bring your stats closer to the top's range, without changing pieces.</value>
+  </data>
+  <data name="Gems_SwapsTitle_One" xml:space="preserve">
+    <value>{0} gem or enchantment to rework</value>
+  </data>
+  <data name="Gems_SwapsTitle_Other" xml:space="preserve">
+    <value>{0} gems or enchantments to rework</value>
+  </data>
+  <data name="Import_AltsString" xml:space="preserve">
+    <value>This string is your alts' progress: paste it on AltPulse (altpulse.noovio.fr), "Update from addon" button. Here, pick "My character" in the addon.</value>
+  </data>
+  <data name="Import_BadContent" xml:space="preserve">
+    <value>Unreadable content: update the NoovioPulse addon, then export again.</value>
+  </data>
+  <data name="Import_Empty" xml:space="preserve">
+    <value>Paste the string copied from the NoovioPulse addon (/noovio command in game).</value>
+  </data>
+  <data name="Import_NewerAddon" xml:space="preserve">
+    <value>This export comes from a version of the addon newer than the site: try again after the site's next update.</value>
+  </data>
+  <data name="Import_NoCharacter" xml:space="preserve">
+    <value>The export contains no character: log in with it in game and run /noovio again.</value>
+  </data>
+  <data name="Import_NoGear" xml:space="preserve">
+    <value>The export contains no gear: run /noovio again once in game, not on the character selection screen.</value>
+  </data>
+  <data name="Import_NotNoovio" xml:space="preserve">
+    <value>This is not a NoovioPulse string: it starts with "NP1:". A SimulationCraft string will not work.</value>
+  </data>
+  <data name="Import_TooLong" xml:space="preserve">
+    <value>String too long: this is not a NoovioPulse export.</value>
+  </data>
+  <data name="Import_Truncated" xml:space="preserve">
+    <value>Truncated or modified string: copy it again in full from the addon window (Ctrl+A, Ctrl+C).</value>
+  </data>
+  <data name="Import_UnknownVersion" xml:space="preserve">
+    <value>Addon version too recent for this site, or incomplete string: copy it again from the game.</value>
+  </data>
+  <data name="Import_Unreadable" xml:space="preserve">
+    <value>Unreadable string: copy it again in full from the addon window.</value>
+  </data>
+  <data name="Inventory_BagUpgrades_One" xml:space="preserve">
+    <value>{0} upgrade in your bags</value>
+  </data>
+  <data name="Inventory_BagUpgrades_Other" xml:space="preserve">
+    <value>{0} upgrades in your bags</value>
+  </data>
+  <data name="Inventory_MissingConsumables_One" xml:space="preserve">
+    <value>{0} consumable missing</value>
+  </data>
+  <data name="Inventory_MissingConsumables_Other" xml:space="preserve">
+    <value>{0} consumables missing</value>
+  </data>
+  <data name="Inventory_Ready" xml:space="preserve">
+    <value>Bags ready for the key</value>
+  </data>
+  <data name="Inventory_VaultReady" xml:space="preserve">
+    <value>vault to open</value>
+  </data>
+  <data name="ItemLevel_GoodAdvice" xml:space="preserve">
+    <value>Nothing to do here: focus on the other points.</value>
+  </data>
+  <data name="ItemLevel_GoodTitle" xml:space="preserve">
+    <value>Item level {0:0.#}: on par with the top</value>
+  </data>
+  <data name="ItemLevel_LowAdviceGeneric" xml:space="preserve">
+    <value>Upgrade your lowest pieces through the Great Vault and crests.</value>
+  </data>
+  <data name="ItemLevel_LowAdvicePieces" xml:space="preserve">
+    <value>Replace or upgrade first: {0}.</value>
+  </data>
+  <data name="ItemLevel_LowDetail" xml:space="preserve">
+    <value>The top's median is {0:0.#}. Item level directly drives {1}.</value>
+  </data>
+  <data name="ItemLevel_LowTitle" xml:space="preserve">
+    <value>Item level {0:0.#}: {1:0.#} below the top</value>
+  </data>
+  <data name="ItemLevel_Piece" xml:space="preserve">
+    <value>{0} ({1} vs {2})</value>
+  </data>
+  <data name="ItemLevel_TopMedian" xml:space="preserve">
+    <value>The top's median is {0:0.#}.</value>
+  </data>
+  <data name="MythicPlus_DepletedAdvice" xml:space="preserve">
+    <value>Run these dungeons again at the same level, aiming for the timer rather than a higher level.</value>
+  </data>
+  <data name="MythicPlus_DepletedDetail" xml:space="preserve">
+    <value>{0}: a timed key gives more score.</value>
+  </data>
+  <data name="MythicPlus_DepletedTitle_One" xml:space="preserve">
+    <value>{0} best key out of time</value>
+  </data>
+  <data name="MythicPlus_DepletedTitle_Other" xml:space="preserve">
+    <value>{0} best keys out of time</value>
+  </data>
+  <data name="MythicPlus_GoodAdvice" xml:space="preserve">
+    <value>Raise your keys one by one, starting with the lowest.</value>
+  </data>
+  <data name="MythicPlus_GoodDetail" xml:space="preserve">
+    <value>All your dungeons are timed and at a similar level.</value>
+  </data>
+  <data name="MythicPlus_GoodTitle" xml:space="preserve">
+    <value>Even progression</value>
+  </data>
+  <data name="MythicPlus_MissingAdvice" xml:space="preserve">
+    <value>Run at least one key in: {0}.</value>
+  </data>
+  <data name="MythicPlus_MissingDetail" xml:space="preserve">
+    <value>Every dungeon counts toward the score: a missing dungeon is worth 0.</value>
+  </data>
+  <data name="MythicPlus_MissingTitle_One" xml:space="preserve">
+    <value>{0} dungeon never done</value>
+  </data>
+  <data name="MythicPlus_MissingTitle_Other" xml:space="preserve">
+    <value>{0} dungeons never done</value>
+  </data>
+  <data name="MythicPlus_NoKeys" xml:space="preserve">
+    <value>No keys this season</value>
+  </data>
+  <data name="MythicPlus_Summary" xml:space="preserve">
+    <value>Score {0:0}</value>
+  </data>
+  <data name="MythicPlus_WeakAdvice" xml:space="preserve">
+    <value>Push these dungeons first: that is where your score will rise fastest.</value>
+  </data>
+  <data name="MythicPlus_WeakDetail" xml:space="preserve">
+    <value>{0}: below your usual level (+{1:0}).</value>
+  </data>
+  <data name="MythicPlus_WeakTitle" xml:space="preserve">
+    <value>Lagging dungeons</value>
+  </data>
+  <data name="OffSpec_Advice" xml:space="preserve">
+    <value>Switch to {0} with your {1} gear and log out, then run the analysis again for an accurate result.</value>
+  </data>
+  <data name="OffSpec_Detail" xml:space="preserve">
+    <value>The gear and stats read are those of your current specialization, not necessarily your {0} set.</value>
+  </data>
+  <data name="OffSpec_Other" xml:space="preserve">
+    <value>another specialization</value>
+  </data>
+  <data name="OffSpec_Title" xml:space="preserve">
+    <value>Character played as {0}</value>
+  </data>
+  <data name="Option_AtMax" xml:space="preserve">
+    <value> at max ({0})</value>
+  </data>
+  <data name="Option_BigGainPopular" xml:space="preserve">
+    <value>+{0} item levels{1} over {2}, and played at least as much by the top.</value>
+  </data>
+  <data name="Option_Embellished" xml:space="preserve">
+    <value>+{0}, but {1} carries an embellishment.</value>
+  </data>
+  <data name="Option_EmptySlot" xml:space="preserve">
+    <value>Empty slot: equip it.</value>
+  </data>
+  <data name="Option_Gain" xml:space="preserve">
+    <value>+{0} item levels{1} over {2}.</value>
+  </data>
+  <data name="Option_GainSet" xml:space="preserve">
+    <value>+{0} item levels{1}, and a set piece.</value>
+  </data>
+  <data name="Option_MorePopular" xml:space="preserve">
+    <value>Played more by the top ({0:P0}) than {1} ({2:P0}).</value>
+  </data>
+  <data name="Option_NotHigher" xml:space="preserve">
+    <value>Not higher than the equipped piece, once both are fully upgraded.</value>
+  </data>
+  <data name="Option_PopularNotBetter" xml:space="preserve">
+    <value>Played by the top, but not above your piece.</value>
+  </data>
+  <data name="Option_SameItem" xml:space="preserve">
+    <value>Same piece as the one equipped.</value>
+  </data>
+  <data name="Option_SetBonus" xml:space="preserve">
+    <value>+{0}, but {1} counts toward your set bonus.</value>
+  </data>
+  <data name="Option_Unpopular" xml:space="preserve">
+    <value>Rarely played by the top.</value>
+  </data>
+  <data name="Stats_GoodAdvice" xml:space="preserve">
+    <value>Keep this balance when you swap pieces.</value>
+  </data>
+  <data name="Stats_GoodDetail" xml:space="preserve">
+    <value>Your four secondary stats are within the range of the middle half of the top.</value>
+  </data>
+  <data name="Stats_GoodTitle" xml:space="preserve">
+    <value>Stats aligned with the top</value>
+  </data>
+  <data name="Stats_LowAdvice" xml:space="preserve">
+    <value>Favor {0} on your gems, enchantments and crafted pieces.</value>
+  </data>
+  <data name="Stats_LowAdviceSwap" xml:space="preserve">
+    <value>Rework your gems, enchantments and crafted pieces: take {0} instead of {1}.</value>
+  </data>
+  <data name="Stats_LowTitle" xml:space="preserve">
+    <value>{0} too low: {1:0}%</value>
+  </data>
+  <data name="Stats_Range" xml:space="preserve">
+    <value>Half of the top is between {0:0} and {1:0}% (median {2:0}%).</value>
+  </data>
+  <data name="Stats_Summary" xml:space="preserve">
+    <value>{0}/4 within range</value>
+  </data>
+  <data name="Stats_SurplusAdvice" xml:space="preserve">
+    <value>Rebalance toward {0}, the top's priority stat.</value>
+  </data>
+  <data name="Stats_SurplusDetail" xml:space="preserve">
+    <value>You exceed the top's range: these points would be worth more elsewhere.</value>
+  </data>
+  <data name="Stats_SurplusTitle" xml:space="preserve">
+    <value>Surplus of {0}</value>
+  </data>
+  <data name="Stats_Unavailable" xml:space="preserve">
+    <value>Unavailable</value>
+  </data>
+  <data name="Talents_AtypicalAdvice" xml:space="preserve">
+    <value>Keep them only if they meet a specific need (affix, dungeon); otherwise, follow the meta.</value>
+  </data>
+  <data name="Talents_AtypicalDetail" xml:space="preserve">
+    <value>Taken by less than 10% of the top: {0}.</value>
+  </data>
+  <data name="Talents_AtypicalTitle" xml:space="preserve">
+    <value>{0} atypical picks</value>
+  </data>
+  <data name="Talents_GoodAdvice" xml:space="preserve">
+    <value>Nothing to change, apart from occasional tweaks for a dungeon.</value>
+  </data>
+  <data name="Talents_GoodDetail" xml:space="preserve">
+    <value>You take the talents picked by most of the top.</value>
+  </data>
+  <data name="Talents_GoodTitle" xml:space="preserve">
+    <value>Talents close to the meta ({0:P0})</value>
+  </data>
+  <data name="Talents_HeroAdvice" xml:space="preserve">
+    <value>Try {0}: open the most played loadout in the calculator to see the differences.</value>
+  </data>
+  <data name="Talents_HeroDetail" xml:space="preserve">
+    <value>{0:P0} of the top plays {1}.</value>
+  </data>
+  <data name="Talents_HeroNone" xml:space="preserve">
+    <value>none</value>
+  </data>
+  <data name="Talents_HeroTitle" xml:space="preserve">
+    <value>Hero tree: {0}</value>
+  </data>
+  <data name="Talents_MissingAdvice" xml:space="preserve">
+    <value>Take the points back from your atypical picks, or import the most played loadout directly.</value>
+  </data>
+  <data name="Talents_MissingDetail" xml:space="preserve">
+    <value>Taken by at least 90% of the top: {0}.</value>
+  </data>
+  <data name="Talents_MissingTitle_One" xml:space="preserve">
+    <value>{0} core talent missing</value>
+  </data>
+  <data name="Talents_MissingTitle_Other" xml:space="preserve">
+    <value>{0} core talents missing</value>
+  </data>
+  <data name="Talents_NoneAdvice" xml:space="preserve">
+    <value>Switch to this specialization in game and import the top's most played loadout (Wowhead button or copy the code).</value>
+  </data>
+  <data name="Talents_NoneDetail" xml:space="preserve">
+    <value>Blizzard returns no talents for your {0} specialization.</value>
+  </data>
+  <data name="Talents_NoneSummary" xml:space="preserve">
+    <value>No loadout</value>
+  </data>
+  <data name="Talents_NoneTitle" xml:space="preserve">
+    <value>No {0} loadout found</value>
+  </data>
+  <data name="Talents_Summary" xml:space="preserve">
+    <value>{0:P0} of the meta</value>
+  </data>
+  <data name="Trinkets_GoodDetail" xml:space="preserve">
+    <value>{0}: common picks in the top.</value>
+  </data>
+  <data name="Trinkets_GoodTitle" xml:space="preserve">
+    <value>Trinkets played by the top</value>
+  </data>
+  <data name="Trinkets_RareAdvice" xml:space="preserve">
+    <value>Most worn: {0}.</value>
+  </data>
+  <data name="Trinkets_RareAdviceGeneric" xml:space="preserve">
+    <value>Aim for one of the top's most worn trinkets.</value>
+  </data>
+  <data name="Trinkets_RareDetail" xml:space="preserve">
+    <value>Only {0:P0} of the top wears it.</value>
+  </data>
+  <data name="Trinkets_RareTitle" xml:space="preserve">
+    <value>{0}: fringe trinket</value>
+  </data>
+  <data name="Trinkets_Summary_One" xml:space="preserve">
+    <value>{0} fringe</value>
+  </data>
+  <data name="Trinkets_Summary_Other" xml:space="preserve">
+    <value>{0} fringe</value>
+  </data>
+  <data name="Trinkets_SummaryGood" xml:space="preserve">
+    <value>Common picks</value>
+  </data>
+  <data name="Vault_Dungeons" xml:space="preserve">
+    <value>Dungeons</value>
+  </data>
+  <data name="Vault_Next" xml:space="preserve">
+    <value> Next slot: {0} more {1} ({2}).</value>
+  </data>
+  <data name="Vault_NoUpgrade" xml:space="preserve">
+    <value>No option upgrades your gear: take the highest to recycle it into crests, or the one most played by the top.</value>
+  </data>
+  <data name="Vault_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Vault_Progress" xml:space="preserve">
+    <value>{0}/{1} slots unlocked</value>
+  </data>
+  <data name="Vault_ProgressIlvl" xml:space="preserve">
+    <value>{0}/{1} slots unlocked, up to item level {2}</value>
+  </data>
+  <data name="Vault_Raid" xml:space="preserve">
+    <value>Raid</value>
+  </data>
+  <data name="Vault_Take" xml:space="preserve">
+    <value>Take: {0} ({1}). {2}</value>
+  </data>
+  <data name="Vault_TakeMax" xml:space="preserve">
+    <value>{0}, {1} at max</value>
+  </data>
+  <data name="Vault_Unit_Activity_One" xml:space="preserve">
+    <value>activity</value>
+  </data>
+  <data name="Vault_Unit_Activity_Other" xml:space="preserve">
+    <value>activities</value>
+  </data>
+  <data name="Vault_Unit_Boss_One" xml:space="preserve">
+    <value>boss</value>
+  </data>
+  <data name="Vault_Unit_Boss_Other" xml:space="preserve">
+    <value>bosses</value>
+  </data>
+  <data name="Vault_Unit_Key_One" xml:space="preserve">
+    <value>key</value>
+  </data>
+  <data name="Vault_Unit_Key_Other" xml:space="preserve">
+    <value>keys</value>
+  </data>
+  <data name="Vault_Waiting" xml:space="preserve">
+    <value>Last week's vault is waiting for you: open it in game, then export again to know what to pick.</value>
+  </data>
+  <data name="Vault_World" xml:space="preserve">
+    <value>World</value>
+  </data>
+</root>

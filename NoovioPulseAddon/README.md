@@ -39,8 +39,8 @@ New-Item -ItemType SymbolicLink -Path "C:\Program Files (x86)\World of Warcraft\
 | `Minimap.lua` | Minimap button (drag to move, `/noovio minimap` to hide) |
 | `Media/*.tga` | Icon, banner and card art, rendered from `art/*.svg` (32-bit RLE TGA, power-of-two sizes) |
 
-Commands: `/noovio` opens the window, `/noovio perso` and `/noovio alts` go straight to an export,
-`/noovio minimap` toggles the button, `/noovio oublier` clears the saved alts.
+Commands: `/noovio` opens the window, `/noovio character` (or `perso`) and `/noovio alts` go straight to an export,
+`/noovio minimap` toggles the button, `/noovio forget` (or `oublier`) clears the saved alts.
 
 `## Interface` lists the supported client versions: add each new patch, or the addon shows as out of date.
 

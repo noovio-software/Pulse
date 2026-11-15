@@ -7,6 +7,9 @@ using Noovio.Pulse.Application.Analysis;
 using Noovio.Pulse.Domain;
 using Noovio.Pulse.Domain.Entities;
 using Noovio.Pulse.Web.Auth;
+using Noovio.Pulse.Web.Components.Shared;
+using Noovio.Pulse.Web.Localization;
+using Noovio.Pulse.Web.Resources;
 
 namespace Noovio.Pulse.Web.Components.Pages;
 
@@ -57,13 +60,14 @@ public partial class CharacterReport
         if (character is null)
         {
             // Inexistant ou appartenant à un autre compte : même réponse, pour ne rien divulguer.
-            error = "Personnage introuvable dans ton compte. Synchronise tes personnages puis réessaie.";
+            error = WebTexts.Report_CharacterMissing;
             loading = false;
             return;
         }
 
         var requested = Site.Role.FromSlug(SpecSlug);
-        var key = $"analysis:{character.Id}:{requested?.Slug}";
+        // Les textes de l'analyse sont rédigés dans la langue du visiteur : une entrée par langue.
+        var key = $"analysis:{PulseLocalization.CurrentLanguage}:{character.Id}:{requested?.Slug}";
         if (force)
         {
             Cache.Remove(key);
@@ -82,15 +86,15 @@ public partial class CharacterReport
             analysis = result?.Analysis;
             error = result?.Status switch
             {
-                AnalysisStatus.NoRoleSpec => $"{character.ClassName} n'a pas de spécialisation {Site.Words.Noun}.",
-                AnalysisStatus.NoMeta => $"La méta {result.Spec?.SpecName} n'est pas encore calculée : réessaie après la prochaine mise à jour.",
-                AnalysisStatus.CharacterNotFound => "Blizzard ne renvoie pas ce personnage (renommé, transféré, ou pas reconnecté depuis la dernière mise à jour du jeu).",
+                AnalysisStatus.NoRoleSpec => Ui.F(WebTexts.Report_NoRoleSpec, WowClasses.Name(character.ClassId) is { Length: > 0 } name ? name : character.ClassName, Site.Words.Noun),
+                AnalysisStatus.NoMeta => Ui.F(WebTexts.Report_NoMeta, result.Spec?.SpecName),
+                AnalysisStatus.CharacterNotFound => WebTexts.Report_CharacterNotFound,
                 _ => null
             };
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
-            error = "Blizzard ou Raider.io ne répond pas pour le moment. Réessaie dans un instant.";
+            error = WebTexts.Report_Unavailable;
         }
 
         loading = false;

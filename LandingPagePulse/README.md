@@ -2,7 +2,8 @@
 
 Presentation page of the Noovio brand at https://www.noovio.fr: it introduces AltPulse, FrontPulse, LifePulse and BurstPulse and sends visitors to them.
 
-- **Stack**: ASP.NET Core / Blazor Web App .NET 10, static server rendering only (no circuit, no WebAssembly, no JavaScript, no cookie, no database).
+- **Stack**: ASP.NET Core / Blazor Web App .NET 10, static server rendering only (no circuit, no WebAssembly, no JavaScript, no database). The only cookie is the language choice.
+- **Languages**: French (default) and English, in `Resources/LandingTexts(.en).resx`. The switch in the top bar (`GET /culture/{fr|en}`) sets the `.AspNetCore.Culture` cookie on `noovio.fr`, shared with the tools; without it, the browser's `Accept-Language` decides.
 - **Redirects**: `/altpulse`, `/frontpulse`, `/lifepulse` and `/burstpulse` answer a 302 to the tool. The targets live in `appsettings.json` (`Tools` section), and every link on the page goes through them.
 - **Theme**: « Battement », the page is shared between the four tools' worlds: AltPulse's venom green on the left, FrontPulse's forge amber in the centre, LifePulse's shaman blue on the right, BurstPulse's Midnight violet at the bottom. The side of the tool being hovered lights up.
 

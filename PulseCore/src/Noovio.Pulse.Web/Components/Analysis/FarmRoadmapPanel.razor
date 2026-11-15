@@ -2,12 +2,12 @@
 
 @if (!Roadmap.HasJournal)
 {
-    <p class="farm-note">Le Journal d'aventure n'a pas pu être lu : les pièces visées sont listées sans leur source. Relance l'analyse dans un instant.</p>
+    <p class="farm-note">@WebTexts.Farm_NoJournal</p>
 }
 
 @if (Roadmap.Stops.Count == 0 && Roadmap.Elsewhere.Count == 0 && Roadmap.Upgrades.Count == 0)
 {
-    <p class="farm-ok">Rien à farmer : tes pièces sont celles du top, à un niveau d'objet comparable.</p>
+    <p class="farm-ok">@WebTexts.Farm_Nothing</p>
 }
 
 @if (Roadmap.Stops.Count > 0)
@@ -23,15 +23,15 @@
                         <span class="stop-kind">@Ui.InstanceKindLabel(stop.Kind)</span>
                         @if (stop.KeyIsMissing)
                         {
-                            <span class="stop-key is-bad">Jamais fait : compte aussi pour ton score</span>
+                            <span class="stop-key is-bad">@WebTexts.Farm_KeyMissing</span>
                         }
                         else if (stop.KeyIsWeak)
                         {
-                            <span class="stop-key is-warn">Clé en retard (+@stop.BestKeyLevel) : compte aussi pour ton score</span>
+                            <span class="stop-key is-warn">@Ui.F(WebTexts.Farm_KeyWeak, stop.BestKeyLevel)</span>
                         }
                         else if (stop.BestKeyLevel is { } level)
                         {
-                            <span class="stop-key">Ta meilleure clé : +@level</span>
+                            <span class="stop-key">@Ui.F(WebTexts.Farm_BestKey, level)</span>
                         }
                     </header>
                     <ul class="farm-targets">
@@ -48,7 +48,7 @@
 
 @if (Roadmap.Elsewhere.Count > 0)
 {
-    <h3 class="farm-title">Hors donjons et raids listés <small>craft, catalyseur… : le journal ne donne pas de source</small></h3>
+    <h3 class="farm-title">@WebTexts.Farm_Elsewhere <small>@WebTexts.Farm_ElsewhereNote</small></h3>
     <ul class="farm-targets">
         @foreach (var target in Roadmap.Elsewhere)
         {
@@ -59,7 +59,7 @@
 
 @if (Roadmap.Upgrades.Count > 0)
 {
-    <h3 class="farm-title">Bonnes pièces, à améliorer <small>même pièce, avec des écus ou la Grande chambre forte</small></h3>
+    <h3 class="farm-title">@WebTexts.Farm_Upgrades <small>@WebTexts.Farm_UpgradesNote</small></h3>
     <ul class="farm-upgrades">
         @foreach (var upgrade in Roadmap.Upgrades)
         {

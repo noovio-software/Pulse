@@ -1,6 +1,6 @@
 @page "/routes"
 
-<PageTitle>Routes Midnight · @Site.Name by Noovio</PageTitle>
+<PageTitle>@Ui.F(WebTexts.Routes_PageTitle, Site.Name)</PageTitle>
 
 <TopBar RoutesActive />
 
@@ -8,18 +8,16 @@
     <section class="routes-hero">
         @if (dungeons.Count > 0)
         {
-            <span class="routes-kicker">@Ui.SeasonLabel(dungeons[0].Season) · Mythique+</span>
+            <span class="routes-kicker">@Ui.SeasonLabel(dungeons[0].Season) · @WebTexts.Common_MythicPlus</span>
         }
-        <h1 class="routes-title">Les routes <em>Midnight</em></h1>
+        <h1 class="routes-title">@WebTexts.Routes_Title <em>@WebTexts.Routes_TitleEmphasis</em>@WebTexts.Routes_TitleAfter</h1>
         <p class="routes-lead">
-            Les routes les plus populaires de chaque donjon de la saison, avec ce qui compte pour ouvrir la marche :
-            la taille de chaque pull, et le moment où ils sont les plus gros.
+            @WebTexts.Routes_Lead
         </p>
         @if (lastUpdate is { } at)
         {
             <p class="routes-source muted">
-                Routes publiées par la communauté de <a href="https://keystone.guru" target="_blank" rel="noopener">Keystone.guru</a>,
-                mises à jour @Ui.Ago(at).
+                @WebTexts.Routes_SourceBefore <a href="https://keystone.guru" target="_blank" rel="noopener">Keystone.guru</a>@Ui.F(WebTexts.Routes_SourceAfter, Ui.Ago(at))
             </p>
         }
     </section>
@@ -27,9 +25,9 @@
     @if (dungeons.Count == 0)
     {
         <section class="panel empty-state">
-            <h2>Pas encore de routes</h2>
-            <p>La prochaine synchronisation avec Keystone.guru remplira cette page.</p>
-            <a class="btn" href="/">Retour</a>
+            <h2>@WebTexts.Routes_None</h2>
+            <p>@WebTexts.Routes_NoneText</p>
+            <a class="btn" href="/">@WebTexts.Common_Back</a>
         </section>
     }
     else

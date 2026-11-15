@@ -8,7 +8,7 @@
                 <span class="eyebrow">@Ui.SlotLabel(slot.Slot)</span>
                 @if (slot.Items.Count > 0)
                 {
-                    <span class="slot-ilvl" title="Niveau d'objet médian">@slot.Items[0].MedianItemLevel</span>
+                    <span class="slot-ilvl" title="@WebTexts.Meta_MedianIlvl">@slot.Items[0].MedianItemLevel</span>
                 }
             </header>
 
@@ -19,7 +19,7 @@
 
             @if (slot.Items.Count > 1)
             {
-                <div class="slot-alternatives" aria-label="Alternatives">
+                <div class="slot-alternatives" aria-label="@WebTexts.Meta_Alternatives">
                     @foreach (var item in slot.Items.Skip(1))
                     {
                         <ItemUsage Item="item" Chip />

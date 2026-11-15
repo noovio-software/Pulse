@@ -1,6 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
+using AltPulse.Client.Localization;
 using AltPulse.Client.Models;
+using AltPulse.Client.Resources;
 
 namespace AltPulse.Client.Services;
 
@@ -25,10 +27,10 @@ public sealed class HttpAltPulseApi(HttpClient http) : IAltPulseApi
         if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.NotFound)
         {
             return await response.Content.ReadFromJsonAsync<CharacterLookupResult>(cancellationToken)
-                   ?? new CharacterLookupResult(null, "Réponse vide du serveur.");
+                   ?? new CharacterLookupResult(null, AltTexts.Error_EmptyResponse);
         }
 
-        return new CharacterLookupResult(null, $"Erreur serveur ({(int)response.StatusCode}).");
+        return new CharacterLookupResult(null, AltLocalization.F(AltTexts.Error_Server, (int)response.StatusCode));
     }
 
     public async Task<AddonImportResult> ImportAddonAsync(string text, CancellationToken cancellationToken = default)
@@ -37,10 +39,10 @@ public sealed class HttpAltPulseApi(HttpClient http) : IAltPulseApi
         if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.BadRequest)
         {
             return await response.Content.ReadFromJsonAsync<AddonImportResult>(cancellationToken)
-                   ?? new AddonImportResult([], "Réponse vide du serveur.");
+                   ?? new AddonImportResult([], AltTexts.Error_EmptyResponse);
         }
 
-        return new AddonImportResult([], $"Erreur serveur ({(int)response.StatusCode}).");
+        return new AddonImportResult([], AltLocalization.F(AltTexts.Error_Server, (int)response.StatusCode));
     }
 }
 

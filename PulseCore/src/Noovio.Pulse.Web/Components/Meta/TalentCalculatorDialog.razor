@@ -7,8 +7,8 @@
         <header class="modal-head">
             <img class="wow-icon" src="@Spec.IconUrl" alt="" width="40" height="40" />
             <div>
-                <h2 id="talent-modal-title">@(Selected is null ? "Calculateur de talents" : "Tes talents face au top")</h2>
-                <p class="muted">@Spec.SpecName @Spec.ClassName · méta des @SampleSize meilleurs @Site.Words.NounPlural</p>
+                <h2 id="talent-modal-title">@(Selected is null ? WebTexts.Talents_CalculatorTitle : WebTexts.Talents_YoursTitle)</h2>
+                <p class="muted">@Spec.SpecName @Spec.ClassName · @Ui.F(WebTexts.Talents_Subtitle, SampleSize, Site.Words.NounPlural)</p>
             </div>
             <div class="talent-modal-actions">
                 @if (LoadoutCode is not null)
@@ -17,28 +17,28 @@
                         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
                         </svg>
-                        Ouvrir dans Wowhead
+                        @WebTexts.Build_OpenWowhead
                     </a>
-                    <CopyButton Text="@LoadoutCode" Label="Copier le code de talents" IconOnly />
+                    <CopyButton Text="@LoadoutCode" Label="@WebTexts.Build_CopyCode" IconOnly />
                 }
-                <button type="button" class="btn btn-ghost btn-icon" @onclick="OnClose" aria-label="Fermer">✕</button>
+                <button type="button" class="btn btn-ghost btn-icon" @onclick="OnClose" aria-label="@WebTexts.Common_Close">✕</button>
             </div>
         </header>
 
-        <ul class="talent-legend" aria-label="Légende">
+        <ul class="talent-legend" aria-label="@WebTexts.Talents_Legend">
             @if (Selected is null)
             {
-                <li><span class="swatch is-core"></span>Incontournable (≥ 90 %)</li>
-                <li><span class="swatch is-common"></span>Courant (≥ 50 %)</li>
-                <li><span class="swatch is-situational"></span>Situationnel</li>
-                <li><span class="swatch is-unpicked"></span>Jamais pris</li>
+                <li><span class="swatch is-core"></span>@WebTexts.Talents_Core</li>
+                <li><span class="swatch is-common"></span>@WebTexts.Talents_Common</li>
+                <li><span class="swatch is-situational"></span>@WebTexts.Talents_Situational</li>
+                <li><span class="swatch is-unpicked"></span>@WebTexts.Talents_Unpicked</li>
             }
             else
             {
-                <li><span class="swatch is-match"></span>Ton choix, comme la majorité du top</li>
-                <li><span class="swatch is-picked"></span>Ton choix, partagé par une partie du top</li>
-                <li><span class="swatch is-atypical"></span>Ton choix, rare dans le top (&lt; 10 %)</li>
-                <li><span class="swatch is-missing"></span>Incontournable que tu ne prends pas</li>
+                <li><span class="swatch is-match"></span>@WebTexts.Talents_Match</li>
+                <li><span class="swatch is-picked"></span>@WebTexts.Talents_Picked</li>
+                <li><span class="swatch is-atypical"></span>@WebTexts.Talents_Atypical</li>
+                <li><span class="swatch is-missing"></span>@WebTexts.Talents_Missing</li>
             }
         </ul>
 
@@ -55,7 +55,7 @@
             {
                 var hero = HeroSections.FirstOrDefault(h => h.Name == activeHero) ?? HeroSections[0];
                 <div class="tree-column is-hero">
-                    <div class="hero-switch" role="tablist" aria-label="Arbres héroïques">
+                    <div class="hero-switch" role="tablist" aria-label="@WebTexts.Build_HeroTrees">
                         @foreach (var h in HeroSections)
                         {
                             <button type="button" role="tab" class="hero-tab @(h == hero ? "is-active" : null)"
@@ -85,11 +85,11 @@
         <p class="muted talent-note">
             @if (Selected is null)
             {
-                <text>Chaque nœud affiche l'option la plus choisie et la part du top qui la prend. Pour un build exact, ouvre la configuration la plus jouée dans Wowhead.</text>
+                <text>@WebTexts.Talents_NoteMeta</text>
             }
             else
             {
-                <text>Le chiffre sur chaque nœud est la part du top qui le prend. Ouvre ta configuration dans Wowhead pour la modifier.</text>
+                <text>@WebTexts.Talents_NotePlayer</text>
             }
         </p>
     </section>

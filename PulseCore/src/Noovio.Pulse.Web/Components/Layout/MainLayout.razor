@@ -13,18 +13,18 @@
                 <span class="brand-name">@Site.Name</span>
                 <span class="brand-by">by Noovio</span>
             </span>
-            <span class="app-version" title="Version déployée">v@(AppVersion)</span>
+            <span class="app-version" title="@WebTexts.Layout_Version">v@(AppVersion)</span>
         </div>
 
         <div class="footer-sources">
-            <span class="eyebrow">Données</span>
+            <span class="eyebrow">@WebTexts.Layout_Data</span>
             <a class="source" href="https://raider.io" target="_blank" rel="noopener">
                 <span class="source-dot" aria-hidden="true"></span> Raider.io
             </a>
             <a class="source" href="https://develop.battle.net" target="_blank" rel="noopener">
-                <span class="source-dot" aria-hidden="true"></span> API Blizzard
+                <span class="source-dot" aria-hidden="true"></span> @WebTexts.Layout_BlizzardApi
             </a>
-            <a class="source" href="https://www.wowhead.com/fr" target="_blank" rel="noopener">
+            <a class="source" href="@Ui.WowheadSite" target="_blank" rel="noopener">
                 <span class="source-dot" aria-hidden="true"></span> Wowhead
             </a>
             @if (Site.HasDungeonRoutes)
@@ -47,7 +47,7 @@
 </footer>
 
 <div id="blazor-error-ui" data-nosnippet>
-    Une erreur inattendue est survenue.
-    <a href="." class="reload">Recharger</a>
+    @WebTexts.Layout_UnexpectedError
+    <a href="." class="reload">@WebTexts.Layout_Reload</a>
     <span class="dismiss">🗙</span>
 </div>

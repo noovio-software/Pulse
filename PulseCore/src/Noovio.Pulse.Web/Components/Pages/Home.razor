@@ -1,6 +1,6 @@
 @page "/"
 
-<PageTitle>@Site.Name by Noovio · Méta @Site.Words.Noun Mythique+</PageTitle>
+<PageTitle>@Ui.F(WebTexts.Home_PageTitle, Site.Name, Site.Words.Noun)</PageTitle>
 
 <TopBar />
 
@@ -10,59 +10,57 @@
         <div class="landing-pitch">
             <span class="landing-kicker">
                 <span class="pulse-dot" aria-hidden="true"></span>
-                @(season is null ? "Mythique+" : $"{Ui.SeasonLabel(season)} · Mythique+")
+                @(season is null ? WebTexts.Common_MythicPlus : $"{Ui.SeasonLabel(season)} · {WebTexts.Common_MythicPlus}")
             </span>
-            <h1 class="landing-title">Joue ton @Site.Words.Noun <em>comme le top 100</em></h1>
+            <h1 class="landing-title">@Ui.F(WebTexts.Home_Title, Site.Words.Noun) <em>@WebTexts.Home_TitleEmphasis</em></h1>
             <p class="landing-lead">
-                @Site.Name lit les 100 meilleurs @Site.Words.NounPlural de chaque spécialisation en Mythique+ et en tire la méta :
-                caractéristiques à viser, talents, équipement, bijoux et embellissements. Puis compare ton personnage
-                à ce top, point par point.
+                @Ui.F(WebTexts.Home_Lead, Site.Name, Site.Words.NounPlural)
             </p>
             <div class="landing-actions">
                 <CompareButton />
-                <a class="btn btn-ghost" href="importer" title="Coller la chaîne de l'addon NoovioPulse, sans connexion">Importer depuis l'addon</a>
+                <a class="btn btn-ghost" href="importer" title="@WebTexts.Home_ImportTitle">@WebTexts.Home_Import</a>
                 <a class="btn btn-ghost" href="#specialisations">
-                    Voir la méta
+                    @WebTexts.Home_SeeMeta
                     <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 5v14M6 13l6 6 6-6" />
                     </svg>
                 </a>
                 @if (dungeons.Count > 0)
                 {
-                    <a class="btn btn-ghost" href="routes">Routes Midnight</a>
+                    <a class="btn btn-ghost" href="routes">@WebTexts.Home_RoutesButton</a>
                 }
             </div>
             <ul class="landing-proof">
-                <li>Classements Raider.io</li>
-                <li>Profils de l'API Blizzard</li>
+                <li>@WebTexts.Home_ProofRaiderIo</li>
+                <li>@WebTexts.Home_ProofBlizzard</li>
                 @if (dungeons.Count > 0)
                 {
-                    <li>Routes Keystone.guru</li>
+                    <li>@WebTexts.Home_ProofKeystoneGuru</li>
                 }
-                <li>Recalculé toutes les 6 h</li>
+                <li>@WebTexts.Home_ProofRefresh</li>
             </ul>
         </div>
 
-        <div class="panel landing-board" aria-label="Le dernier calcul en chiffres">
+        <div class="panel landing-board" aria-label="@WebTexts.Home_BoardLabel">
             <div class="board-head">
-                <span class="eyebrow">Dernier calcul</span>
-                <span class="board-live">@(lastUpdate is { } at ? Ui.Ago(at) : "en attente")</span>
+                <span class="eyebrow">@WebTexts.Home_LastRun</span>
+                <span class="board-live">@(lastUpdate is { } at ? Ui.Ago(at) : WebTexts.Home_Pending)</span>
             </div>
             <dl class="board-kpis">
                 <div>
-                    <dt>@Ui.Capitalized(Site.Words.NounPlural) analysés</dt>
+                    <dt>@Ui.F(WebTexts.Home_PlayersAnalysed, Ui.Capitalized(Site.Words.NounPlural))</dt>
                     <dd>@totalPlayers</dd>
                 </div>
                 <div>
-                    <dt>Spécialisations</dt>
+                    <dt>@WebTexts.Home_Specs</dt>
                     <dd>@Site.Role.Specs.Count</dd>
                 </div>
                 <div>
-                    <dt>Clé médiane du top</dt>
+                    <dt>@WebTexts.Home_MedianKey</dt>
                     <dd>@(medianKey > 0 ? $"+{medianKey}" : "-")</dd>
                 </div>
                 <div>
-                    <dt>Niv. d'objet médian</dt>
+                    <dt>@WebTexts.Home_MedianIlvl</dt>
                     <dd>@Ui.Ilvl(medianItemLevel)</dd>
                 </div>
             </dl>
@@ -71,7 +69,7 @@
                 <a class="board-record" href="specs/@best.Info.Slug" style="--class-color: @best.Info.Color">
                     <img class="wow-icon" src="@best.Info.IconUrl" alt="" width="36" height="36" />
                     <span class="board-record-text">
-                        <span class="eyebrow">Plus haute clé du top</span>
+                        <span class="eyebrow">@WebTexts.Home_HighestKey</span>
                         <strong>@best.Player.Name</strong>
                         <span class="muted">@best.Info.SpecName @best.Info.ClassName · @best.Player.Region.ToUpperInvariant()</span>
                     </span>
@@ -82,11 +80,11 @@
     </section>
 
     @* --- Ce que contient une fiche de spécialisation ------------------------------------------ *@
-    <section class="landing-features" aria-label="Ce que @Site.Name décortique">
+    <section class="landing-features" aria-label="@Ui.F(WebTexts.Home_FeaturesLabel, Site.Name)">
         <article class="feature">
             <span class="feature-icon stat-haste"><StatIcon Stat="SecondaryStat.Haste" Size="20" /></span>
-            <h2>Caractéristiques</h2>
-            <p>L'ordre de priorité du top et le pourcentage à viser, avec la fourchette où se situe la moitié des joueurs.</p>
+            <h2>@WebTexts.Home_FeatureStats</h2>
+            <p>@WebTexts.Home_FeatureStatsText</p>
         </article>
         <article class="feature">
             <span class="feature-icon is-talents">
@@ -94,8 +92,8 @@
                     <circle cx="12" cy="5" r="2.5" /><circle cx="6" cy="19" r="2.5" /><circle cx="18" cy="19" r="2.5" /><path d="M12 7.5v4M12 11.5l-5 5M12 11.5l5 5" />
                 </svg>
             </span>
-            <h2>Talents</h2>
-            <p>Les configurations les plus jouées, l'arbre héroïque dominant et un calculateur, chaîne d'export prête à copier.</p>
+            <h2>@WebTexts.Home_FeatureTalents</h2>
+            <p>@WebTexts.Home_FeatureTalentsText</p>
         </article>
         <article class="feature">
             <span class="feature-icon is-gear">
@@ -103,21 +101,21 @@
                     <path d="M12 3l8 3v6c0 4.5-3.4 7.8-8 9-4.6-1.2-8-4.5-8-9V6z" /><path d="M12 8v8M8.5 12h7" />
                 </svg>
             </span>
-            <h2>Équipement et bijoux</h2>
-            <p>Les objets portés emplacement par emplacement, et les bijoux @Site.Words.RoleTrinket ou @Site.Words.DamageTrinket qui reviennent le plus.</p>
+            <h2>@WebTexts.Home_FeatureGear</h2>
+            <p>@Ui.F(WebTexts.Home_FeatureGearText, Site.Words.RoleTrinket, Site.Words.DamageTrinket)</p>
         </article>
         <article class="feature">
             <span class="feature-icon is-compare"><CompareIcon Size="20" /></span>
-            <h2>Ton personnage</h2>
-            <p>Connecte-toi avec Battle.net, ou <a href="importer">importe-le depuis l'addon NoovioPulse</a> : un score sur 100 et un plan d'action pour te rapprocher du top.</p>
+            <h2>@WebTexts.Home_FeatureYou</h2>
+            <p>@WebTexts.Home_FeatureYouBefore <a href="importer">@WebTexts.Home_FeatureYouLink</a>@WebTexts.Home_FeatureYouAfter</p>
         </article>
     </section>
 
     @* --- Tableau de bord des spécialisations ---------------------------------------------- *@
     <section class="landing-section" id="specialisations">
         <div class="landing-section-head">
-            <h2 class="landing-heading">Les @Site.Words.SpecCount spécialisations</h2>
-            <p class="muted">Le top 100 de chaque spécialisation, classé sur la meilleure clé de la saison.</p>
+            <h2 class="landing-heading">@Ui.F(WebTexts.Home_SpecsHeading, Site.Words.SpecCount)</h2>
+            <p class="muted">@WebTexts.Home_SpecsLead</p>
         </div>
 
         <div class="spec-cards">
@@ -134,21 +132,21 @@
                     </a>
                     @if (meta is null)
                     {
-                        <span class="muted">En attente de la première ingestion</span>
+                        <span class="muted">@WebTexts.Home_AwaitingIngestion</span>
                     }
                     else
                     {
                         <dl class="spec-card-facts">
-                            <div><dt>Niv.</dt><dd>@Ui.Ilvl(meta.MedianItemLevel)</dd></div>
-                            <div><dt>Clé</dt><dd>+@meta.MedianKeyLevel</dd></div>
+                            <div><dt>@WebTexts.Home_FactIlvl</dt><dd>@Ui.Ilvl(meta.MedianItemLevel)</dd></div>
+                            <div><dt>@WebTexts.Home_FactKey</dt><dd>+@meta.MedianKeyLevel</dd></div>
                             <div><dt>@Ui.Capitalized(Site.Words.NounPlural)</dt><dd>@meta.SampleSize</dd></div>
                         </dl>
                         @if (meta.Stats.Count > 0)
                         {
-                            <ol class="spec-card-stats" aria-label="Priorité des caractéristiques">
+                            <ol class="spec-card-stats" aria-label="@WebTexts.Home_StatPriority">
                                 @foreach (var s in meta.Stats)
                                 {
-                                    <li class="@Ui.StatCss(s.Stat)" title="@Ui.StatLabel(s.Stat) : @s.MedianPercent.ToString("0") % (médiane du top)">
+                                    <li class="@Ui.StatCss(s.Stat)" title="@Ui.F(WebTexts.Home_StatTitle, Ui.StatLabel(s.Stat), Ui.PercentValue(s.MedianPercent))">
                                         <StatIcon Stat="s.Stat" Size="14" />
                                         @if (s == meta.Stats[0])
                                         {
@@ -162,12 +160,12 @@
                         {
                             <span class="spec-card-hero">
                                 <HeroBadge Name="@hero.Name" IconUrl="@Ui.HeroIcon(meta.TalentTree, hero.Name)" />
-                                <small class="muted">@Ui.Percent(hero.Share) du top</small>
+                                <small class="muted">@Ui.F(WebTexts.Common_OfTop, Ui.Percent(hero.Share))</small>
                             </span>
                         }
                     }
                     <span class="spec-card-foot">
-                        <span class="muted spec-card-updated">@(meta is null ? null : $"Mis à jour {Ui.Ago(meta.ComputedAtUtc)}")</span>
+                        <span class="muted spec-card-updated">@(meta is null ? null : Ui.F(WebTexts.Home_Updated, Ui.Ago(meta.ComputedAtUtc)))</span>
                         <CompareButton Spec="info" Compact />
                     </span>
                 </article>
@@ -180,8 +178,8 @@
     {
         <section class="landing-section" id="routes">
             <div class="landing-section-head">
-                <h2 class="landing-heading">Les routes Midnight</h2>
-                <p class="muted">Les routes les plus populaires de chaque donjon, avec la taille de leurs pulls. <a href="routes">Toutes les routes</a></p>
+                <h2 class="landing-heading">@WebTexts.Home_RoutesHeading</h2>
+                <p class="muted">@WebTexts.Home_RoutesLead <a href="routes">@WebTexts.Home_AllRoutes</a></p>
             </div>
             <DungeonGrid Dungeons="dungeons" />
         </section>
@@ -190,29 +188,29 @@
     @* --- Comment c'est calculé ---------------------------------------------------------------- *@
     <section class="landing-section">
         <div class="landing-section-head">
-            <h2 class="landing-heading">D'où viennent les chiffres</h2>
-            <p class="muted">Aucune opinion, aucun guide recopié : uniquement ce que jouent les meilleurs.</p>
+            <h2 class="landing-heading">@WebTexts.Home_SourcesHeading</h2>
+            <p class="muted">@WebTexts.Home_SourcesLead</p>
         </div>
         <ol class="landing-steps">
             <li>
                 <span class="step-index">1</span>
-                <h3>Le classement</h3>
-                <p>Les meilleurs @Site.Words.NounPlural de chaque spécialisation, donjon par donjon et région par région, d'après Raider.io.</p>
+                <h3>@WebTexts.Home_Step1</h3>
+                <p>@Ui.F(WebTexts.Home_Step1Text, Site.Words.NounPlural)</p>
             </li>
             <li>
                 <span class="step-index">2</span>
-                <h3>Les profils</h3>
-                <p>Équipement, caractéristiques et talents de chaque joueur, lus sur l'API Blizzard.</p>
+                <h3>@WebTexts.Home_Step2</h3>
+                <p>@WebTexts.Home_Step2Text</p>
             </li>
             <li>
                 <span class="step-index">3</span>
-                <h3>La méta</h3>
-                <p>Médianes, taux de sélection et combinaisons les plus jouées, recalculés toutes les 6 heures.</p>
+                <h3>@WebTexts.Home_Step3</h3>
+                <p>@WebTexts.Home_Step3Text</p>
             </li>
             <li>
                 <span class="step-index">4</span>
-                <h3>Ta comparaison</h3>
-                <p>Ton personnage face à cette méta : ce qui est bon, ce qui est à améliorer, par ordre d'importance.</p>
+                <h3>@WebTexts.Home_Step4</h3>
+                <p>@WebTexts.Home_Step4Text</p>
             </li>
         </ol>
     </section>

@@ -1,0 +1,16 @@
+@using System.Globalization
+@* Bascule de langue : un lien par autre langue ; le choix vaut aussi pour les outils Noovio. *@
+<nav class="language-switch" aria-label="@LandingTexts.Language_Label">
+    @foreach (var culture in Ui.Cultures.Where(c => c != Ui.CurrentLanguage))
+    {
+        var info = CultureInfo.GetCultureInfo(culture);
+        <a class="language-link" href="@Ui.SwitchUrl(culture, Nav.ToBaseRelativePath(Nav.Uri))"
+           hreflang="@culture" lang="@culture" title="@(char.ToUpper(info.NativeName[0], info) + info.NativeName[1..])" rel="nofollow">
+            @culture.ToUpperInvariant()
+        </a>
+    }
+</nav>
+
+@code {
+    [Inject] private NavigationManager Nav { get; set; } = default!;
+}

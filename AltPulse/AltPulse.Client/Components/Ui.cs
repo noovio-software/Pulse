@@ -1,4 +1,6 @@
+using AltPulse.Client.Localization;
 using AltPulse.Client.Models;
+using AltPulse.Client.Resources;
 using AltPulse.Client.Services;
 
 namespace AltPulse.Client.Components;
@@ -15,22 +17,42 @@ public sealed class CharacterColumn(HistoryEntry entry)
 
 public static class Ui
 {
-    public static readonly (RaidDifficulty Difficulty, string Label, string Short)[] Difficulties =
+    /// <summary>Libellés dans la langue de l'interface : recalculés à chaque lecture. Le code court sert aussi de classe CSS (diff-n, diff-h…).</summary>
+    public static (RaidDifficulty Difficulty, string Label, string Short, string Css)[] Difficulties =>
     [
-        (RaidDifficulty.Lfr, "Recherche de raid", "RdR"),
-        (RaidDifficulty.Normal, "Normal", "N"),
-        (RaidDifficulty.Heroic, "Héroïque", "H"),
-        (RaidDifficulty.Mythic, "Mythique", "M")
+        (RaidDifficulty.Lfr, AltTexts.Difficulty_Lfr, AltTexts.Difficulty_LfrShort, "rdr"),
+        (RaidDifficulty.Normal, AltTexts.Difficulty_Normal, "N", "n"),
+        (RaidDifficulty.Heroic, AltTexts.Difficulty_Heroic, "H", "h"),
+        (RaidDifficulty.Mythic, AltTexts.Difficulty_Mythic, "M", "m")
     ];
 
-    public static readonly (string Value, string Label)[] SortOptions =
+    public static (string Value, string Label)[] SortOptions =>
     [
-        ("recent", "Recherche récente"),
-        ("name", "Nom"),
-        ("ilvl", "Niveau d'objet"),
-        ("rating", "Score M+"),
-        ("class", "Classe")
+        ("recent", AltTexts.Sort_Recent),
+        ("name", AltTexts.Sort_Name),
+        ("ilvl", AltTexts.Sort_Ilvl),
+        ("rating", AltTexts.Sort_Rating),
+        ("class", AltTexts.Sort_Class)
     ];
+
+    /// <summary>Code court d'une difficulté (vault de raid) : « RdR »/« LFR », « N », « H », « M ».</summary>
+    public static string DifficultyShort(RaidDifficulty difficulty) => difficulty switch
+    {
+        RaidDifficulty.Lfr => AltTexts.Difficulty_LfrShort,
+        RaidDifficulty.Normal => "N",
+        RaidDifficulty.Heroic => "H",
+        RaidDifficulty.Mythic => "M",
+        _ => "✓"
+    };
+
+    /// <summary>Emplacement d'équipement dans la langue de l'interface, d'après son code Blizzard (HEAD, FINGER_1…).</summary>
+    public static string SlotName(EquippedItem item) => SlotNameOrNull(item.Slot) ?? item.SlotName;
+
+    public static string SlotName(string slot) => SlotNameOrNull(slot) ?? slot;
+
+    private static string? SlotNameOrNull(string slot) => AltTexts.ResourceManager.GetString($"Slot_{slot}", AltTexts.Culture);
+
+    public static string ItemUrl(EquippedItem item) => $"{AltLocalization.WowheadSite}/item={item.ItemId}";
 
     public static string ClassCss(int classId) => classId is >= 1 and <= 13 ? $"class-{classId}" : "class-0";
 
@@ -61,32 +83,33 @@ public static class Ui
         var left = target - DateTimeOffset.UtcNow;
         if (left <= TimeSpan.Zero)
         {
-            return "imminente";
+            return AltTexts.Time_Imminent;
         }
 
         return left.TotalDays >= 1
-            ? $"{(int)left.TotalDays} j {left.Hours} h"
-            : $"{left.Hours} h {left.Minutes:00} min";
+            ? AltLocalization.F(AltTexts.Time_DaysHours, (int)left.TotalDays, left.Hours)
+            : AltLocalization.F(AltTexts.Time_HoursMinutes, left.Hours, left.Minutes);
     }
 
     public static string Ago(DateTimeOffset at)
     {
         var elapsed = DateTimeOffset.UtcNow - at;
-        return elapsed.TotalMinutes < 1 ? "à l'instant"
-            : elapsed.TotalHours < 1 ? $"il y a {(int)elapsed.TotalMinutes} min"
-            : elapsed.TotalDays < 1 ? $"il y a {(int)elapsed.TotalHours} h"
-            : $"il y a {(int)elapsed.TotalDays} j";
+        return elapsed.TotalMinutes < 1 ? AltTexts.Time_JustNow
+            : elapsed.TotalHours < 1 ? AltLocalization.F(AltTexts.Time_MinutesAgo, (int)elapsed.TotalMinutes)
+            : elapsed.TotalDays < 1 ? AltLocalization.F(AltTexts.Time_HoursAgo, (int)elapsed.TotalHours)
+            : AltLocalization.F(AltTexts.Time_DaysAgo, (int)elapsed.TotalDays);
     }
 
     public static string WowheadData(EquippedItem item) =>
-        item.Bonuses is null ? $"item={item.ItemId}&ilvl={item.ItemLevel}" : $"item={item.ItemId}&bonus={item.Bonuses}&ilvl={item.ItemLevel}";
+        (item.Bonuses is null ? $"item={item.ItemId}&ilvl={item.ItemLevel}" : $"item={item.ItemId}&bonus={item.Bonuses}&ilvl={item.ItemLevel}")
+        + AltLocalization.WowheadDomain;
 
     public static IEnumerable<CharacterColumn> Sort(IEnumerable<CharacterColumn> columns, string sortBy) => sortBy switch
     {
         "name" => columns.OrderBy(c => c.Entry.Name, StringComparer.CurrentCultureIgnoreCase),
         "ilvl" => columns.OrderByDescending(c => c.Data?.ItemLevelEquipped ?? 0),
         "rating" => columns.OrderByDescending(c => c.Data?.Rating ?? 0),
-        "class" => columns.OrderBy(c => c.Data?.ClassName ?? "~").ThenBy(c => c.Entry.Name),
+        "class" => columns.OrderBy(c => c.Data?.ClassName ?? "~", StringComparer.CurrentCultureIgnoreCase).ThenBy(c => c.Entry.Name),
         _ => columns.OrderByDescending(c => c.Entry.LastSearchedUtc)
     };
 }

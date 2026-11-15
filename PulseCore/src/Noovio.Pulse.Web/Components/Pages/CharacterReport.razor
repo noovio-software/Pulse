@@ -2,31 +2,31 @@
 @attribute [Authorize]
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
-<PageTitle>@(analysis?.Character.Name ?? "Analyse") · @Site.Name by Noovio</PageTitle>
+<PageTitle>@Ui.F(WebTexts.Report_PageTitle, analysis?.Character.Name ?? WebTexts.Report_Analysis, Site.Name)</PageTitle>
 
 <TopBar Active="analysis?.Spec.Spec" />
 
 <main class="shell">
-    <a class="back-link" href="compte">‹ Mes personnages</a>
+    <a class="back-link" href="compte">@WebTexts.Report_MyCharacters</a>
 
 @if (loading)
 {
     <section class="panel empty-state">
         <div class="spinner"></div>
-        <p>Analyse en cours : équipement, talents et caractéristiques (Blizzard), clés (Raider.io), méta du top…</p>
+        <p>@WebTexts.Report_AccountLoading</p>
     </section>
 }
 else if (error is not null)
 {
     <section class="panel empty-state">
-        <h1>Analyse impossible</h1>
+        <h1>@WebTexts.Report_Failed</h1>
         <p>@error</p>
-        <a class="btn" href="compte">Retour</a>
+        <a class="btn" href="compte">@WebTexts.Common_Back</a>
     </section>
 }
 else if (analysis is { } a)
 {
     <AnalysisReport Analysis="a" BasePath="@($"compte/personnages/{Id}/analyse")" RealmName="@character?.RealmName"
-                    OnRefresh="() => LoadAsync(force: true)" RefreshTitle="Relire le personnage chez Blizzard et Raider.io" />
+                    OnRefresh="() => LoadAsync(force: true)" RefreshTitle="@WebTexts.Report_AccountRefreshTitle" />
 }
 </main>

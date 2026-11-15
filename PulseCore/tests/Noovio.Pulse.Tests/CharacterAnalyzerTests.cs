@@ -39,6 +39,20 @@ public sealed class CharacterAnalyzerTests
         Assert.Equal(Verdict.Problem, analysis.Findings[0].Verdict); // les problèmes passent en tête du plan d'action
     }
 
+    /// <summary>L'analyse est rédigée dans la langue de l'interface : un visiteur anglophone reçoit un plan d'action en anglais.</summary>
+    [Fact]
+    public void Findings_are_written_in_the_interface_language()
+    {
+        var top = Top();
+        var mine = Player(top[0], gear: top[0].Gear.Select(g => g.Slot == GearSlot.Chest ? g with { Enchantments = [] } : g).ToList());
+
+        using var _ = TestCulture.Use("en");
+        var finding = Assert.Single(Analyze(top, mine).Findings, f => f.Area == AnalysisAreaKind.Enchantments && f.Verdict == Verdict.Problem);
+
+        Assert.Equal("Chest without enchantment", finding.Title);
+        Assert.StartsWith("Most common in the top:", finding.How);
+    }
+
     [Fact]
     public void Core_talents_not_taken_are_listed_as_missing()
     {

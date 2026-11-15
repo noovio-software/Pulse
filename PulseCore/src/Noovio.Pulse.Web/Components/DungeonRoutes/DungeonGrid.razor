@@ -19,13 +19,13 @@
                     @if (top is not null)
                     {
                         <span class="dungeon-card-route">
-                            <span class="eyebrow">Route la plus populaire</span>
+                            <span class="eyebrow">@WebTexts.Routes_MostPopular</span>
                             <span class="dungeon-card-title">@top.Title</span>
                         </span>
                         <span class="dungeon-card-facts">
-                            <span><strong>@top.PullSizes.Count</strong> pulls</span>
-                            <span><strong>@top.LargestPull</strong> au plus gros</span>
-                            <span><strong>@dungeon.Routes.Count</strong> routes</span>
+                            <span><strong>@top.PullSizes.Count</strong> @WebTexts.Routes_CardPulls</span>
+                            <span><strong>@top.LargestPull</strong> @WebTexts.Routes_CardLargest</span>
+                            <span><strong>@dungeon.Routes.Count</strong> @WebTexts.Routes_CardRoutes</span>
                         </span>
                     }
                 </span>

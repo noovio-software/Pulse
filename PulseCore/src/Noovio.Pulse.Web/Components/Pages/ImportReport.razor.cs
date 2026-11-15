@@ -5,6 +5,8 @@ using Microsoft.JSInterop;
 using Noovio.Pulse.Application.Analysis;
 using Noovio.Pulse.Application.Import;
 using Noovio.Pulse.Web.Components.Shared;
+using Noovio.Pulse.Web.Localization;
+using Noovio.Pulse.Web.Resources;
 
 namespace Noovio.Pulse.Web.Components.Pages;
 
@@ -32,10 +34,11 @@ public partial class ImportReport
     private bool loading = true;
     private bool refreshTooltips;
 
-    private string SourceLabel => import?.ExportedAtUtc is { } at ? $"Addon · {Ui.Ago(at)}" : "Addon";
+    private string SourceLabel => import?.ExportedAtUtc is { } at ? Ui.F(WebTexts.Report_SourceAddonAgo, Ui.Ago(at)) : WebTexts.Report_SourceAddon;
 
-    private string SourceTitle =>
-        $"Lu en jeu par l'addon NoovioPulse{(import?.Addon is { Length: > 0 } v ? $" {v}" : "")}{(import?.Game is { Length: > 0 } g ? $", client {g}" : "")}";
+    private string SourceTitle => Ui.F(WebTexts.Report_SourceTitle,
+        import?.Addon is { Length: > 0 } v ? $" {v}" : "",
+        import?.Game is { Length: > 0 } g ? Ui.F(WebTexts.Report_SourceClient, g) : "");
 
     protected override Task OnParametersSetAsync() => LoadAsync(force: false);
 
@@ -58,7 +61,7 @@ public partial class ImportReport
         if (raw is null || !parsed.Succeeded)
         {
             error = raw is null
-                ? $"Import introuvable : il a expiré (les imports sont gardés {AddonInfo.Retention.TotalDays} jours) ou le lien est incomplet."
+                ? Ui.F(WebTexts.Report_ImportExpired, AddonInfo.Retention.TotalDays)
                 : parsed.Error;
             loading = false;
             return;
@@ -66,7 +69,8 @@ public partial class ImportReport
 
         import = parsed.Import!;
         var requested = Site.Role.FromSlug(SpecSlug);
-        var key = $"import-analysis:{Key}:{requested?.Slug}";
+        // Les textes de l'analyse sont rédigés dans la langue du visiteur : une entrée par langue.
+        var key = $"import-analysis:{PulseLocalization.CurrentLanguage}:{Key}:{requested?.Slug}";
         if (force)
         {
             Cache.Remove(key);
@@ -84,14 +88,14 @@ public partial class ImportReport
             analysis = result?.Analysis;
             error = result?.Status switch
             {
-                AnalysisStatus.NoRoleSpec => $"Cette classe n'a pas de spécialisation {Site.Words.Noun} : importe ce personnage sur le site de son rôle.",
-                AnalysisStatus.NoMeta => $"La méta {result.Spec?.SpecName} n'est pas encore calculée : réessaie après la prochaine mise à jour.",
+                AnalysisStatus.NoRoleSpec => Ui.F(WebTexts.Report_ImportNoRoleSpec, Site.Words.Noun),
+                AnalysisStatus.NoMeta => Ui.F(WebTexts.Report_NoMeta, result.Spec?.SpecName),
                 _ => null
             };
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
-            error = "Blizzard ou Raider.io ne répond pas pour le moment. Réessaie dans un instant.";
+            error = WebTexts.Report_Unavailable;
         }
 
         loading = false;

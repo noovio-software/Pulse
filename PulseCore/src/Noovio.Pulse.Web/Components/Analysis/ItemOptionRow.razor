@@ -12,34 +12,34 @@
         }
     </a>
     <div class="option-text">
-        <span class="eyebrow">@Ui.SlotLabel(Option.Slot)@(Option.Recommended ? " · conseillé" : "")</span>
+        <span class="eyebrow">@Ui.SlotLabel(Option.Slot)@(Option.Recommended ? WebTexts.Option_Recommended : "")</span>
         <span class="option-name">@Option.Name</span>
         <span class="option-tags">
-            <span class="ilvl-tag" title="Niveau d'objet actuel">@Option.ItemLevel</span>
+            <span class="ilvl-tag" title="@WebTexts.Option_CurrentIlvl">@Option.ItemLevel</span>
             @if (Option.MaxItemLevel > Option.ItemLevel || Option.Upgrade is not null)
             {
-                <span class="max-tag" title="@(Option.MaxEstimated ? "Niveau max estimé (environ 3 niveaux par rang)" : "Niveau d'objet une fois améliorée au maximum")">
-                    max @(Option.MaxEstimated ? "≈" : "")@Option.MaxItemLevel @if (Option.Upgrade is not null) { <small>@Option.Upgrade</small> }
+                <span class="max-tag" title="@(Option.MaxEstimated ? WebTexts.Option_MaxEstimated : WebTexts.Option_MaxReal)">
+                    @WebTexts.Option_Max @(Option.MaxEstimated ? "≈" : "")@Option.MaxItemLevel @if (Option.Upgrade is not null) { <small>@Option.Upgrade</small> }
                 </span>
             }
             @if (Option.EquippedName is null)
             {
-                <span class="gain-tag is-high" title="Emplacement vide">nouveau</span>
+                <span class="gain-tag is-high" title="@WebTexts.Option_EmptySlotTitle">@WebTexts.Option_New</span>
             }
             else
             {
                 <span class="gain-tag @(Option.Gain > 0 ? "is-high" : Option.Gain < 0 ? "is-low" : null)"
-                      title="Au max, face à @Option.EquippedName (@Option.EquippedItemLevel, @Option.EquippedMaxItemLevel au max)">
-                    @(Option.Gain >= 0 ? "+" : "")@Option.Gain au max
+                      title="@Ui.F(WebTexts.Option_GainTitle, Option.EquippedName, Option.EquippedItemLevel, Option.EquippedMaxItemLevel)">
+                    @Ui.F(WebTexts.Option_GainAtMax, (Option.Gain >= 0 ? "+" : "") + Option.Gain)
                 </span>
             }
             @if (Option.TopShare >= 0.05)
             {
-                <span class="meta-tag" title="Part du top portant cette pièce">Méta @Ui.Percent(Option.TopShare)</span>
+                <span class="meta-tag" title="@WebTexts.Gear_MetaShareTitle">@Ui.F(WebTexts.Gear_Meta, Ui.Percent(Option.TopShare))</span>
             }
             @if (Option.IsSetPiece)
             {
-                <span class="set-tag">Set</span>
+                <span class="set-tag">@WebTexts.Option_Set</span>
             }
         </span>
         <small class="muted">@Option.Reason</small>
