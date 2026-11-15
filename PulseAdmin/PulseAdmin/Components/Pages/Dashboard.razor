@@ -99,6 +99,10 @@ else
             <BarList Items="@report.Statuses.Select(s => new BarItem(Labels.Status(s.Label), s.Count, $"{s.Count} · {Labels.Percent(s.Ratio)}", filter.Url("/benchs", ("statut", s.Label)))).ToList()" />
         </section>
         <section class="panel">
+            <h2>Source du personnage</h2>
+            <BarList Items="@report.Sources.Select(s => new BarItem(Labels.Source(s.Label), s.Count, $"{s.Count} · {Labels.Percent(s.Ratio)}", filter.Url("/benchs", ("source", s.Label)))).ToList()" />
+        </section>
+        <section class="panel">
             <h2>Régions</h2>
             <BarList Items="@report.Regions.Select(s => new BarItem(s.Label, s.Count, $"{s.Count} · {Labels.Percent(s.Ratio)}", filter.Url("/", ("region", s.Label.ToLowerInvariant())))).ToList()" />
             <h3>Factions</h3>

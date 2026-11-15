@@ -13,6 +13,7 @@ public sealed record UsageReport(
     int[,] WeekHour,
     IReadOnlyList<AppUsage> Apps,
     IReadOnlyList<Share> Statuses,
+    IReadOnlyList<Share> Sources,
     int ProfileSample,
     ItemLevelSummary ItemLevel,
     IReadOnlyList<StatSummary> Stats,
@@ -61,20 +62,22 @@ public sealed record UsageReport(
                 .ToList()
             : ok;
 
-        var users = events.Select(e => e.BattleNetId).Distinct().ToList();
+        // Les comptes : un import de l'addon fait sans connexion compte comme bench, pas comme utilisateur.
+        var withAccount = events.Where(e => e.BattleNetId is not null).ToList();
+        var users = withAccount.Select(e => e.BattleNetId!.Value).Distinct().ToList();
         var computed = events.Where(e => !e.FromCache && e.Status != BenchStatus.Error).Select(e => (double)e.DurationMs).ToList();
         var kpis = new UsageKpis(
             Benches: events.Count,
             Users: users.Count,
             Characters: events.Select(CharacterKey).Distinct().Count(),
             NewUsers: users.Count(u => firstSeen.TryGetValue(u, out var first) && first >= fromUtc && first < toUtc),
-            ReturningUsers: events.GroupBy(e => e.BattleNetId).Count(g => g.Select(e => Local(e.OccurredAtUtc).Date).Distinct().Count() > 1),
+            ReturningUsers: withAccount.GroupBy(e => e.BattleNetId).Count(g => g.Select(e => Local(e.OccurredAtUtc).Date).Distinct().Count() > 1),
             SuccessRate: Ratio(ok.Count, events.Count),
             CacheRate: Ratio(events.Count(e => e.FromCache), events.Count),
             ForcedRate: Ratio(events.Count(e => e.Forced), events.Count),
             AverageDurationMs: Average(computed),
             P95DurationMs: Percentile(computed, 0.95),
-            BenchesPerUser: users.Count == 0 ? null : (double)events.Count / users.Count);
+            BenchesPerUser: users.Count == 0 ? null : (double)withAccount.Count / users.Count);
 
         // Jours de la période, vides compris : une courbe sans trous.
         var firstDay = DateOnly.FromDateTime(Local(fromUtc).Date);
@@ -84,7 +87,7 @@ public sealed record UsageReport(
         for (var day = firstDay; day <= lastDay; day = day.AddDays(1))
         {
             var list = byDay.GetValueOrDefault(day) ?? [];
-            daily.Add(new DailyUsage(day, AppNames.ToDictionary(a => a, a => list.Count(e => e.App == a)), list.Select(e => e.BattleNetId).Distinct().Count()));
+            daily.Add(new DailyUsage(day, AppNames.ToDictionary(a => a, a => list.Count(e => e.App == a)), list.Where(e => e.BattleNetId is not null).Select(e => e.BattleNetId).Distinct().Count()));
         }
 
         var hourly = AppNames.ToDictionary(a => a, _ => new int[24]);
@@ -102,7 +105,7 @@ public sealed record UsageReport(
         }
 
         var apps = AppNames
-            .Select(a => new AppUsage(a, events.Count(e => e.App == a), events.Where(e => e.App == a).Select(e => e.BattleNetId).Distinct().Count(),
+            .Select(a => new AppUsage(a, events.Count(e => e.App == a), events.Where(e => e.App == a && e.BattleNetId is not null).Select(e => e.BattleNetId).Distinct().Count(),
                 events.Where(e => e.App == a).Select(CharacterKey).Distinct().Count(), Average(profile.Where(e => e.App == a).Select(e => e.ItemLevel))))
             .ToList();
 
@@ -176,7 +179,7 @@ public sealed record UsageReport(
             .OrderByDescending(s => s.Characters)
             .ToList();
 
-        var topUsers = events.GroupBy(e => e.BattleNetId)
+        var topUsers = withAccount.GroupBy(e => e.BattleNetId!.Value)
             .Select(g => new UserUsage(
                 g.Key, g.Count(), g.Select(CharacterKey).Distinct().Count(),
                 g.Select(e => e.App).Distinct().Order().ToList(),
@@ -190,6 +193,7 @@ public sealed record UsageReport(
         return new UsageReport(
             kpis, daily, hourly, weekHour, apps,
             Shares(events, e => e.Status),
+            Shares(events, e => e.Source),
             profile.Count, itemLevel, stats, gear, areas, slots, classes, specs,
             Shares(events, e => e.Region.ToUpperInvariant()),
             Shares(profile, e => $"{e.RealmName} ({e.Region.ToUpperInvariant()})", 15),

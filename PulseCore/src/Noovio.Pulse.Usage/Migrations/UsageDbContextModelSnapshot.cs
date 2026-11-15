@@ -38,7 +38,7 @@ namespace Noovio.Pulse.Usage.Migrations
                     b.Property<string>("Areas")
                         .HasColumnType("jsonb");
 
-                    b.Property<long>("BattleNetId")
+                    b.Property<long?>("BattleNetId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("CharacterName")
@@ -176,6 +176,13 @@ namespace Noovio.Pulse.Usage.Migrations
 
                     b.Property<int?>("SocketsEmpty")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasDefaultValue("BattleNet");
 
                     b.Property<int?>("SpecId")
                         .HasColumnType("integer");

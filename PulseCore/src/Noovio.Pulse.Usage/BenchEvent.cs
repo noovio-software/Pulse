@@ -10,6 +10,13 @@ public static class BenchStatus
     public const string Error = "Error";
 }
 
+/// <summary>D'où vient le personnage analysé : un personnage du compte Battle.net, ou une chaîne collée depuis l'addon NoovioPulse.</summary>
+public static class BenchSource
+{
+    public const string BattleNet = "BattleNet";
+    public const string Addon = "Addon";
+}
+
 /// <summary>
 /// Un bench lancé sur FrontPulse, LifePulse ou BurstPulse : qui, quel personnage, et ce que l'analyse en a dit.
 /// Une ligne plate, une colonne par mesure suivie, pour que PulseAdmin agrège sans relire de JSON ;
@@ -37,8 +44,12 @@ public sealed class BenchEvent
 
     public int DurationMs { get; set; }
 
+    /// <summary>Voir <see cref="BenchSource"/>.</summary>
+    public string Source { get; set; } = BenchSource.BattleNet;
+
     // Qui
-    public long BattleNetId { get; set; }
+    /// <summary>Compte Battle.net du visiteur. Absent pour un import de l'addon fait sans être connecté au site.</summary>
+    public long? BattleNetId { get; set; }
 
     // Le personnage
     public string Region { get; set; } = "";

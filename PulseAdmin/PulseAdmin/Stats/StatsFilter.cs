@@ -16,6 +16,7 @@ public sealed record StatsFilter(
     string? Spec,
     string? Region,
     string? Status,
+    string? Source,
     long? User,
     string? Search,
     bool AllBenches,
@@ -43,6 +44,7 @@ public sealed record StatsFilter(
             Text("spe"),
             Text("region"),
             Text("statut"),
+            Text("source"),
             long.TryParse(Text("compte"), out var u) ? u : null,
             Text("q"),
             Text("tous") == "1",
@@ -82,6 +84,7 @@ public sealed record StatsFilter(
             ["spe"] = Spec,
             ["region"] = Region,
             ["statut"] = Status,
+            ["source"] = Source,
             ["compte"] = User?.ToString(CultureInfo.InvariantCulture),
             ["q"] = Search,
             ["tous"] = AllBenches ? "1" : null

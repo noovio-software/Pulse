@@ -35,6 +35,13 @@ public static class Labels
         _ => status
     };
 
+    public static string Source(string source) => source switch
+    {
+        BenchSource.BattleNet => "Battle.net",
+        BenchSource.Addon => "Addon",
+        _ => source
+    };
+
     public static string Area(string area) => area switch
     {
         "ItemLevel" => "Niveau d'objet",

@@ -25,10 +25,10 @@ public sealed class UsageQueries(UsageDbContext db, TimeProvider time)
         var (from, to) = await RangeAsync(filter, ct);
         var events = await Filtered(filter, from, to).AsNoTracking().ToListAsync(ct);
 
-        var users = events.Select(e => e.BattleNetId).Distinct().ToList();
+        var users = events.Where(e => e.BattleNetId != null).Select(e => e.BattleNetId!.Value).Distinct().ToList();
         var firstSeen = await db.BenchEvents
-            .Where(e => users.Contains(e.BattleNetId))
-            .GroupBy(e => e.BattleNetId)
+            .Where(e => e.BattleNetId != null && users.Contains(e.BattleNetId.Value))
+            .GroupBy(e => e.BattleNetId!.Value)
             .Select(g => new { g.Key, First = g.Min(e => e.OccurredAtUtc) })
             .ToDictionaryAsync(x => x.Key, x => x.First, ct);
 
@@ -73,7 +73,7 @@ public sealed class UsageQueries(UsageDbContext db, TimeProvider time)
         var columns = new (string Name, Func<BenchEvent, object?> Value)[]
         {
             ("id", e => e.Id), ("date_paris", e => TimeZoneInfo.ConvertTime(e.OccurredAtUtc, StatsFilter.Zone).ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)),
-            ("app", e => e.App), ("role", e => e.Role), ("statut", e => e.Status), ("cache", e => e.FromCache), ("actualise", e => e.Forced),
+            ("app", e => e.App), ("role", e => e.Role), ("source", e => e.Source), ("statut", e => e.Status), ("cache", e => e.FromCache), ("actualise", e => e.Forced),
             ("duree_ms", e => e.DurationMs), ("compte", e => e.BattleNetId), ("region", e => e.Region), ("royaume", e => e.RealmName),
             ("personnage", e => e.CharacterName), ("classe", e => e.ClassName), ("niveau", e => e.Level), ("race", e => e.Race), ("faction", e => e.Faction),
             ("spe", e => e.SpecName), ("joue_la_spe", e => e.PlaysSpec), ("score", e => e.Score), ("ilvl", e => e.ItemLevel), ("ilvl_top", e => e.TopItemLevel),
@@ -139,6 +139,11 @@ public sealed class UsageQueries(UsageDbContext db, TimeProvider time)
         if (filter.Status is { } status)
         {
             query = query.Where(e => e.Status == status);
+        }
+
+        if (filter.Source is { } source)
+        {
+            query = query.Where(e => e.Source == source);
         }
 
         if (filter.User is { } user)

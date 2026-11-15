@@ -55,6 +55,28 @@ public class UsageReportTests
     }
 
     [Fact]
+    public void Counts_addon_imports_as_benches_but_only_signed_in_ones_as_users()
+    {
+        var anonymous = Bench(0, "Delta", From.AddHours(13));
+        anonymous.BattleNetId = null;
+        anonymous.Source = BenchSource.Addon;
+        var signedIn = Bench(1, "Alpha", From.AddHours(14));
+        signedIn.Source = BenchSource.Addon;
+        var events = new[] { Bench(1, "Alpha", From.AddHours(10)), anonymous, signedIn };
+
+        var report = UsageReport.Build(events, new Dictionary<long, DateTimeOffset> { [1] = From.AddDays(-20) }, From, To, Paris);
+
+        Assert.Equal(3, report.Kpis.Benches);
+        Assert.Equal(1, report.Kpis.Users);
+        Assert.Equal(2, report.Kpis.Characters);
+        Assert.Equal(2, report.Kpis.BenchesPerUser);
+        Assert.Equal(2, report.Sources.Single(s => s.Label == BenchSource.Addon).Count);
+        Assert.Equal(1, report.Sources.Single(s => s.Label == BenchSource.BattleNet).Count);
+        Assert.Equal(2, Assert.Single(report.TopUsers).Benches);
+        Assert.Equal(1, report.Daily.Single(d => d.Day == DateOnly.FromDateTime(From.Date)).Users);
+    }
+
+    [Fact]
     public void Profile_keeps_the_last_bench_of_each_character_unless_asked_otherwise()
     {
         var events = new[]

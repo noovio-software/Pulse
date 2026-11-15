@@ -1,4 +1,6 @@
 using Noovio.Pulse.Application.Analysis;
+using Noovio.Pulse.Application.Import;
+using Noovio.Pulse.Domain;
 using Noovio.Pulse.Domain.Entities;
 using Noovio.Pulse.Domain.Enums;
 using Noovio.Pulse.Domain.Roles;
@@ -20,28 +22,66 @@ public static class BenchEvents
         TimeSpan duration,
         DateTimeOffset nowUtc)
     {
-        var bench = new BenchEvent
-        {
-            OccurredAtUtc = nowUtc,
-            App = app.Name,
-            Role = app.Role.RaiderIoRole,
-            Status = error is not null ? BenchStatus.Error : result?.Status.ToString() ?? BenchStatus.Error,
-            Error = error,
-            FromCache = fromCache,
-            Forced = forced,
-            DurationMs = (int)Math.Min(int.MaxValue, duration.TotalMilliseconds),
-            BattleNetId = battleNetId,
-            Region = character.Region,
-            RealmSlug = character.RealmSlug,
-            RealmName = character.RealmName,
-            CharacterName = character.Name,
-            ClassId = character.ClassId,
-            ClassName = character.ClassName,
-            Level = character.Level,
-            Race = character.RaceName,
-            Faction = character.Faction
-        };
+        var bench = Start(app, result, error, fromCache, forced, duration, nowUtc);
+        bench.Source = BenchSource.BattleNet;
+        bench.BattleNetId = battleNetId;
+        bench.Region = character.Region;
+        bench.RealmSlug = character.RealmSlug;
+        bench.RealmName = character.RealmName;
+        bench.CharacterName = character.Name;
+        bench.ClassId = character.ClassId;
+        bench.ClassName = character.ClassName;
+        bench.Level = character.Level;
+        bench.Race = character.RaceName;
+        bench.Faction = character.Faction;
+        return Finish(bench, result);
+    }
 
+    /// <summary>Bench d'une chaîne collée depuis l'addon : le personnage vient de l'export, le compte seulement si le visiteur est connecté.</summary>
+    public static BenchEvent CreateImport(
+        PulseApp app,
+        long? battleNetId,
+        CharacterImport import,
+        AnalysisResult? result,
+        string? error,
+        bool fromCache,
+        bool forced,
+        TimeSpan duration,
+        DateTimeOffset nowUtc)
+    {
+        var who = import.Character;
+        var bench = Start(app, result, error, fromCache, forced, duration, nowUtc);
+        bench.Source = BenchSource.Addon;
+        bench.BattleNetId = battleNetId;
+        bench.Region = Cut(who?.Region?.ToLowerInvariant(), 4);
+        bench.RealmSlug = Cut(who?.RealmNormalized ?? who?.Realm, 64);
+        bench.RealmName = Cut(who?.Realm ?? who?.RealmNormalized, 64);
+        bench.CharacterName = Cut(who?.Name, 64);
+        bench.ClassId = who?.Class ?? 0;
+        bench.ClassName = Cut(who is null ? null : WowClasses.Name(who.Class), 64);
+        bench.Level = who?.Level ?? 0;
+        bench.Race = who?.Race is { } race ? Cut(race, 64) : null;
+        bench.Faction = who?.Faction is { } faction ? Cut(faction, 16) : null;
+        return Finish(bench, result);
+    }
+
+    private static BenchEvent Start(PulseApp app, AnalysisResult? result, string? error, bool fromCache, bool forced, TimeSpan duration, DateTimeOffset nowUtc) => new()
+    {
+        OccurredAtUtc = nowUtc,
+        App = app.Name,
+        Role = app.Role.RaiderIoRole,
+        Status = error is not null ? BenchStatus.Error : result?.Status.ToString() ?? BenchStatus.Error,
+        Error = error,
+        FromCache = fromCache,
+        Forced = forced,
+        DurationMs = (int)Math.Min(int.MaxValue, duration.TotalMilliseconds)
+    };
+
+    /// <summary>Les textes d'un export viennent du jeu : coupés à la taille des colonnes plutôt que de faire échouer l'écriture.</summary>
+    private static string Cut(string? text, int max) => text is null ? "" : text.Length <= max ? text : text[..max];
+
+    private static BenchEvent Finish(BenchEvent bench, AnalysisResult? result)
+    {
         if (result?.Spec is { } spec)
         {
             bench.SpecId = (int)spec.Spec;

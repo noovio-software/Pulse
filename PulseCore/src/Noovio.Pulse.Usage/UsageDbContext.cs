@@ -22,6 +22,7 @@ public sealed class UsageDbContext(DbContextOptions<UsageDbContext> options) : D
             e.Property(b => b.App).HasMaxLength(32);
             e.Property(b => b.Role).HasMaxLength(16);
             e.Property(b => b.Status).HasMaxLength(24);
+            e.Property(b => b.Source).HasMaxLength(16).HasDefaultValue(BenchSource.BattleNet);
             e.Property(b => b.Region).HasMaxLength(4);
             e.Property(b => b.RealmSlug).HasMaxLength(64);
             e.Property(b => b.RealmName).HasMaxLength(64);

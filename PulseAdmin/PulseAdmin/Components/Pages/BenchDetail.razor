@@ -26,7 +26,18 @@ else
                 @if (e.FromCache) { <span class="badge muted">cache</span> }
                 @if (e.Forced) { <span class="badge muted">actualisé</span> }
                 @if (e.PlaysSpec == false) { <span class="badge muted">ne joue pas cette spé</span> }
-                <span class="faint">durée @Labels.Duration(e.DurationMs) · compte <a href="/benchs?compte=@e.BattleNetId&periode=tout">#@e.BattleNetId</a></span>
+                @if (e.Source == BenchSource.Addon) { <span class="badge muted">addon</span> }
+                <span class="faint">
+                    durée @Labels.Duration(e.DurationMs) ·
+                    @if (e.BattleNetId is { } account)
+                    {
+                        <text>compte <a href="/benchs?compte=@account&periode=tout">#@account</a></text>
+                    }
+                    else
+                    {
+                        <text>sans compte</text>
+                    }
+                </span>
                 @if (e.Error is not null) { <code>@e.Error</code> }
             </p>
         </div>
