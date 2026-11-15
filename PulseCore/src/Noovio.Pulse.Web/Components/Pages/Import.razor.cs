@@ -21,9 +21,15 @@ public partial class Import
 
     private string? error;
 
-    /// <summary>« , puis dépose le dossier NoovioPulse dans _retail_\Interface\AddOns. », noms de dossiers en code.</summary>
-    private static MarkupString StepFolders => new(Ui.F(
-        System.Net.WebUtility.HtmlEncode(WebTexts.Import_Step1After), "<code>NoovioPulse</code>", @"<code>_retail_\Interface\AddOns</code>"));
+    /// <summary>
+    /// « Depuis CurseForge, ou en téléchargement direct : dépose alors le dossier NoovioPulse dans _retail_\Interface\AddOns. »,
+    /// avec les deux liens et les noms de dossiers en code.
+    /// </summary>
+    private static MarkupString Step1Text => new(Ui.F(
+        System.Net.WebUtility.HtmlEncode(WebTexts.Import_Step1Text),
+        $"""<a href="{AddonInfo.CurseForgeUrl}" target="_blank" rel="noopener">CurseForge</a>""",
+        $"""<a href="{AddonInfo.DirectDownloadUrl}" target="_blank" rel="noopener">{System.Net.WebUtility.HtmlEncode(WebTexts.Import_DirectDownload)}</a>""",
+        "<code>NoovioPulse</code>", @"<code>_retail_\Interface\AddOns</code>"));
 
     protected override void OnInitialized() => Input ??= new();
 

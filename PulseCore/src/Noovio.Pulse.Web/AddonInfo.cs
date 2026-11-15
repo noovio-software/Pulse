@@ -3,7 +3,10 @@ namespace Noovio.Pulse.Web;
 /// <summary>L'addon NoovioPulse vu du site : où le télécharger, et combien de temps un import reste consultable.</summary>
 public static class AddonInfo
 {
-    public const string DownloadUrl = "https://github.com/noovio-software/Pulse/releases?q=noovio-pulse-addon&expanded=true";
+    public const string CurseForgeUrl = "https://www.curseforge.com/wow/addons/nooviopulse";
+
+    /// <summary>Téléchargement direct : les releases GitHub, pour qui n'utilise pas CurseForge.</summary>
+    public const string DirectDownloadUrl = "https://github.com/noovio-software/Pulse/releases";
 
     public static readonly TimeSpan Retention = TimeSpan.FromDays(7);
 

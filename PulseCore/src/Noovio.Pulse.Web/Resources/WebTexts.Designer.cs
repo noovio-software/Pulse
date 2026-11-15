@@ -1444,6 +1444,15 @@ namespace Noovio.Pulse.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to téléchargement direct.
+        /// </summary>
+        internal static string Import_DirectDownload {
+            get {
+                return ResourceManager.GetString("Import_DirectDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Addon NoovioPulse.
         /// </summary>
         internal static string Import_Eyebrow {
@@ -1516,20 +1525,11 @@ namespace Noovio.Pulse.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to , puis dépose le dossier {0} dans {1}..
+        ///   Looks up a localized string similar to Depuis {0}, ou en {1} : dépose alors le dossier {2} dans {3}..
         /// </summary>
-        internal static string Import_Step1After {
+        internal static string Import_Step1Text {
             get {
-                return ResourceManager.GetString("Import_Step1After", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Télécharge.
-        /// </summary>
-        internal static string Import_Step1Before {
-            get {
-                return ResourceManager.GetString("Import_Step1Before", resourceCulture);
+                return ResourceManager.GetString("Import_Step1Text", resourceCulture);
             }
         }
         

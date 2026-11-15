@@ -256,7 +256,7 @@
                     @LandingTexts.Addon_Download
                     <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14" /></svg>
                 </a>
-                <span class="door-note">@LandingTexts.Addon_Note</span>
+                <span class="door-note">@AddonNote</span>
             </footer>
         </div>
 
@@ -355,6 +355,11 @@
 </main>
 
 @code {
+    /// <summary>« Ou en téléchargement direct : dossier à déposer dans Interface\AddOns », le lien vers les releases GitHub.</summary>
+    private static MarkupString AddonNote => new(Ui.F(
+        System.Net.WebUtility.HtmlEncode(LandingTexts.Addon_Note),
+        $"""<a href="addon-direct">{System.Net.WebUtility.HtmlEncode(LandingTexts.Addon_DirectDownload)}</a>"""));
+
     // Ligne plate, un battement par outil, régulièrement espacés (x = 150, 450, 750 et 1050).
     private const string HeartbeatPath =
         "M0 62H100l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H400l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H700l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H1000l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H1200";
