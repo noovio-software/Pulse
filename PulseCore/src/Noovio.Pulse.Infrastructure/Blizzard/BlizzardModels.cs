@@ -203,6 +203,23 @@ public sealed class BzRealm
     public string Slug { get; set; } = "";
 }
 
+/// <summary>/profile/wow/character/{realm}/{name} : le résumé d'un personnage.</summary>
+public sealed class BzCharacterProfile
+{
+    public long Id { get; set; }
+    public string Name { get; set; } = "";
+    public int Level { get; set; }
+    public BzTyped? Faction { get; set; }
+    public BzRef? Race { get; set; }
+    public BzRef? CharacterClass { get; set; }
+    public BzRealm? Realm { get; set; }
+}
+
+public sealed class BzRealmIndex
+{
+    public List<BzRealm> Realms { get; set; } = [];
+}
+
 public sealed class BzKey
 {
     public string Href { get; set; } = "";

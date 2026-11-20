@@ -4277,5 +4277,41 @@ namespace Noovio.Pulse.Web.Resources {
                 return ResourceManager.GetString("Ui_DateTimeFormat", resourceCulture);
             }
         }
+
+        internal static string Home_Search => ResourceManager.GetString("Home_Search", resourceCulture);
+
+        internal static string Home_SearchTitle => ResourceManager.GetString("Home_SearchTitle", resourceCulture);
+
+        internal static string Search_PageTitle => ResourceManager.GetString("Search_PageTitle", resourceCulture);
+
+        internal static string Search_Eyebrow => ResourceManager.GetString("Search_Eyebrow", resourceCulture);
+
+        internal static string Search_Title => ResourceManager.GetString("Search_Title", resourceCulture);
+
+        internal static string Search_Lead => ResourceManager.GetString("Search_Lead", resourceCulture);
+
+        internal static string Search_Region => ResourceManager.GetString("Search_Region", resourceCulture);
+
+        internal static string Search_Realm => ResourceManager.GetString("Search_Realm", resourceCulture);
+
+        internal static string Search_RealmPlaceholder => ResourceManager.GetString("Search_RealmPlaceholder", resourceCulture);
+
+        internal static string Search_Name => ResourceManager.GetString("Search_Name", resourceCulture);
+
+        internal static string Search_NamePlaceholder => ResourceManager.GetString("Search_NamePlaceholder", resourceCulture);
+
+        internal static string Search_Searching => ResourceManager.GetString("Search_Searching", resourceCulture);
+
+        internal static string Search_Hint => ResourceManager.GetString("Search_Hint", resourceCulture);
+
+        internal static string Search_Required => ResourceManager.GetString("Search_Required", resourceCulture);
+
+        internal static string Search_NotFound => ResourceManager.GetString("Search_NotFound", resourceCulture);
+
+        internal static string Search_WrongClass => ResourceManager.GetString("Search_WrongClass", resourceCulture);
+
+        internal static string Report_NewSearch => ResourceManager.GetString("Report_NewSearch", resourceCulture);
+
+        internal static string Report_RetrySearch => ResourceManager.GetString("Report_RetrySearch", resourceCulture);
     }
 }

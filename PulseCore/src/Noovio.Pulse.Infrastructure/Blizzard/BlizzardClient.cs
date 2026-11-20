@@ -17,6 +17,14 @@ public sealed class BlizzardClient(HttpClient http, BlizzardOAuthClient oauth, I
 
     public bool IsConfigured => _options.IsConfigured;
 
+    /// <summary>Résumé du personnage (classe, niveau, royaume) : null s'il est introuvable.</summary>
+    public Task<BzCharacterProfile?> GetCharacterProfileAsync(string region, string realmSlug, string name, CancellationToken ct) =>
+        GetProfileResourceAsync<BzCharacterProfile>(region, realmSlug, name, "", ct);
+
+    /// <summary>Royaumes d'une région (namespace dynamique), noms dans la langue configurée.</summary>
+    public Task<BzRealmIndex?> GetRealmIndexAsync(string region, CancellationToken ct) =>
+        GetAsync<BzRealmIndex>(region, $"/data/wow/realm/index?namespace=dynamic-{region}&locale={_options.Locale}", ct);
+
     public Task<BzEquipment?> GetEquipmentAsync(string region, string realmSlug, string name, CancellationToken ct) =>
         GetProfileResourceAsync<BzEquipment>(region, realmSlug, name, "/equipment", ct);
 

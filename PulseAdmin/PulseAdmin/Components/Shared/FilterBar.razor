@@ -71,7 +71,7 @@
         <span>Source</span>
         <select name="source">
             <option value="">Toutes</option>
-            @foreach (var source in new[] { BenchSource.BattleNet, BenchSource.Addon })
+            @foreach (var source in new[] { BenchSource.BattleNet, BenchSource.Addon, BenchSource.Search })
             {
                 <option value="@source" selected="@(Filter.Source == source)">@Labels.Source(source)</option>
             }

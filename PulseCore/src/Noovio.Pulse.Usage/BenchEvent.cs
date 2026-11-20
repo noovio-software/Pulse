@@ -10,11 +10,15 @@ public static class BenchStatus
     public const string Error = "Error";
 }
 
-/// <summary>D'où vient le personnage analysé : un personnage du compte Battle.net, ou une chaîne collée depuis l'addon NoovioPulse.</summary>
+/// <summary>
+/// D'où vient le personnage analysé : un personnage du compte Battle.net, une chaîne collée depuis l'addon NoovioPulse,
+/// ou une recherche par région, royaume et nom.
+/// </summary>
 public static class BenchSource
 {
     public const string BattleNet = "BattleNet";
     public const string Addon = "Addon";
+    public const string Search = "Search";
 }
 
 /// <summary>

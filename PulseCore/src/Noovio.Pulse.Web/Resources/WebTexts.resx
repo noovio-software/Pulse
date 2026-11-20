@@ -1419,4 +1419,58 @@
   <data name="Ui_DateTimeFormat" xml:space="preserve">
     <value>d MMMM yyyy &apos;à&apos; HH:mm</value>
   </data>
+  <data name="Home_Search" xml:space="preserve">
+    <value>Rechercher un personnage</value>
+  </data>
+  <data name="Home_SearchTitle" xml:space="preserve">
+    <value>Analyser un personnage par région, royaume et nom, sans connexion</value>
+  </data>
+  <data name="Search_PageTitle" xml:space="preserve">
+    <value>Rechercher un personnage · {0} by Noovio</value>
+  </data>
+  <data name="Search_Eyebrow" xml:space="preserve">
+    <value>Recherche</value>
+  </data>
+  <data name="Search_Title" xml:space="preserve">
+    <value>Analyser n'importe quel personnage</value>
+  </data>
+  <data name="Search_Lead" xml:space="preserve">
+    <value>Région, royaume et nom suffisent : équipement, talents et caractéristiques sont lus chez Blizzard, les clés chez Raider.io, puis comparés au top des {0}. Pas besoin de compte Battle.net, et le lien de l'analyse se partage.</value>
+  </data>
+  <data name="Search_Region" xml:space="preserve">
+    <value>Région</value>
+  </data>
+  <data name="Search_Realm" xml:space="preserve">
+    <value>Royaume</value>
+  </data>
+  <data name="Search_RealmPlaceholder" xml:space="preserve">
+    <value>Hyjal, Ysondre, Archimonde…</value>
+  </data>
+  <data name="Search_Name" xml:space="preserve">
+    <value>Personnage</value>
+  </data>
+  <data name="Search_NamePlaceholder" xml:space="preserve">
+    <value>Nom du personnage</value>
+  </data>
+  <data name="Search_Searching" xml:space="preserve">
+    <value>Recherche…</value>
+  </data>
+  <data name="Search_Hint" xml:space="preserve">
+    <value>Profil publié par Blizzard à la dernière déconnexion du personnage. Pour son état exact en jeu :</value>
+  </data>
+  <data name="Search_Required" xml:space="preserve">
+    <value>Indique le royaume et le nom du personnage.</value>
+  </data>
+  <data name="Search_NotFound" xml:space="preserve">
+    <value>{0} introuvable sur {1} ({2}). Vérifie le nom et le royaume ; un personnage qui ne s'est pas reconnecté depuis la dernière mise à jour du jeu n'est pas publié par Blizzard.</value>
+  </data>
+  <data name="Search_WrongClass" xml:space="preserve">
+    <value>{0} ({1}) : cette classe n'a pas de spécialisation {2}, il n'y a rien à comparer sur ce site.</value>
+  </data>
+  <data name="Report_NewSearch" xml:space="preserve">
+    <value>‹ Nouvelle recherche</value>
+  </data>
+  <data name="Report_RetrySearch" xml:space="preserve">
+    <value>Nouvelle recherche</value>
+  </data>
 </root>

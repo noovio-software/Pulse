@@ -22,9 +22,32 @@ public static class BenchEvents
         TimeSpan duration,
         DateTimeOffset nowUtc)
     {
-        var bench = Start(app, result, error, fromCache, forced, duration, nowUtc);
+        var bench = Describe(Start(app, result, error, fromCache, forced, duration, nowUtc), character);
         bench.Source = BenchSource.BattleNet;
         bench.BattleNetId = battleNetId;
+        return Finish(bench, result);
+    }
+
+    /// <summary>Bench d'un personnage trouvé par recherche : le compte seulement si le visiteur est connecté.</summary>
+    public static BenchEvent CreateSearch(
+        PulseApp app,
+        long? battleNetId,
+        UserCharacter character,
+        AnalysisResult? result,
+        string? error,
+        bool fromCache,
+        bool forced,
+        TimeSpan duration,
+        DateTimeOffset nowUtc)
+    {
+        var bench = Describe(Start(app, result, error, fromCache, forced, duration, nowUtc), character);
+        bench.Source = BenchSource.Search;
+        bench.BattleNetId = battleNetId;
+        return Finish(bench, result);
+    }
+
+    private static BenchEvent Describe(BenchEvent bench, UserCharacter character)
+    {
         bench.Region = character.Region;
         bench.RealmSlug = character.RealmSlug;
         bench.RealmName = character.RealmName;
@@ -34,7 +57,7 @@ public static class BenchEvents
         bench.Level = character.Level;
         bench.Race = character.RaceName;
         bench.Faction = character.Faction;
-        return Finish(bench, result);
+        return bench;
     }
 
     /// <summary>Bench d'une chaîne collée depuis l'addon : le personnage vient de l'export, le compte seulement si le visiteur est connecté.</summary>

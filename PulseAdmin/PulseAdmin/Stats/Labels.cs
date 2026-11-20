@@ -39,6 +39,7 @@ public static class Labels
     {
         BenchSource.BattleNet => "Battle.net",
         BenchSource.Addon => "Addon",
+        BenchSource.Search => "Recherche",
         _ => source
     };
 
