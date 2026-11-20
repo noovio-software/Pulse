@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +30,10 @@ public static class PulseSite
         builder.Services.AddPulseLocalization();
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
+        // Accents et symboles écrits tels quels (« Conformité ») plutôt qu'en entités (« Conformit&#xE9; ») : les aperçus
+        // de lien générés par les applications (Messenger, WhatsApp) lisent les balises avec des analyseurs sommaires.
+        // < > & " ' restent échappés.
+        builder.Services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
 
         // Comme AltPulse : Nginx termine le HTTPS et relaie en HTTP sur 127.0.0.1.
         builder.Services.Configure<ForwardedHeadersOptions>(options =>
@@ -75,6 +81,19 @@ public static class PulseSite
             pages => pages.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true));
         app.UseHttpsRedirection();
 
+        // HEAD servi comme GET : les pages Blazor ne répondent qu'à GET et POST, et un robot d'aperçu (l'application
+        // Messenger…) qui sonde un lien en HEAD le croyait mort. Seul le texte de la méthode change : Kestrel garde la
+        // requête pour un HEAD et n'envoie que les en-têtes, ceux de la vraie page. Avant le routage, pour qu'il trouve la page.
+        app.Use((context, next) =>
+        {
+            if (HttpMethods.IsHead(context.Request.Method))
+            {
+                context.Request.Method = HttpMethods.Get;
+            }
+            return next(context);
+        });
+        app.UseRouting();
+
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseAntiforgery();
@@ -94,9 +113,8 @@ public static class PulseSite
                 : Results.NotFound());
 
         // Vignette d'un lien partagé, lue par Discord, Messenger & co. L'analyse partagée ne change jamais et la langue est
-        // dans l'adresse : l'image non plus, d'où un cache long côté client. HEAD aussi : le robot de Facebook s'en sert
-        // pour vérifier l'image avant de la télécharger (Kestrel n'envoie alors que les en-têtes).
-        app.MapMethods("/partage/{token}/vignette-{language}.png", [HttpMethods.Get, HttpMethods.Head],
+        // dans l'adresse : l'image non plus, d'où un cache long côté client.
+        app.MapGet("/partage/{token}/vignette-{language}.png",
             async (string token, string language, ShareCards cards, HttpContext http, CancellationToken ct) =>
             {
                 if (await cards.GetAsync(token, language, ct) is not { } png)
@@ -107,11 +125,6 @@ public static class PulseSite
                 http.Response.Headers.CacheControl = "public, max-age=604800, immutable";
                 return Results.File(png, "image/png");
             });
-
-        // Les pages Blazor ne répondent qu'à GET et POST : un HEAD sur un lien partagé finirait en 404, et un robot
-        // d'aperçu qui sonde le lien avant de le lire le croirait mort. Il reçoit les en-têtes de la page.
-        app.MapMethods("/partage/{token}", [HttpMethods.Head], async (string token, ISharedAnalysisStore shares, CancellationToken ct) =>
-            await shares.GetAsync(token, ct) is null ? Results.NotFound() : Results.Content("", "text/html; charset=utf-8"));
 
         app.MapStaticAssets();
         app.MapRazorComponents<App>()
