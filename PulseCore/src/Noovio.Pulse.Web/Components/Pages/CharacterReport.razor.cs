@@ -12,6 +12,7 @@ using Noovio.Pulse.Web.Usage;
 using Noovio.Pulse.Web.Components.Shared;
 using Noovio.Pulse.Web.Localization;
 using Noovio.Pulse.Web.Resources;
+using Noovio.Pulse.Web.ShareCard;
 
 namespace Noovio.Pulse.Web.Components.Pages;
 
@@ -30,6 +31,7 @@ public partial class CharacterReport
     [Inject] private IUsageRecorder Benches { get; set; } = default!;
     [Inject] private TimeProvider Time { get; set; } = default!;
     [Inject] private ISharedAnalysisStore SharedAnalyses { get; set; } = default!;
+    [Inject] private ShareCards ShareCards { get; set; } = default!;
 
     [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; } = default!;
 
@@ -55,6 +57,11 @@ public partial class CharacterReport
         var bnetId = (await AuthenticationState).User.BattleNetId()
                      ?? throw new InvalidOperationException("Partage sans compte Battle.net");
         var token = await SharedAnalyses.ShareAsync(bnetId, character!, shown, CancellationToken.None);
+        // Le robot d'aperçu passe dès que le lien est collé, dans une langue qu'on ne connaît pas : les deux vignettes sont prêtes.
+        foreach (var language in PulseLocalization.Cultures)
+        {
+            ShareCards.Warm(token, language);
+        }
         return $"partage/{token}";
     }
 
