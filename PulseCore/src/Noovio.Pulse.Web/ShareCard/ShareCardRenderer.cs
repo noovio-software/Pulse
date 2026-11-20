@@ -37,8 +37,14 @@ public sealed class ShareCardRenderer(IHttpClientFactory http, PulseApp site, IL
     private static readonly SKColor Improve = SKColor.Parse("#FBBF24");
     private static readonly SKColor Problem = SKColor.Parse("#F87171");
 
-    /// <summary>Adresse relative de la vignette dans une langue (« partage/abc/vignette-fr.png »).</summary>
-    public static string Path(string token, string language) => $"partage/{token}/vignette-{language}.png";
+    /// <summary>
+    /// JPEG plutôt que PNG : environ trois fois plus léger. Les applications de messagerie qui construisent l'aperçu
+    /// elles-mêmes (Messenger, WhatsApp) écartent les images lourdes (au-delà de 300 Ko environ).
+    /// </summary>
+    public const string ContentType = "image/jpeg";
+
+    /// <summary>Adresse relative de la vignette dans une langue (« partage/abc/vignette-fr.jpg »).</summary>
+    public static string Path(string token, string language) => $"partage/{token}/vignette-{language}.jpg";
 
     /// <summary>« 1 problème », « 3 problèmes ».</summary>
     public static string Problems(int count) => Ui.F(count > 1 ? WebTexts.Card_ProblemsMany : WebTexts.Card_ProblemsOne, count);
@@ -65,8 +71,8 @@ public sealed class ShareCardRenderer(IHttpClientFactory http, PulseApp site, IL
         DrawFooter(canvas, a);
 
         using var image = surface.Snapshot();
-        using var png = image.Encode(SKEncodedImageFormat.Png, 100);
-        return png.ToArray();
+        using var jpeg = image.Encode(SKEncodedImageFormat.Jpeg, 85);
+        return jpeg.ToArray();
     }
 
     private static void DrawBackground(SKCanvas canvas, SKColor classColor, SKImage? portrait)

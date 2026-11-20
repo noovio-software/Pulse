@@ -162,21 +162,24 @@ public sealed class CharacterAnalyzerTests
     }
 
     [Fact]
-    public async Task A_share_card_is_a_1200x630_png_even_without_character_images()
+    public async Task A_share_card_is_a_light_1200x630_jpeg_even_without_character_images()
     {
         var top = Top();
         var analysis = Analyze(top, Player(top[0], stats: Sheet(mastery: 30)));
         var app = new PulseApp("FrontPulse", PulseRoles.Tank, "M16 3l10 4v8c0 6.5-4.2 11-10 14-5.8-3-10-7.5-10-14V7z");
         var renderer = new ShareCardRenderer(new NoHttp(), app, NullLogger<ShareCardRenderer>.Instance);
 
-        var png = await renderer.RenderAsync(new SharedAnalysis("token", "Hyjal", analysis, Now), CancellationToken.None);
+        var card = await renderer.RenderAsync(new SharedAnalysis("token", "Hyjal", analysis, Now), CancellationToken.None);
 
-        using var image = SkiaSharp.SKBitmap.Decode(png);
-        Assert.Equal((ShareCardRenderer.Width, ShareCardRenderer.Height), (image.Width, image.Height));
-        // Pour regarder la vignette : PULSE_SHARE_CARD=chemin.png dotnet test
+        using var codec = SkiaSharp.SKCodec.Create(new MemoryStream(card));
+        Assert.Equal(SkiaSharp.SKEncodedImageFormat.Jpeg, codec.EncodedFormat);
+        Assert.Equal((ShareCardRenderer.Width, ShareCardRenderer.Height), (codec.Info.Width, codec.Info.Height));
+        // Les applications de messagerie écartent les images lourdes (au-delà de 300 Ko environ).
+        Assert.True(card.Length < 300_000, $"{card.Length} octets");
+        // Pour regarder la vignette : PULSE_SHARE_CARD=chemin.jpg dotnet test
         if (Environment.GetEnvironmentVariable("PULSE_SHARE_CARD") is { Length: > 0 } output)
         {
-            await File.WriteAllBytesAsync(output, png);
+            await File.WriteAllBytesAsync(output, card);
         }
     }
 
