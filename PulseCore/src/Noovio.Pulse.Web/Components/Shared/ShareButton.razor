@@ -1,0 +1,28 @@
+@* Partage d'une analyse : crée le lien figé, le copie, et l'affiche s'il n'a pas pu être copié. *@
+
+<button type="button" class="btn btn-ghost btn-share @(state == ShareState.Copied ? "is-copied" : null)" @onclick="ShareAsync"
+        disabled="@(state == ShareState.Creating)" title="@WebTexts.Share_ButtonTitle">
+    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        @if (state == ShareState.Copied)
+        {
+            <path d="M5 12l5 5L20 7" />
+        }
+        else
+        {
+            <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+            <path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" />
+        }
+    </svg>
+    @(state switch
+    {
+        ShareState.Creating => WebTexts.Share_Creating,
+        ShareState.Copied => WebTexts.Share_Copied,
+        ShareState.Failed => WebTexts.Share_Failed,
+        _ => WebTexts.Share_Button
+    })
+</button>
+@if (state == ShareState.NotCopied && url is not null)
+{
+    @* Presse-papiers indisponible : le lien reste à copier à la main. *@
+    <input class="share-link" type="text" readonly value="@url" aria-label="@WebTexts.Share_LinkLabel" onfocus="this.select()" />
+}

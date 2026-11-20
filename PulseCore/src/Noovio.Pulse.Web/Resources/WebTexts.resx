@@ -1338,4 +1338,85 @@
   <data name="Ui_Verdict_Problem" xml:space="preserve">
     <value>Problème</value>
   </data>
+  <data name="Share_Button" xml:space="preserve">
+    <value>Partager</value>
+  </data>
+  <data name="Share_ButtonTitle" xml:space="preserve">
+    <value>Copier un lien vers cette analyse, figée telle quelle : la relancer ne le change pas</value>
+  </data>
+  <data name="Share_Creating" xml:space="preserve">
+    <value>Création du lien…</value>
+  </data>
+  <data name="Share_Copied" xml:space="preserve">
+    <value>Lien copié !</value>
+  </data>
+  <data name="Share_Failed" xml:space="preserve">
+    <value>Partage impossible</value>
+  </data>
+  <data name="Share_LinkLabel" xml:space="preserve">
+    <value>Lien de partage</value>
+  </data>
+  <data name="Shared_Title" xml:space="preserve">
+    <value>Analyse partagée</value>
+  </data>
+  <data name="Shared_NotFoundTitle" xml:space="preserve">
+    <value>Analyse introuvable</value>
+  </data>
+  <data name="Shared_NotFound" xml:space="preserve">
+    <value>Ce lien de partage n&apos;existe pas ou a été mal copié.</value>
+  </data>
+  <data name="Shared_Home" xml:space="preserve">
+    <value>Accueil</value>
+  </data>
+  <data name="Shared_Notice" xml:space="preserve">
+    <value>Analyse partagée du {0}</value>
+  </data>
+  <data name="Shared_AnalyzedOn" xml:space="preserve">
+    <value>Analyse du {0}</value>
+  </data>
+  <data name="Shared_AnalyzedOnTitle" xml:space="preserve">
+    <value>Le personnage a pu évoluer depuis</value>
+  </data>
+  <data name="Shared_CopyLink" xml:space="preserve">
+    <value>Copier le lien</value>
+  </data>
+  <data name="Shared_PreviewScore" xml:space="preserve">
+    <value>Conformité à la méta {0}/100</value>
+  </data>
+  <data name="Shared_PreviewItemLevel" xml:space="preserve">
+    <value>Niv. d&apos;objet {0} ({1} vs top)</value>
+  </data>
+  <data name="Shared_PreviewMythicPlus" xml:space="preserve">
+    <value>M+ {0}</value>
+  </data>
+  <data name="Shared_PreviewNothingToFix" xml:space="preserve">
+    <value>rien à corriger</value>
+  </data>
+  <data name="Shared_ImageAlt" xml:space="preserve">
+    <value>{0} : {1}/100 de conformité à la méta</value>
+  </data>
+  <data name="Card_Hero" xml:space="preserve">
+    <value>Héros</value>
+  </data>
+  <data name="Card_PlayedAs" xml:space="preserve">
+    <value>Joué en</value>
+  </data>
+  <data name="Card_ProblemsOne" xml:space="preserve">
+    <value>{0} problème</value>
+  </data>
+  <data name="Card_ProblemsMany" xml:space="preserve">
+    <value>{0} problèmes</value>
+  </data>
+  <data name="Card_Improve" xml:space="preserve">
+    <value>{0} à améliorer</value>
+  </data>
+  <data name="Card_StrengthsOne" xml:space="preserve">
+    <value>{0} point fort</value>
+  </data>
+  <data name="Card_StrengthsMany" xml:space="preserve">
+    <value>{0} points forts</value>
+  </data>
+  <data name="Ui_DateTimeFormat" xml:space="preserve">
+    <value>d MMMM yyyy &apos;à&apos; HH:mm</value>
+  </data>
 </root>

@@ -81,6 +81,15 @@ public static class Ui
             : F(WebTexts.Ui_AgoDays, (int)elapsed.TotalDays);
     }
 
+    private static readonly TimeZoneInfo Paris = TimeZoneInfo.FindSystemTimeZoneById("Europe/Paris");
+
+    /// <summary>
+    /// Date absolue à l'heure de Paris → « 20 novembre 2026 à 14:32 », « November 20, 2026 at 14:32 »
+    /// (un lien partagé se relit des semaines après : « il y a 3 j » ne dirait plus grand-chose).
+    /// </summary>
+    public static string Date(DateTimeOffset at) =>
+        TimeZoneInfo.ConvertTime(at, Paris).ToString(WebTexts.Ui_DateTimeFormat, CultureInfo.CurrentCulture);
+
     /// <summary>Durée → « 2 h 15 », « 40 min », « moins d'une minute ».</summary>
     public static string Duration(TimeSpan duration) =>
         duration.TotalMinutes < 1 ? WebTexts.Ui_DurationUnderMinute

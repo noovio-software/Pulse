@@ -29,6 +29,12 @@ public partial class AnalysisReport
 
     [Parameter] public string RefreshTitle { get; set; } = WebTexts.Report_RerunTitle;
 
+    /// <summary>Boutons ajoutés à côté de « Relancer » (partager…), ou à sa place dans un rapport partagé.</summary>
+    [Parameter] public RenderFragment? Actions { get; set; }
+
+    /// <summary>Liens « Comparer en … » vers les autres spécialisations : pas dans un rapport partagé, figé.</summary>
+    [Parameter] public bool ShowOtherSpecs { get; set; } = true;
+
     private bool treeOpen;
 
     private IReadOnlyList<AnalysisFinding> ToFix => Analysis.Findings.Where(f => f.Verdict != Verdict.Good).ToList();

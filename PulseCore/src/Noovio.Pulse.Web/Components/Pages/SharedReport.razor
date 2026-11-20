@@ -1,0 +1,68 @@
+@page "/partage/{Token}"
+@rendermode InteractiveServer
+
+<PageTitle>@Ui.F(WebTexts.Report_PageTitle, shared is { } titled ? PreviewTitle(titled) : WebTexts.Shared_Title, Site.Name)</PageTitle>
+
+<HeadContent>
+    @* Lien personnel, transmis à la main : pas dans les moteurs de recherche. *@
+    <meta name="robots" content="noindex, nofollow" />
+    @* Aperçu du lien (Discord, X, WhatsApp, Slack…) : la vignette en grand, et les chiffres clés en texte. *@
+    @if (shared is { } preview)
+    {
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="@Site.Name by Noovio" />
+        <meta property="og:url" content="@PageUrl" />
+        <meta property="og:title" content="@PreviewTitle(preview)" />
+        <meta property="og:description" content="@PreviewDescription(preview)" />
+        <meta property="og:image" content="@CardUrl" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="@ShareCardRenderer.Width" />
+        <meta property="og:image:height" content="@ShareCardRenderer.Height" />
+        <meta property="og:image:alt" content="@Ui.F(WebTexts.Shared_ImageAlt, PreviewTitle(preview), preview.Analysis.Score)" />
+        <meta name="twitter:card" content="summary_large_image" />
+    }
+</HeadContent>
+
+@if (shared is { } colored)
+{
+    @* La barre de l'aperçu Discord prend la couleur de la classe. *@
+    <SectionContent SectionName="theme-color"><meta name="theme-color" content="@colored.Analysis.Spec.Color" /></SectionContent>
+}
+
+<TopBar Active="shared?.Analysis.Spec.Spec" />
+
+<main class="shell">
+@if (loading)
+{
+    <section class="panel empty-state">
+        <div class="spinner"></div>
+    </section>
+}
+else if (shared is not { } s)
+{
+    <section class="panel empty-state">
+        <h1>@WebTexts.Shared_NotFoundTitle</h1>
+        <p>@WebTexts.Shared_NotFound</p>
+        <a class="btn" href="">@WebTexts.Shared_Home</a>
+    </section>
+}
+else
+{
+    var a = s.Analysis;
+    <p class="shared-notice">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" />
+        </svg>
+        <span>@Ui.F(WebTexts.Shared_Notice, Ui.Date(a.AnalyzedAtUtc))</span>
+    </p>
+
+    <AnalysisReport Analysis="a" BasePath="@($"partage/{Token}")" RealmName="@s.RealmName" ShowOtherSpecs="false">
+        <Actions>
+            <span class="snapshot-date" title="@WebTexts.Shared_AnalyzedOnTitle">@Ui.F(WebTexts.Shared_AnalyzedOn, Ui.Date(a.AnalyzedAtUtc))</span>
+            <CopyButton Text="@PageUrl" Label="@WebTexts.Shared_CopyLink" />
+        </Actions>
+    </AnalysisReport>
+
+    <CompareCallout Spec="a.Spec" />
+}
+</main>

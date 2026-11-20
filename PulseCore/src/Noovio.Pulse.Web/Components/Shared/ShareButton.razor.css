@@ -1,0 +1,15 @@
+/* Même gabarit que « Relancer », à côté duquel il se place. */
+.btn-share { height: 30px; padding: 0 10px; gap: 6px; font-size: 0.75rem; font-weight: 500; color: var(--text-dim); }
+.btn-share.is-copied { color: var(--accent-alt); border-color: var(--accent-alt); background: color-mix(in srgb, var(--accent-alt) 10%, transparent); }
+
+.share-link {
+    width: 100%;
+    max-width: 280px;
+    height: 30px;
+    padding: 0 8px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 20, 0.75);
+    color: var(--text);
+    font-size: 0.75rem;
+}

@@ -27,6 +27,11 @@ else if (error is not null)
 else if (analysis is { } a)
 {
     <AnalysisReport Analysis="a" BasePath="@($"compte/personnages/{Id}/analyse")" RealmName="@character?.RealmName"
-                    OnRefresh="() => LoadAsync(force: true)" RefreshTitle="@WebTexts.Report_AccountRefreshTitle" />
+                    OnRefresh="() => LoadAsync(force: true)" RefreshTitle="@WebTexts.Report_AccountRefreshTitle">
+        <Actions>
+            @* La clé force un bouton neuf pour chaque analyse : un lien affiché ne survit pas à une relance. *@
+            <ShareButton @key="a" CreateLink="() => ShareAsync(a)" />
+        </Actions>
+    </AnalysisReport>
 }
 </main>

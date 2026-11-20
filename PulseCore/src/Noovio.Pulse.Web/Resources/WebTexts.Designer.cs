@@ -4034,5 +4034,248 @@ namespace Noovio.Pulse.Web.Resources {
                 return ResourceManager.GetString("Ui_Verdict_Problem", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Partager.
+        /// </summary>
+        internal static string Share_Button {
+            get {
+                return ResourceManager.GetString("Share_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copier un lien vers cette analyse, figée telle quelle : la relancer ne le change pas.
+        /// </summary>
+        internal static string Share_ButtonTitle {
+            get {
+                return ResourceManager.GetString("Share_ButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Création du lien….
+        /// </summary>
+        internal static string Share_Creating {
+            get {
+                return ResourceManager.GetString("Share_Creating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lien copié !.
+        /// </summary>
+        internal static string Share_Copied {
+            get {
+                return ResourceManager.GetString("Share_Copied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Partage impossible.
+        /// </summary>
+        internal static string Share_Failed {
+            get {
+                return ResourceManager.GetString("Share_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lien de partage.
+        /// </summary>
+        internal static string Share_LinkLabel {
+            get {
+                return ResourceManager.GetString("Share_LinkLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analyse partagée.
+        /// </summary>
+        internal static string Shared_Title {
+            get {
+                return ResourceManager.GetString("Shared_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analyse introuvable.
+        /// </summary>
+        internal static string Shared_NotFoundTitle {
+            get {
+                return ResourceManager.GetString("Shared_NotFoundTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ce lien de partage n&apos;existe pas ou a été mal copié..
+        /// </summary>
+        internal static string Shared_NotFound {
+            get {
+                return ResourceManager.GetString("Shared_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accueil.
+        /// </summary>
+        internal static string Shared_Home {
+            get {
+                return ResourceManager.GetString("Shared_Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analyse partagée du {0}.
+        /// </summary>
+        internal static string Shared_Notice {
+            get {
+                return ResourceManager.GetString("Shared_Notice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analyse du {0}.
+        /// </summary>
+        internal static string Shared_AnalyzedOn {
+            get {
+                return ResourceManager.GetString("Shared_AnalyzedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Le personnage a pu évoluer depuis.
+        /// </summary>
+        internal static string Shared_AnalyzedOnTitle {
+            get {
+                return ResourceManager.GetString("Shared_AnalyzedOnTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copier le lien.
+        /// </summary>
+        internal static string Shared_CopyLink {
+            get {
+                return ResourceManager.GetString("Shared_CopyLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conformité à la méta {0}/100.
+        /// </summary>
+        internal static string Shared_PreviewScore {
+            get {
+                return ResourceManager.GetString("Shared_PreviewScore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Niv. d&apos;objet {0} ({1} vs top).
+        /// </summary>
+        internal static string Shared_PreviewItemLevel {
+            get {
+                return ResourceManager.GetString("Shared_PreviewItemLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to M+ {0}.
+        /// </summary>
+        internal static string Shared_PreviewMythicPlus {
+            get {
+                return ResourceManager.GetString("Shared_PreviewMythicPlus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to rien à corriger.
+        /// </summary>
+        internal static string Shared_PreviewNothingToFix {
+            get {
+                return ResourceManager.GetString("Shared_PreviewNothingToFix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} : {1}/100 de conformité à la méta.
+        /// </summary>
+        internal static string Shared_ImageAlt {
+            get {
+                return ResourceManager.GetString("Shared_ImageAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Héros.
+        /// </summary>
+        internal static string Card_Hero {
+            get {
+                return ResourceManager.GetString("Card_Hero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Joué en.
+        /// </summary>
+        internal static string Card_PlayedAs {
+            get {
+                return ResourceManager.GetString("Card_PlayedAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} problème.
+        /// </summary>
+        internal static string Card_ProblemsOne {
+            get {
+                return ResourceManager.GetString("Card_ProblemsOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} problèmes.
+        /// </summary>
+        internal static string Card_ProblemsMany {
+            get {
+                return ResourceManager.GetString("Card_ProblemsMany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} à améliorer.
+        /// </summary>
+        internal static string Card_Improve {
+            get {
+                return ResourceManager.GetString("Card_Improve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} point fort.
+        /// </summary>
+        internal static string Card_StrengthsOne {
+            get {
+                return ResourceManager.GetString("Card_StrengthsOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} points forts.
+        /// </summary>
+        internal static string Card_StrengthsMany {
+            get {
+                return ResourceManager.GetString("Card_StrengthsMany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to d MMMM yyyy &apos;à&apos; HH:mm.
+        /// </summary>
+        internal static string Ui_DateTimeFormat {
+            get {
+                return ResourceManager.GetString("Ui_DateTimeFormat", resourceCulture);
+            }
+        }
     }
 }
