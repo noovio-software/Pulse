@@ -27,6 +27,7 @@ else
                 @if (e.Forced) { <span class="badge muted">actualisé</span> }
                 @if (e.PlaysSpec == false) { <span class="badge muted">ne joue pas cette spé</span> }
                 @if (e.Source == BenchSource.Addon) { <span class="badge muted">addon</span> }
+                @if (e.Source == BenchSource.Search) { <span class="badge muted">recherche</span> }
                 <span class="faint">
                     durée @Labels.Duration(e.DurationMs) ·
                     @if (e.BattleNetId is { } account)

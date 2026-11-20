@@ -1419,4 +1419,58 @@
   <data name="Ui_DateTimeFormat" xml:space="preserve">
     <value>MMMM d, yyyy &apos;at&apos; HH:mm</value>
   </data>
+  <data name="Home_Search" xml:space="preserve">
+    <value>Find a character</value>
+  </data>
+  <data name="Home_SearchTitle" xml:space="preserve">
+    <value>Analyse a character by region, realm and name, no sign-in needed</value>
+  </data>
+  <data name="Search_PageTitle" xml:space="preserve">
+    <value>Find a character · {0} by Noovio</value>
+  </data>
+  <data name="Search_Eyebrow" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Search_Title" xml:space="preserve">
+    <value>Analyse any character</value>
+  </data>
+  <data name="Search_Lead" xml:space="preserve">
+    <value>Region, realm and name are all it takes: gear, talents and stats come from Blizzard, keys from Raider.io, then everything is compared with the top {0}. No Battle.net account needed, and the analysis link can be shared.</value>
+  </data>
+  <data name="Search_Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="Search_Realm" xml:space="preserve">
+    <value>Realm</value>
+  </data>
+  <data name="Search_RealmPlaceholder" xml:space="preserve">
+    <value>Tarren Mill, Draenor, Silvermoon…</value>
+  </data>
+  <data name="Search_Name" xml:space="preserve">
+    <value>Character</value>
+  </data>
+  <data name="Search_NamePlaceholder" xml:space="preserve">
+    <value>Character name</value>
+  </data>
+  <data name="Search_Searching" xml:space="preserve">
+    <value>Searching…</value>
+  </data>
+  <data name="Search_Hint" xml:space="preserve">
+    <value>Profile as published by Blizzard at the character's last logout. For its exact in-game state:</value>
+  </data>
+  <data name="Search_Required" xml:space="preserve">
+    <value>Enter the realm and the character's name.</value>
+  </data>
+  <data name="Search_NotFound" xml:space="preserve">
+    <value>{0} not found on {1} ({2}). Check the name and realm; Blizzard does not publish a character that hasn't logged in since the last game update.</value>
+  </data>
+  <data name="Search_WrongClass" xml:space="preserve">
+    <value>{0} ({1}): this class has no {2} specialization, there is nothing to compare on this site.</value>
+  </data>
+  <data name="Report_NewSearch" xml:space="preserve">
+    <value>‹ New search</value>
+  </data>
+  <data name="Report_RetrySearch" xml:space="preserve">
+    <value>New search</value>
+  </data>
 </root>

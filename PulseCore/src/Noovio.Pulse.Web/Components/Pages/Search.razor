@@ -1,0 +1,68 @@
+@page "/rechercher"
+@rendermode InteractiveServer
+
+<PageTitle>@Ui.F(WebTexts.Search_PageTitle, Site.Name)</PageTitle>
+
+<TopBar />
+
+<main class="shell search-shell">
+    <section class="panel search-head">
+        <span class="eyebrow">@WebTexts.Search_Eyebrow</span>
+        <h1>@WebTexts.Search_Title</h1>
+        <p class="search-lead">@Ui.F(WebTexts.Search_Lead, Site.Words.NounPlural)</p>
+    </section>
+
+    <section class="panel search-form">
+        <form @onsubmit="SearchAsync" @onsubmit:preventDefault>
+            <div class="search-fields">
+                <label class="search-field search-field-region">
+                    <span>@WebTexts.Search_Region</span>
+                    <select value="@region" @onchange="OnRegionChangedAsync">
+                        @foreach (var r in WowRegions.All)
+                        {
+                            <option value="@r">@r.ToUpperInvariant()</option>
+                        }
+                    </select>
+                </label>
+
+                <label class="search-field">
+                    <span>@WebTexts.Search_Realm</span>
+                    <input @bind="realm" list="search-realms" placeholder="@WebTexts.Search_RealmPlaceholder"
+                           autocomplete="off" spellcheck="false" />
+                    <datalist id="search-realms">
+                        @foreach (var r in realms)
+                        {
+                            <option value="@r.Name"></option>
+                        }
+                    </datalist>
+                </label>
+
+                <label class="search-field">
+                    <span>@WebTexts.Search_Name</span>
+                    <input @bind="name" placeholder="@WebTexts.Search_NamePlaceholder" autocomplete="off" spellcheck="false"
+                           aria-invalid="@(error is not null)" />
+                </label>
+            </div>
+
+            @if (error is not null)
+            {
+                <p class="search-error" role="alert">
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9" /><path d="M12 8v5M12 16h.01" />
+                    </svg>
+                    @error
+                </p>
+            }
+
+            <div class="search-actions">
+                <p class="muted">
+                    @WebTexts.Search_Hint <a href="importer">@WebTexts.Home_Import</a>
+                </p>
+                <button type="submit" class="btn btn-primary" disabled="@(!RendererInfo.IsInteractive || searching)">
+                    <CompareIcon />
+                    @(searching ? WebTexts.Search_Searching : WebTexts.Import_Analyse)
+                </button>
+            </div>
+        </form>
+    </section>
+</main>

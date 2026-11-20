@@ -34,6 +34,7 @@ else
                             @if (e.FromCache) { <span class="badge muted" title="Servi par le cache de 10 minutes">cache</span> }
                             @if (e.Forced) { <span class="badge muted" title="Bouton « Actualiser »">actualisé</span> }
                             @if (e.Source == BenchSource.Addon) { <span class="badge muted" title="Chaîne collée depuis l'addon NoovioPulse">addon</span> }
+                            @if (e.Source == BenchSource.Search) { <span class="badge muted" title="Personnage cherché par région, royaume et nom">recherche</span> }
                         </td>
                         <td class="num">@Labels.Number(e.ItemLevel, 1)</td>
                         <td class="num @(e.ItemLevel - e.TopItemLevel < 0 ? "neg" : "pos")">@Labels.Signed(e.ItemLevel - e.TopItemLevel, 1)</td>

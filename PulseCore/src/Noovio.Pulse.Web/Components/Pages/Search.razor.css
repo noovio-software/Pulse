@@ -1,0 +1,83 @@
+/* Un formulaire court : colonne centrée, comme l'import depuis l'addon. */
+.search-shell { max-width: 960px; }
+
+.search-head { padding: 28px 32px 30px; }
+.search-head h1 {
+    margin: 6px 0 10px;
+    font-family: var(--font-title);
+    font-size: 1.9rem;
+    letter-spacing: 0.05em;
+    color: var(--accent-alt);
+}
+.search-lead { margin: 0; max-width: 68ch; color: var(--text-dim); line-height: 1.6; }
+
+.search-form { padding: 24px 32px 28px; }
+.search-form form { display: flex; flex-direction: column; gap: 16px; }
+
+.search-fields {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr) minmax(0, 1fr);
+    gap: 14px;
+}
+
+.search-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.search-field > span {
+    font-family: var(--font-title);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+}
+
+.search-field input,
+.search-field select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    background: var(--bg-2);
+    color: var(--text);
+    font: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.search-field input::placeholder { color: var(--text-faint); }
+.search-field input:focus,
+.search-field select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.search-field input[aria-invalid="true"] { border-color: var(--danger); }
+
+.search-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0;
+    padding: 10px 14px;
+    border: 1px solid color-mix(in srgb, var(--danger) 45%, transparent);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
+    color: var(--danger);
+    font-size: 0.9rem;
+}
+.search-error svg { flex: none; margin-top: 2px; }
+
+.search-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 20px;
+    padding-top: 4px;
+}
+.search-actions p { margin: 0; font-size: 0.85rem; max-width: 60ch; }
+.search-actions .btn { min-width: 150px; justify-content: center; }
+
+@media (max-width: 760px) {
+    .search-head, .search-form { padding: 20px; }
+    .search-head h1 { font-size: 1.5rem; }
+    .search-fields { grid-template-columns: 1fr; }
+    .search-actions .btn { width: 100%; }
+}
