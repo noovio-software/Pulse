@@ -61,6 +61,7 @@
 
 .report-score { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .btn-refresh { height: 30px; padding: 0 10px; font-size: 0.75rem; font-weight: 500; color: var(--text-dim); }
+.report-actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; }
 
 /* --- Synthèse par domaine ------------------------------------------------ */
 .area-tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }

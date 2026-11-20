@@ -1,3 +1,5 @@
+using System.Text.Json;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Noovio.Pulse.Application.Abstractions;
 using Noovio.Pulse.Application.Analysis;
@@ -6,6 +8,8 @@ using Noovio.Pulse.Domain;
 using Noovio.Pulse.Domain.Entities;
 using Noovio.Pulse.Domain.Enums;
 using Noovio.Pulse.Domain.Roles;
+using Noovio.Pulse.Infrastructure.Persistence;
+using Noovio.Pulse.Web.ShareCard;
 
 namespace Noovio.Pulse.Tests;
 
@@ -129,6 +133,56 @@ public sealed class CharacterAnalyzerTests
 
         Assert.False(analysis.PlaysSpec);
         Assert.Contains(analysis.Findings, f => f.Title.Contains("Givre"));
+    }
+
+    [Fact]
+    public void A_shared_analysis_reads_back_exactly_as_it_was_stored()
+    {
+        // Un lien partagé relit la colonne jsonb : tout ce que la page affiche doit survivre à l'aller-retour.
+        var top = Top();
+        var analysis = Analyze(top, Player(top[0], stats: Sheet(mastery: 30)));
+
+        var json = JsonSerializer.Serialize(analysis, JsonColumn.Options);
+        var read = JsonSerializer.Deserialize<CharacterAnalysis>(json, JsonColumn.Options)!;
+
+        Assert.Equal(json, JsonSerializer.Serialize(read, JsonColumn.Options));
+        Assert.Equal(analysis.Spec, read.Spec);
+        Assert.Equal(analysis.Score, read.Score);
+        Assert.Equal(analysis.Findings, read.Findings);
+        Assert.Equal(analysis.AnalyzedAtUtc, read.AnalyzedAtUtc);
+    }
+
+    [Fact]
+    public void Share_tokens_are_random_and_url_safe()
+    {
+        var tokens = Enumerable.Range(0, 100).Select(_ => SharedAnalysisStore.NewToken()).ToList();
+
+        Assert.Equal(100, tokens.Distinct().Count());
+        Assert.All(tokens, t => Assert.Matches("^[A-Za-z0-9_-]{22}$", t));
+    }
+
+    [Fact]
+    public async Task A_share_card_is_a_1200x630_png_even_without_character_images()
+    {
+        var top = Top();
+        var analysis = Analyze(top, Player(top[0], stats: Sheet(mastery: 30)));
+        var app = new PulseApp("FrontPulse", PulseRoles.Tank, "M16 3l10 4v8c0 6.5-4.2 11-10 14-5.8-3-10-7.5-10-14V7z");
+        var renderer = new ShareCardRenderer(new NoHttp(), app, NullLogger<ShareCardRenderer>.Instance);
+
+        var png = await renderer.RenderAsync(new SharedAnalysis("token", "Hyjal", analysis, Now), CancellationToken.None);
+
+        using var image = SkiaSharp.SKBitmap.Decode(png);
+        Assert.Equal((ShareCardRenderer.Width, ShareCardRenderer.Height), (image.Width, image.Height));
+        // Pour regarder la vignette : PULSE_SHARE_CARD=chemin.png dotnet test
+        if (Environment.GetEnvironmentVariable("PULSE_SHARE_CARD") is { Length: > 0 } output)
+        {
+            await File.WriteAllBytesAsync(output, png);
+        }
+    }
+
+    private sealed class NoHttp : IHttpClientFactory
+    {
+        public HttpClient CreateClient(string name) => new();
     }
 
     private static CharacterAnalysis Analyze(IReadOnlyList<PlayerProfile> top, CharacterDetails player)

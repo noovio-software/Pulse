@@ -1338,4 +1338,85 @@
   <data name="Ui_Verdict_Problem" xml:space="preserve">
     <value>Problem</value>
   </data>
+  <data name="Share_Button" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="Share_ButtonTitle" xml:space="preserve">
+    <value>Copy a link to this analysis, frozen as it is: re-running it will not change it</value>
+  </data>
+  <data name="Share_Creating" xml:space="preserve">
+    <value>Creating the link…</value>
+  </data>
+  <data name="Share_Copied" xml:space="preserve">
+    <value>Link copied!</value>
+  </data>
+  <data name="Share_Failed" xml:space="preserve">
+    <value>Sharing failed</value>
+  </data>
+  <data name="Share_LinkLabel" xml:space="preserve">
+    <value>Share link</value>
+  </data>
+  <data name="Shared_Title" xml:space="preserve">
+    <value>Shared analysis</value>
+  </data>
+  <data name="Shared_NotFoundTitle" xml:space="preserve">
+    <value>Analysis not found</value>
+  </data>
+  <data name="Shared_NotFound" xml:space="preserve">
+    <value>This share link does not exist or was copied incorrectly.</value>
+  </data>
+  <data name="Shared_Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Shared_Notice" xml:space="preserve">
+    <value>Shared analysis from {0}</value>
+  </data>
+  <data name="Shared_AnalyzedOn" xml:space="preserve">
+    <value>Analysis from {0}</value>
+  </data>
+  <data name="Shared_AnalyzedOnTitle" xml:space="preserve">
+    <value>The character may have changed since</value>
+  </data>
+  <data name="Shared_CopyLink" xml:space="preserve">
+    <value>Copy link</value>
+  </data>
+  <data name="Shared_PreviewScore" xml:space="preserve">
+    <value>Meta compliance {0}/100</value>
+  </data>
+  <data name="Shared_PreviewItemLevel" xml:space="preserve">
+    <value>Item level {0} ({1} vs top)</value>
+  </data>
+  <data name="Shared_PreviewMythicPlus" xml:space="preserve">
+    <value>M+ {0}</value>
+  </data>
+  <data name="Shared_PreviewNothingToFix" xml:space="preserve">
+    <value>nothing to fix</value>
+  </data>
+  <data name="Shared_ImageAlt" xml:space="preserve">
+    <value>{0}: {1}/100 meta compliance</value>
+  </data>
+  <data name="Card_Hero" xml:space="preserve">
+    <value>Hero</value>
+  </data>
+  <data name="Card_PlayedAs" xml:space="preserve">
+    <value>Played as</value>
+  </data>
+  <data name="Card_ProblemsOne" xml:space="preserve">
+    <value>{0} problem</value>
+  </data>
+  <data name="Card_ProblemsMany" xml:space="preserve">
+    <value>{0} problems</value>
+  </data>
+  <data name="Card_Improve" xml:space="preserve">
+    <value>{0} to improve</value>
+  </data>
+  <data name="Card_StrengthsOne" xml:space="preserve">
+    <value>{0} strength</value>
+  </data>
+  <data name="Card_StrengthsMany" xml:space="preserve">
+    <value>{0} strengths</value>
+  </data>
+  <data name="Ui_DateTimeFormat" xml:space="preserve">
+    <value>MMMM d, yyyy &apos;at&apos; HH:mm</value>
+  </data>
 </root>

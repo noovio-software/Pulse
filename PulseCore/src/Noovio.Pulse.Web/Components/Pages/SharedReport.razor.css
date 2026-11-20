@@ -1,0 +1,23 @@
+.shared-notice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    background: color-mix(in srgb, var(--accent-alt) 8%, var(--panel));
+    border: 1px solid color-mix(in srgb, var(--accent-alt) 35%, var(--line));
+}
+.shared-notice svg { flex: none; color: var(--accent-alt); }
+.shared-notice strong { color: var(--text); }
+
+.snapshot-date {
+    display: inline-flex;
+    align-items: center;
+    height: 34px;
+    padding: 0 10px;
+    font-size: 0.75rem;
+    color: var(--text-faint);
+}

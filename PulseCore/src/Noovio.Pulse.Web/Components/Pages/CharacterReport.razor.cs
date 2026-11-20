@@ -29,6 +29,7 @@ public partial class CharacterReport
     [Inject] private IJSRuntime JS { get; set; } = default!;
     [Inject] private IUsageRecorder Benches { get; set; } = default!;
     [Inject] private TimeProvider Time { get; set; } = default!;
+    [Inject] private ISharedAnalysisStore SharedAnalyses { get; set; } = default!;
 
     [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; } = default!;
 
@@ -44,6 +45,18 @@ public partial class CharacterReport
     private bool refreshTooltips;
 
     protected override Task OnParametersSetAsync() => LoadAsync(force: false);
+
+    /// <summary>
+    /// Fige l'analyse affichée (l'objet même qui est à l'écran, méta comprise) et renvoie l'adresse de son lien.
+    /// Relancer l'analyse en produit une nouvelle : le lien déjà donné ne bouge plus.
+    /// </summary>
+    private async Task<string> ShareAsync(CharacterAnalysis shown)
+    {
+        var bnetId = (await AuthenticationState).User.BattleNetId()
+                     ?? throw new InvalidOperationException("Partage sans compte Battle.net");
+        var token = await SharedAnalyses.ShareAsync(bnetId, character!, shown, CancellationToken.None);
+        return $"partage/{token}";
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

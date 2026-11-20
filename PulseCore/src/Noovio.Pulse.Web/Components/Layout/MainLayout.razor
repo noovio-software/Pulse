@@ -1,5 +1,8 @@
 @inherits LayoutComponentBase
 
+@* Par défaut ; une page peut la remplacer (la dernière SectionContent rendue l'emporte, et la page vient après le layout). *@
+<SectionContent SectionName="theme-color"><meta name="theme-color" content="#0B0E14" /></SectionContent>
+
 <div class="forge-backdrop" aria-hidden="true"></div>
 
 @* Chaque page rend sa propre <TopBar> (la spécialisation active y est surlignée). *@

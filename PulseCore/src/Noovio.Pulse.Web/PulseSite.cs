@@ -11,6 +11,8 @@ using Noovio.Pulse.Usage;
 using Noovio.Pulse.Web.Auth;
 using Noovio.Pulse.Web.Components;
 using Noovio.Pulse.Web.Localization;
+using Noovio.Pulse.Web.ShareCard;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Noovio.Pulse.Web;
 
@@ -40,6 +42,8 @@ public static class PulseSite
         // Chaque bench est écrit dans la base d'usage commune, lue par PulseAdmin (sans chaîne PulseUsage : rien n'est écrit).
         builder.Services.AddPulseUsageRecording(builder.Configuration);
         builder.Services.AddSingleton<RefreshSchedule>();
+        builder.Services.AddHttpClient(ShareCardRenderer.HttpClientName, c => c.Timeout = TimeSpan.FromSeconds(5));
+        builder.Services.AddSingleton<ShareCardRenderer>();
 
         // Clés de chiffrement du cookie de connexion : en prod, dans un dossier persistant (sinon chaque redémarrage,
         // donc chaque déploiement, déconnecterait tout le monde). En local, l'emplacement par défaut suffit.
@@ -88,6 +92,32 @@ public static class PulseSite
             pulse.Role.FromSlug(slug) is { } info && await queries.GetLatestAsync(info.Spec, ct) is { } meta
                 ? Results.Ok(meta)
                 : Results.NotFound());
+
+        // Vignette d'un lien partagé, lue par Discord & co. L'analyse partagée ne change jamais et la langue est dans
+        // l'adresse : l'image non plus, d'où un cache long côté serveur comme côté client.
+        app.MapGet("/partage/{token}/vignette-{language}.png", async (string token, string language, ISharedAnalysisStore shares, ShareCardRenderer cards, IMemoryCache cache, HttpContext http, CancellationToken ct) =>
+        {
+            if (!PulseLocalization.Cultures.Contains(language))
+            {
+                return Results.NotFound();
+            }
+
+            CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
+            var key = $"share-card:{language}:{token}";
+            var png = await cache.GetOrCreateAsync(key, async entry =>
+            {
+                entry.SlidingExpiration = TimeSpan.FromHours(6);
+                return await shares.GetAsync(token, ct) is { } shared ? await cards.RenderAsync(shared, ct) : null;
+            });
+            if (png is null)
+            {
+                cache.Remove(key);
+                return Results.NotFound();
+            }
+
+            http.Response.Headers.CacheControl = "public, max-age=604800, immutable";
+            return Results.File(png, "image/png");
+        });
 
         app.MapStaticAssets();
         app.MapRazorComponents<App>()

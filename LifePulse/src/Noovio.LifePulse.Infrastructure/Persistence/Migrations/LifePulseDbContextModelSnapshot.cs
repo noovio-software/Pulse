@@ -378,6 +378,55 @@ namespace Noovio.LifePulse.Infrastructure.Persistence.Migrations
                     b.ToTable("user_characters", (string)null);
                 });
 
+            modelBuilder.Entity("Noovio.Pulse.Infrastructure.Persistence.SharedAnalysisRecord", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Analysis")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<DateTimeOffset>("AnalyzedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("BattleNetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CharacterId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("RealmName")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("SpecSlug")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("BattleNetId", "CharacterId", "SpecSlug", "AnalyzedAtUtc");
+
+                    b.ToTable("shared_analyses", (string)null);
+                });
+
             modelBuilder.Entity("Noovio.Pulse.Domain.Entities.UserCharacter", b =>
                 {
                     b.HasOne("Noovio.Pulse.Domain.Entities.UserAccount", null)

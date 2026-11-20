@@ -22,6 +22,7 @@ public abstract class PulseDbContext(DbContextOptions options) : DbContext(optio
     public DbSet<UserCharacter> UserCharacters => Set<UserCharacter>();
     public DbSet<IngestionRequest> IngestionRequests => Set<IngestionRequest>();
     public DbSet<IngestionRun> IngestionRuns => Set<IngestionRun>();
+    public DbSet<SharedAnalysisRecord> SharedAnalyses => Set<SharedAnalysisRecord>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -92,6 +93,19 @@ public abstract class PulseDbContext(DbContextOptions options) : DbContext(optio
             e.Property(c => c.RaceName).HasMaxLength(64);
             e.Property(c => c.Faction).HasMaxLength(16);
         });
+
+        // Pas de clé étrangère vers le personnage : un lien partagé survit à la resynchronisation du compte,
+        // qui recrée les personnages.
+        modelBuilder.Entity<SharedAnalysisRecord>(e =>
+        {
+            e.ToTable("shared_analyses");
+            e.HasIndex(s => s.Token).IsUnique();
+            e.HasIndex(s => new { s.BattleNetId, s.CharacterId, s.SpecSlug, s.AnalyzedAtUtc });
+            e.Property(s => s.Token).HasMaxLength(32);
+            e.Property(s => s.SpecSlug).HasMaxLength(64);
+            e.Property(s => s.RealmName).HasMaxLength(64);
+            e.Property(s => s.Analysis).HasJsonConversion();
+        });
     }
 }
 
@@ -101,7 +115,7 @@ public abstract class PulseDbContext(DbContextOptions options) : DbContext(optio
 /// </summary>
 internal static class JsonColumn
 {
-    private static readonly JsonSerializerOptions Options = new(JsonSerializerDefaults.Web)
+    internal static readonly JsonSerializerOptions Options = new(JsonSerializerDefaults.Web)
     {
         Converters = { new JsonStringEnumConverter() }
     };
