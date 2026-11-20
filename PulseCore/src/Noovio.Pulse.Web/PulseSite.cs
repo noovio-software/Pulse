@@ -12,7 +12,6 @@ using Noovio.Pulse.Web.Auth;
 using Noovio.Pulse.Web.Components;
 using Noovio.Pulse.Web.Localization;
 using Noovio.Pulse.Web.ShareCard;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Noovio.Pulse.Web;
 
@@ -44,6 +43,7 @@ public static class PulseSite
         builder.Services.AddSingleton<RefreshSchedule>();
         builder.Services.AddHttpClient(ShareCardRenderer.HttpClientName, c => c.Timeout = TimeSpan.FromSeconds(5));
         builder.Services.AddSingleton<ShareCardRenderer>();
+        builder.Services.AddSingleton<ShareCards>();
 
         // Clés de chiffrement du cookie de connexion : en prod, dans un dossier persistant (sinon chaque redémarrage,
         // donc chaque déploiement, déconnecterait tout le monde). En local, l'emplacement par défaut suffit.
@@ -93,31 +93,25 @@ public static class PulseSite
                 ? Results.Ok(meta)
                 : Results.NotFound());
 
-        // Vignette d'un lien partagé, lue par Discord & co. L'analyse partagée ne change jamais et la langue est dans
-        // l'adresse : l'image non plus, d'où un cache long côté serveur comme côté client.
-        app.MapGet("/partage/{token}/vignette-{language}.png", async (string token, string language, ISharedAnalysisStore shares, ShareCardRenderer cards, IMemoryCache cache, HttpContext http, CancellationToken ct) =>
-        {
-            if (!PulseLocalization.Cultures.Contains(language))
+        // Vignette d'un lien partagé, lue par Discord, Messenger & co. L'analyse partagée ne change jamais et la langue est
+        // dans l'adresse : l'image non plus, d'où un cache long côté client. HEAD aussi : le robot de Facebook s'en sert
+        // pour vérifier l'image avant de la télécharger (Kestrel n'envoie alors que les en-têtes).
+        app.MapMethods("/partage/{token}/vignette-{language}.png", [HttpMethods.Get, HttpMethods.Head],
+            async (string token, string language, ShareCards cards, HttpContext http, CancellationToken ct) =>
             {
-                return Results.NotFound();
-            }
+                if (await cards.GetAsync(token, language, ct) is not { } png)
+                {
+                    return Results.NotFound();
+                }
 
-            CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
-            var key = $"share-card:{language}:{token}";
-            var png = await cache.GetOrCreateAsync(key, async entry =>
-            {
-                entry.SlidingExpiration = TimeSpan.FromHours(6);
-                return await shares.GetAsync(token, ct) is { } shared ? await cards.RenderAsync(shared, ct) : null;
+                http.Response.Headers.CacheControl = "public, max-age=604800, immutable";
+                return Results.File(png, "image/png");
             });
-            if (png is null)
-            {
-                cache.Remove(key);
-                return Results.NotFound();
-            }
 
-            http.Response.Headers.CacheControl = "public, max-age=604800, immutable";
-            return Results.File(png, "image/png");
-        });
+        // Les pages Blazor ne répondent qu'à GET et POST : un HEAD sur un lien partagé finirait en 404, et un robot
+        // d'aperçu qui sonde le lien avant de le lire le croirait mort. Il reçoit les en-têtes de la page.
+        app.MapMethods("/partage/{token}", [HttpMethods.Head], async (string token, ISharedAnalysisStore shares, CancellationToken ct) =>
+            await shares.GetAsync(token, ct) is null ? Results.NotFound() : Results.Content("", "text/html; charset=utf-8"));
 
         app.MapStaticAssets();
         app.MapRazorComponents<App>()
