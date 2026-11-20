@@ -114,16 +114,16 @@ public static class PulseSite
 
         // Vignette d'un lien partagé, lue par Discord, Messenger & co. L'analyse partagée ne change jamais et la langue est
         // dans l'adresse : l'image non plus, d'où un cache long côté client.
-        app.MapGet("/partage/{token}/vignette-{language}.png",
+        app.MapGet("/partage/{token}/vignette-{language}.jpg",
             async (string token, string language, ShareCards cards, HttpContext http, CancellationToken ct) =>
             {
-                if (await cards.GetAsync(token, language, ct) is not { } png)
+                if (await cards.GetAsync(token, language, ct) is not { } card)
                 {
                     return Results.NotFound();
                 }
 
                 http.Response.Headers.CacheControl = "public, max-age=604800, immutable";
-                return Results.File(png, "image/png");
+                return Results.File(card, ShareCardRenderer.ContentType);
             });
 
         app.MapStaticAssets();

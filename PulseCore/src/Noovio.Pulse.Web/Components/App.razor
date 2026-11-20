@@ -4,6 +4,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @* Titre et balises d'aperçu en tête : les applications de messagerie (Messenger, WhatsApp) qui construisent l'aperçu
+       d'un lien ne lisent que le début de la page. Seul SharedReport y ajoute des balises : rien n'y change l'ordre des styles. *@
+    <HeadOutlet />
     @* Couleur du navigateur mobile et de la barre des aperçus Discord : celle du site, ou celle d'une page (MainLayout, SharedReport). *@
     <SectionOutlet SectionName="theme-color" />
     <base href="/" />
@@ -18,7 +21,6 @@
     <ImportMap />
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <HeadOutlet />
 </head>
 
 <body>
