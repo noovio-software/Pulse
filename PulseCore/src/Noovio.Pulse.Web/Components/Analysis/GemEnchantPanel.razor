@@ -5,29 +5,44 @@
     <p class="gem-note">@WebTexts.Gems_TopPending</p>
 }
 
-@if (Review.Swaps.Count > 0)
+@{
+    var toDo = ToDo;
+}
+
+@if (toDo.Count > 0)
 {
     <h3 class="gem-title">@WebTexts.Gems_ToDo <small>@WebTexts.Gems_ToDoNote</small></h3>
     <ol class="swap-list">
-        @foreach (var swap in Review.Swaps)
+        @foreach (var item in toDo)
         {
             <li>
-                <span class="swap-slot" title="@swap.ItemName">@Ui.SlotLabel(swap.Slot)</span>
+                <span class="swap-slot" title="@item.ItemName">@Ui.SlotLabel(item.Slot)</span>
                 <span class="swap-change">
-                    @if (swap.ToIconUrl is not null)
+                    @if (item.IconUrl is not null)
                     {
-                        <img class="wow-icon" src="@swap.ToIconUrl" alt="" loading="lazy" />
+                        <img class="wow-icon" src="@item.IconUrl" alt="" loading="lazy" />
                     }
                     <span>
-                        @if (swap.From is not null)
+                        @if (item.Missing is not null)
                         {
-                            <del>@swap.From</del> <text>→ </text>
+                            <span class="mod-missing">@item.Missing</span>
+                            @if (item.To is not null)
+                            {
+                                <text> → </text>
+                            }
                         }
-                        <strong>@swap.To</strong>
+                        else if (item.From is not null)
+                        {
+                            <del>@item.From</del> <text>→ </text>
+                        }
+                        @if (item.To is not null)
+                        {
+                            <strong>@item.To</strong>
+                        }
                     </span>
                 </span>
                 <span class="swap-deltas">
-                    @foreach (var delta in swap.Deltas)
+                    @foreach (var delta in item.Deltas)
                     {
                         <span class="stat-chip @Ui.StatCss(delta.Stat)">@Ui.StatDelta(delta)</span>
                     }
@@ -64,7 +79,7 @@ else if (Review.Sockets.Count > 0 || Review.Enchants.Count > 0)
 
 @if (Rows.Count > 0)
 {
-    <details class="piece-details" open="@(Review.Swaps.Count == 0)">
+    <details class="piece-details" open="@(toDo.Count == 0)">
         <summary>@Ui.F(WebTexts.Gems_Details, Rows.Count)</summary>
         <ul class="piece-list">
             @foreach (var row in Rows)
