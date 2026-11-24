@@ -525,4 +525,13 @@
   <data name="Vault_World" xml:space="preserve">
     <value>Monde</value>
   </data>
+  <data name="Enchants_MissingLegsTitle" xml:space="preserve">
+    <value>{0} sans renfort</value>
+  </data>
+  <data name="Enchants_MissingLegsDetail" xml:space="preserve">
+    <value>La majorité du top pose un renfort d&apos;armure ou un fil à sorts sur cet emplacement.</value>
+  </data>
+  <data name="Enchants_MissingLegsAdviceGeneric" xml:space="preserve">
+    <value>Pose le renfort ou le fil à sorts adapté.</value>
+  </data>
 </root>

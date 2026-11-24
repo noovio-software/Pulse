@@ -525,4 +525,13 @@
   <data name="Vault_World" xml:space="preserve">
     <value>World</value>
   </data>
+  <data name="Enchants_MissingLegsTitle" xml:space="preserve">
+    <value>{0} without armor kit or spellthread</value>
+  </data>
+  <data name="Enchants_MissingLegsDetail" xml:space="preserve">
+    <value>Most of the top applies an armor kit or a spellthread to this slot.</value>
+  </data>
+  <data name="Enchants_MissingLegsAdviceGeneric" xml:space="preserve">
+    <value>Apply the right armor kit or spellthread.</value>
+  </data>
 </root>

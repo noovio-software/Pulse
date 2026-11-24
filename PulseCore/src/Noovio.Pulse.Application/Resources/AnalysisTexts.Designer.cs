@@ -1595,5 +1595,32 @@ namespace Noovio.Pulse.Application.Resources {
                 return ResourceManager.GetString("Vault_World", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} sans renfort.
+        /// </summary>
+        internal static string Enchants_MissingLegsTitle {
+            get {
+                return ResourceManager.GetString("Enchants_MissingLegsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La majorité du top pose un renfort d&apos;armure ou un fil à sorts sur cet emplacement..
+        /// </summary>
+        internal static string Enchants_MissingLegsDetail {
+            get {
+                return ResourceManager.GetString("Enchants_MissingLegsDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pose le renfort ou le fil à sorts adapté..
+        /// </summary>
+        internal static string Enchants_MissingLegsAdviceGeneric {
+            get {
+                return ResourceManager.GetString("Enchants_MissingLegsAdviceGeneric", resourceCulture);
+            }
+        }
     }
 }

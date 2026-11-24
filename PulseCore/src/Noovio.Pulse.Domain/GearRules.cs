@@ -26,6 +26,19 @@ public static class GearRules
         _ => null
     };
 
+    /// <summary>
+    /// Emplacements qui n'acceptent aucun enchantement en jeu : cou, mains, taille, bijoux. Une ligne lue sur l'un d'eux
+    /// (effet d'artisanat, renfort…) ne doit ni être proposée, ni compter comme un enchantement manquant.
+    /// </summary>
+    public static bool CanBeEnchanted(GearSlot slot) =>
+        slot is not (GearSlot.Neck or GearSlot.Hands or GearSlot.Waist or GearSlot.Trinket);
+
+    /// <summary>
+    /// Les jambes ne s'enchantent pas : elles portent un renfort d'armure (cuir, mailles…) ou un fil à sorts, lu par le jeu
+    /// comme un enchantement permanent. Même logique d'analyse, mais le libellé doit le dire.
+    /// </summary>
+    public static bool TakesLegAugment(GearSlot slot) => slot == GearSlot.Legs;
+
     /// <summary>Comme le jeu : 16 emplacements, une arme à deux mains compte deux fois.</summary>
     public static double AverageItemLevel(IReadOnlyList<GearPiece> gear)
     {

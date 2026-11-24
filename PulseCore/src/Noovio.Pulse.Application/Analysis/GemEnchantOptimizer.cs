@@ -1,4 +1,5 @@
 using Noovio.Pulse.Application.Meta;
+using Noovio.Pulse.Domain;
 using Noovio.Pulse.Domain.Entities;
 using Noovio.Pulse.Domain.Enums;
 
@@ -74,6 +75,7 @@ public static class GemEnchantOptimizer
 
     private static List<EnchantUsage> TopEnchants(List<GearPiece> topPieces) =>
         topPieces
+            .Where(g => GearRules.CanBeEnchanted(g.Slot))
             .SelectMany(g => g.Enchantments.Select(e => (g.Slot, Text: e)))
             .GroupBy(e => e.Slot)
             .SelectMany(slot => slot
@@ -104,6 +106,7 @@ public static class GemEnchantOptimizer
     {
         var n = Math.Max(1, top.Count);
         return gear
+            .Where(piece => GearRules.CanBeEnchanted(piece.Slot))
             .Select(piece =>
             {
                 var usage = enchants.Where(e => e.Slot == piece.Slot).ToList();
@@ -198,7 +201,7 @@ public static class GemEnchantOptimizer
                     .Select(g => new Option(piece, index, socket.GemId is null ? SwapKind.FillSocket : SwapKind.Gem, socket.GemName, g.Name, g.IconUrl, current, g.Stats, g.Share)));
             }
 
-            if (piece.Enchantments.FirstOrDefault() is { } enchant && StatText.Parse(enchant) is { Count: > 0 } enchantStats)
+            if (GearRules.CanBeEnchanted(piece.Slot) && piece.Enchantments.FirstOrDefault() is { } enchant && StatText.Parse(enchant) is { Count: > 0 } enchantStats)
             {
                 var label = StatText.ShortLabel(enchant);
                 options.AddRange(enchants

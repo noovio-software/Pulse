@@ -1473,4 +1473,13 @@
   <data name="Report_RetrySearch" xml:space="preserve">
     <value>New search</value>
   </data>
+  <data name="Gear_LegAugment" xml:space="preserve">
+    <value>Kit applied</value>
+  </data>
+  <data name="Gear_NoLegAugment" xml:space="preserve">
+    <value>No kit</value>
+  </data>
+  <data name="Gear_NoLegAugmentTitle" xml:space="preserve">
+    <value>No armor kit or spellthread — top: {0}</value>
+  </data>
 </root>

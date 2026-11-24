@@ -45,6 +45,33 @@ public sealed class CharacterAnalyzerTests
 
     /// <summary>L'analyse est rédigée dans la langue de l'interface : un visiteur anglophone reçoit un plan d'action en anglais.</summary>
     [Fact]
+    public void Hands_are_never_expected_to_be_enchanted()
+    {
+        var top = Top();
+        top.ForEach(p => p.Gear.Add(new GearPiece(GearSlot.Hands, 5, "Gants", 300, [], ["Enchanté : Hâte"], [], false)));
+        var mine = Player(top[0], gear: top[0].Gear.Select(g => g.Slot == GearSlot.Hands ? g with { Enchantments = [] } : g).ToList());
+
+        var analysis = Analyze(top, mine);
+
+        Assert.Equal(Verdict.Good, analysis.Areas.Single(a => a.Kind == AnalysisAreaKind.Enchantments).Verdict);
+        Assert.False(analysis.Gear.Single(g => g.Slot == GearSlot.Hands).EnchantExpected);
+        Assert.DoesNotContain(analysis.GemsAndEnchants.Enchants, e => e.Slot == GearSlot.Hands);
+    }
+
+    [Fact]
+    public void Missing_leg_kit_is_called_a_kit_not_an_enchantment()
+    {
+        var top = Top();
+        top.ForEach(p => p.Gear.Add(new GearPiece(GearSlot.Legs, 5, "Jambières", 300, [], ["Renfort d'armure en cuir"], [], false)));
+        var mine = Player(top[0], gear: top[0].Gear.Select(g => g.Slot == GearSlot.Legs ? g with { Enchantments = [] } : g).ToList());
+
+        var finding = Assert.Single(Analyze(top, mine).Findings, f => f.Area == AnalysisAreaKind.Enchantments && f.Verdict == Verdict.Problem);
+
+        Assert.Equal("Jambes sans renfort", finding.Title);
+        Assert.DoesNotContain("enchant", finding.Title, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public void Findings_are_written_in_the_interface_language()
     {
         var top = Top();

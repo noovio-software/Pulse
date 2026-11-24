@@ -24,8 +24,10 @@
                     </span>
                     @if (g.EnchantExpected)
                     {
-                        <span class="enchant-tag @(g.HasEnchant ? "is-ok" : "is-missing")" title="@(g.HasEnchant ? WebTexts.Gear_Enchanted : Ui.F(WebTexts.Gear_NoEnchantTitle, g.SuggestedEnchant))">
-                            @(g.HasEnchant ? WebTexts.Gear_Enchanted : WebTexts.Gear_NoEnchant)
+                        var legs = GearRules.TakesLegAugment(g.Slot);
+                        var done = legs ? WebTexts.Gear_LegAugment : WebTexts.Gear_Enchanted;
+                        <span class="enchant-tag @(g.HasEnchant ? "is-ok" : "is-missing")" title="@(g.HasEnchant ? done : Ui.F(legs ? WebTexts.Gear_NoLegAugmentTitle : WebTexts.Gear_NoEnchantTitle, g.SuggestedEnchant))">
+                            @(g.HasEnchant ? done : legs ? WebTexts.Gear_NoLegAugment : WebTexts.Gear_NoEnchant)
                         </span>
                     }
                     @if (g.TopShare >= 0.2)

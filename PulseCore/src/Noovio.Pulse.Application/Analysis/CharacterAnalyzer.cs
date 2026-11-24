@@ -93,15 +93,17 @@ public static class CharacterAnalyzer
             var share = (double)top.Count(p => p.Gear.Any(g => g.Slot == piece.Slot && g.ItemId == piece.ItemId)) / n;
 
             // Un emplacement compte comme enchanté pour un joueur du top dès qu'une de ses pièces l'est (anneaux).
+            // Mains, cou, taille, bijoux : rien à enchanter, quoi que l'API liste dessus.
+            var enchantable = GearRules.CanBeEnchanted(piece.Slot);
             var enchantRate = (double)top.Count(p => p.Gear.Any(g => g.Slot == piece.Slot && g.Enchantments.Count > 0)) / n;
-            var expected = enchantRate >= EnchantExpectedShare;
-            var suggested = topPieces.SelectMany(g => g.Enchantments)
+            var expected = enchantable && enchantRate >= EnchantExpectedShare;
+            var suggested = !enchantable ? null : topPieces.SelectMany(g => g.Enchantments)
                 .GroupBy(StatText.Label)
                 .OrderByDescending(g => g.Count())
                 .Select(g => g.Key)
                 .FirstOrDefault();
 
-            var hasEnchant = piece.Enchantments.Count > 0;
+            var hasEnchant = enchantable && piece.Enchantments.Count > 0;
             var verdict = expected && !hasEnchant ? Verdict.Problem
                 : piece.ItemLevel < slotIlvl - SlotIlvlGap ? Verdict.Improve
                 : Verdict.Good;
@@ -354,9 +356,14 @@ public static class CharacterAnalyzer
         var missing = gear.Where(g => g.EnchantExpected && !g.HasEnchant).ToList();
         foreach (var g in missing)
         {
-            findings.Add(new(AnalysisAreaKind.Enchantments, Verdict.Problem, Fmt.Of(AnalysisTexts.Enchants_MissingTitle, GameLabels.Slot(g.Slot)),
-                AnalysisTexts.Enchants_MissingDetail,
-                g.SuggestedEnchant is null ? AnalysisTexts.Enchants_MissingAdviceGeneric : Fmt.Of(AnalysisTexts.Enchants_MissingAdvice, g.SuggestedEnchant),
+            // Jambes : renfort d'armure ou fil à sorts, pas un enchantement.
+            var legs = GearRules.TakesLegAugment(g.Slot);
+            findings.Add(new(AnalysisAreaKind.Enchantments, Verdict.Problem,
+                Fmt.Of(legs ? AnalysisTexts.Enchants_MissingLegsTitle : AnalysisTexts.Enchants_MissingTitle, GameLabels.Slot(g.Slot)),
+                legs ? AnalysisTexts.Enchants_MissingLegsDetail : AnalysisTexts.Enchants_MissingDetail,
+                g.SuggestedEnchant is not null ? Fmt.Of(AnalysisTexts.Enchants_MissingAdvice, g.SuggestedEnchant)
+                    : legs ? AnalysisTexts.Enchants_MissingLegsAdviceGeneric
+                    : AnalysisTexts.Enchants_MissingAdviceGeneric,
                 g.IconUrl));
         }
 

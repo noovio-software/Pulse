@@ -4313,5 +4313,32 @@ namespace Noovio.Pulse.Web.Resources {
         internal static string Report_NewSearch => ResourceManager.GetString("Report_NewSearch", resourceCulture);
 
         internal static string Report_RetrySearch => ResourceManager.GetString("Report_RetrySearch", resourceCulture);
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Renfort posé.
+        /// </summary>
+        internal static string Gear_LegAugment {
+            get {
+                return ResourceManager.GetString("Gear_LegAugment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sans renfort.
+        /// </summary>
+        internal static string Gear_NoLegAugment {
+            get {
+                return ResourceManager.GetString("Gear_NoLegAugment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sans renfort ni fil à sorts — top : {0}.
+        /// </summary>
+        internal static string Gear_NoLegAugmentTitle {
+            get {
+                return ResourceManager.GetString("Gear_NoLegAugmentTitle", resourceCulture);
+            }
+        }
     }
 }

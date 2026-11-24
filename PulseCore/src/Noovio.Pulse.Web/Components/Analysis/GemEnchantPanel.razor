@@ -106,7 +106,7 @@ else if (Review.Sockets.Count > 0 || Review.Enchants.Count > 0)
                                 }
                                 else
                                 {
-                                    <span class="mod-missing">@WebTexts.Gear_NoEnchant</span>
+                                    <span class="mod-missing">@(GearRules.TakesLegAugment(row.Slot) ? WebTexts.Gear_NoLegAugment : WebTexts.Gear_NoEnchant)</span>
                                 }
                                 @if (enchant.TopChoice is not null)
                                 {
