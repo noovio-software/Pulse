@@ -160,14 +160,15 @@ public sealed record UsageReport(
             .Where(s => s.Average is not null)
             .ToList();
 
-        var classes = profile.GroupBy(e => (e.ClassId, e.ClassName))
-            .Select(g => new ClassUsage(g.Key.ClassId, g.Key.ClassName, g.Count(), Average(g.Select(e => e.ItemLevel)), Average(g.Select(e => (double?)e.Score))))
+        // Regroupé par identifiant, pas par libellé : un même chaman a pu être enregistré « Chaman » et « Shaman ».
+        var classes = profile.GroupBy(e => e.ClassId)
+            .Select(g => new ClassUsage(g.Key, MostCommon(g.Select(e => e.ClassName)) ?? "", g.Count(), Average(g.Select(e => e.ItemLevel)), Average(g.Select(e => (double?)e.Score))))
             .OrderByDescending(c => c.Count)
             .ToList();
 
-        var specs = profile.GroupBy(e => (e.App, e.SpecSlug, e.SpecName, e.ClassId, e.ClassName))
+        var specs = profile.GroupBy(e => (e.App, e.SpecSlug, e.ClassId))
             .Select(g => new SpecUsage(
-                g.Key.App, g.Key.SpecSlug ?? "", g.Key.SpecName ?? "?", g.Key.ClassId, g.Key.ClassName,
+                g.Key.App, g.Key.SpecSlug ?? "", MostCommon(g.Select(e => e.SpecName)) ?? "?", g.Key.ClassId, MostCommon(g.Select(e => e.ClassName)) ?? "",
                 ok.Count(e => e.App == g.Key.App && e.SpecSlug == g.Key.SpecSlug),
                 g.Count(),
                 Average(g.Select(e => e.ItemLevel)),
@@ -229,6 +230,15 @@ public sealed record UsageReport(
     private static double? Average(IReadOnlyCollection<double> values) => values.Count == 0 ? null : values.Average();
 
     private static double? Ratio(int part, int total) => total == 0 ? null : (double)part / total;
+
+    /// <summary>Libellé le plus fréquent d'un groupe (à égalité, l'ordre alphabétique) ; null s'il n'y en a aucun.</summary>
+    private static string? MostCommon(IEnumerable<string?> labels) =>
+        labels.Where(l => !string.IsNullOrEmpty(l))
+            .GroupBy(l => l!)
+            .OrderByDescending(g => g.Count())
+            .ThenBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g => g.Key)
+            .FirstOrDefault();
 
     /// <summary>Percentile par interpolation linéaire entre les deux rangs voisins.</summary>
     internal static double? Percentile(IReadOnlyCollection<double> values, double p)

@@ -53,7 +53,7 @@ public static class BenchEvents
         bench.RealmName = character.RealmName;
         bench.CharacterName = character.Name;
         bench.ClassId = character.ClassId;
-        bench.ClassName = character.ClassName;
+        bench.ClassName = ClassName(character.ClassId, character.ClassName);
         bench.Level = character.Level;
         bench.Race = character.RaceName;
         bench.Faction = character.Faction;
@@ -81,7 +81,7 @@ public static class BenchEvents
         bench.RealmName = Cut(who?.Realm ?? who?.RealmNormalized, 64);
         bench.CharacterName = Cut(who?.Name, 64);
         bench.ClassId = who?.Class ?? 0;
-        bench.ClassName = Cut(who is null ? null : WowClasses.Name(who.Class), 64);
+        bench.ClassName = Cut(who is null ? null : ClassName(who.Class, null), 64);
         bench.Level = who?.Level ?? 0;
         bench.Race = who?.Race is { } race ? Cut(race, 64) : null;
         bench.Faction = who?.Faction is { } faction ? Cut(faction, 16) : null;
@@ -100,6 +100,13 @@ public static class BenchEvents
         DurationMs = (int)Math.Min(int.MaxValue, duration.TotalMilliseconds)
     };
 
+    /// <summary>
+    /// Toujours en français : la base d'usage est lue par PulseAdmin, qui regroupe par classe. Le nom renvoyé par Blizzard
+    /// ou l'interface suit la langue du visiteur (« Shaman » à côté de « Chaman »). Repli sur ce nom pour une classe inconnue.
+    /// </summary>
+    private static string ClassName(int classId, string? fallback) =>
+        WowClasses.FrenchName(classId) is { Length: > 0 } name ? name : fallback ?? "";
+
     /// <summary>Les textes d'un export viennent du jeu : coupés à la taille des colonnes plutôt que de faire échouer l'écriture.</summary>
     private static string Cut(string? text, int max) => text is null ? "" : text.Length <= max ? text : text[..max];
 
@@ -109,7 +116,7 @@ public static class BenchEvents
         {
             bench.SpecId = (int)spec.Spec;
             bench.SpecSlug = spec.Slug;
-            bench.SpecName = spec.SpecName;
+            bench.SpecName = spec.FrenchSpecName;
         }
 
         if (result?.Analysis is { } analysis)

@@ -1,3 +1,4 @@
+using System.Globalization;
 using Noovio.Pulse.Domain.Enums;
 using Noovio.Pulse.Domain.Resources;
 using Noovio.Pulse.Domain.Roles;
@@ -13,6 +14,9 @@ public sealed record SpecInfo(WowSpec Spec, string Slug, int ClassId, string Col
 
     /// <summary>« Druide » / « Druid », dans la langue de l'interface.</summary>
     public string ClassName => WowClasses.Name(ClassId);
+
+    /// <summary>Nom de la spécialisation en français, quelle que soit la langue de l'interface (statistiques d'usage).</summary>
+    public string FrenchSpecName => GameTexts.ResourceManager.GetString($"Spec_{Spec}", CultureInfo.InvariantCulture) ?? Spec.ToString();
 }
 
 /// <summary>Les classes jouables, par identifiant Blizzard (<c>playable-class</c>).</summary>
@@ -20,6 +24,9 @@ public static class WowClasses
 {
     /// <summary>Nom de la classe dans la langue de l'interface ; vide pour un identifiant inconnu.</summary>
     public static string Name(int classId) => GameTexts.ResourceManager.GetString($"Class_{classId}", GameTexts.Culture) ?? "";
+
+    /// <summary>Nom de la classe en français (ressources neutres), quelle que soit la langue de l'interface ; vide pour un identifiant inconnu.</summary>
+    public static string FrenchName(int classId) => GameTexts.ResourceManager.GetString($"Class_{classId}", CultureInfo.InvariantCulture) ?? "";
 }
 
 public static class WowSpecs

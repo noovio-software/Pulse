@@ -55,6 +55,21 @@ public class UsageReportTests
     }
 
     [Fact]
+    public void Groups_classes_and_specs_by_id_whatever_the_label_language()
+    {
+        var english = Bench(1, "Alpha", From.AddHours(10));
+        (english.ClassName, english.SpecName) = ("Shaman", "Fire");
+        var events = new[] { english, Bench(2, "Beta", From.AddHours(11)), Bench(3, "Gamma", From.AddHours(12)) };
+
+        var report = UsageReport.Build(events, new Dictionary<long, DateTimeOffset>(), From, To, Paris);
+
+        var mage = Assert.Single(report.Classes);
+        Assert.Equal(("Mage", 3), (mage.ClassName, mage.Count));
+        var fire = Assert.Single(report.Specs);
+        Assert.Equal(("Feu", "Mage"), (fire.SpecName, fire.ClassName));
+    }
+
+    [Fact]
     public void Counts_addon_imports_as_benches_but_only_signed_in_ones_as_users()
     {
         var anonymous = Bench(0, "Delta", From.AddHours(13));
