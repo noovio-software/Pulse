@@ -189,12 +189,14 @@ public sealed class BlizzardCharacterSource(BlizzardClient client, RaiderIoClien
                 item.Spells.Select(s => new ItemEffect(s.Spell.Id, s.Spell.Name ?? "", s.Description)).ToList(),
                 GearRules.IsEmbellished(item.LimitCategory),
                 item.Sockets.Select(s => new GemSocket(s.SocketType?.Type, s.Item?.Id, s.Item?.Name, s.DisplayString)).ToList(),
-                item.Stats.Where(s => !s.IsNegated).Select(ToItemStat).OfType<ItemStat>().ToList());
+                item.Stats.Where(s => !s.IsNegated).Select(ToItemStat).OfType<ItemStat>().ToList(),
+                item.Enchantments.Where(e => !IsPermanent(e)).Select(e => e.DisplayString).OfType<string>().FirstOrDefault());
     }
 
     /// <summary>
     /// Les huiles et imprégnations (chaman : Garde de mande-flots sur le bouclier) sont aussi listées, en TEMPORARY :
-    /// ce ne sont pas des enchantements à poser. Sans emplacement indiqué, l'entrée est gardée.
+    /// ce ne sont pas des enchantements à poser, elles vont dans <see cref="GearPiece.TemporaryEnchant"/>.
+    /// Sans emplacement indiqué, l'entrée est gardée comme permanente.
     /// </summary>
     private static bool IsPermanent(BzEnchantment enchantment) =>
         enchantment.EnchantmentSlot?.Type is not { } type || type.Equals("PERMANENT", StringComparison.OrdinalIgnoreCase);

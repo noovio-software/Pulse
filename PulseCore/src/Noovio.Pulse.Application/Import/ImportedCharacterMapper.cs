@@ -103,7 +103,8 @@ public static class ImportedCharacterMapper
             effects,
             embellished,
             (g.Gems ?? []).Select(s => new GemSocket(s.Type ?? "PRISMATIC", s.Id is > 0 ? s.Id : null, s.Name, s.Text)).ToList(),
-            (g.Stats ?? new Dictionary<string, double>()).Select(ToItemStat).OfType<ItemStat>().ToList());
+            (g.Stats ?? new Dictionary<string, double>()).Select(ToItemStat).OfType<ItemStat>().ToList(),
+            string.IsNullOrWhiteSpace(g.TempEnchant) ? null : g.TempEnchant.Trim());
     }
 
     /// <summary>Préfixe anglais remis devant le texte : l'analyse repère « Use: » comme « Utiliser : », quelle que soit la langue du client.</summary>

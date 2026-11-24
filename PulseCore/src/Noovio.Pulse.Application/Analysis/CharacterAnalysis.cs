@@ -83,7 +83,8 @@ public sealed record GearReview(
     bool EnchantExpected,
     bool HasEnchant,
     string? SuggestedEnchant,
-    Verdict Verdict);
+    Verdict Verdict,
+    string? TemporaryEnchant = null);
 
 /// <summary>Une caractéristique secondaire du personnage placée sur la fourchette du top.</summary>
 public sealed record StatReview(SecondaryStat Stat, double Percent, double Rating, StatDistribution Top, Verdict Verdict);

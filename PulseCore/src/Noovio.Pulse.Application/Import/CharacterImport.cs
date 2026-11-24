@@ -36,7 +36,10 @@ public sealed record ImportedIdentity(
     string? SpecName,
     double Ilvl);
 
-/// <summary><see cref="Slot"/> : type d'emplacement de l'API Blizzard (HEAD, FINGER_1…).</summary>
+/// <summary>
+/// <see cref="Slot"/> : type d'emplacement de l'API Blizzard (HEAD, FINGER_1…). <see cref="TempEnchant"/> : huile ou
+/// imprégnation sur l'arme, texte de l'infobulle sans la durée restante (addon 1.x récent ; absent avant).
+/// </summary>
 public sealed record ImportedGear(
     string? Slot,
     int Id,
@@ -51,7 +54,8 @@ public sealed record ImportedGear(
     bool Embellished,
     int? SetId = null,
     bool Usable = true,
-    ImportedUpgrade? Upgrade = null);
+    ImportedUpgrade? Upgrade = null,
+    string? TempEnchant = null);
 
 /// <summary>
 /// Piste d'amélioration (« Héros 2/6 ») : <see cref="MaxIlvl"/> quand le jeu l'a donné, sinon le site l'estime

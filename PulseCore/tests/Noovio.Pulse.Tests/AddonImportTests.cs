@@ -30,7 +30,7 @@ public sealed class AddonImportTests
             { "slot": "TRINKET_1", "id": 1003, "name": "Idol", "ilvl": 707, "embellished": false, "gems": [],
               "effects": [{ "trigger": "use", "spell": 5001, "name": "Dark Pact", "text": "Gain power. (2 Min Cooldown)" }], "stats": {} },
             { "slot": "BODY", "id": 1004, "name": "Shirt", "ilvl": 1 },
-            { "slot": "MAIN_HAND", "id": 1005, "name": "Staff", "ilvl": 700, "enchant_id": 7000 }
+            { "slot": "MAIN_HAND", "id": 1005, "name": "Staff", "ilvl": 700, "enchant_id": 7000, "temp_enchant": "Mana Oil" }
           ],
           "talents": { "code": "CODE123", "hero": "Voidweaver", "hero_id": 9,
                        "nodes": [[10, 100, 3001, 1, 0], [11, 110, 3012, 2, 0], [12, 120, 3020, 1, 1], [13, 130, 3030, 1, 1], [20, 200, 4001, 1, 0], [99, 990, 9999, 1, 0]] },
@@ -116,6 +116,8 @@ public sealed class AddonImportTests
         Assert.Equal([new ItemStat(SecondaryStat.Mastery, 600), new ItemStat(SecondaryStat.Haste, 300)], head.Stats!.OrderByDescending(s => s.Value));
         Assert.Equal(["Enchanted: +80 Intellect"], gear[1].Enchantments);
         Assert.Equal(["Enchantement #7000"], gear[3].Enchantments); // l'enchantement compte même sans texte
+        Assert.Equal("Mana Oil", gear[3].TemporaryEnchant); // l'huile est gardée à part, jamais comme enchantement
+        Assert.Null(gear[1].TemporaryEnchant);
         Assert.Equal(GearRules.AverageItemLevel(gear), Details().Loadout.ItemLevel);
     }
 

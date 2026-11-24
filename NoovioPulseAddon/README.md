@@ -70,7 +70,8 @@ The JSON (format `v: 1`), texts in the client's language:
       "gems": [{ "id": 213743, "name": "…", "text": "+147 Maîtrise" }, {}],   // {}: empty socket
       "stats": { "MASTERY_RATING": 600, "HASTE_RATING": 300 },               // the item's own ratings
       "effects": [{ "trigger": "use", "spell": 5001, "name": "…", "text": "… (2 min de recharge)" }],
-      "embellished": true
+      "embellished": true,
+      "temp_enchant": "Huile de …"         // weapons only: oil, whetstone or imbuement, without the time left
     }
   ],
   "talents": {

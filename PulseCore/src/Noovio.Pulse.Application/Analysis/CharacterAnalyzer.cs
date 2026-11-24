@@ -120,7 +120,8 @@ public static class CharacterAnalyzer
                 expected,
                 hasEnchant,
                 suggested,
-                verdict);
+                verdict,
+                piece.TemporaryEnchant is { } temporary ? StatText.ShortLabel(temporary) : null);
         }).ToList();
     }
 

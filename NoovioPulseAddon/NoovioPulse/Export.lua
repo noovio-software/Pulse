@@ -183,6 +183,29 @@ end
 
 Export.ItemStats = ItemStats
 
+--- Huile, pierre à aiguiser ou imprégnation : ligne verte de l'infobulle terminée par la durée restante, « (59 min) »,
+--- « (1 h) ». Renvoie le texte sans la durée, ou nil. « (1/5) » (pièce de set) ne compte pas : un chiffre suivi d'une barre.
+local function TemporaryEnchantText(line, text)
+    local color = line.leftColor
+    if type(color) ~= "table" or Number(color.r) > 0.3 or Number(color.g) < 0.8 or Number(color.b) > 0.3 then
+        return nil
+    end
+    local name = text:match("^(.-)%s*%(%d+[^%d/%)][^%)]*%)$")
+    return name and Clean(name) or nil
+end
+
+--- L'arme de cet emplacement porte-t-elle un enchantement temporaire ? (16 : main droite, 17 : main gauche)
+local function HasTemporaryEnchant(slotId)
+    if slotId ~= 16 and slotId ~= 17 then
+        return false
+    end
+    local hasMainHand, _, _, _, hasOffHand = Try(GetWeaponEnchantInfo)
+    if slotId == 16 then
+        return hasMainHand and true or false
+    end
+    return hasOffHand and true or false
+end
+
 local function ReadGear(slotId, slotName)
     local link = GetInventoryItemLink("player", slotId)
     local parsed = ParseLink(link)
@@ -216,6 +239,7 @@ local function ReadGear(slotId, slotName)
     local gemType = Enum and Enum.TooltipDataLineType and Enum.TooltipDataLineType.GemSocket
     local useSpellName, useSpellId = Try(C_Item and C_Item.GetItemSpell, link)
     local tooltip = Try(C_TooltipInfo and C_TooltipInfo.GetInventoryItem, "player", slotId)
+    local lookForTemporary = HasTemporaryEnchant(slotId)
     local socketTexts = {}
     for _, line in ipairs(tooltip and tooltip.lines or {}) do
         local text = Clean(line.leftText)
@@ -237,6 +261,8 @@ local function ReadGear(slotId, slotName)
                     spell = 0,
                     text = Clean(text:sub(#ITEM_SPELL_TRIGGER_ONEQUIP + 1)),
                 }
+            elseif lookForTemporary and not piece.temp_enchant and TemporaryEnchantText(line, text) then
+                piece.temp_enchant = TemporaryEnchantText(line, text)
             elseif IsEmbellished(text) then
                 piece.embellished = true
             end

@@ -4340,5 +4340,14 @@ namespace Noovio.Pulse.Web.Resources {
                 return ResourceManager.GetString("Gear_NoLegAugmentTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Huile ou imprégnation posée sur l&apos;arme (temporaire).
+        /// </summary>
+        internal static string Gear_TemporaryEnchantTitle {
+            get {
+                return ResourceManager.GetString("Gear_TemporaryEnchantTitle", resourceCulture);
+            }
+        }
     }
 }

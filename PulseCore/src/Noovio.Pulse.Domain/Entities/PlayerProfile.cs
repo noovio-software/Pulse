@@ -38,6 +38,11 @@ public sealed class PlayerProfile
     public DateTimeOffset FetchedAtUtc { get; set; }
 }
 
+/// <param name="Enchantments">Enchantements permanents (et, aux jambes, renfort ou fil à sorts).</param>
+/// <param name="TemporaryEnchant">
+/// Huile, pierre à aiguiser ou imprégnation posée sur l'arme au moment de la lecture : un consommable, affiché pour
+/// information, jamais compté comme un enchantement ni attendu.
+/// </param>
 public sealed record GearPiece(
     GearSlot Slot,
     int ItemId,
@@ -48,7 +53,8 @@ public sealed record GearPiece(
     IReadOnlyList<ItemEffect> Effects,
     bool IsEmbellished,
     IReadOnlyList<GemSocket>? Sockets = null,
-    IReadOnlyList<ItemStat>? Stats = null);
+    IReadOnlyList<ItemStat>? Stats = null,
+    string? TemporaryEnchant = null);
 
 /// <summary>Une châsse de la pièce. <see cref="GemId"/> est null quand elle est vide ; <see cref="Display"/> : texte de la gemme (« +70 Hâte »).</summary>
 public sealed record GemSocket(string? SocketType, int? GemId, string? GemName, string? Display);

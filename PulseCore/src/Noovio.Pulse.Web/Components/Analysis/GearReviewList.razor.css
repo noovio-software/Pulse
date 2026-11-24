@@ -34,6 +34,8 @@
 .ilvl-tag.is-high small { color: #34D399; }
 .enchant-tag.is-ok { color: #34D399 !important; border-color: rgba(52, 211, 153, 0.35) !important; }
 .enchant-tag.is-missing { color: #F87171 !important; border-color: rgba(248, 113, 113, 0.5) !important; }
+/* Huile ou imprégnation : consommable, affiché pour information (ni attendu, ni manquant). */
+.temp-tag { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #93C5FD !important; border-style: dashed !important; }
 .meta-tag { color: var(--accent-text) !important; border-color: color-mix(in srgb, var(--accent) 35%, transparent) !important; }
 
 /* Pièce la plus jouée du top sur l'emplacement, quand ce n'est pas celle portée */

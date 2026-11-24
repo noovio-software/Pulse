@@ -1482,4 +1482,7 @@
   <data name="Gear_NoLegAugmentTitle" xml:space="preserve">
     <value>Sans renfort ni fil à sorts — top : {0}</value>
   </data>
+  <data name="Gear_TemporaryEnchantTitle" xml:space="preserve">
+    <value>Huile ou imprégnation posée sur l&apos;arme (temporaire)</value>
+  </data>
 </root>

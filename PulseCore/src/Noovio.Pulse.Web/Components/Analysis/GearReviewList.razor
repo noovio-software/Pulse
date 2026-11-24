@@ -30,6 +30,10 @@
                             @(g.HasEnchant ? done : legs ? WebTexts.Gear_NoLegAugment : WebTexts.Gear_NoEnchant)
                         </span>
                     }
+                    @if (g.TemporaryEnchant is { } temporary)
+                    {
+                        <span class="temp-tag" title="@WebTexts.Gear_TemporaryEnchantTitle">@temporary</span>
+                    }
                     @if (g.TopShare >= 0.2)
                     {
                         <span class="meta-tag" title="@WebTexts.Gear_MetaShareTitle">@Ui.F(WebTexts.Gear_Meta, Ui.Percent(g.TopShare))</span>

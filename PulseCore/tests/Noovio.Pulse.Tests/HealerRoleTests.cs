@@ -89,6 +89,7 @@ public sealed class HealerRoleTests
         var shield = JsonSerializer.Deserialize<BzEquippedItem>(json, RaiderIoClient.JsonOptions)!;
 
         Assert.Empty(BlizzardCharacterSource.ToGear(shield)!.Enchantments);
+        Assert.Equal("Garde de mande-flots", BlizzardCharacterSource.ToGear(shield)!.TemporaryEnchant); // affichée, pas attendue
 
         shield.Enchantments.Add(new BzEnchantment { DisplayString = "Enchanté : +100 Hâte", EnchantmentSlot = new BzTyped { Type = "PERMANENT" } });
         Assert.Equal(["Enchanté : +100 Hâte"], BlizzardCharacterSource.ToGear(shield)!.Enchantments);

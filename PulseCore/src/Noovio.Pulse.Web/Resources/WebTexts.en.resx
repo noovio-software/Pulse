@@ -1482,4 +1482,7 @@
   <data name="Gear_NoLegAugmentTitle" xml:space="preserve">
     <value>No armor kit or spellthread — top: {0}</value>
   </data>
+  <data name="Gear_TemporaryEnchantTitle" xml:space="preserve">
+    <value>Oil or imbuement on the weapon (temporary)</value>
+  </data>
 </root>
