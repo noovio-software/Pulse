@@ -1,0 +1,8 @@
+@page "/"
+@using PulseMetrics.Alt.Client.Pages
+
+@* Page rendue côté serveur : le titre va dans le <head> statique. La grille est un îlot interactif (Server puis WebAssembly) :
+   un composant interactif ne peut pas écrire dans le <head>, rendu une fois pour toutes en statique. *@
+<PageTitle>@AltTexts.Home_Title</PageTitle>
+
+<Tracker @rendermode="InteractiveAuto" />
