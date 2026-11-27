@@ -1,4 +1,7 @@
 @inherits LayoutComponentBase
+@using Microsoft.Extensions.Options
+@using PulseAdmin.Notifications
+@inject IOptions<NotificationOptions> Notifications
 
 <header class="topbar">
     <div class="topbar-inner">
@@ -10,6 +13,16 @@
             <NavLink href="/" Match="NavLinkMatch.All">Tableau de bord</NavLink>
             <NavLink href="/benchs">Benchs</NavLink>
         </nav>
+        @* Pilotés par app.js : cachés tant que le navigateur ne les permet pas. *@
+        <div class="topbar-actions">
+            <button type="button" class="btn btn-ghost btn-small" id="install-app" hidden title="Installer PulseMetrics Admin comme une application">Installer l'app</button>
+            @if (Notifications.Value.IsConfigured)
+            {
+                <button type="button" class="btn btn-ghost btn-small" id="push-toggle" hidden data-vapid-key="@Notifications.Value.PublicKey"
+                        data-times="@Notifications.Value.TimesLabel">Notifications</button>
+                <button type="button" class="btn btn-ghost btn-small" id="push-test" hidden title="Envoyer le récap du jour à cet appareil">Tester</button>
+            }
+        </div>
         <AuthorizeView>
             <Authorized>
                 <span class="who">@context.User.Identity?.Name</span>
@@ -25,6 +38,8 @@
 <main class="page">
     @Body
 </main>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <footer class="footer">PulseMetrics Admin v@(AppVersion) · statistiques d'usage de Front, Life et Burst · réservé, non référencé</footer>
 

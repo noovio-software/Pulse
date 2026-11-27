@@ -20,9 +20,18 @@ BurstPulse ─┘                    (Noovio.Pulse.Usage, in PulseCore)        t
 
 Filters (period, dates, app, class, spec, region, outcome) live in the URL, so a view can be bookmarked. Averages describe characters, not clicks: by default each character and spec counts once, through its latest successful bench ("Moyennes sur tous les benchs" counts every bench).
 
+- Today, at the top and regardless of the filters: benches since midnight (Paris) against yesterday at the same time, users, and the name of each user once (latest character benched; "addon" when imported without signing in), linking to their benches.
 - Usage: benches, users (new, returning), characters, success and cache rates, bench duration (mean, p95), benches per day stacked by app, hour-of-day curve per app, weekday × hour heatmap, outcomes, regions, factions.
 - Character profile: item level (mean, median, spread, histogram, gap to the top), analysis score, M+ score, secondary stats against the top, gear (pieces at the top's level, popularity of the pieces, enchant and socket coverage, talents, hero tree), verdicts per area, item level per slot, classes, specs (full table), races, realms, hero trees.
 - Most active accounts, latest benches, a paged list of every bench with search, a detail page per bench, and a CSV export of the filtered benches.
+
+## Application and notifications
+
+- **Install**: in Chrome or Edge, "Installer l'app" in the top bar (or the install icon of the address bar) opens the admin in its own window, with its icon in the Start menu and taskbar. A web manifest and a service worker make it installable; the service worker caches nothing, pages stay private and fresh.
+- **Notifications**: "Activer les notifications" subscribes the device (Web Push, VAPID, like Nowtilus). At 7:00, 12:00, 18:00 and 21:00 (Paris, `Notifications:Times`), each subscribed device receives the benches since the previous recap: count, users, names. "Tester" sends today's figures to the current device. A device remembers the last recap it received, so a restart sends nothing twice; a recap missed for more than an hour is skipped. Devices are stored in `admin_push_devices`, with their own migrations history (`__admin_migrations_history`).
+- **Discord**: NoovioBot posts the same recap in the private admin channel and answers `!stats X` (last X hours), through `GET /api/usage/summary?hours=X` or `?from=…&to=…` (ISO 8601), authenticated by `Authorization: Bearer <Api:Key>`. Without `Api:Key` the API answers 401.
+
+Without `Notifications:PublicKey`/`PrivateKey`, the buttons are hidden and no recap is sent. `PulseAdmin --vapid-keys` prints a new pair.
 
 ## Run it
 
@@ -45,3 +54,4 @@ Port 8560 behind Nginx, systemd unit `kestrel-pulseadmin`.
 3. Fill in the Blizzard client and your BattleTag in `/etc/pulseadmin/pulseadmin.env`, and add `https://admin.pulsemetrics.fr/signin-battlenet` to the Battle.net client.
 4. Restart the three sites so they start recording, after deploying a version that includes `Noovio.Pulse.Usage`.
 5. Add the GitHub secret `REMOTE_TARGET_PULSEADMIN` (for example `/home/ubuntu/projects/pulseadmin/`), then push a tag `prod-admin-x.y.z`.
+6. Run `setup-server.sh` again after the first deployment: it generates `Api__Key` and, now that the executable exists, the VAPID keys (`Notifications__PublicKey`/`PrivateKey`). Existing values are kept. Copy `Api__Key` into `PULSEADMIN_API_KEY` of NoovioBot, then restart both services.

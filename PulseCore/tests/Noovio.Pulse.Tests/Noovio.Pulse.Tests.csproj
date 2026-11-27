@@ -8,6 +8,8 @@
     <ProjectReference Include="..\..\src\Noovio.Pulse.Infrastructure\Noovio.Pulse.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\Noovio.Pulse.Usage\Noovio.Pulse.Usage.csproj" />
     <ProjectReference Include="..\..\src\Noovio.Pulse.Web\Noovio.Pulse.Web.csproj" />
+    <!-- Récaps d'usage de PulseAdmin (périodes, utilisateurs dédoublonnés). -->
+    <ProjectReference Include="..\..\..\PulseAdmin\PulseAdmin\PulseAdmin.csproj" />
   </ItemGroup>
 
   <ItemGroup>
