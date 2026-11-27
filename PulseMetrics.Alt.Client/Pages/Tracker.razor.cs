@@ -9,7 +9,7 @@ using Microsoft.JSInterop;
 
 namespace PulseMetrics.Alt.Client.Pages;
 
-public partial class Home
+public partial class Tracker
 {
     [Inject] private IAltPulseApi Api { get; set; } = default!;
     [Inject] private LocalHistoryStore Store { get; set; } = default!;
