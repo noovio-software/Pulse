@@ -580,7 +580,7 @@ namespace Noovio.Pulse.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contenu illisible : mets l&apos;addon NoovioPulse à jour puis refais l&apos;export..
+        ///   Looks up a localized string similar to Contenu illisible : mets l&apos;addon PulseMetrics à jour puis refais l&apos;export..
         /// </summary>
         internal static string Import_BadContent {
             get {
@@ -589,7 +589,7 @@ namespace Noovio.Pulse.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Colle la chaîne copiée depuis l&apos;addon NoovioPulse (commande /noovio en jeu)..
+        ///   Looks up a localized string similar to Colle la chaîne copiée depuis l&apos;addon PulseMetrics (commande /pulsemetrics en jeu)..
         /// </summary>
         internal static string Import_Empty {
             get {
@@ -607,7 +607,7 @@ namespace Noovio.Pulse.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to L&apos;export ne contient pas de personnage : connecte-toi avec lui en jeu et refais /noovio..
+        ///   Looks up a localized string similar to L&apos;export ne contient pas de personnage : connecte-toi avec lui en jeu et refais /pulsemetrics..
         /// </summary>
         internal static string Import_NoCharacter {
             get {
@@ -616,7 +616,7 @@ namespace Noovio.Pulse.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to L&apos;export ne contient aucun équipement : refais /noovio une fois en jeu, pas sur l&apos;écran de sélection..
+        ///   Looks up a localized string similar to L&apos;export ne contient aucun équipement : refais /pulsemetrics une fois en jeu, pas sur l&apos;écran de sélection..
         /// </summary>
         internal static string Import_NoGear {
             get {
@@ -625,7 +625,7 @@ namespace Noovio.Pulse.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ce n&apos;est pas une chaîne NoovioPulse : elle commence par « NP1: ». Une chaîne SimulationCraft ne convient pas..
+        ///   Looks up a localized string similar to Ce n&apos;est pas une chaîne PulseMetrics : elle commence par « NP1: ». Une chaîne SimulationCraft ne convient pas..
         /// </summary>
         internal static string Import_NotNoovio {
             get {
@@ -634,7 +634,7 @@ namespace Noovio.Pulse.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chaîne trop longue : ce n&apos;est pas un export NoovioPulse..
+        ///   Looks up a localized string similar to Chaîne trop longue : ce n&apos;est pas un export PulseMetrics..
         /// </summary>
         internal static string Import_TooLong {
             get {

@@ -9,7 +9,7 @@ using Noovio.Pulse.Domain.Roles;
 
 namespace Noovio.Pulse.Tests;
 
-/// <summary>Lecture de la chaîne de l'addon NoovioPulse et traduction dans le modèle de l'analyse.</summary>
+/// <summary>Lecture de la chaîne de l'addon PulseMetrics et traduction dans le modèle de l'analyse.</summary>
 public sealed class AddonImportTests
 {
     private static readonly SpecInfo Shadow = WowSpec.ShadowPriest.Info();

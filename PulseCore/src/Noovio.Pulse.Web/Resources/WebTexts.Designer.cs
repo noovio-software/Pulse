@@ -85,7 +85,7 @@ namespace Noovio.Pulse.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Analyser un personnage lu en jeu par l&apos;addon NoovioPulse.
+        ///   Looks up a localized string similar to Analyser un personnage lu en jeu par l&apos;addon PulseMetrics.
         /// </summary>
         internal static string Account_ImportTitle {
             get {
@@ -1102,7 +1102,7 @@ namespace Noovio.Pulse.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to importe-le depuis l&apos;addon NoovioPulse.
+        ///   Looks up a localized string similar to importe-le depuis l&apos;addon PulseMetrics.
         /// </summary>
         internal static string Home_FeatureYouLink {
             get {
@@ -1129,7 +1129,7 @@ namespace Noovio.Pulse.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Coller la chaîne de l&apos;addon NoovioPulse, sans connexion.
+        ///   Looks up a localized string similar to Coller la chaîne de l&apos;addon PulseMetrics, sans connexion.
         /// </summary>
         internal static string Home_ImportTitle {
             get {
@@ -1453,7 +1453,7 @@ namespace Noovio.Pulse.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Addon NoovioPulse.
+        ///   Looks up a localized string similar to Addon PulseMetrics.
         /// </summary>
         internal static string Import_Eyebrow {
             get {
@@ -1462,7 +1462,7 @@ namespace Noovio.Pulse.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chaîne NoovioPulse.
+        ///   Looks up a localized string similar to Chaîne PulseMetrics.
         /// </summary>
         internal static string Import_Label {
             get {
@@ -2290,7 +2290,7 @@ namespace Noovio.Pulse.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recomparer cet export à la dernière méta (pour un personnage à jour, refais /noovio en jeu).
+        ///   Looks up a localized string similar to Recomparer cet export à la dernière méta (pour un personnage à jour, refais /pulsemetrics en jeu).
         /// </summary>
         internal static string Report_ImportRefreshTitle {
             get {
@@ -2605,7 +2605,7 @@ namespace Noovio.Pulse.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lu en jeu par l&apos;addon NoovioPulse{0}{1}.
+        ///   Looks up a localized string similar to Lu en jeu par l&apos;addon PulseMetrics{0}{1}.
         /// </summary>
         internal static string Report_SourceTitle {
             get {

@@ -1,4 +1,4 @@
-name: NoovioPulse Addons
+name: PulseMetrics Addon
 
 # Publication de l'addon sur un tag, ex. : git tag noovio-pulse-addon-1.0.0 && git push origin noovio-pulse-addon-1.0.0
 on:
@@ -38,12 +38,12 @@ jobs:
           cp -r NoovioPulseAddon/NoovioPulse dist/NoovioPulse
           sed -i "s/@project-version@/$VERSION/" dist/NoovioPulse/NoovioPulse.toc
           cp LICENSE dist/NoovioPulse/LICENSE
-          cd dist && zip -r "NoovioPulse-$VERSION.zip" NoovioPulse
+          cd dist && zip -r "PulseMetrics-$VERSION.zip" NoovioPulse
 
       - name: Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" "dist/NoovioPulse-$VERSION.zip" \
-            --title "NoovioPulse Addons $VERSION" \
-            --notes "Addon World of Warcraft : dépose le dossier NoovioPulse dans Interface/AddOns, puis /noovio en jeu."
+          gh release create "$GITHUB_REF_NAME" "dist/PulseMetrics-$VERSION.zip" \
+            --title "PulseMetrics Addon $VERSION" \
+            --notes "Addon World of Warcraft PulseMetrics : dépose le dossier du zip dans Interface/AddOns, puis /pulsemetrics en jeu."

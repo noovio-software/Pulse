@@ -1,4 +1,4 @@
-# NoovioPulse Addons
+# PulseMetrics addon
 
 World of Warcraft addon that exports the logged-in character to the PulseMetrics tools
 ([Front](../PulseMetrics/docs/front.md), [Life](../PulseMetrics/docs/life.md), [Burst](../PulseMetrics/docs/burst.md)),
@@ -15,8 +15,8 @@ The portrait and the Mythic+ part (Raider.io) are read by name, realm and region
 ## Install
 
 1. Download the zip of the latest version (GitHub releases `noovio-pulse-addon-x.y.z`).
-2. Drop the `NoovioPulse` folder into `World of Warcraft\_retail_\Interface\AddOns`.
-3. In game: `/noovio` (or the addon menu under the minimap), out of combat, in the specialization to analyse.
+2. Drop the `NoovioPulse` folder of the zip (its technical name, kept so that saved alts survive updates) into `World of Warcraft\_retail_\Interface\AddOns`.
+3. In game: `/pulsemetrics` (or the addon menu under the minimap), out of combat, in the specialization to analyse.
 4. `Ctrl+C` (the string is already selected), then paste it on `https://pulsemetrics.fr/<tool>/importer` (`front`, `life` or `burst`), or, for the alts, on `https://pulsemetrics.fr/alt/`.
 
 While developing, a symbolic link saves copying the folder:
@@ -35,12 +35,12 @@ New-Item -ItemType SymbolicLink -Path "C:\Program Files (x86)\World of Warcraft\
 | `Export.lua` | Reads the character: gear, talents, stats, character sheet; encodes the string |
 | `Inventory.lua` | Reads the bags (gear, consumables) and the Great Vault for the character export |
 | `Alts.lua` | Saves each character's progress at login and when it changes (vault, keys, keystone) for Alt |
-| `UI.lua` | Window (banner, two cards, copy screen), `/noovio` command, addon menu |
-| `Minimap.lua` | Minimap button (drag to move, `/noovio minimap` to hide) |
+| `UI.lua` | Window (banner, two cards, copy screen), `/pulsemetrics` command, addon menu |
+| `Minimap.lua` | Minimap button (drag to move, `/pulsemetrics minimap` to hide) |
 | `Media/*.tga` | Icon, banner and card art, rendered from `art/*.svg` (32-bit RLE TGA, power-of-two sizes) |
 
-Commands: `/noovio` opens the window, `/noovio character` (or `perso`) and `/noovio alts` go straight to an export,
-`/noovio minimap` toggles the button, `/noovio forget` (or `oublier`) clears the saved alts.
+Commands: `/pulsemetrics` opens the window, `/pulsemetrics character` (or `perso`) and `/pulsemetrics alts` go straight to an export,
+`/pulsemetrics minimap` toggles the button, `/pulsemetrics forget` (or `oublier`) clears the saved alts.
 
 `## Interface` lists the supported client versions: add each new patch, or the addon shows as out of date.
 

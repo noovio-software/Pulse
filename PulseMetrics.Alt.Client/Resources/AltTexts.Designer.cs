@@ -85,7 +85,7 @@ namespace PulseMetrics.Alt.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Installe l&apos;addon NoovioPulse.
+        ///   Looks up a localized string similar to Installe l&apos;addon PulseMetrics.
         /// </summary>
         public static string Addon_Step1 {
             get {
@@ -103,7 +103,7 @@ namespace PulseMetrics.Alt.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to En jeu : /noovio, carte « Mes alts ».
+        ///   Looks up a localized string similar to En jeu : /pulsemetrics, carte « Mes alts ».
         /// </summary>
         public static string Addon_Step2 {
             get {
@@ -373,7 +373,7 @@ namespace PulseMetrics.Alt.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Coffre, clés et clé en poche lus en jeu par l&apos;addon NoovioPulse.
+        ///   Looks up a localized string similar to Coffre, clés et clé en poche lus en jeu par l&apos;addon PulseMetrics.
         /// </summary>
         public static string Grid_AddonSyncTitle {
             get {
@@ -463,7 +463,7 @@ namespace PulseMetrics.Alt.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clé en poche (addon NoovioPulse).
+        ///   Looks up a localized string similar to Clé en poche (addon PulseMetrics).
         /// </summary>
         public static string Grid_KeystoneTitle {
             get {
@@ -472,7 +472,7 @@ namespace PulseMetrics.Alt.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connue grâce à l&apos;addon NoovioPulse : bouton « MàJ depuis l&apos;addon ».
+        ///   Looks up a localized string similar to Connue grâce à l&apos;addon PulseMetrics : bouton « MàJ depuis l&apos;addon ».
         /// </summary>
         public static string Grid_KeystoneViaAddon {
             get {
@@ -733,7 +733,7 @@ namespace PulseMetrics.Alt.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mettre à jour depuis l&apos;addon NoovioPulse.
+        ///   Looks up a localized string similar to Mettre à jour depuis l&apos;addon PulseMetrics.
         /// </summary>
         public static string Home_AddonAria {
             get {
@@ -751,7 +751,7 @@ namespace PulseMetrics.Alt.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Coffre, clés et clé en poche de tous tes alts, lus en jeu par l&apos;addon NoovioPulse.
+        ///   Looks up a localized string similar to Coffre, clés et clé en poche de tous tes alts, lus en jeu par l&apos;addon PulseMetrics.
         /// </summary>
         public static string Home_AddonTitle {
             get {
@@ -769,7 +769,7 @@ namespace PulseMetrics.Alt.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lance une recherche, ou importe tous tes alts d&apos;un coup avec l&apos;addon NoovioPulse : chaque personnage est mémorisé sur ce poste..
+        ///   Looks up a localized string similar to Lance une recherche, ou importe tous tes alts d&apos;un coup avec l&apos;addon PulseMetrics : chaque personnage est mémorisé sur ce poste..
         /// </summary>
         public static string Home_EmptyText {
             get {
@@ -850,7 +850,7 @@ namespace PulseMetrics.Alt.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Colle la chaîne copiée depuis l&apos;addon NoovioPulse (en jeu : /noovio, carte « Mes alts »)..
+        ///   Looks up a localized string similar to Colle la chaîne copiée depuis l&apos;addon PulseMetrics (en jeu : /pulsemetrics, carte « Mes alts »)..
         /// </summary>
         public static string Import_Empty {
             get {
@@ -886,7 +886,7 @@ namespace PulseMetrics.Alt.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ce n&apos;est pas une chaîne NoovioPulse : elle commence par « NP1: »..
+        ///   Looks up a localized string similar to Ce n&apos;est pas une chaîne PulseMetrics : elle commence par « NP1: »..
         /// </summary>
         public static string Import_NotNoovio {
             get {
@@ -895,7 +895,7 @@ namespace PulseMetrics.Alt.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chaîne trop longue : ce n&apos;est pas un export NoovioPulse..
+        ///   Looks up a localized string similar to Chaîne trop longue : ce n&apos;est pas un export PulseMetrics..
         /// </summary>
         public static string Import_TooLong {
             get {
@@ -913,7 +913,7 @@ namespace PulseMetrics.Alt.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contenu illisible : mets l&apos;addon NoovioPulse à jour puis refais l&apos;export..
+        ///   Looks up a localized string similar to Contenu illisible : mets l&apos;addon PulseMetrics à jour puis refais l&apos;export..
         /// </summary>
         public static string Import_Unreadable {
             get {

@@ -1,7 +1,7 @@
 -- NoovioPulse, Copyright (C) 2026 Florian Rampin. SPDX-License-Identifier: AGPL-3.0-only
 --
 -- Fenêtre de l'addon, aux couleurs de PulseMetrics : un bandeau, deux cartes illustrées (mon personnage, mes alts),
--- puis l'écran de copie de la chaîne avec l'adresse du site où la coller. Commande /noovio et menu des addons.
+-- puis l'écran de copie de la chaîne avec l'adresse du site où la coller. Commande /pulsemetrics et menu des addons.
 
 local _, ns = ...
 
@@ -33,7 +33,7 @@ local Sites = {
 local window
 
 local function Print(message)
-    print("|cff7c3aedNoovioPulse|r " .. message)
+    print("|cff7c3aedPulseMetrics|r " .. message)
 end
 
 local function Text(parent, size, color, layer)
@@ -195,7 +195,7 @@ local function CreateWindow()
 
     local title = Text(f, 26, Colors.text)
     title:SetPoint("TOPLEFT", logo, "TOPRIGHT", 14, -4)
-    title:SetText("|cffc4b5fdNoovio|rPulse")
+    title:SetText("|cffc4b5fdPulse|rMetrics")
 
     local tagline = Text(f, 13, Colors.dim)
     tagline:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -6)
@@ -348,8 +348,11 @@ function ns.ShowExport(kind)
     f.edit:HighlightText()
 end
 
-SLASH_NOOVIOPULSE1 = "/noovio"
-SLASH_NOOVIOPULSE2 = "/noovipulse"
+SLASH_NOOVIOPULSE1 = "/pulsemetrics"
+SLASH_NOOVIOPULSE2 = "/pulse"
+-- Anciennes commandes, gardées pour les habitués : non affichées.
+SLASH_NOOVIOPULSE3 = "/noovio"
+SLASH_NOOVIOPULSE4 = "/noovipulse"
 SlashCmdList.NOOVIOPULSE = function(message)
     local command = (message or ""):lower():match("^%s*(%S*)")
     if command == "help" or command == "aide" then

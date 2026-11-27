@@ -187,25 +187,25 @@
     <value>Cette chaîne est l'avancement de tes alts : colle-la sur PulseMetrics Alt (pulsemetrics.fr/alt), bouton « MàJ depuis l'addon ». Ici, choisis « Mon personnage » dans l'addon.</value>
   </data>
   <data name="Import_BadContent" xml:space="preserve">
-    <value>Contenu illisible : mets l'addon NoovioPulse à jour puis refais l'export.</value>
+    <value>Contenu illisible : mets l'addon PulseMetrics à jour puis refais l'export.</value>
   </data>
   <data name="Import_Empty" xml:space="preserve">
-    <value>Colle la chaîne copiée depuis l'addon NoovioPulse (commande /noovio en jeu).</value>
+    <value>Colle la chaîne copiée depuis l'addon PulseMetrics (commande /pulsemetrics en jeu).</value>
   </data>
   <data name="Import_NewerAddon" xml:space="preserve">
     <value>Cet export vient d'une version de l'addon plus récente que le site : réessaie après la prochaine mise à jour du site.</value>
   </data>
   <data name="Import_NoCharacter" xml:space="preserve">
-    <value>L'export ne contient pas de personnage : connecte-toi avec lui en jeu et refais /noovio.</value>
+    <value>L'export ne contient pas de personnage : connecte-toi avec lui en jeu et refais /pulsemetrics.</value>
   </data>
   <data name="Import_NoGear" xml:space="preserve">
-    <value>L'export ne contient aucun équipement : refais /noovio une fois en jeu, pas sur l'écran de sélection.</value>
+    <value>L'export ne contient aucun équipement : refais /pulsemetrics une fois en jeu, pas sur l'écran de sélection.</value>
   </data>
   <data name="Import_NotNoovio" xml:space="preserve">
-    <value>Ce n'est pas une chaîne NoovioPulse : elle commence par « NP1: ». Une chaîne SimulationCraft ne convient pas.</value>
+    <value>Ce n'est pas une chaîne PulseMetrics : elle commence par « NP1: ». Une chaîne SimulationCraft ne convient pas.</value>
   </data>
   <data name="Import_TooLong" xml:space="preserve">
-    <value>Chaîne trop longue : ce n'est pas un export NoovioPulse.</value>
+    <value>Chaîne trop longue : ce n'est pas un export PulseMetrics.</value>
   </data>
   <data name="Import_Truncated" xml:space="preserve">
     <value>Chaîne tronquée ou modifiée : recopie-la entièrement depuis la fenêtre de l'addon (Ctrl+A, Ctrl+C).</value>

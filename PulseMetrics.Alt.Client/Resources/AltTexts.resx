@@ -22,13 +22,13 @@
     <value>Import…</value>
   </data>
   <data name="Addon_Step1" xml:space="preserve">
-    <value>Installe l'addon NoovioPulse</value>
+    <value>Installe l'addon PulseMetrics</value>
   </data>
   <data name="Addon_Step1Detail" xml:space="preserve">
     <value>Puis connecte-toi une fois sur chaque alt : il retient leur avancement.</value>
   </data>
   <data name="Addon_Step2" xml:space="preserve">
-    <value>En jeu : /noovio, carte « Mes alts »</value>
+    <value>En jeu : /pulsemetrics, carte « Mes alts »</value>
   </data>
   <data name="Addon_Step2Detail" xml:space="preserve">
     <value>La chaîne est sélectionnée : Ctrl+C.</value>
@@ -118,7 +118,7 @@
     <value>addon · {0}</value>
   </data>
   <data name="Grid_AddonSyncTitle" xml:space="preserve">
-    <value>Coffre, clés et clé en poche lus en jeu par l'addon NoovioPulse</value>
+    <value>Coffre, clés et clé en poche lus en jeu par l'addon PulseMetrics</value>
   </data>
   <data name="Grid_Characters" xml:space="preserve">
     <value>Personnages</value>
@@ -148,10 +148,10 @@
     <value>Clé en poche</value>
   </data>
   <data name="Grid_KeystoneTitle" xml:space="preserve">
-    <value>Clé en poche (addon NoovioPulse)</value>
+    <value>Clé en poche (addon PulseMetrics)</value>
   </data>
   <data name="Grid_KeystoneViaAddon" xml:space="preserve">
-    <value>Connue grâce à l'addon NoovioPulse : bouton « MàJ depuis l'addon »</value>
+    <value>Connue grâce à l'addon PulseMetrics : bouton « MàJ depuis l'addon »</value>
   </data>
   <data name="Grid_Level" xml:space="preserve">
     <value>Niveau</value>
@@ -238,19 +238,19 @@
     <value>max</value>
   </data>
   <data name="Home_AddonAria" xml:space="preserve">
-    <value>Mettre à jour depuis l'addon NoovioPulse</value>
+    <value>Mettre à jour depuis l'addon PulseMetrics</value>
   </data>
   <data name="Home_AddonButton" xml:space="preserve">
     <value>MàJ depuis l'addon</value>
   </data>
   <data name="Home_AddonTitle" xml:space="preserve">
-    <value>Coffre, clés et clé en poche de tous tes alts, lus en jeu par l'addon NoovioPulse</value>
+    <value>Coffre, clés et clé en poche de tous tes alts, lus en jeu par l'addon PulseMetrics</value>
   </data>
   <data name="Home_Affixes" xml:space="preserve">
     <value>Affixes de la semaine</value>
   </data>
   <data name="Home_EmptyText" xml:space="preserve">
-    <value>Lance une recherche, ou importe tous tes alts d'un coup avec l'addon NoovioPulse : chaque personnage est mémorisé sur ce poste.</value>
+    <value>Lance une recherche, ou importe tous tes alts d'un coup avec l'addon PulseMetrics : chaque personnage est mémorisé sur ce poste.</value>
   </data>
   <data name="Home_EmptyTitle" xml:space="preserve">
     <value>Aucun personnage suivi</value>
@@ -277,7 +277,7 @@
     <value>Cette chaîne est l'analyse d'un personnage : colle-la sur Front, Life ou Burst. Pour Alt, choisis « Mes alts » dans l'addon.</value>
   </data>
   <data name="Import_Empty" xml:space="preserve">
-    <value>Colle la chaîne copiée depuis l'addon NoovioPulse (en jeu : /noovio, carte « Mes alts »).</value>
+    <value>Colle la chaîne copiée depuis l'addon PulseMetrics (en jeu : /pulsemetrics, carte « Mes alts »).</value>
   </data>
   <data name="Import_Newer" xml:space="preserve">
     <value>Version de l'addon trop récente pour ce site : Alt sera mis à jour sous peu.</value>
@@ -289,16 +289,16 @@
     <value>Aucun personnage dans l'export : connecte-toi une fois sur chaque alt avec l'addon activé.</value>
   </data>
   <data name="Import_NotNoovio" xml:space="preserve">
-    <value>Ce n'est pas une chaîne NoovioPulse : elle commence par « NP1: ».</value>
+    <value>Ce n'est pas une chaîne PulseMetrics : elle commence par « NP1: ».</value>
   </data>
   <data name="Import_TooLong" xml:space="preserve">
-    <value>Chaîne trop longue : ce n'est pas un export NoovioPulse.</value>
+    <value>Chaîne trop longue : ce n'est pas un export PulseMetrics.</value>
   </data>
   <data name="Import_Truncated" xml:space="preserve">
     <value>Chaîne tronquée ou modifiée : recopie-la entièrement depuis la fenêtre de l'addon (Ctrl+C).</value>
   </data>
   <data name="Import_Unreadable" xml:space="preserve">
-    <value>Contenu illisible : mets l'addon NoovioPulse à jour puis refais l'export.</value>
+    <value>Contenu illisible : mets l'addon PulseMetrics à jour puis refais l'export.</value>
   </data>
   <data name="Language_Label" xml:space="preserve">
     <value>Langue</value>

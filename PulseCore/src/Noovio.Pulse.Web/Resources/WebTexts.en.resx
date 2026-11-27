@@ -22,7 +22,7 @@
     <value>Characters who can {0}</value>
   </data>
   <data name="Account_ImportTitle" xml:space="preserve">
-    <value>Analyse a character read in game by the NoovioPulse addon</value>
+    <value>Analyse a character read in game by the PulseMetrics addon</value>
   </data>
   <data name="Account_Level" xml:space="preserve">
     <value>lvl {0}</value>
@@ -361,7 +361,7 @@
     <value>Sign in with Battle.net, or</value>
   </data>
   <data name="Home_FeatureYouLink" xml:space="preserve">
-    <value>import it from the NoovioPulse addon</value>
+    <value>import it from the PulseMetrics addon</value>
   </data>
   <data name="Home_HighestKey" xml:space="preserve">
     <value>Highest key in the top</value>
@@ -370,7 +370,7 @@
     <value>Import from the addon</value>
   </data>
   <data name="Home_ImportTitle" xml:space="preserve">
-    <value>Paste the NoovioPulse addon string, no sign-in needed</value>
+    <value>Paste the PulseMetrics addon string, no sign-in needed</value>
   </data>
   <data name="Home_LastRun" xml:space="preserve">
     <value>Latest computation</value>
@@ -478,10 +478,10 @@
     <value>direct download</value>
   </data>
   <data name="Import_Eyebrow" xml:space="preserve">
-    <value>NoovioPulse addon</value>
+    <value>PulseMetrics addon</value>
   </data>
   <data name="Import_Label" xml:space="preserve">
-    <value>NoovioPulse string</value>
+    <value>PulseMetrics string</value>
   </data>
   <data name="Import_Lead" xml:space="preserve">
     <value>The addon reads your character in game, right now: gear, gems, enchantments, talents and stats. No need to log out for Blizzard to update its profile, nor a Battle.net account on the site.</value>
@@ -757,7 +757,7 @@
     <value>This class has no {0} specialization: import this character on the site for its role.</value>
   </data>
   <data name="Report_ImportRefreshTitle" xml:space="preserve">
-    <value>Compare this export with the latest meta again (for an up-to-date character, run /noovio in game again)</value>
+    <value>Compare this export with the latest meta again (for an up-to-date character, run /pulsemetrics in game again)</value>
   </data>
   <data name="Report_ItemLevel" xml:space="preserve">
     <value>Item level</value>
@@ -862,7 +862,7 @@
     <value>, client {0}</value>
   </data>
   <data name="Report_SourceTitle" xml:space="preserve">
-    <value>Read in game by the NoovioPulse addon{0}{1}</value>
+    <value>Read in game by the PulseMetrics addon{0}{1}</value>
   </data>
   <data name="Report_StatsNote" xml:space="preserve">
     <value>by the top's priority; you (◆) against its range</value>

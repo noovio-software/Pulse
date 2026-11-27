@@ -110,12 +110,12 @@ local function Refresh()
     button:Show()
 end
 
---- /noovio minimap : affiche ou masque le bouton.
+--- /pulsemetrics minimap : affiche ou masque le bouton.
 function ns.ToggleMinimap()
     local settings = Settings()
     settings.hide = not settings.hide
     Refresh()
-    print("|cff7c3aedNoovioPulse|r " .. (settings.hide and L.minimapHidden or L.minimapShown))
+    print("|cff7c3aedPulseMetrics|r " .. (settings.hide and L.minimapHidden or L.minimapShown))
 end
 
 -- Les variables sauvegardées ne sont lues qu'au chargement de l'addon.
