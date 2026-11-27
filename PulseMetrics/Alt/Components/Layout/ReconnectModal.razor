@@ -1,0 +1,31 @@
+﻿<script type="module" src="@Assets["Alt/Components/Layout/ReconnectModal.razor.js"]"></script>
+
+<dialog id="components-reconnect-modal" data-nosnippet>
+    <div class="components-reconnect-container">
+        <div class="components-rejoining-animation" aria-hidden="true">
+            <div></div>
+            <div></div>
+        </div>
+        <p class="components-reconnect-first-attempt-visible">
+            @AltTexts.Reconnect_First
+        </p>
+        <p class="components-reconnect-repeated-attempt-visible">
+            @AltTexts.Reconnect_RepeatedBefore <span id="components-seconds-to-next-attempt"></span> @AltTexts.Reconnect_RepeatedAfter
+        </p>
+        <p class="components-reconnect-failed-visible">
+            @AltTexts.Reconnect_Failed<br />@AltTexts.Reconnect_FailedHint
+        </p>
+        <button id="components-reconnect-button" class="components-reconnect-failed-visible">
+            @AltTexts.Reconnect_Retry
+        </button>
+        <p class="components-pause-visible">
+            @AltTexts.Reconnect_Paused
+        </p>
+        <button id="components-resume-button" class="components-pause-visible">
+            @AltTexts.Reconnect_Resume
+        </button>
+        <p class="components-resume-failed-visible">
+            @AltTexts.Reconnect_ResumeFailed<br />@AltTexts.Reconnect_ResumeFailedHint
+        </p>
+    </div>
+</dialog>

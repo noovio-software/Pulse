@@ -9,7 +9,7 @@ using Noovio.Pulse.Domain.Roles;
 
 namespace Noovio.Pulse.Tests;
 
-/// <summary>Lecture de la chaîne de l'addon NoovioPulse et traduction dans le modèle de l'analyse.</summary>
+/// <summary>Lecture de la chaîne de l'addon PulseMetrics et traduction dans le modèle de l'analyse.</summary>
 public sealed class AddonImportTests
 {
     private static readonly SpecInfo Shadow = WowSpec.ShadowPriest.Info();
@@ -98,11 +98,12 @@ public sealed class AddonImportTests
     }
 
     [Fact]
-    public void An_alts_export_points_to_AltPulse()
+    public void An_alts_export_points_to_Alt()
     {
         var result = CharacterImportParser.Parse("NP1:J:" + Convert.ToBase64String(Encoding.UTF8.GetBytes("""{"v":1,"kind":"alts","characters":[]}""")));
 
-        Assert.Contains("AltPulse", result.Error);
+        Assert.Contains("PulseMetrics Alt", result.Error);
+        Assert.Contains("pulsemetrics.fr/alt", result.Error);
     }
 
     [Fact]

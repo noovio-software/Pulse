@@ -1,9 +1,10 @@
-name: PulseAdmin
+name: Admin
 
-# Déploiement en prod sur un tag, ex. : git tag prod-pulseadmin-1.0.0 && git push origin prod-pulseadmin-1.0.0
+# Déploiement en prod sur un tag, ex. : git tag prod-admin-1.0.0 && git push origin prod-admin-1.0.0
 on:
   push:
     tags:
+      - 'prod-admin-[0-9]+.[0-9]+.[0-9]+'
       - 'prod-pulseadmin-[0-9]+.[0-9]+.[0-9]+'
 
 # Un seul déploiement à la fois : un tag poussé pendant un déploiement attend la fin du précédent.
@@ -26,7 +27,7 @@ jobs:
       - name: Extract version from tag
         run: |
           TAG_NAME="${GITHUB_REF##*/}"
-          VERSION="${TAG_NAME#prod-pulseadmin-}"
+          VERSION="${TAG_NAME##*-}"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "::notice title=Build version::$VERSION"
 
@@ -39,7 +40,7 @@ jobs:
 
       # Pas de -p:Version : la variable VERSION posée ci-dessus est lue par le .csproj.
       - name: Dotnet Publish
-        run: dotnet publish PulseAdmin/PulseAdmin/PulseAdmin.csproj -c Release -o deploy
+        run: dotnet publish PulseAdmin/PulseAdmin/PulseAdmin.csproj -c Release -r linux-x64 --self-contained -o deploy
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
@@ -53,10 +54,16 @@ jobs:
       - name: Deploy with rsync
         run: rsync -avz --delete deploy/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_TARGET_PULSEADMIN }}
 
+      # L'unité systemd vit dans le dépôt : elle suit la publication (self-contained : on lance l'exécutable).
+      - name: Install systemd unit
+        run: |
+          scp PulseAdmin/deploy/kestrel-pulseadmin.service ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/tmp/kestrel-pulseadmin.service
+          ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'sudo install -m 644 /tmp/kestrel-pulseadmin.service /etc/systemd/system/kestrel-pulseadmin.service && rm /tmp/kestrel-pulseadmin.service && sudo systemctl daemon-reload'
+
       # Le site applique les migrations de la base d'usage au démarrage ; is-active échoue si le service n'a pas redémarré.
       - name: Restart service
         run: ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'sudo systemctl restart kestrel-pulseadmin.service && sleep 6 && systemctl is-active kestrel-pulseadmin.service'
 
       # Sans session, la page d'accueil renvoie vers Battle.net (302) : on vérifie la page d'accès, publique.
       - name: Smoke test
-        run: curl -fsS --retry 6 --retry-delay 5 --retry-all-errors -o /dev/null -w "HTTP %{http_code}\n" https://pulseadmin.noovio.fr/acces-refuse
+        run: curl -fsS --retry 6 --retry-delay 5 --retry-all-errors -o /dev/null -w "HTTP %{http_code}\n" https://admin.pulsemetrics.fr/acces-refuse

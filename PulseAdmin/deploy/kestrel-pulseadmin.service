@@ -1,10 +1,10 @@
 [Unit]
-Description=PulseAdmin by Noovio - statistiques d'usage (Kestrel)
+Description=PulseMetrics Admin - statistiques d'usage (Kestrel)
 After=network.target postgresql.service
 
 [Service]
 WorkingDirectory=/home/ubuntu/projects/pulseadmin
-ExecStart=/usr/bin/dotnet /home/ubuntu/projects/pulseadmin/PulseAdmin.dll --urls http://127.0.0.1:8560
+ExecStart=/home/ubuntu/projects/pulseadmin/PulseAdmin --urls http://127.0.0.1:8560
 Restart=always
 RestartSec=10
 KillSignal=SIGINT

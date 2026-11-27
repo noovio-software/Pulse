@@ -52,7 +52,14 @@ public partial class SpecOverview
         if (firstRender || refreshTooltips)
         {
             refreshTooltips = false;
-            await JS.InvokeVoidAsync("pulse.refreshTooltips");
+            try
+            {
+                await JS.InvokeVoidAsync("pulse.refreshTooltips");
+            }
+            catch (JSDisconnectedException)
+            {
+                // Circuit fermé (onglet quitté) : plus rien à mettre à jour.
+            }
         }
     }
 }

@@ -4,9 +4,9 @@
 local _, ns = ...
 
 local L = {
-    title = "NoovioPulse",
-    tagline = "Ton personnage et tes alts, analysés par Noovio",
-    tools = "Les outils Noovio",
+    title = "PulseMetrics",
+    tagline = "Ton personnage et tes alts, analysés par PulseMetrics",
+    tools = "Les outils PulseMetrics",
     choose = "Que veux-tu exporter ?",
 
     characterTitle = "Mon personnage",
@@ -28,18 +28,18 @@ local L = {
 
     combat = "Export impossible en combat : réessaie une fois le combat terminé.",
     noSpec = "Choisis d'abord une spécialisation.",
-    tooltip = "Clic : ouvrir NoovioPulse",
+    tooltip = "Clic : ouvrir PulseMetrics",
     tooltipDrag = "Glisser : déplacer le bouton",
-    tooltipHide = "/noovio minimap : masquer le bouton",
-    usage = "/noovio : ouvrir · /noovio perso : exporter le personnage · /noovio alts : exporter les alts · /noovio minimap : bouton de la minicarte · /noovio oublier : vider la liste des alts",
+    tooltipHide = "/pulsemetrics minimap : masquer le bouton",
+    usage = "/pulsemetrics : ouvrir · /pulsemetrics perso : exporter le personnage · /pulsemetrics alts : exporter les alts · /pulsemetrics minimap : bouton de la minicarte · /pulsemetrics oublier : vider la liste des alts",
     minimapShown = "Bouton de la minicarte affiché.",
-    minimapHidden = "Bouton de la minicarte masqué : /noovio minimap pour le réafficher.",
+    minimapHidden = "Bouton de la minicarte masqué : /pulsemetrics minimap pour le réafficher.",
     altsReset = "Liste des alts vidée : chaque personnage y revient à sa prochaine connexion.",
 }
 
 if GetLocale() ~= "frFR" then
-    L.tagline = "Your character and your alts, analysed by Noovio"
-    L.tools = "Noovio tools"
+    L.tagline = "Your character and your alts, analysed by PulseMetrics"
+    L.tools = "PulseMetrics tools"
     L.choose = "What do you want to export?"
     L.characterTitle = "My character"
     L.characterText = "Gear, talents, gems and stats, exactly as in game right now. Compared point by point with the Mythic+ top 100 of your spec."
@@ -58,12 +58,12 @@ if GetLocale() ~= "frFR" then
     L.exported = "%d items, %d talents"
     L.combat = "Cannot export during combat: try again once combat ends."
     L.noSpec = "Pick a specialization first."
-    L.tooltip = "Click: open NoovioPulse"
+    L.tooltip = "Click: open PulseMetrics"
     L.tooltipDrag = "Drag: move the button"
-    L.tooltipHide = "/noovio minimap: hide the button"
-    L.usage = "/noovio: open · /noovio character: export the character · /noovio alts: export the alts · /noovio minimap: minimap button · /noovio forget: clear the alt list"
+    L.tooltipHide = "/pulsemetrics minimap: hide the button"
+    L.usage = "/pulsemetrics: open · /pulsemetrics character: export the character · /pulsemetrics alts: export the alts · /pulsemetrics minimap: minimap button · /pulsemetrics forget: clear the alt list"
     L.minimapShown = "Minimap button shown."
-    L.minimapHidden = "Minimap button hidden: /noovio minimap to show it again."
+    L.minimapHidden = "Minimap button hidden: /pulsemetrics minimap to show it again."
     L.altsReset = "Alt list cleared: each character comes back at its next login."
 end
 

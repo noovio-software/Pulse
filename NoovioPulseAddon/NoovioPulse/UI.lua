@@ -1,7 +1,7 @@
 -- NoovioPulse, Copyright (C) 2026 Florian Rampin. SPDX-License-Identifier: AGPL-3.0-only
 --
--- Fenêtre de l'addon, aux couleurs des sites Noovio : un bandeau, deux cartes illustrées (mon personnage, mes alts),
--- puis l'écran de copie de la chaîne avec l'adresse du site où la coller. Commande /noovio et menu des addons.
+-- Fenêtre de l'addon, aux couleurs de PulseMetrics : un bandeau, deux cartes illustrées (mon personnage, mes alts),
+-- puis l'écran de copie de la chaîne avec l'adresse du site où la coller. Commande /pulsemetrics et menu des addons.
 
 local _, ns = ...
 
@@ -22,18 +22,18 @@ local Colors = {
     green = { 0.302, 1, 0.533 },
 }
 
--- Le site où coller la chaîne : celui du rôle joué pour l'analyse, AltPulse pour les alts.
+-- L'outil où coller la chaîne : celui du rôle joué pour l'analyse, Alt pour les alts.
 local Sites = {
-    TANK = { name = "FrontPulse", url = "https://frontpulse.noovio.fr/importer", hex = "f59e0b" },
-    HEALER = { name = "LifePulse", url = "https://lifepulse.noovio.fr/importer", hex = "4fa8f7" },
-    DAMAGER = { name = "BurstPulse", url = "https://burstpulse.noovio.fr/importer", hex = "a78bfa" },
-    ALTS = { name = "AltPulse", url = "https://altpulse.noovio.fr", hex = "4dff88" },
+    TANK = { name = "Front", url = "https://pulsemetrics.fr/front/importer", hex = "f59e0b" },
+    HEALER = { name = "Life", url = "https://pulsemetrics.fr/life/importer", hex = "4fa8f7" },
+    DAMAGER = { name = "Burst", url = "https://pulsemetrics.fr/burst/importer", hex = "a78bfa" },
+    ALTS = { name = "Alt", url = "https://pulsemetrics.fr/alt/", hex = "4dff88" },
 }
 
 local window
 
 local function Print(message)
-    print("|cff7c3aedNoovioPulse|r " .. message)
+    print("|cff7c3aedPulseMetrics|r " .. message)
 end
 
 local function Text(parent, size, color, layer)
@@ -173,7 +173,7 @@ local function CreateWindow()
     Fill(f, Colors.background)
     Border(f, Colors.line)
 
-    -- Bandeau : logo, nom, accroche, et les sites Noovio.
+    -- Bandeau : logo, nom, accroche, et les outils PulseMetrics.
     local header = f:CreateTexture(nil, "ARTWORK")
     header:SetTexture(Media .. "Header")
     header:SetPoint("TOPLEFT", 1, -1)
@@ -195,7 +195,7 @@ local function CreateWindow()
 
     local title = Text(f, 26, Colors.text)
     title:SetPoint("TOPLEFT", logo, "TOPRIGHT", 14, -4)
-    title:SetText("|cffc4b5fdNoovio|rPulse")
+    title:SetText("|cffc4b5fdPulse|rMetrics")
 
     local tagline = Text(f, 13, Colors.dim)
     tagline:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -6)
@@ -204,7 +204,7 @@ local function CreateWindow()
     local tools = Text(f, 11, Colors.faint)
     tools:SetPoint("TOPRIGHT", -44, -30)
     tools:SetJustifyH("RIGHT")
-    tools:SetText(L.tools .. "\n|cfff59e0bFrontPulse|r · |cff4fa8f7LifePulse|r · |cffa78bfaBurstPulse|r · |cff4dff88AltPulse|r\n|cffc4b5fdnoovio.fr|r")
+    tools:SetText(L.tools .. "\n|cfff59e0bFront|r · |cff4fa8f7Life|r · |cffa78bfaBurst|r · |cff4dff88Alt|r\n|cffc4b5fdpulsemetrics.fr|r")
     tools:SetSpacing(3)
 
     local close = CreateFrame("Button", nil, f, "UIPanelCloseButton")
@@ -315,7 +315,7 @@ function ns.ShowHome()
     f:Show()
 end
 
---- Écran de copie : <paramref name="kind"/> vaut character (analyse du personnage) ou alts (avancement AltPulse).
+--- Écran de copie : <paramref name="kind"/> vaut character (analyse du personnage) ou alts (avancement, pour Alt).
 function ns.ShowExport(kind)
     local data, problem, heading, status, site
     if kind == "alts" then
@@ -348,8 +348,11 @@ function ns.ShowExport(kind)
     f.edit:HighlightText()
 end
 
-SLASH_NOOVIOPULSE1 = "/noovio"
-SLASH_NOOVIOPULSE2 = "/noovipulse"
+SLASH_NOOVIOPULSE1 = "/pulsemetrics"
+SLASH_NOOVIOPULSE2 = "/pulse"
+-- Anciennes commandes, gardées pour les habitués : non affichées.
+SLASH_NOOVIOPULSE3 = "/noovio"
+SLASH_NOOVIOPULSE4 = "/noovipulse"
 SlashCmdList.NOOVIOPULSE = function(message)
     local command = (message or ""):lower():match("^%s*(%S*)")
     if command == "help" or command == "aide" then

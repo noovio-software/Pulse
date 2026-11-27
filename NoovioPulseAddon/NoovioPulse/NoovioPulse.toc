@@ -1,13 +1,13 @@
 ## Interface: 120001, 120005, 120007, 120100, 120105, 120107
-## Title: |cff7c3aedNoovio|rPulse
-## Notes: Exports your character to FrontPulse, LifePulse and BurstPulse to compare it with the Mythic+ top players, and your alts' progress to AltPulse.
-## Notes-frFR: Exporte ton personnage vers FrontPulse, LifePulse et BurstPulse pour l'analyser face au top Mythique+, et l'avancement de tes alts vers AltPulse.
-## Notes-enUS: Exports your character to FrontPulse, LifePulse and BurstPulse to compare it with the Mythic+ top players, and your alts' progress to AltPulse.
-## Author: Noovio
+## Title: |cff7c3aedPulse|rMetrics
+## Notes: Exports your character to PulseMetrics (Front, Life, Burst) to compare it with the Mythic+ top players, and your alts' progress to PulseMetrics Alt.
+## Notes-frFR: Exporte ton personnage vers PulseMetrics (Front, Life, Burst) pour l'analyser face au top Mythique+, et l'avancement de tes alts vers PulseMetrics Alt.
+## Notes-enUS: Exports your character to PulseMetrics (Front, Life, Burst) to compare it with the Mythic+ top players, and your alts' progress to PulseMetrics Alt.
+## Author: PulseMetrics
 ## Version: @project-version@
-## X-Website: https://www.noovio.fr
+## X-Website: https://pulsemetrics.fr
 ## X-License: AGPL-3.0-only
-## Category: Noovio
+## Category: PulseMetrics
 ## IconTexture: Interface\AddOns\NoovioPulse\Media\Icon
 ## SavedVariables: NoovioPulseDB
 ## AddonCompartmentFunc: NoovioPulse_OnAddonCompartmentClick

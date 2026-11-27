@@ -70,18 +70,24 @@ public static class BattleNetAuthentication
     {
         var account = app.MapGroup("/compte");
 
-        account.MapGet("/connexion", (string? returnUrl) =>
-            Results.Challenge(new AuthenticationProperties { RedirectUri = LocalUrl(returnUrl) ?? "/compte" }, [Scheme]));
+        account.MapGet("/connexion", (string? returnUrl, HttpContext context) =>
+        {
+            var destination = LocalUrl(returnUrl) ?? "/compte";
+            return Results.Challenge(
+                new AuthenticationProperties { RedirectUri = context.Request.PathBase.Add(new PathString(destination)) },
+                [Scheme]);
+        });
 
         account.MapGet("/deconnexion", async (HttpContext context) =>
         {
             await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Results.Redirect("/");
+            return Results.Redirect(context.Request.PathBase.Add("/"));
         });
 
         account.MapGet("/synchroniser", async (HttpContext context, AccountSyncService sync, TimeProvider time, CancellationToken ct) =>
         {
-            var reconnect = Results.Challenge(new AuthenticationProperties { RedirectUri = "/compte" }, [Scheme]);
+            var reconnect = Results.Challenge(
+                new AuthenticationProperties { RedirectUri = context.Request.PathBase.Add("/compte") }, [Scheme]);
             var token = await context.GetTokenAsync("access_token");
             var expiresAt = await context.GetTokenAsync("expires_at");
             if (token is null || context.User.BattleNetId() is not { } id
@@ -100,7 +106,7 @@ public static class BattleNetAuthentication
                 return reconnect;
             }
 
-            return Results.Redirect("/compte");
+            return Results.Redirect(context.Request.PathBase.Add("/compte"));
         }).RequireAuthorization();
 
         return app;

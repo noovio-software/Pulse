@@ -22,7 +22,7 @@
     <value>Personnages pouvant {0}</value>
   </data>
   <data name="Account_ImportTitle" xml:space="preserve">
-    <value>Analyser un personnage lu en jeu par l'addon NoovioPulse</value>
+    <value>Analyser un personnage lu en jeu par l'addon PulseMetrics</value>
   </data>
   <data name="Account_Level" xml:space="preserve">
     <value>niv. {0}</value>
@@ -43,7 +43,7 @@
     <value>{0} autres personnages (classes sans spécialisation {1})</value>
   </data>
   <data name="Account_PageTitle" xml:space="preserve">
-    <value>Mes personnages · {0} by Noovio</value>
+    <value>Mes personnages · PulseMetrics {0}</value>
   </data>
   <data name="Account_SignOut" xml:space="preserve">
     <value>Déconnexion</value>
@@ -208,7 +208,7 @@
     <value>Ce donjon n'est pas dans la saison en cours, ou ses routes ne sont pas encore synchronisées.</value>
   </data>
   <data name="Error_PageTitle" xml:space="preserve">
-    <value>Erreur · {0} by Noovio</value>
+    <value>Erreur · PulseMetrics {0}</value>
   </data>
   <data name="Error_RequestId" xml:space="preserve">
     <value>Identifiant de la requête :</value>
@@ -361,7 +361,7 @@
     <value>Connecte-toi avec Battle.net, ou</value>
   </data>
   <data name="Home_FeatureYouLink" xml:space="preserve">
-    <value>importe-le depuis l'addon NoovioPulse</value>
+    <value>importe-le depuis l'addon PulseMetrics</value>
   </data>
   <data name="Home_HighestKey" xml:space="preserve">
     <value>Plus haute clé du top</value>
@@ -370,7 +370,7 @@
     <value>Importer depuis l'addon</value>
   </data>
   <data name="Home_ImportTitle" xml:space="preserve">
-    <value>Coller la chaîne de l'addon NoovioPulse, sans connexion</value>
+    <value>Coller la chaîne de l'addon PulseMetrics, sans connexion</value>
   </data>
   <data name="Home_LastRun" xml:space="preserve">
     <value>Dernier calcul</value>
@@ -385,7 +385,7 @@
     <value>Clé médiane du top</value>
   </data>
   <data name="Home_PageTitle" xml:space="preserve">
-    <value>{0} by Noovio · Méta {1} Mythique+</value>
+    <value>PulseMetrics {0} · Méta {1} Mythique+</value>
   </data>
   <data name="Home_Pending" xml:space="preserve">
     <value>en attente</value>
@@ -478,16 +478,16 @@
     <value>téléchargement direct</value>
   </data>
   <data name="Import_Eyebrow" xml:space="preserve">
-    <value>Addon NoovioPulse</value>
+    <value>Addon PulseMetrics</value>
   </data>
   <data name="Import_Label" xml:space="preserve">
-    <value>Chaîne NoovioPulse</value>
+    <value>Chaîne PulseMetrics</value>
   </data>
   <data name="Import_Lead" xml:space="preserve">
     <value>L'addon lit ton personnage en jeu, à l'instant : équipement, gemmes, enchantements, talents et caractéristiques. Pas besoin de te déconnecter pour que Blizzard mette son profil à jour, ni de compte Battle.net sur le site.</value>
   </data>
   <data name="Import_PageTitle" xml:space="preserve">
-    <value>Importer depuis l'addon · {0} by Noovio</value>
+    <value>Importer depuis l'addon · PulseMetrics {0}</value>
   </data>
   <data name="Import_Placeholder" xml:space="preserve">
     <value>Colle ici la chaîne copiée en jeu…</value>
@@ -757,7 +757,7 @@
     <value>Cette classe n'a pas de spécialisation {0} : importe ce personnage sur le site de son rôle.</value>
   </data>
   <data name="Report_ImportRefreshTitle" xml:space="preserve">
-    <value>Recomparer cet export à la dernière méta (pour un personnage à jour, refais /noovio en jeu)</value>
+    <value>Recomparer cet export à la dernière méta (pour un personnage à jour, refais /pulsemetrics en jeu)</value>
   </data>
   <data name="Report_ItemLevel" xml:space="preserve">
     <value>Niv. d'objet</value>
@@ -814,7 +814,7 @@
     <value>autre spécialisation</value>
   </data>
   <data name="Report_PageTitle" xml:space="preserve">
-    <value>{0} · {1} by Noovio</value>
+    <value>{0} · PulseMetrics {1}</value>
   </data>
   <data name="Report_PlanNote" xml:space="preserve">
     <value>par effort, du plus immédiat au plus long ; les problèmes en tête de chaque groupe</value>
@@ -862,7 +862,7 @@
     <value>, client {0}</value>
   </data>
   <data name="Report_SourceTitle" xml:space="preserve">
-    <value>Lu en jeu par l'addon NoovioPulse{0}{1}</value>
+    <value>Lu en jeu par l'addon PulseMetrics{0}{1}</value>
   </data>
   <data name="Report_StatsNote" xml:space="preserve">
     <value>par priorité du top ; toi (◆) face à sa fourchette</value>
@@ -934,7 +934,7 @@
     <value>La prochaine synchronisation avec Keystone.guru remplira cette page.</value>
   </data>
   <data name="Routes_PageTitle" xml:space="preserve">
-    <value>Routes Midnight · {0} by Noovio</value>
+    <value>Routes Midnight · PulseMetrics {0}</value>
   </data>
   <data name="Routes_SourceAfter" xml:space="preserve">
     <value>, mises à jour {0}.</value>
@@ -1036,7 +1036,7 @@
     <value>Aucun embellissement relevé.</value>
   </data>
   <data name="Spec_PageTitle" xml:space="preserve">
-    <value>{0} {1} · {2} by Noovio</value>
+    <value>{0} {1} · PulseMetrics {2}</value>
   </data>
   <data name="Spec_Sample" xml:space="preserve">
     <value>Échantillon</value>
@@ -1426,7 +1426,7 @@
     <value>Analyser un personnage par région, royaume et nom, sans connexion</value>
   </data>
   <data name="Search_PageTitle" xml:space="preserve">
-    <value>Rechercher un personnage · {0} by Noovio</value>
+    <value>Rechercher un personnage · PulseMetrics {0}</value>
   </data>
   <data name="Search_Eyebrow" xml:space="preserve">
     <value>Recherche</value>

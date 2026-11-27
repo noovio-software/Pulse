@@ -1,0 +1,26 @@
+# PostgreSQL + Redis de développement, alignés sur appsettings.Development.json (une base, un schéma par outil).
+#   docker compose -f PulseMetrics/docker-compose.yml up -d
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: pulsemetrics
+      POSTGRES_USER: pulsemetrics
+      POSTGRES_PASSWORD: pulsemetrics
+    ports:
+      - "5432:5432"
+    volumes:
+      - pulsemetrics-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pulsemetrics -d pulsemetrics"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+volumes:
+  pulsemetrics-pg:

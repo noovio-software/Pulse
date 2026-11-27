@@ -40,7 +40,14 @@ public partial class ShareButton
             return;
         }
 
-        state = await JS.InvokeAsync<bool>("pulse.copy", url) ? ShareState.Copied : ShareState.NotCopied;
+        try
+        {
+            state = await JS.InvokeAsync<bool>("pulse.copy", url) ? ShareState.Copied : ShareState.NotCopied;
+        }
+        catch (JSDisconnectedException)
+        {
+            return;
+        }
         if (state == ShareState.Copied)
         {
             StateHasChanged();

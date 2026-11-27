@@ -4,7 +4,7 @@ namespace Noovio.Pulse.Web.Auth;
 
 /// <summary>
 /// API d'administration : déclenchement d'une ingestion hors calendrier et suivi des dernières exécutions.
-/// <code>curl -X POST https://&lt;application&gt;.noovio.fr/api/admin/ingestion -H "X-Admin-Key: …"</code>
+/// <code>curl -X POST https://pulsemetrics.fr/&lt;application&gt;/api/admin/ingestion -H "X-Admin-Key: …"</code>
 /// </summary>
 public static class AdminEndpoints
 {

@@ -2,7 +2,7 @@
 @attribute [Authorize]
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
-<PageTitle>@Ui.F(WebTexts.Report_PageTitle, analysis?.Character.Name ?? WebTexts.Report_Analysis, Site.Name)</PageTitle>
+<PageTitle>@Ui.F(WebTexts.Report_PageTitle, analysis?.Character.Name ?? WebTexts.Report_Analysis, Site.DisplayName)</PageTitle>
 
 <TopBar Active="analysis?.Spec.Spec" />
 

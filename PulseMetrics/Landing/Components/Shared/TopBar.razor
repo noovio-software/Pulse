@@ -1,0 +1,30 @@
+﻿@* En-tête : marque PulseMetrics à gauche, accès direct aux quatre outils à droite. *@
+
+<header class="topbar">
+    <a class="brand" href="/">
+        <Sigil />
+        <span class="brand-name">PulseMetrics</span>
+        <span class="brand-tag">@LandingTexts.Brand_Tag</span>
+    </a>
+
+    <nav class="topbar-tools" aria-label="@LandingTexts.Nav_Tools">
+        <a class="tool-link tool-alt" href="alt/" aria-label="Alt">
+            <ToolSigil Size="18" />
+            <span class="tool-link-name">Alt</span>
+        </a>
+        <a class="tool-link tool-front" href="front/" aria-label="Front">
+            <ToolSigil Front Size="18" />
+            <span class="tool-link-name">Front</span>
+        </a>
+        <a class="tool-link tool-life" href="life/" aria-label="Life">
+            <ToolSigil Life Size="18" />
+            <span class="tool-link-name">Life</span>
+        </a>
+        <a class="tool-link tool-burst" href="burst/" aria-label="Burst">
+            <ToolSigil Burst Size="18" />
+            <span class="tool-link-name">Burst</span>
+        </a>
+    </nav>
+
+    <LanguageSwitch />
+</header>

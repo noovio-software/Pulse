@@ -1,7 +1,7 @@
-# PulseAdmin by Noovio
+# PulseMetrics Admin
 
-Private usage statistics for [FrontPulse](../FrontPulse/README.md), [LifePulse](../LifePulse/README.md) and [BurstPulse](../BurstPulse/README.md): who benches which characters, when, and what the analyses find.
-Served at https://pulseadmin.noovio.fr, behind Battle.net sign-in restricted to a list of BattleTags. It is deliberately not linked from the Noovio page, and every response carries `noindex` (header, meta tag, `robots.txt`).
+Private usage statistics for [Front](../PulseMetrics/docs/front.md), [Life](../PulseMetrics/docs/life.md) and [Burst](../PulseMetrics/docs/burst.md): who benches which characters, when, and what the analyses find.
+Served only at https://admin.pulsemetrics.fr, behind Battle.net sign-in restricted to a list of BattleTags. It is deliberately not linked from the public page, and every response carries `noindex` (header, meta tag, `robots.txt`).
 
 ## How the data gets here
 
@@ -28,9 +28,9 @@ Filters (period, dates, app, class, spec, region, outcome) live in the URL, so a
 
 ```powershell
 # PostgreSQL for the usage database, on port 5433 (5432 is the sites' database)
-docker compose -f PulseAdmin/docker-compose.yml up -d
+docker compose -f PulseMetrics/docker-compose.yml up -d
 
-dotnet run --project PulseAdmin/PulseAdmin --launch-profile http
+dotnet run --project PulseAdmin/PulseAdmin --launch-profile PulseMetrics
 # → http://localhost:5190, open without sign-in in Development (Admin:AllowAnonymousInDevelopment)
 ```
 
@@ -40,8 +40,8 @@ The sites' `appsettings.Development.json` point at the same database: run one of
 
 Port 8560 behind Nginx, systemd unit `kestrel-pulseadmin`.
 
-1. Point the DNS record `pulseadmin.noovio.fr` at the server.
-2. Run `PulseAdmin/deploy/setup-server.sh` on the server. It creates the `pulseusage` database and role, writes the connection string into `/etc/pulseadmin/pulseadmin.env` and appends it to the three sites' env files.
-3. Fill in the Blizzard client and your BattleTag in `/etc/pulseadmin/pulseadmin.env`, and add `https://pulseadmin.noovio.fr/signin-battlenet` to the Battle.net client.
+1. Point the DNS record `admin.pulsemetrics.fr` at the server.
+2. Run `PulseAdmin/deploy/setup-server.sh` on the server. It copies the shared `ConnectionStrings__PulseUsage` from `/etc/pulsemetrics/pulsemetrics.env`; the admin tables use the `usage` schema of the same `pulsemetrics` database.
+3. Fill in the Blizzard client and your BattleTag in `/etc/pulseadmin/pulseadmin.env`, and add `https://admin.pulsemetrics.fr/signin-battlenet` to the Battle.net client.
 4. Restart the three sites so they start recording, after deploying a version that includes `Noovio.Pulse.Usage`.
-5. Add the GitHub secret `REMOTE_TARGET_PULSEADMIN` (for example `/home/ubuntu/projects/pulseadmin/`), then push a tag `prod-pulseadmin-x.y.z`.
+5. Add the GitHub secret `REMOTE_TARGET_PULSEADMIN` (for example `/home/ubuntu/projects/pulseadmin/`), then push a tag `prod-admin-x.y.z`.

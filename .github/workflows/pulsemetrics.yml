@@ -1,0 +1,74 @@
+name: PulseMetrics
+
+# Déploiement en prod sur un tag, ex. : git tag prod-pulsemetrics-1.0.0 && git push origin prod-pulsemetrics-1.0.0
+# Un seul processus : l'accueil, Alt, Front, Life et Burst (et leurs workers) partent ensemble.
+on:
+  push:
+    tags:
+      - 'prod-pulsemetrics-[0-9]+.[0-9]+.[0-9]+'
+
+# Un seul déploiement à la fois : un tag poussé pendant un déploiement attend la fin du précédent.
+concurrency:
+  group: pulsemetrics-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 11.0.x
+
+      - name: Extract version from tag
+        run: |
+          TAG_NAME="${GITHUB_REF##*/}"
+          VERSION="${TAG_NAME#prod-pulsemetrics-}"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "::notice title=Build version::$VERSION"
+
+      # Les tests de règles (agrégation, analyse) bloquent le déploiement s'ils échouent.
+      - name: Tests
+        run: dotnet test PulseCore/tests/Noovio.Pulse.Tests -c Release
+
+      - name: Clean deploy directory
+        run: rm -rf deploy
+
+      # Pas de -p:Version : la variable VERSION posée ci-dessus est lue par le .csproj.
+      # Self-contained : le runtime .NET est embarqué, le VPS (partagé avec d'autres sites) n'a rien à installer.
+      - name: Dotnet Publish
+        run: dotnet publish PulseMetrics/PulseMetrics.csproj -c Release -r linux-x64 --self-contained -o deploy
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.REMOTE_KEY }}
+          known_hosts: 'pulsemetrics-githubactions-known-hosts'
+
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy with rsync
+        run: rsync -avz --delete deploy/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_TARGET_PULSEMETRICS }}
+
+      # L'unité systemd vit dans le dépôt : elle suit la publication (self-contained : on lance l'exécutable).
+      - name: Install systemd unit
+        run: |
+          scp PulseMetrics/deploy/kestrel-pulsemetrics.service ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/tmp/kestrel-pulsemetrics.service
+          ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'sudo install -m 644 /tmp/kestrel-pulsemetrics.service /etc/systemd/system/kestrel-pulsemetrics.service && rm /tmp/kestrel-pulsemetrics.service && sudo systemctl daemon-reload'
+
+      # Les migrations en attente sont appliquées au démarrage, avant que le port n'écoute.
+      # is-active échoue (et fait échouer le job) si le service n'a pas redémarré.
+      - name: Restart service
+        run: ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'sudo systemctl restart kestrel-pulsemetrics.service && sleep 8 && systemctl is-active kestrel-pulsemetrics.service'
+
+      # Réessaie pendant ~30 s : le port n'écoute qu'une fois les migrations appliquées.
+      - name: Smoke test
+        run: |
+          for path in / /alt/ /front/ /life/ /burst/; do
+            curl -fsS --retry 6 --retry-delay 5 --retry-all-errors -o /dev/null -w "$path HTTP %{http_code}\n" "https://pulsemetrics.fr$path"
+          done

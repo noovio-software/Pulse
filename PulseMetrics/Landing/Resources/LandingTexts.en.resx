@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Addon_AtMax" xml:space="preserve">
+    <value>{0} at max</value>
+  </data>
+  <data name="Addon_Badge" xml:space="preserve">
+    <value>New · free</value>
+  </data>
+  <data name="Addon_BagLegs" xml:space="preserve">
+    <value>Leggings from bags</value>
+  </data>
+  <data name="Addon_By" xml:space="preserve">
+    <value>the World of Warcraft addon</value>
+  </data>
+  <data name="Addon_CombatPotion" xml:space="preserve">
+    <value>Combat potion</value>
+  </data>
+  <data name="Addon_DirectDownload" xml:space="preserve">
+    <value>direct download</value>
+  </data>
+  <data name="Addon_Download" xml:space="preserve">
+    <value>Get it on CurseForge</value>
+  </data>
+  <data name="Addon_Flask" xml:space="preserve">
+    <value>Flask</value>
+  </data>
+  <data name="Addon_LeadAfter" xml:space="preserve">
+    <value>in game, copy the string, paste it on the tool. No need to wait for Blizzard to update your profile, nor to log in, and the analysis finally sees what Battle.net ignores: your bags and your Great Vault.</value>
+  </data>
+  <data name="Addon_LeadBefore" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Addon_LowStock" xml:space="preserve">
+    <value>low stock</value>
+  </data>
+  <data name="Addon_MyAlts" xml:space="preserve">
+    <value>My alts</value>
+  </data>
+  <data name="Addon_MyAltsText" xml:space="preserve">
+    <value>Vault, this week's keys and owned keystone of all your characters, in a single paste on</value>
+  </data>
+  <data name="Addon_MyCharacter" xml:space="preserve">
+    <value>My character</value>
+  </data>
+  <data name="Addon_MyCharacterText" xml:space="preserve">
+    <value>Gear, talents, bags, vault and consumables, analyzed against the top 100 on</value>
+  </data>
+  <data name="Addon_Note" xml:space="preserve">
+    <value>Or as a {0}: folder to drop into Interface\AddOns</value>
+  </data>
+  <data name="Addon_Or" xml:space="preserve">
+    <value>or</value>
+  </data>
+  <data name="Addon_PastedReport" xml:space="preserve">
+    <value>Pasted on the tool, the report adds:</value>
+  </data>
+  <data name="Addon_Ready" xml:space="preserve">
+    <value>ready</value>
+  </data>
+  <data name="Addon_Title" xml:space="preserve">
+    <value>Your character as it is, to the minute</value>
+  </data>
+  <data name="Addon_Track" xml:space="preserve">
+    <value>Hero {0}/6</value>
+  </data>
+  <data name="Addon_VaultBoots" xml:space="preserve">
+    <value>Vault boots</value>
+  </data>
+  <data name="Alt_Badge" xml:space="preserve">
+    <value>All your characters</value>
+  </data>
+  <data name="Alt_Ilvl" xml:space="preserve">
+    <value>Item level</value>
+  </data>
+  <data name="Alt_Keys" xml:space="preserve">
+    <value>Weekly keys</value>
+  </data>
+  <data name="Alt_Lead" xml:space="preserve">
+    <value>One column per character: item level, rating, keys, Great Vault, best key per dungeon and this week's raids. No more logging in on each character to check.</value>
+  </data>
+  <data name="Alt_Mage" xml:space="preserve">
+    <value>Mage</value>
+  </data>
+  <data name="Alt_Note" xml:space="preserve">
+    <value>No account: your history stays in your browser</value>
+  </data>
+  <data name="Alt_Paladin" xml:space="preserve">
+    <value>Paladin</value>
+  </data>
+  <data name="Alt_Rating" xml:space="preserve">
+    <value>M+ rating</value>
+  </data>
+  <data name="Alt_Title" xml:space="preserve">
+    <value>Your whole week, a single grid</value>
+  </data>
+  <data name="Alt_Vault" xml:space="preserve">
+    <value>Great Vault</value>
+  </data>
+  <data name="Alt_Warrior" xml:space="preserve">
+    <value>Warrior</value>
+  </data>
+  <data name="Brand_Tag" xml:space="preserve">
+    <value>World of Warcraft tools</value>
+  </data>
+  <data name="Burst_Badge" xml:space="preserve">
+    <value>Your DPS in Mythic+</value>
+  </data>
+  <data name="Burst_Lead" xml:space="preserve">
+    <value>Stats, talents, gear and trinkets of the 100 best DPS, across the twenty-seven damage specs. Compare your character and leave knowing what to change first.</value>
+  </data>
+  <data name="Burst_Title" xml:space="preserve">
+    <value>Play your DPS like the top 100</value>
+  </data>
+  <data name="Chooser_Heading" xml:space="preserve">
+    <value>Which one to open?</value>
+  </data>
+  <data name="Common_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Doors_Label" xml:space="preserve">
+    <value>The tools</value>
+  </data>
+  <data name="Error_Heading" xml:space="preserve">
+    <value>An error occurred</value>
+  </data>
+  <data name="Error_RequestId" xml:space="preserve">
+    <value>Request ID:</value>
+  </data>
+  <data name="Error_Text" xml:space="preserve">
+    <value>The pulse skipped a beat. Try again in a moment.</value>
+  </data>
+  <data name="Error_Title" xml:space="preserve">
+    <value>Error · PulseMetrics</value>
+  </data>
+  <data name="Front_Badge" xml:space="preserve">
+    <value>Your tank in Mythic+</value>
+  </data>
+  <data name="Front_Lead" xml:space="preserve">
+    <value>Stats, talents, gear and trinkets of the 100 best tanks of each spec. Compare your character and leave knowing what to change first. Before your next key, find the most popular Midnight routes for each dungeon, with the size of every pull.</value>
+  </data>
+  <data name="Front_Note" xml:space="preserve">
+    <value>Meta recomputed every 6 h, comparison through Battle.net, routes from Keystone.guru</value>
+  </data>
+  <data name="Front_Title" xml:space="preserve">
+    <value>Play your tank like the top 100</value>
+  </data>
+  <data name="Hero_Lead" xml:space="preserve">
+    <value>One tool to know where all your characters stand this week, three more to play your tank, healer or DPS like the best. Pick your door.</value>
+  </data>
+  <data name="Hero_Title" xml:space="preserve">
+    <value>Take the pulse</value>
+  </data>
+  <data name="Hero_TitleEm" xml:space="preserve">
+    <value>of your characters</value>
+  </data>
+  <data name="Home_Description" xml:space="preserve">
+    <value>PulseMetrics brings together four World of Warcraft tools: Alt to track all your characters in a single grid, Front, Life and Burst to play your tank, healer or DPS like the top 100 in Mythic+, and the companion addon to feed them from the game.</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Alt to track all your characters, Front, Life and Burst to play your tank, healer or DPS like the top 100 in Mythic+.</value>
+  </data>
+  <data name="Home_OgLocale" xml:space="preserve">
+    <value>en_GB</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>PulseMetrics · Take the pulse of your characters</value>
+  </data>
+  <data name="Home_Title" xml:space="preserve">
+    <value>PulseMetrics · World of Warcraft tools: Alt, Front, Life and Burst</value>
+  </data>
+  <data name="Language_Label" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Layout_BlizzardApi" xml:space="preserve">
+    <value>Blizzard API</value>
+  </data>
+  <data name="Layout_Data" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="Layout_Legal" xml:space="preserve">
+    <value>World of Warcraft is a registered trademark of Blizzard Entertainment, Inc. PulseMetrics is neither affiliated with nor endorsed by Blizzard.</value>
+  </data>
+  <data name="Layout_Version" xml:space="preserve">
+    <value>Deployed version</value>
+  </data>
+  <data name="Legend_Top" xml:space="preserve">
+    <value>top median</value>
+  </data>
+  <data name="Legend_You" xml:space="preserve">
+    <value>your character</value>
+  </data>
+  <data name="Life_Badge" xml:space="preserve">
+    <value>Your healer in Mythic+</value>
+  </data>
+  <data name="Life_Lead" xml:space="preserve">
+    <value>Stats, talents, gear and trinkets of the 100 best healers, across the seven healing specs. Compare your character and leave knowing what to change first.</value>
+  </data>
+  <data name="Life_Title" xml:space="preserve">
+    <value>Play your healer like the top 100</value>
+  </data>
+  <data name="Meta_Note" xml:space="preserve">
+    <value>Meta recomputed every 6 h, comparison through Battle.net</value>
+  </data>
+  <data name="Nav_Tools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="NotFound_Heading" xml:space="preserve">
+    <value>Not found</value>
+  </data>
+  <data name="NotFound_Text" xml:space="preserve">
+    <value>No pulse at this address.</value>
+  </data>
+  <data name="NotFound_Title" xml:space="preserve">
+    <value>Not found · PulseMetrics</value>
+  </data>
+  <data name="Open_Tool" xml:space="preserve">
+    <value>Open {0}</value>
+  </data>
+  <data name="Preview_Tag" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="Q_AltBosses" xml:space="preserve">
+    <value>Which bosses have I already killed this week, and on which difficulty?</value>
+  </data>
+  <data name="Q_AltKeys" xml:space="preserve">
+    <value>Where do my keys and Great Vault stand this week?</value>
+  </data>
+  <data name="Q_BurstFix" xml:space="preserve">
+    <value>What should I change first on my DPS?</value>
+  </data>
+  <data name="Q_BurstMeta" xml:space="preserve">
+    <value>Which stats and talents do the best DPS play?</value>
+  </data>
+  <data name="Q_FrontFix" xml:space="preserve">
+    <value>What should I change first on my tank?</value>
+  </data>
+  <data name="Q_FrontMeta" xml:space="preserve">
+    <value>Which stats and talents do the best tanks play?</value>
+  </data>
+  <data name="Q_LifeFix" xml:space="preserve">
+    <value>What should I change first on my healer?</value>
+  </data>
+  <data name="Q_LifeMeta" xml:space="preserve">
+    <value>Which stats and talents do the best healers play?</value>
+  </data>
+  <data name="Stat_Crit" xml:space="preserve">
+    <value>Critical Strike</value>
+  </data>
+  <data name="Stat_Haste" xml:space="preserve">
+    <value>Haste</value>
+  </data>
+  <data name="Stat_Mastery" xml:space="preserve">
+    <value>Mastery</value>
+  </data>
+  <data name="Stat_Versatility" xml:space="preserve">
+    <value>Versatility</value>
+  </data>
+</root>

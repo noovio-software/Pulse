@@ -61,5 +61,5 @@ internal static class UsageJson
 public sealed class DesignTimeUsageDbContextFactory : IDesignTimeDbContextFactory<UsageDbContext>
 {
     public UsageDbContext CreateDbContext(string[] args) =>
-        new(new DbContextOptionsBuilder<UsageDbContext>().UseNpgsql("Host=localhost;Database=pulseusage").Options);
+        new(new DbContextOptionsBuilder<UsageDbContext>().UseNpgsql("Host=localhost;Port=5432;Database=pulsemetrics;Username=pulsemetrics;Password=pulsemetrics;Search Path=usage,public").Options);
 }

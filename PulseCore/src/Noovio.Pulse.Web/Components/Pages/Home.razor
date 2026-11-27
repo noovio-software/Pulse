@@ -1,6 +1,6 @@
 @page "/"
 
-<PageTitle>@Ui.F(WebTexts.Home_PageTitle, Site.Name, Site.Words.Noun)</PageTitle>
+<PageTitle>@Ui.F(WebTexts.Home_PageTitle, Site.DisplayName, Site.Words.Noun)</PageTitle>
 
 <TopBar />
 
@@ -14,7 +14,7 @@
             </span>
             <h1 class="landing-title">@Ui.F(WebTexts.Home_Title, Site.Words.Noun) <em>@WebTexts.Home_TitleEmphasis</em></h1>
             <p class="landing-lead">
-                @Ui.F(WebTexts.Home_Lead, Site.Name, Site.Words.NounPlural)
+                @Ui.F(WebTexts.Home_Lead, Site.DisplayName, Site.Words.NounPlural)
             </p>
             <div class="landing-actions">
                 <CompareButton />
@@ -81,7 +81,7 @@
     </section>
 
     @* --- Ce que contient une fiche de spécialisation ------------------------------------------ *@
-    <section class="landing-features" aria-label="@Ui.F(WebTexts.Home_FeaturesLabel, Site.Name)">
+    <section class="landing-features" aria-label="@Ui.F(WebTexts.Home_FeaturesLabel, Site.DisplayName)">
         <article class="feature">
             <span class="feature-icon stat-haste"><StatIcon Stat="SecondaryStat.Haste" Size="20" /></span>
             <h2>@WebTexts.Home_FeatureStats</h2>

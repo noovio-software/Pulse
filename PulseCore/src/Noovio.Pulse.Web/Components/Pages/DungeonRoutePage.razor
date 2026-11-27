@@ -1,6 +1,6 @@
 @page "/routes/{Slug}"
 
-<PageTitle>@Ui.F(WebTexts.Report_PageTitle, dungeon is null ? WebTexts.Dungeon_Unknown : Ui.F(WebTexts.Dungeon_PageTitle, dungeon.Name), Site.Name)</PageTitle>
+<PageTitle>@Ui.F(WebTexts.Report_PageTitle, dungeon is null ? WebTexts.Dungeon_Unknown : Ui.F(WebTexts.Dungeon_PageTitle, dungeon.Name), Site.DisplayName)</PageTitle>
 
 <TopBar RoutesActive />
 

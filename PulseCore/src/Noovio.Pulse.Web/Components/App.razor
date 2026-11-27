@@ -9,7 +9,7 @@
     <HeadOutlet />
     @* Couleur du navigateur mobile et de la barre des aperçus Discord : celle du site, ou celle d'une page (MainLayout, SharedReport). *@
     <SectionOutlet SectionName="theme-color" />
-    <base href="/" />
+    <base href="@Navigation.BaseUri" />
     <ResourcePreloader />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,10 +17,10 @@
     <link rel="stylesheet" href="@Assets["_content/Noovio.Pulse.Web/pulse.css"]" />
     <link rel="stylesheet" href="@Assets["_content/Noovio.Pulse.Web/Noovio.Pulse.Web.bundle.scp.css"]" />
     @* Le thème de l'application redéfinit les jetons de couleur de pulse.css. *@
-    <link rel="stylesheet" href="@Assets["theme.css"]" />
+    <link rel="stylesheet" href="@Assets[$"{Site.Slug}/theme.css"]" />
     <ImportMap />
-    <link rel="icon" href="favicon.ico" sizes="any" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" href="@Assets[$"{Site.Slug}/favicon.ico"]" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="@Assets[$"{Site.Slug}/favicon.svg"]" />
 </head>
 
 <body>
@@ -33,3 +33,7 @@
 </body>
 
 </html>
+
+@code {
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+}

@@ -1,6 +1,6 @@
 -- NoovioPulse, Copyright (C) 2026 Florian Rampin. SPDX-License-Identifier: AGPL-3.0-only
 --
--- Avancement de chaque personnage du compte, pour AltPulse : Grande Chambre forte, clés de la semaine, clé en poche,
+-- Avancement de chaque personnage du compte, pour Alt (PulseMetrics) : Grande Chambre forte, clés de la semaine, clé en poche,
 -- niveau d'objet, cote M+. Chaque personnage est relu à la connexion et quand ces données changent, puis gardé dans
 -- NoovioPulseDB.characters (variables sauvegardées du compte) : l'export contient tous les personnages déjà connectés.
 
@@ -149,7 +149,7 @@ local function CopyArray(source)
     return array
 end
 
---- Export AltPulse : tous les personnages, le plus récent en tête. Les tableaux sont re-marqués :
+--- Export pour Alt : tous les personnages, le plus récent en tête. Les tableaux sont re-marqués :
 --- les variables sauvegardées perdent la marque, et un tableau vide serait sinon écrit « {} ».
 function Alts.Collect()
     if not InCombatLockdown() then

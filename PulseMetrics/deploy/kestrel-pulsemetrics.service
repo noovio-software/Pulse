@@ -1,0 +1,22 @@
+[Unit]
+Description=PulseMetrics - accueil, Alt, Front, Life et Burst, workers compris (Kestrel, un seul processus)
+After=network.target postgresql.service redis-server.service
+
+[Service]
+WorkingDirectory=/home/ubuntu/projects/pulsemetrics
+# Publication self-contained (runtime .NET embarqué) : on lance l'exécutable, pas /usr/bin/dotnet.
+ExecStart=/home/ubuntu/projects/pulsemetrics/PulseMetrics
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+# Laisse aux workers le temps de s'arrêter proprement (ingestion en cours).
+TimeoutStopSec=60
+SyslogIdentifier=pulsemetrics
+User=ubuntu
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_NOLOGO=true
+# Secrets (chaînes de connexion, clés Blizzard…) : fichier root:root 600, pas de lignes Environment= lisibles par tous.
+EnvironmentFile=/etc/pulsemetrics/pulsemetrics.env
+
+[Install]
+WantedBy=multi-user.target

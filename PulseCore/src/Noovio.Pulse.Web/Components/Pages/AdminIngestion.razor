@@ -2,7 +2,7 @@
 @attribute [Authorize]
 @rendermode InteractiveServer
 
-<PageTitle>Ingestion · Admin · @Site.Name by Noovio</PageTitle>
+<PageTitle>Ingestion · Admin · PulseMetrics @Site.DisplayName</PageTitle>
 
 <TopBar />
 
@@ -11,8 +11,8 @@
 {
     <section class="panel empty-state">
         <h1>Accès réservé</h1>
-        <p>Cette page est réservée aux administrateurs de @Site.Name.</p>
-        <a class="btn" href="/">Retour</a>
+        <p>Cette page est réservée aux administrateurs de PulseMetrics @Site.DisplayName.</p>
+        <a class="btn" href=".">Retour</a>
     </section>
 }
 else
@@ -203,8 +203,8 @@ else
 
     <section class="panel meta-section">
         <h2 class="section-title">En ligne de commande</h2>
-        <pre class="admin-cmd">curl -X POST https://@(Site.Key).noovio.fr/api/admin/ingestion -H "X-Admin-Key: &lt;clé&gt;"
-curl https://@(Site.Key).noovio.fr/api/admin/ingestion -H "X-Admin-Key: &lt;clé&gt;"</pre>
+        <pre class="admin-cmd">curl -X POST https://pulsemetrics.fr/@(Site.DisplayName.ToLowerInvariant())/api/admin/ingestion -H "X-Admin-Key: &lt;clé&gt;"
+curl https://pulsemetrics.fr/@(Site.DisplayName.ToLowerInvariant())/api/admin/ingestion -H "X-Admin-Key: &lt;clé&gt;"</pre>
         <p class="muted">La clé est <code>Admin__ApiKey</code> dans <code>/etc/@Site.Key/@(Site.Key).env</code> sur le serveur.</p>
     </section>
 }

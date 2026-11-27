@@ -14,15 +14,15 @@ How FrontPulse gets its Mythic+ routes. The engine lives in PulseCore; only appl
 `RouteSyncWorker` runs this every 6 hours, separately from the ingestion, and counts from the last sync in the database so that a restart does not read everything again. To sync immediately:
 
 ```powershell
-dotnet run --project FrontPulse/src/Noovio.FrontPulse.Worker -- --sync-routes
+dotnet run --project PulseMetrics -- --sync-routes
 ```
 
 ## Credentials
 
 The API uses HTTP Basic with the email and password of a Keystone.guru account. Only the worker needs them:
 
-- locally, in `dotnet user-secrets` on the Worker project (`KeystoneGuru:Email`, `KeystoneGuru:Password`);
-- in production, in `/etc/frontpulse/frontpulse.env` (`KeystoneGuru__Email`, `KeystoneGuru__Password`).
+- locally, in `dotnet user-secrets` on the `PulseMetrics` project (`KeystoneGuru:Email`, `KeystoneGuru:Password`);
+- in production, in `/etc/pulsemetrics/pulsemetrics.env` (`KeystoneGuru__Email`, `KeystoneGuru__Password`).
 
 Credentials are sent to the API only, never with the public page requests. Without them, the worker logs a warning and the route pages stay empty.
 

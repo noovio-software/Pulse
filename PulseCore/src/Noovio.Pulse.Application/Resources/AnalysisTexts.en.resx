@@ -184,28 +184,28 @@
     <value>{0} gems or enchantments to rework</value>
   </data>
   <data name="Import_AltsString" xml:space="preserve">
-    <value>This string is your alts' progress: paste it on AltPulse (altpulse.noovio.fr), "Update from addon" button. Here, pick "My character" in the addon.</value>
+    <value>This string is your alts' progress: paste it on PulseMetrics Alt (pulsemetrics.fr/alt), "Update from addon" button. Here, pick "My character" in the addon.</value>
   </data>
   <data name="Import_BadContent" xml:space="preserve">
-    <value>Unreadable content: update the NoovioPulse addon, then export again.</value>
+    <value>Unreadable content: update the PulseMetrics addon, then export again.</value>
   </data>
   <data name="Import_Empty" xml:space="preserve">
-    <value>Paste the string copied from the NoovioPulse addon (/noovio command in game).</value>
+    <value>Paste the string copied from the PulseMetrics addon (/pulsemetrics command in game).</value>
   </data>
   <data name="Import_NewerAddon" xml:space="preserve">
     <value>This export comes from a version of the addon newer than the site: try again after the site's next update.</value>
   </data>
   <data name="Import_NoCharacter" xml:space="preserve">
-    <value>The export contains no character: log in with it in game and run /noovio again.</value>
+    <value>The export contains no character: log in with it in game and run /pulsemetrics again.</value>
   </data>
   <data name="Import_NoGear" xml:space="preserve">
-    <value>The export contains no gear: run /noovio again once in game, not on the character selection screen.</value>
+    <value>The export contains no gear: run /pulsemetrics again once in game, not on the character selection screen.</value>
   </data>
   <data name="Import_NotNoovio" xml:space="preserve">
-    <value>This is not a NoovioPulse string: it starts with "NP1:". A SimulationCraft string will not work.</value>
+    <value>This is not a PulseMetrics string: it starts with "NP1:". A SimulationCraft string will not work.</value>
   </data>
   <data name="Import_TooLong" xml:space="preserve">
-    <value>String too long: this is not a NoovioPulse export.</value>
+    <value>String too long: this is not a PulseMetrics export.</value>
   </data>
   <data name="Import_Truncated" xml:space="preserve">
     <value>Truncated or modified string: copy it again in full from the addon window (Ctrl+A, Ctrl+C).</value>

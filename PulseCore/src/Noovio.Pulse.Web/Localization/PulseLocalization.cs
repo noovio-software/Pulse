@@ -50,7 +50,8 @@ public static class PulseLocalization
                     Secure = http.Request.IsHttps
                 });
 
-            return Results.LocalRedirect(SafeReturnUrl(returnUrl));
+            var destination = http.Request.PathBase.Add(new PathString(SafeReturnUrl(returnUrl)));
+            return Results.LocalRedirect(destination);
         });
 
         return app;

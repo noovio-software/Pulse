@@ -22,7 +22,7 @@
     <value>Characters who can {0}</value>
   </data>
   <data name="Account_ImportTitle" xml:space="preserve">
-    <value>Analyse a character read in game by the NoovioPulse addon</value>
+    <value>Analyse a character read in game by the PulseMetrics addon</value>
   </data>
   <data name="Account_Level" xml:space="preserve">
     <value>lvl {0}</value>
@@ -43,7 +43,7 @@
     <value>{0} other characters (classes without a {1} specialization)</value>
   </data>
   <data name="Account_PageTitle" xml:space="preserve">
-    <value>My characters · {0} by Noovio</value>
+    <value>My characters · PulseMetrics {0}</value>
   </data>
   <data name="Account_SignOut" xml:space="preserve">
     <value>Sign out</value>
@@ -208,7 +208,7 @@
     <value>This dungeon is not in the current season, or its routes are not synced yet.</value>
   </data>
   <data name="Error_PageTitle" xml:space="preserve">
-    <value>Error · {0} by Noovio</value>
+    <value>Error · PulseMetrics {0}</value>
   </data>
   <data name="Error_RequestId" xml:space="preserve">
     <value>Request ID:</value>
@@ -361,7 +361,7 @@
     <value>Sign in with Battle.net, or</value>
   </data>
   <data name="Home_FeatureYouLink" xml:space="preserve">
-    <value>import it from the NoovioPulse addon</value>
+    <value>import it from the PulseMetrics addon</value>
   </data>
   <data name="Home_HighestKey" xml:space="preserve">
     <value>Highest key in the top</value>
@@ -370,7 +370,7 @@
     <value>Import from the addon</value>
   </data>
   <data name="Home_ImportTitle" xml:space="preserve">
-    <value>Paste the NoovioPulse addon string, no sign-in needed</value>
+    <value>Paste the PulseMetrics addon string, no sign-in needed</value>
   </data>
   <data name="Home_LastRun" xml:space="preserve">
     <value>Latest computation</value>
@@ -385,7 +385,7 @@
     <value>Top's median key</value>
   </data>
   <data name="Home_PageTitle" xml:space="preserve">
-    <value>{0} by Noovio · Mythic+ {1} meta</value>
+    <value>PulseMetrics {0} · Mythic+ {1} meta</value>
   </data>
   <data name="Home_Pending" xml:space="preserve">
     <value>pending</value>
@@ -478,16 +478,16 @@
     <value>direct download</value>
   </data>
   <data name="Import_Eyebrow" xml:space="preserve">
-    <value>NoovioPulse addon</value>
+    <value>PulseMetrics addon</value>
   </data>
   <data name="Import_Label" xml:space="preserve">
-    <value>NoovioPulse string</value>
+    <value>PulseMetrics string</value>
   </data>
   <data name="Import_Lead" xml:space="preserve">
     <value>The addon reads your character in game, right now: gear, gems, enchantments, talents and stats. No need to log out for Blizzard to update its profile, nor a Battle.net account on the site.</value>
   </data>
   <data name="Import_PageTitle" xml:space="preserve">
-    <value>Import from the addon · {0} by Noovio</value>
+    <value>Import from the addon · PulseMetrics {0}</value>
   </data>
   <data name="Import_Placeholder" xml:space="preserve">
     <value>Paste the string copied in game here…</value>
@@ -757,7 +757,7 @@
     <value>This class has no {0} specialization: import this character on the site for its role.</value>
   </data>
   <data name="Report_ImportRefreshTitle" xml:space="preserve">
-    <value>Compare this export with the latest meta again (for an up-to-date character, run /noovio in game again)</value>
+    <value>Compare this export with the latest meta again (for an up-to-date character, run /pulsemetrics in game again)</value>
   </data>
   <data name="Report_ItemLevel" xml:space="preserve">
     <value>Item level</value>
@@ -814,7 +814,7 @@
     <value>another specialization</value>
   </data>
   <data name="Report_PageTitle" xml:space="preserve">
-    <value>{0} · {1} by Noovio</value>
+    <value>{0} · PulseMetrics {1}</value>
   </data>
   <data name="Report_PlanNote" xml:space="preserve">
     <value>by effort, from the quickest to the longest; problems first in each group</value>
@@ -862,7 +862,7 @@
     <value>, client {0}</value>
   </data>
   <data name="Report_SourceTitle" xml:space="preserve">
-    <value>Read in game by the NoovioPulse addon{0}{1}</value>
+    <value>Read in game by the PulseMetrics addon{0}{1}</value>
   </data>
   <data name="Report_StatsNote" xml:space="preserve">
     <value>by the top's priority; you (◆) against its range</value>
@@ -934,7 +934,7 @@
     <value>The next sync with Keystone.guru will fill this page.</value>
   </data>
   <data name="Routes_PageTitle" xml:space="preserve">
-    <value>Midnight routes · {0} by Noovio</value>
+    <value>Midnight routes · PulseMetrics {0}</value>
   </data>
   <data name="Routes_SourceAfter" xml:space="preserve">
     <value>, updated {0}.</value>
@@ -1036,7 +1036,7 @@
     <value>No embellishment found.</value>
   </data>
   <data name="Spec_PageTitle" xml:space="preserve">
-    <value>{0} {1} · {2} by Noovio</value>
+    <value>{0} {1} · PulseMetrics {2}</value>
   </data>
   <data name="Spec_Sample" xml:space="preserve">
     <value>Sample</value>
@@ -1426,7 +1426,7 @@
     <value>Analyse a character by region, realm and name, no sign-in needed</value>
   </data>
   <data name="Search_PageTitle" xml:space="preserve">
-    <value>Find a character · {0} by Noovio</value>
+    <value>Find a character · PulseMetrics {0}</value>
   </data>
   <data name="Search_Eyebrow" xml:space="preserve">
     <value>Search</value>

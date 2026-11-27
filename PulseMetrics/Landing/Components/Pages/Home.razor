@@ -1,0 +1,364 @@
+<PageTitle>@LandingTexts.Home_Title</PageTitle>
+
+<HeadContent>
+    <link rel="canonical" href="https://pulsemetrics.fr/" />
+    <meta name="description" content="@LandingTexts.Home_Description" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PulseMetrics" />
+    <meta property="og:locale" content="@LandingTexts.Home_OgLocale" />
+    <meta property="og:url" content="https://pulsemetrics.fr/" />
+    <meta property="og:title" content="@LandingTexts.Home_OgTitle" />
+    <meta property="og:description" content="@LandingTexts.Home_OgDescription" />
+    <meta property="og:image" content="https://pulsemetrics.fr/landing/og-noovio.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+</HeadContent>
+
+<main class="shell">
+    @* --- Accroche ------------------------------------------------------------------------------ *@
+    <section class="hero">
+        <h1 class="hero-title">@LandingTexts.Hero_Title <em>@LandingTexts.Hero_TitleEm</em></h1>
+        <p class="hero-lead">
+            @LandingTexts.Hero_Lead
+        </p>
+    </section>
+
+    @* Le tracé relie les quatre outils : un battement par outil, dans l'ordre des portes et à la couleur de chacun. *@
+    <svg class="heartbeat" viewBox="0 0 1200 96" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+            <linearGradient id="heartbeat-color" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#4DFF88" />
+                <stop offset="0.2" stop-color="#4DFF88" />
+                <stop offset="0.3" stop-color="#F59E0B" />
+                <stop offset="0.45" stop-color="#F59E0B" />
+                <stop offset="0.55" stop-color="#4FA8F7" />
+                <stop offset="0.7" stop-color="#4FA8F7" />
+                <stop offset="0.8" stop-color="#A78BFA" />
+                <stop offset="1" stop-color="#A78BFA" />
+            </linearGradient>
+        </defs>
+        <path class="heartbeat-base" d="@HeartbeatPath" stroke="url(#heartbeat-color)" />
+        <path class="heartbeat-spark" d="@HeartbeatPath" stroke="url(#heartbeat-color)" pathLength="100" />
+    </svg>
+
+    @* --- Les quatre portes, deux par rangée : le lien couvre toute la carte (::after) -------------- *@
+    <section class="doors" aria-label="@LandingTexts.Doors_Label">
+        <article class="panel door tool-alt">
+            <div class="door-pattern" aria-hidden="true"></div>
+            <header class="door-head">
+                <ToolSigil Size="34" />
+                <span class="door-wordmark">
+                    <span class="door-name">Alt</span>
+                    <span class="door-by">PulseMetrics</span>
+                </span>
+                <span class="door-badge">@LandingTexts.Alt_Badge</span>
+            </header>
+            <h2 class="door-title">@LandingTexts.Alt_Title</h2>
+            <p class="door-lead">
+                @LandingTexts.Alt_Lead
+            </p>
+
+            <div class="preview" aria-hidden="true">
+                <span class="preview-tag">@LandingTexts.Preview_Tag</span>
+                <div class="alt-grid">
+                    <span></span>
+                    <strong style="--class: #C69B6D">@LandingTexts.Alt_Warrior</strong>
+                    <strong style="--class: #3FC7EB">@LandingTexts.Alt_Mage</strong>
+                    <strong style="--class: #F48CBA">@LandingTexts.Alt_Paladin</strong>
+
+                    <span>@LandingTexts.Alt_Ilvl</span><b>284</b><b>279</b><b>263</b>
+                    <span>@LandingTexts.Alt_Rating</span><b>@(3120.ToString("N0"))</b><b>@(2480.ToString("N0"))</b><b>@(1655.ToString("N0"))</b>
+                    <span>@LandingTexts.Alt_Keys</span><b>8</b><b>4</b><b>1</b>
+                    <span>@LandingTexts.Alt_Vault</span>
+                    <i class="vault"><u class="on"></u><u class="on"></u><u class="on"></u></i>
+                    <i class="vault"><u class="on"></u><u class="on"></u><u></u></i>
+                    <i class="vault"><u class="on"></u><u></u><u></u></i>
+                </div>
+            </div>
+
+            <footer class="door-foot">
+                <a class="door-link" href="alt/">
+                    @Ui.F(LandingTexts.Open_Tool, "Alt")
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </a>
+                <span class="door-note">@LandingTexts.Alt_Note</span>
+            </footer>
+        </article>
+
+        <article class="panel door tool-front">
+            <div class="door-pattern" aria-hidden="true"></div>
+            <header class="door-head">
+                <ToolSigil Front Size="34" />
+                <span class="door-wordmark">
+                    <span class="door-name">Front</span>
+                    <span class="door-by">PulseMetrics</span>
+                </span>
+                <span class="door-badge">@LandingTexts.Front_Badge</span>
+            </header>
+            <h2 class="door-title">@LandingTexts.Front_Title</h2>
+            <p class="door-lead">
+                @LandingTexts.Front_Lead
+            </p>
+
+            <div class="preview" aria-hidden="true">
+                <span class="preview-tag">@LandingTexts.Preview_Tag</span>
+                <div class="report">
+                    <div class="score" style="--score: 78">
+                        <strong>78</strong>
+                        <small>/ 100</small>
+                    </div>
+                    <ul class="gauges">
+                        <li style="--stat: #F59E0B; --you: 92%; --top: 88%"><span>@LandingTexts.Stat_Haste</span><i></i></li>
+                        <li style="--stat: #8B5CF6; --you: 44%; --top: 66%"><span>@LandingTexts.Stat_Mastery</span><i></i></li>
+                        <li style="--stat: #38BDF8; --you: 40%; --top: 48%"><span>@LandingTexts.Stat_Versatility</span><i></i></li>
+                        <li style="--stat: #F87171; --you: 34%; --top: 22%"><span>@LandingTexts.Stat_Crit</span><i></i></li>
+                    </ul>
+                </div>
+                <span class="legend"><u></u> @LandingTexts.Legend_You <u class="is-top"></u> @LandingTexts.Legend_Top</span>
+            </div>
+
+            <footer class="door-foot">
+                <a class="door-link" href="front/">
+                    @Ui.F(LandingTexts.Open_Tool, "Front")
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </a>
+                <span class="door-note">@LandingTexts.Front_Note</span>
+            </footer>
+        </article>
+
+        <article class="panel door tool-life">
+            <div class="door-pattern" aria-hidden="true"></div>
+            <header class="door-head">
+                <ToolSigil Life Size="34" />
+                <span class="door-wordmark">
+                    <span class="door-name">Life</span>
+                    <span class="door-by">PulseMetrics</span>
+                </span>
+                <span class="door-badge">@LandingTexts.Life_Badge</span>
+            </header>
+            <h2 class="door-title">@LandingTexts.Life_Title</h2>
+            <p class="door-lead">
+                @LandingTexts.Life_Lead
+            </p>
+
+            <div class="preview" aria-hidden="true">
+                <span class="preview-tag">@LandingTexts.Preview_Tag</span>
+                <div class="report">
+                    <div class="score" style="--score: 84">
+                        <strong>84</strong>
+                        <small>/ 100</small>
+                    </div>
+                    <ul class="gauges">
+                        <li style="--stat: #4FA8F7; --you: 86%; --top: 90%"><span>@LandingTexts.Stat_Haste</span><i></i></li>
+                        <li style="--stat: #F87171; --you: 58%; --top: 52%"><span>@LandingTexts.Stat_Crit</span><i></i></li>
+                        <li style="--stat: #8B5CF6; --you: 36%; --top: 46%"><span>@LandingTexts.Stat_Mastery</span><i></i></li>
+                        <li style="--stat: #2DD4BF; --you: 30%; --top: 28%"><span>@LandingTexts.Stat_Versatility</span><i></i></li>
+                    </ul>
+                </div>
+                <span class="legend"><u></u> @LandingTexts.Legend_You <u class="is-top"></u> @LandingTexts.Legend_Top</span>
+            </div>
+
+            <footer class="door-foot">
+                <a class="door-link" href="life/">
+                    @Ui.F(LandingTexts.Open_Tool, "Life")
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </a>
+                <span class="door-note">@LandingTexts.Meta_Note</span>
+            </footer>
+        </article>
+
+        <article class="panel door tool-burst">
+            <div class="door-pattern" aria-hidden="true"></div>
+            <header class="door-head">
+                <ToolSigil Burst Size="34" />
+                <span class="door-wordmark">
+                    <span class="door-name">Burst</span>
+                    <span class="door-by">PulseMetrics</span>
+                </span>
+                <span class="door-badge">@LandingTexts.Burst_Badge</span>
+            </header>
+            <h2 class="door-title">@LandingTexts.Burst_Title</h2>
+            <p class="door-lead">
+                @LandingTexts.Burst_Lead
+            </p>
+
+            <div class="preview" aria-hidden="true">
+                <span class="preview-tag">@LandingTexts.Preview_Tag</span>
+                <div class="report">
+                    <div class="score" style="--score: 71">
+                        <strong>71</strong>
+                        <small>/ 100</small>
+                    </div>
+                    <ul class="gauges">
+                        <li style="--stat: #F87171; --you: 80%; --top: 88%"><span>@LandingTexts.Stat_Crit</span><i></i></li>
+                        <li style="--stat: #FB923C; --you: 66%; --top: 62%"><span>@LandingTexts.Stat_Haste</span><i></i></li>
+                        <li style="--stat: #8B5CF6; --you: 38%; --top: 50%"><span>@LandingTexts.Stat_Mastery</span><i></i></li>
+                        <li style="--stat: #FBBF24; --you: 26%; --top: 20%"><span>@LandingTexts.Stat_Versatility</span><i></i></li>
+                    </ul>
+                </div>
+                <span class="legend"><u></u> @LandingTexts.Legend_You <u class="is-top"></u> @LandingTexts.Legend_Top</span>
+            </div>
+
+            <footer class="door-foot">
+                <a class="door-link" href="burst/">
+                    @Ui.F(LandingTexts.Open_Tool, "Burst")
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </a>
+                <span class="door-note">@LandingTexts.Meta_Note</span>
+            </footer>
+        </article>
+    </section>
+
+    @* --- L'addon PulseMetrics : il nourrit les quatre outils depuis le jeu ------------------------------ *@
+    <section class="panel addon tool-addon" aria-labelledby="addon-title">
+        <div class="addon-text">
+            <header class="door-head">
+                <span class="tool-sigil addon-sigil" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" width="34" height="34" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="26" height="26" rx="7" stroke-width="2" />
+                        <path d="M7 17h5l2-6 4 11 2.5-7H25" stroke-width="2.2" />
+                    </svg>
+                </span>
+                <span class="door-wordmark">
+                    <span class="door-name">PulseMetrics Addon</span>
+                    <span class="door-by">World of Warcraft companion</span>
+                </span>
+                <span class="door-badge">@LandingTexts.Addon_Badge</span>
+            </header>
+            <h2 class="door-title" id="addon-title">@LandingTexts.Addon_Title</h2>
+            <p class="door-lead">
+                @LandingTexts.Addon_LeadBefore <code>/pulsemetrics</code> @LandingTexts.Addon_LeadAfter
+            </p>
+
+            <ul class="addon-exports">
+                <li>
+                    <strong>@LandingTexts.Addon_MyCharacter</strong>
+                    <span>
+                        @LandingTexts.Addon_MyCharacterText
+                        <a class="tool-front" href="front/">Front</a>, <a class="tool-life" href="life/">Life</a>
+                        @LandingTexts.Addon_Or <a class="tool-burst" href="burst/">Burst</a>.
+                    </span>
+                </li>
+                <li>
+                    <strong>@LandingTexts.Addon_MyAlts</strong>
+                    <span>
+                        @LandingTexts.Addon_MyAltsText
+                        <a class="tool-alt" href="alt/">Alt</a>.
+                    </span>
+                </li>
+            </ul>
+
+            <footer class="door-foot">
+                <a class="door-link" href="addon">
+                    @LandingTexts.Addon_Download
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14" /></svg>
+                </a>
+                <span class="door-note">@AddonNote</span>
+            </footer>
+        </div>
+
+        @* Aperçu : la chaîne copiée en jeu, puis le bloc « Sacs et coffre » du rapport (valeurs fictives). *@
+        <div class="preview addon-preview" aria-hidden="true">
+            <span class="preview-tag">@LandingTexts.Preview_Tag</span>
+            <div class="addon-string">
+                <span class="addon-step">1</span>
+                <code>/pulsemetrics</code>
+                <span class="addon-arrow">→</span>
+                <code class="addon-code">NP1:D:eJzFWNtu4zYQ…</code>
+            </div>
+            <div class="addon-string">
+                <span class="addon-step">2</span>
+                <span>@LandingTexts.Addon_PastedReport</span>
+            </div>
+            <ul class="addon-items">
+                <li>
+                    <span>@LandingTexts.Addon_VaultBoots <small>@Ui.F(LandingTexts.Addon_Track, 2)</small></span>
+                    <b>330 → 346</b>
+                    <i class="is-good">@Ui.F(LandingTexts.Addon_AtMax, "+22")</i>
+                </li>
+                <li>
+                    <span>@LandingTexts.Addon_BagLegs <small>@Ui.F(LandingTexts.Addon_Track, 1)</small></span>
+                    <b>327 → 346</b>
+                    <i class="is-good">@Ui.F(LandingTexts.Addon_AtMax, "+28")</i>
+                </li>
+                <li>
+                    <span>@LandingTexts.Addon_Flask <small>×3</small></span>
+                    <b>@LandingTexts.Addon_Ready</b>
+                    <i class="is-good">✓</i>
+                </li>
+                <li>
+                    <span>@LandingTexts.Addon_CombatPotion <small>×2</small></span>
+                    <b>@LandingTexts.Addon_LowStock</b>
+                    <i class="is-warn">!</i>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    @* --- Lequel ouvrir ? -------------------------------------------------------------------------- *@
+    <section class="chooser">
+        <h2 class="chooser-heading">@LandingTexts.Chooser_Heading</h2>
+        <ul class="questions">
+            <li class="tool-alt">
+                <a href="alt/">
+                    <span class="question">@LandingTexts.Q_AltKeys</span>
+                    <span class="answer"><ToolSigil Size="16" /> Alt</span>
+                </a>
+            </li>
+            <li class="tool-front">
+                <a href="front/">
+                    <span class="question">@LandingTexts.Q_FrontMeta</span>
+                    <span class="answer"><ToolSigil Front Size="16" /> Front</span>
+                </a>
+            </li>
+            <li class="tool-life">
+                <a href="life/">
+                    <span class="question">@LandingTexts.Q_LifeMeta</span>
+                    <span class="answer"><ToolSigil Life Size="16" /> Life</span>
+                </a>
+            </li>
+            <li class="tool-burst">
+                <a href="burst/">
+                    <span class="question">@LandingTexts.Q_BurstMeta</span>
+                    <span class="answer"><ToolSigil Burst Size="16" /> Burst</span>
+                </a>
+            </li>
+            <li class="tool-alt">
+                <a href="alt/">
+                    <span class="question">@LandingTexts.Q_AltBosses</span>
+                    <span class="answer"><ToolSigil Size="16" /> Alt</span>
+                </a>
+            </li>
+            <li class="tool-front">
+                <a href="front/">
+                    <span class="question">@LandingTexts.Q_FrontFix</span>
+                    <span class="answer"><ToolSigil Front Size="16" /> Front</span>
+                </a>
+            </li>
+            <li class="tool-life">
+                <a href="life/">
+                    <span class="question">@LandingTexts.Q_LifeFix</span>
+                    <span class="answer"><ToolSigil Life Size="16" /> Life</span>
+                </a>
+            </li>
+            <li class="tool-burst">
+                <a href="burst/">
+                    <span class="question">@LandingTexts.Q_BurstFix</span>
+                    <span class="answer"><ToolSigil Burst Size="16" /> Burst</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+</main>
+
+@code {
+    /// <summary>« Ou en téléchargement direct : dossier à déposer dans Interface\AddOns », le lien vers les releases GitHub.</summary>
+    private static MarkupString AddonNote => new(Ui.F(
+        System.Net.WebUtility.HtmlEncode(LandingTexts.Addon_Note),
+        $"""<a href="addon-direct">{System.Net.WebUtility.HtmlEncode(LandingTexts.Addon_DirectDownload)}</a>"""));
+
+    // Ligne plate, un battement par outil, régulièrement espacés (x = 150, 450, 750 et 1050).
+    private const string HeartbeatPath =
+        "M0 62H100l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H400l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H700l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H1000l14-8 12 8h8l10 26 12-82 12 70 8-14h14l10-8 10 8H1200";
+}

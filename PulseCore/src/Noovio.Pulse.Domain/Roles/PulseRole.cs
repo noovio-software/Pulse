@@ -160,6 +160,12 @@ public sealed class RoleWording(string Key)
 /// <param name="Sigil">Tracé SVG de l'emblème (viewBox 32×32), traversé par le pouls commun à toutes les applications.</param>
 public sealed record PulseApp(string Name, PulseRole Role, string Sigil)
 {
+    /// <summary>Nom court présenté dans l'interface : « Front », « Life » ou « Burst ».</summary>
+    public string DisplayName => Name.EndsWith("Pulse", StringComparison.Ordinal) ? Name[..^5] : Name;
+
+    /// <summary>« front » : préfixe de l'outil dans PulseMetrics (/front/) et dossier de son thème et de ses icônes.</summary>
+    public string Slug => DisplayName.ToLowerInvariant();
+
     /// <summary>« frontpulse » : préfixe de cache, nom de cookie, unités systemd.</summary>
     public string Key => Name.ToLowerInvariant();
 
