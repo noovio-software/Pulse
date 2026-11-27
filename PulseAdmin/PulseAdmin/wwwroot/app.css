@@ -113,6 +113,36 @@ code { background: var(--panel-2); padding: 1px 6px; border-radius: 6px; font-si
 .kpi-value { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kpi-hint { color: var(--text-faint); font-size: 0.78rem; }
 
+/* Aujourd'hui : le coup d'œil en haut du tableau de bord */
+.today { display: grid; grid-template-columns: auto 1fr; gap: 18px 28px; align-items: center; margin-bottom: 18px; padding: 16px 18px;
+         background: linear-gradient(135deg, rgba(79, 168, 247, 0.10), transparent 55%), var(--panel);
+         border: 1px solid var(--line-strong); border-radius: var(--radius); }
+.today-figures { display: flex; gap: 28px; }
+.today-figure { display: flex; flex-direction: column; gap: 2px; min-width: 120px; }
+.today-label { color: var(--text-dim); font-size: 0.8rem; }
+.today-value { font-size: 2.4rem; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.today-hint { color: var(--text-faint); font-size: 0.78rem; }
+.today-people { min-width: 0; border-left: 1px solid var(--line); padding-left: 24px; }
+.today-people .empty { margin: 0; }
+.people { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px; max-height: 128px; overflow-y: auto; }
+.person { display: inline-flex; align-items: center; gap: 2px; padding: 4px 10px; border-radius: 999px; background: var(--panel-2);
+          border: 1px solid var(--line); color: var(--text); font-size: 0.85rem; }
+.person:hover { border-color: var(--accent); text-decoration: none; }
+.person .swatch { width: 8px; height: 8px; margin-right: 3px; }
+.person-name { margin-left: 3px; font-weight: 500; }
+.person-count { color: var(--text-faint); font-variant-numeric: tabular-nums; margin-left: 4px; }
+.person-tag { color: var(--text-faint); font-size: 0.72rem; margin-left: 6px; }
+
+/* Application installée, notifications */
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
+.btn-small { padding: 5px 10px; font-size: 0.82rem; }
+.btn[hidden] { display: none; }
+.btn.on { color: var(--text); border-color: var(--accent); }
+.btn:disabled { opacity: 0.55; cursor: default; filter: none; }
+.toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 20; background: var(--panel-2); color: var(--text);
+         border: 1px solid var(--line-strong); border-radius: 10px; padding: 9px 16px; font-size: 0.86rem; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); }
+.toast[hidden] { display: none; }
+
 /* Légendes et pastilles */
 .legend { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 0; margin: 0 0 8px; color: var(--text-dim); font-size: 0.82rem; }
 .legend li { display: flex; align-items: center; gap: 6px; }
@@ -225,4 +255,7 @@ code { background: var(--panel-2); padding: 1px 6px; border-radius: 6px; font-si
     .filter-actions { margin-left: 0; }
     .verdicts li { grid-template-columns: 96px 1fr 48px; }
     .kpi-value { font-size: 1.3rem; }
+    .today { grid-template-columns: 1fr; }
+    .today-people { border-left: 0; padding-left: 0; }
+    .today-value { font-size: 2rem; }
 }

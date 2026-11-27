@@ -1,0 +1,80 @@
+@* L'essentiel du jour, d'un coup d'œil : indépendant des filtres de la page. *@
+@inject TimeProvider Time
+
+<section class="today" aria-label="Aujourd'hui">
+    <div class="today-figures">
+        <div class="today-figure">
+            <span class="today-label">Benchs aujourd'hui</span>
+            <span class="today-value">@Labels.Number(Today.Benches)</span>
+            <span class="today-hint">
+                @if (Trend is { } trend)
+                {
+                    <span class="@(trend >= 0 ? "pos" : "neg")">@Labels.Signed(trend * 100, 0, " %")</span>
+                }
+                hier à la même heure : @Labels.Number(YesterdaySameTime)
+            </span>
+        </div>
+        <div class="today-figure">
+            <span class="today-label">Utilisateurs</span>
+            <span class="today-value">@Labels.Number(Today.Users)</span>
+            <span class="today-hint">
+                @if (Today.LastBenchUtc is { } last)
+                {
+                    @($"dernier bench {Labels.Ago(last, Time.GetUtcNow())}")
+                }
+                else
+                {
+                    @("aucun bench depuis minuit")
+                }
+            </span>
+        </div>
+    </div>
+
+    <div class="today-people">
+        @if (Today.People.Count == 0)
+        {
+            <p class="empty">Personne n'a lancé de bench depuis minuit.</p>
+        }
+        else
+        {
+            <ul class="people">
+                @foreach (var p in Today.People)
+                {
+                    <li>
+                        <a class="person" href="@PersonUrl(p)" title="@PersonTitle(p)">
+                            @foreach (var app in p.Apps)
+                            {
+                                <i class="swatch @Labels.AppClass(app)"></i>
+                            }
+                            <span class="person-name">@p.Name</span>
+                            @if (p.Benches > 1)
+                            {
+                                <span class="person-count">×@p.Benches</span>
+                            }
+                            @if (p.BattleNetId is null)
+                            {
+                                <span class="person-tag">addon</span>
+                            }
+                        </a>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</section>
+
+@code {
+    [Parameter, EditorRequired] public UsageDigest Today { get; set; } = default!;
+    [Parameter] public int YesterdaySameTime { get; set; }
+
+    private double? Trend => YesterdaySameTime == 0 ? null : (double)(Today.Benches - YesterdaySameTime) / YesterdaySameTime;
+
+    private static string PersonUrl(DigestPerson p) =>
+        p.BattleNetId is { } id ? $"/benchs?periode=24h&compte={id}" : $"/benchs?periode=24h&q={Uri.EscapeDataString(p.Name)}";
+
+    private string PersonTitle(DigestPerson p)
+    {
+        var characters = p.Characters.Count > 1 ? $" · persos : {string.Join(", ", p.Characters)}" : "";
+        return $"{p.Name} ({p.Realm}) · {p.Benches} bench(s) · {string.Join(", ", p.Apps)} · dernier {Labels.Ago(p.LastSeenUtc, Time.GetUtcNow())}{characters}";
+    }
+}

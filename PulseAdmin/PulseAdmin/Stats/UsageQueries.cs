@@ -48,6 +48,31 @@ public sealed class UsageQueries(UsageDbContext db, TimeProvider time)
         return new BenchPage(items, total, filter.Page, PageSize);
     }
 
+    /// <summary>Le résumé d'une période, tous benchs confondus (sans les filtres de l'adresse).</summary>
+    public async Task<UsageDigest> GetDigestAsync(DateTimeOffset fromUtc, DateTimeOffset toUtc, CancellationToken ct)
+    {
+        var rows = await db.BenchEvents
+            .Where(e => e.OccurredAtUtc >= fromUtc && e.OccurredAtUtc < toUtc)
+            .Select(e => new DigestRow(e.OccurredAtUtc, e.App, e.BattleNetId, e.Region, e.RealmName, e.CharacterName))
+            .ToListAsync(ct);
+        return UsageDigest.Build(rows, fromUtc, toUtc);
+    }
+
+    /// <summary>
+    /// La journée en cours (heure de Paris), et le nombre de benchs de la veille à la même heure pour situer le chiffre.
+    /// </summary>
+    public async Task<(UsageDigest Today, int YesterdaySameTime)> GetTodayAsync(CancellationToken ct)
+    {
+        var now = time.GetUtcNow();
+        var localDay = TimeZoneInfo.ConvertTime(now, StatsFilter.Zone).Date;
+        var start = new DateTimeOffset(localDay, StatsFilter.Zone.GetUtcOffset(localDay)).ToUniversalTime();
+        var yesterday = new DateTimeOffset(localDay.AddDays(-1), StatsFilter.Zone.GetUtcOffset(localDay.AddDays(-1))).ToUniversalTime();
+
+        var today = await GetDigestAsync(start, now, ct);
+        var before = await db.BenchEvents.CountAsync(e => e.OccurredAtUtc >= yesterday && e.OccurredAtUtc < yesterday + (now - start), ct);
+        return (today, before);
+    }
+
     public Task<BenchEvent?> GetBenchAsync(long id, CancellationToken ct) =>
         db.BenchEvents.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id, ct);
 

@@ -6,7 +6,7 @@
 <PageTitle>Tableau de bord · PulseMetrics Admin</PageTitle>
 
 @* En rendu statique, un premier rendu a lieu pendant le chargement : rien à afficher encore. *@
-@if (report is null || options is null)
+@if (report is null || options is null || today is null)
 {
     <p class="empty">Chargement…</p>
 }
@@ -20,6 +20,8 @@ else
         <p class="dim">@Labels.DateTime(from) → @Labels.DateTime(to) (heure de Paris) · actualisé @Labels.DateTime(Time.GetUtcNow())</p>
     </div>
 </div>
+
+<TodayPanel Today="today" YesterdaySameTime="yesterdaySameTime" />
 
 <FilterBar Filter="filter" Options="options" Path="/" />
 
@@ -258,6 +260,8 @@ else
     private StatsFilter filter = default!;
     private FilterOptions? options;
     private UsageReport? report;
+    private UsageDigest? today;
+    private int yesterdaySameTime;
     private DateTimeOffset from;
     private DateTimeOffset to;
     private List<ColumnData> dailyColumns = [];
@@ -269,6 +273,7 @@ else
         filter = StatsFilter.Parse(HttpContext.Request.Query);
         options = await Queries.GetOptionsAsync(HttpContext.RequestAborted);
         (report, from, to) = await Queries.GetReportAsync(filter, HttpContext.RequestAborted);
+        (today, yesterdaySameTime) = await Queries.GetTodayAsync(HttpContext.RequestAborted);
 
         var long_ = report.Daily.Count > 45;
         dailyColumns = report.Daily

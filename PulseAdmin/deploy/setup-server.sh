@@ -26,6 +26,15 @@ if ! sudo test -f "$ENV_FILE"; then
 fi
 sudo sed -i '/^ConnectionStrings__PulseUsage=/d' "$ENV_FILE"
 echo "ConnectionStrings__PulseUsage=$CONNECTION" | sudo tee -a "$ENV_FILE" >/dev/null
+# Jeton du bot Discord et clés des notifications : générés une fois, jamais remplacés.
+if ! sudo grep -qE '^Api__Key=.+' "$ENV_FILE"; then
+    sudo sed -i '/^Api__Key=/d' "$ENV_FILE"
+    echo "Api__Key=$(openssl rand -hex 32)" | sudo tee -a "$ENV_FILE" >/dev/null
+fi
+if ! sudo grep -qE '^Notifications__PrivateKey=.+' "$ENV_FILE" && [ -x "$APP_DIR/PulseAdmin" ]; then
+    sudo sed -i '/^Notifications__PublicKey=/d; /^Notifications__PrivateKey=/d' "$ENV_FILE"
+    "$APP_DIR/PulseAdmin" --vapid-keys | sudo tee -a "$ENV_FILE" >/dev/null
+fi
 sudo chown root:root "$ENV_FILE"
 sudo chmod 600 "$ENV_FILE"
 
@@ -42,3 +51,5 @@ sudo certbot --nginx -d "$DOMAIN" --redirect --non-interactive --agree-tos --reg
 echo "Terminé. Compléter les clés Blizzard et le BattleTag dans $ENV_FILE."
 echo "Déclarer https://$DOMAIN/signin-battlenet dans le client Battle.net."
 echo "Déployer avec un tag prod-admin-x.y.z."
+echo "Clés des notifications absentes au premier passage (pas encore d'exécutable) : relancer ce script après le premier déploiement."
+echo "Jeton du bot : sudo grep Api__Key $ENV_FILE (à recopier en PULSEADMIN_API_KEY dans /etc/nooviobot/nooviobot.env)."
