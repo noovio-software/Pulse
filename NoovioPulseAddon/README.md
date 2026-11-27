@@ -1,7 +1,7 @@
 # NoovioPulse Addons
 
 World of Warcraft addon that exports the logged-in character to the Pulse sites
-([FrontPulse](../FrontPulse/README.md), [LifePulse](../LifePulse/README.md), [BurstPulse](../BurstPulse/README.md)),
+([Front](../PulseMetrics/docs/front.md), [Life](../PulseMetrics/docs/life.md), [Burst](../PulseMetrics/docs/burst.md)),
 in the spirit of SimulationCraft: a string copied in game, pasted on the site, which runs the character analysis against the top 100.
 
 What the import adds to the Battle.net sign-in:
@@ -17,7 +17,7 @@ The portrait and the Mythic+ part (Raider.io) are read by name, realm and region
 1. Download the zip of the latest version (GitHub releases `noovio-pulse-addon-x.y.z`).
 2. Drop the `NoovioPulse` folder into `World of Warcraft\_retail_\Interface\AddOns`.
 3. In game: `/noovio` (or the addon menu under the minimap), out of combat, in the specialization to analyse.
-4. `Ctrl+C` (the string is already selected), then paste it on `https://<site>.noovio.fr/importer`.
+4. `Ctrl+C` (the string is already selected), then paste it on `https://noovio.fr/<tool>/importer`.
 
 While developing, a symbolic link saves copying the folder:
 

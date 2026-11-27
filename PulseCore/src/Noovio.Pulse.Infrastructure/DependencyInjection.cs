@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 using Noovio.Pulse.Application.Abstractions;
 using Noovio.Pulse.Domain.Roles;
 using Noovio.Pulse.Infrastructure.Blizzard;
@@ -23,7 +24,13 @@ public static class DependencyInjection
         services.Configure<RaiderIoOptions>(configuration.GetSection(RaiderIoOptions.SectionName));
         services.Configure<KeystoneGuruOptions>(configuration.GetSection(KeystoneGuruOptions.SectionName));
 
-        services.AddDbContext<TContext>(o => o.UseNpgsql(configuration.GetConnectionString(app.Name)));
+        var connectionString = configuration.GetConnectionString(app.Name);
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException($"ConnectionStrings:{app.Name} n'est pas configurée pour PulseMetrics.");
+        }
+
+        services.AddDbContext<TContext>(o => o.UseNpgsql(connectionString));
         services.AddScoped<PulseDbContext>(sp => sp.GetRequiredService<TContext>());
 
         services.TryAddSingleton(TimeProvider.System);
@@ -42,8 +49,10 @@ public static class DependencyInjection
             services.AddDistributedMemoryCache();
         }
 
-        services.AddSingleton<BlizzardRateLimiter>();
-        services.AddSingleton<RaiderIoRateLimiter>();
+        // TryAdd : l'hôte peut fournir des limiteurs communs à plusieurs applications du même processus (même client
+        // Blizzard, même adresse IP), pour que leurs quotas s'additionnent au lieu de se multiplier.
+        services.TryAddSingleton<BlizzardRateLimiter>();
+        services.TryAddSingleton<RaiderIoRateLimiter>();
         services.AddTransient<RateLimitingHandler<BlizzardRateLimiter>>();
         services.AddTransient<RateLimitingHandler<RaiderIoRateLimiter>>();
         services.AddSingleton<KeystoneGuruRateLimiter>();
@@ -103,6 +112,18 @@ public static class DependencyInjection
         await using var scope = services.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<PulseDbContext>().Database;
         var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Noovio.Pulse.Migrations");
+
+        var connectionString = new NpgsqlConnectionStringBuilder(db.GetConnectionString());
+        var schema = connectionString.SearchPath?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(schema))
+        {
+            var connection = db.GetDbConnection();
+            await connection.OpenAsync(ct);
+            await using var command = connection.CreateCommand();
+            command.CommandText = "CREATE SCHEMA IF NOT EXISTS \"" + schema.Replace("\"", "\"\"", StringComparison.Ordinal) + "\"";
+            await command.ExecuteNonQueryAsync(ct);
+            await connection.CloseAsync();
+        }
 
         for (var attempt = 1; ; attempt++)
         {

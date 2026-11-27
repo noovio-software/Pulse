@@ -1,7 +1,7 @@
 @page "/specs/{Slug}"
 @rendermode InteractiveServer
 
-<PageTitle>@(info is null ? Ui.F(WebTexts.Report_PageTitle, WebTexts.Spec_Unknown, Site.Name) : Ui.F(WebTexts.Spec_PageTitle, info.SpecName, info.ClassName, Site.Name))</PageTitle>
+<PageTitle>@(info is null ? Ui.F(WebTexts.Report_PageTitle, WebTexts.Spec_Unknown, Site.DisplayName) : Ui.F(WebTexts.Spec_PageTitle, info.SpecName, info.ClassName, Site.DisplayName))</PageTitle>
 
 <TopBar Active="info?.Spec" />
 
@@ -10,8 +10,8 @@
 {
     <section class="panel empty-state">
         <h1>@WebTexts.Spec_Unknown</h1>
-        <p>@Ui.F(WebTexts.Spec_UnknownText, Site.Name, Site.Words.SpecCount, Site.Words.Noun)</p>
-        <a class="btn" href="/">@WebTexts.Common_Back</a>
+        <p>@Ui.F(WebTexts.Spec_UnknownText, Site.DisplayName, Site.Words.SpecCount, Site.Words.Noun)</p>
+        <a class="btn" href=".">@WebTexts.Common_Back</a>
     </section>
 }
 else if (Meta is null)

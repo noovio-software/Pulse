@@ -1,0 +1,17 @@
+@* En-tête du site : logo à gauche, actions de la page (ChildContent) alignées à droite. *@
+
+<header class="topbar">
+    <a class="brand" href=".">
+        <Sigil />
+        <span class="brand-wordmark">
+            <span class="brand-name">PulseMetrics · Alt</span>
+            <span class="brand-by">World of Warcraft analytics</span>
+        </span>
+        <span class="brand-tag">@AltTexts.Brand_Tag</span>
+    </a>
+
+    <div class="topbar-actions">
+        @ChildContent
+        <LanguageSwitch />
+    </div>
+</header>

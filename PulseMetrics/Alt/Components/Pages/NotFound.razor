@@ -1,0 +1,15 @@
+﻿@page "/not-found"
+@layout MainLayout
+@using PulseMetrics.Alt.Client.Components
+
+<PageTitle>@AltTexts.NotFound_Title</PageTitle>
+
+<TopBar />
+
+<main class="shell">
+    <section class="panel empty-state">
+        <h1>@AltTexts.NotFound_Heading</h1>
+        <p>@AltTexts.NotFound_Text</p>
+        <a class="btn" href=".">@AltTexts.Common_Back</a>
+    </section>
+</main>

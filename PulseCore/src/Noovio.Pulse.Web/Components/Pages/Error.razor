@@ -1,6 +1,6 @@
 @page "/Error"
 
-<PageTitle>@Ui.F(WebTexts.Error_PageTitle, Site.Name)</PageTitle>
+<PageTitle>@Ui.F(WebTexts.Error_PageTitle, Site.DisplayName)</PageTitle>
 
 <TopBar />
 
@@ -12,6 +12,6 @@
         {
             <p class="muted">@WebTexts.Error_RequestId <code>@RequestId</code></p>
         }
-        <a class="btn" href="/">@WebTexts.Common_Back</a>
+        <a class="btn" href=".">@WebTexts.Common_Back</a>
     </section>
 </main>

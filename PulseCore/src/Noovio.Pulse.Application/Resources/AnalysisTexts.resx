@@ -184,7 +184,7 @@
     <value>{0} gemmes ou enchantements à réorienter</value>
   </data>
   <data name="Import_AltsString" xml:space="preserve">
-    <value>Cette chaîne est l'avancement de tes alts : colle-la sur AltPulse (altpulse.noovio.fr), bouton « MàJ depuis l'addon ». Ici, choisis « Mon personnage » dans l'addon.</value>
+    <value>Cette chaîne est l'avancement de tes alts : colle-la sur PulseMetrics Alt (pulsemetrics.fr/alt), bouton « MàJ depuis l'addon ». Ici, choisis « Mon personnage » dans l'addon.</value>
   </data>
   <data name="Import_BadContent" xml:space="preserve">
     <value>Contenu illisible : mets l'addon NoovioPulse à jour puis refais l'export.</value>

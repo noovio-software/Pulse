@@ -8,6 +8,7 @@ using Noovio.Pulse.Application;
 using Noovio.Pulse.Application.Abstractions;
 using Noovio.Pulse.Domain.Roles;
 using Noovio.Pulse.Infrastructure;
+using Noovio.Pulse.Infrastructure.Hosting;
 using Noovio.Pulse.Infrastructure.Persistence;
 using Noovio.Pulse.Usage;
 using Noovio.Pulse.Web.Auth;
@@ -17,15 +18,18 @@ using Noovio.Pulse.Web.ShareCard;
 
 namespace Noovio.Pulse.Web;
 
-/// <summary>Hôte du site d'une application Pulse : le <c>Program.cs</c> de l'application se réduit à cet appel.</summary>
+/// <summary>
+/// Site d'une application Pulse (Front, Life, Burst), avec ses workers d'ingestion : l'hôte PulseMetrics fournit le
+/// constructeur (déjà relié à son serveur) et monte l'application sous son préfixe (<see cref="PulseApp.Slug"/>).
+/// </summary>
 public static class PulseSite
 {
-    public static async Task RunAsync<TContext>(string[] args, PulseApp pulse) where TContext : PulseDbContext
+    /// <param name="workers">Ingestion et synchronisation des routes en tâche de fond, dans le même conteneur que le site.</param>
+    public static WebApplication Build<TContext>(WebApplicationBuilder builder, PulseApp pulse, bool workers)
+        where TContext : PulseDbContext
     {
         // Hors requête (démarrage, tâches de fond), le français ; chaque requête prend ensuite la langue du visiteur.
         CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(PulseLocalization.DefaultCulture);
-
-        var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddPulseLocalization();
         builder.Services.AddRazorComponents()
@@ -39,9 +43,13 @@ public static class PulseSite
         builder.Services.Configure<ForwardedHeadersOptions>(options =>
             options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto);
 
-        // Le site lit les snapshots (l'ingestion tourne dans le worker), gère les comptes et les analyses.
+        // Le site lit les snapshots (écrits par les workers), gère les comptes et les analyses.
         builder.Services.AddPulseApplication(builder.Configuration, pulse);
         builder.Services.AddPulseInfrastructure<TContext>(builder.Configuration, pulse);
+        if (workers)
+        {
+            builder.Services.AddPulseWorkers(pulse);
+        }
         builder.Services.AddBattleNetAuthentication(builder.Configuration, pulse);
         builder.Services.AddPulseAdmin(builder.Configuration);
         // Chaque bench est écrit dans la base d'usage commune, lue par PulseAdmin (sans chaîne PulseUsage : rien n'est écrit).
@@ -61,9 +69,7 @@ public static class PulseSite
         }
 
         var app = builder.Build();
-
-        // Le worker applique aussi les migrations au démarrage : EF Core sérialise les deux par un verrou en base.
-        await app.Services.MigratePulseDatabaseAsync();
+        PulseWorker.LogConfigurationWarnings(app.Services, pulse);
 
         app.UseForwardedHeaders();
         // Avant tout le reste : les pages, l'API et le circuit Blazor (fixé à sa connexion) prennent la langue du visiteur.
@@ -130,6 +136,6 @@ public static class PulseSite
         app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode();
 
-        await app.RunAsync();
+        return app;
     }
 }

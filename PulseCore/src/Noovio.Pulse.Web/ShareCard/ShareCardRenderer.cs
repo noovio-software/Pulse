@@ -130,8 +130,8 @@ public sealed class ShareCardRenderer(IHttpClientFactory http, PulseApp site, IL
 
         using var name = new SKFont(Bold, 28);
         using var by = new SKFont(Medium, 20);
-        DrawText(canvas, site.Name, Pad + 54, 76, name, Text);
-        DrawText(canvas, "by Noovio", Pad + 54 + name.MeasureText(site.Name) + 10, 76, by, Faint);
+        DrawText(canvas, site.DisplayName, Pad + 54, 76, name, Text);
+        DrawText(canvas, "PulseMetrics", Pad + 54 + name.MeasureText(site.DisplayName) + 10, 76, by, Faint);
     }
 
     /// <returns>Abscisse du texte d'identité, à droite de l'avatar s'il y en a un.</returns>

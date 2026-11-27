@@ -571,7 +571,7 @@ namespace Noovio.Pulse.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cette chaîne est l&apos;avancement de tes alts : colle-la sur AltPulse (altpulse.noovio.fr), bouton « MàJ depuis l&apos;addon ». Ici, choisis « Mon personnage » dans l&apos;addon..
+        ///   Looks up a localized string similar to Cette chaîne est l&apos;avancement de tes alts : colle-la sur AltPulse (noovio.fr/altpulse), bouton « MàJ depuis l&apos;addon ». Ici, choisis « Mon personnage » dans l&apos;addon..
         /// </summary>
         internal static string Import_AltsString {
             get {

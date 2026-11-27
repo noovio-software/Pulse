@@ -24,10 +24,10 @@ local Colors = {
 
 -- Le site où coller la chaîne : celui du rôle joué pour l'analyse, AltPulse pour les alts.
 local Sites = {
-    TANK = { name = "FrontPulse", url = "https://frontpulse.noovio.fr/importer", hex = "f59e0b" },
-    HEALER = { name = "LifePulse", url = "https://lifepulse.noovio.fr/importer", hex = "4fa8f7" },
-    DAMAGER = { name = "BurstPulse", url = "https://burstpulse.noovio.fr/importer", hex = "a78bfa" },
-    ALTS = { name = "AltPulse", url = "https://altpulse.noovio.fr", hex = "4dff88" },
+    TANK = { name = "Front", url = "https://pulsemetrics.fr/front/importer", hex = "f59e0b" },
+    HEALER = { name = "Life", url = "https://pulsemetrics.fr/life/importer", hex = "4fa8f7" },
+    DAMAGER = { name = "Burst", url = "https://pulsemetrics.fr/burst/importer", hex = "a78bfa" },
+    ALTS = { name = "Alt", url = "https://pulsemetrics.fr/alt/", hex = "4dff88" },
 }
 
 local window

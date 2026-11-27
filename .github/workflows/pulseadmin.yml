@@ -1,9 +1,10 @@
-name: PulseAdmin
+name: Admin
 
-# Déploiement en prod sur un tag, ex. : git tag prod-pulseadmin-1.0.0 && git push origin prod-pulseadmin-1.0.0
+# Déploiement en prod sur un tag, ex. : git tag prod-admin-1.0.0 && git push origin prod-admin-1.0.0
 on:
   push:
     tags:
+      - 'prod-admin-[0-9]+.[0-9]+.[0-9]+'
       - 'prod-pulseadmin-[0-9]+.[0-9]+.[0-9]+'
 
 # Un seul déploiement à la fois : un tag poussé pendant un déploiement attend la fin du précédent.
@@ -26,7 +27,7 @@ jobs:
       - name: Extract version from tag
         run: |
           TAG_NAME="${GITHUB_REF##*/}"
-          VERSION="${TAG_NAME#prod-pulseadmin-}"
+          VERSION="${TAG_NAME##*-}"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "::notice title=Build version::$VERSION"
 
@@ -59,4 +60,4 @@ jobs:
 
       # Sans session, la page d'accueil renvoie vers Battle.net (302) : on vérifie la page d'accès, publique.
       - name: Smoke test
-        run: curl -fsS --retry 6 --retry-delay 5 --retry-all-errors -o /dev/null -w "HTTP %{http_code}\n" https://pulseadmin.noovio.fr/acces-refuse
+        run: curl -fsS --retry 6 --retry-delay 5 --retry-all-errors -o /dev/null -w "HTTP %{http_code}\n" https://admin.pulsemetrics.fr/acces-refuse

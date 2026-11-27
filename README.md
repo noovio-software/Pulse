@@ -1,17 +1,14 @@
-# Pulse by Noovio
+# PulseMetrics
 
-Solution `Pulse.sln`, one folder per application:
+World of Warcraft tools at https://pulsemetrics.fr, in one application: the landing page at `/`, Alt (`/alt/`), Front (`/front/`), Life (`/life/`) and Burst (`/burst/`) run in a single process on a single port.
 
-| Folder | Application |
+| Folder | Role |
 |---|---|
-| [`AltPulse/`](AltPulse/README.md) | AltPulse, World of Warcraft character tracker (https://altpulse.noovio.fr) |
-| [`FrontPulse/`](FrontPulse/README.md) | FrontPulse, Mythic+ tank meta (top 100 per spec) |
-| [`LifePulse/`](LifePulse/README.md) | LifePulse, Mythic+ healer meta (top 100 per spec) |
-| [`BurstPulse/`](BurstPulse/README.md) | BurstPulse, Mythic+ DPS meta (top 100 per spec) |
-| [`NoovioPulseAddon/`](NoovioPulseAddon/README.md) | NoovioPulse Addons, World of Warcraft addon: exports the in-game character to FrontPulse, LifePulse and BurstPulse (`/importer` page) |
-| [`PulseCore/`](PulseCore/README.md) | Engine shared by FrontPulse, LifePulse and BurstPulse (not deployed on its own) |
-| [`LandingPagePulse/`](LandingPagePulse/README.md) | Noovio presentation page, gives access to the four tools (https://www.noovio.fr) |
-| [`PulseAdmin/`](PulseAdmin/README.md) | Private usage statistics of the three meta sites (not linked from the Noovio page) |
+| [`PulseMetrics/`](PulseMetrics/README.md) | The application: host, landing page, Alt, Front, Life and Burst, deployment |
+| `PulseMetrics.Alt.Client/` | Alt's WebAssembly client (separate project, required by the WebAssembly SDK) |
+| [`PulseCore/`](PulseCore/README.md) | Engine shared by Front, Life and Burst: domain, rules, API clients, pages, workers |
+| [`NoovioPulseAddon/`](NoovioPulseAddon/README.md) | Companion World of Warcraft addon (`/importer`) |
+| [`PulseAdmin/`](PulseAdmin/README.md) | Private usage statistics at https://admin.pulsemetrics.fr, deployed on its own |
 
 ## License
 

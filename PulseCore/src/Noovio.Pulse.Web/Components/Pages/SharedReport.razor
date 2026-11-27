@@ -1,7 +1,7 @@
 @page "/partage/{Token}"
 @rendermode InteractiveServer
 
-<PageTitle>@Ui.F(WebTexts.Report_PageTitle, shared is { } titled ? PreviewTitle(titled) : WebTexts.Shared_Title, Site.Name)</PageTitle>
+<PageTitle>@Ui.F(WebTexts.Report_PageTitle, shared is { } titled ? PreviewTitle(titled) : WebTexts.Shared_Title, Site.DisplayName)</PageTitle>
 
 <HeadContent>
     @* Lien personnel, transmis à la main : pas dans les moteurs de recherche. *@
@@ -10,7 +10,7 @@
     @if (shared is { } preview)
     {
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="@Site.Name by Noovio" />
+        <meta property="og:site_name" content="PulseMetrics · @Site.DisplayName" />
         <meta property="og:url" content="@PageUrl" />
         <meta property="og:title" content="@PreviewTitle(preview)" />
         <meta property="og:description" content="@PreviewDescription(preview)" />

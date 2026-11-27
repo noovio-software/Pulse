@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="@Ui.CurrentLanguage">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080C10" />
+    <base href="/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="@Assets["landing/app.css"]" />
+    <link rel="stylesheet" href="@Assets["PulseMetrics.styles.css"]" />
+    <link rel="icon" href="@Assets["landing/favicon.ico"]" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="@Assets["landing/favicon.svg"]" />
+    <link rel="apple-touch-icon" href="@Assets["landing/apple-touch-icon.png"]" />
+    <HeadOutlet />
+</head>
+
+<body>
+    <LayoutView Layout="typeof(MainLayout)">
+        <DynamicComponent Type="Page" />
+    </LayoutView>
+</body>
+
+</html>
+
+@code {
+    /// <summary>
+    /// Page à rendre (Home, NotFound, Error). Pas de routeur : les pages d'Alt vivent dans le même assembly, et la page
+    /// d'accueil, rendue côté serveur sans interactivité, n'a que trois adresses (voir <see cref="LandingSite"/>).
+    /// </summary>
+    [Parameter, EditorRequired] public Type Page { get; set; } = default!;
+}

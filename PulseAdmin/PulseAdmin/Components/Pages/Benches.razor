@@ -2,7 +2,7 @@
 @attribute [Authorize(Policy = AdminAuthentication.Policy)]
 @inject UsageQueries Queries
 
-<PageTitle>Benchs · PulseAdmin</PageTitle>
+<PageTitle>Benchs · PulseMetrics Admin</PageTitle>
 
 @* En rendu statique, un premier rendu a lieu pendant le chargement : rien à afficher encore. *@
 @if (benches is null || options is null)

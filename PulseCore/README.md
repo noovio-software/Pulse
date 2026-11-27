@@ -1,14 +1,14 @@
 # PulseCore
 
-The shared engine behind the role-focused Mythic+ meta sites: [FrontPulse](../FrontPulse/README.md) (tanks), [LifePulse](../LifePulse/README.md) (healers) and [BurstPulse](../BurstPulse/README.md) (DPS).
+The shared engine behind the role-focused Mythic+ meta sites: [Front](../PulseMetrics/docs/front.md) (tanks), [Life](../PulseMetrics/docs/life.md) (healers) and [Burst](../PulseMetrics/docs/burst.md) (DPS).
 It is not deployed on its own: each application references it and adds its host, database and theme.
 
 | Project | Depends on | Role |
 |---|---|---|
 | `Noovio.Pulse.Domain` | nothing | Entities, enums (`WowSpec` = Blizzard spec ids), the role catalog (`PulseRoles.Tank`, `PulseRoles.Healer`, `PulseRoles.Damage`), `PulseApp` |
 | `Noovio.Pulse.Application` | Domain | Contracts, ingestion, aggregation, character analysis |
-| `Noovio.Pulse.Infrastructure` | Application | Raider.io and Blizzard clients, abstract `PulseDbContext`, stores, cache, `PulseWorker` (worker host) |
-| `Noovio.Pulse.Web` | Infrastructure | Razor Class Library: pages, components, Battle.net sign-in, `pulse.css`, `PulseSite` (site host) |
+| `Noovio.Pulse.Infrastructure` | Application | Raider.io and Blizzard clients, abstract `PulseDbContext`, stores, cache, `PulseWorker` (ingestion and route workers) |
+| `Noovio.Pulse.Web` | Infrastructure | Razor Class Library: pages, components, Battle.net sign-in, `pulse.css`, `PulseSite` (site of one application) |
 | `Noovio.Pulse.Usage` | nothing | Usage statistics: `BenchEvent`, the shared `pulseusage` database and its migrations, `IUsageRecorder` (written by the sites), `UsageReport` (read by [PulseAdmin](../PulseAdmin/README.md)) |
 | `Noovio.Pulse.Tests` | Infrastructure, Usage | Rules: aggregation, analysis, healer and DPS roles, usage report |
 
@@ -21,13 +21,13 @@ public static readonly PulseApp Definition = new("LifePulse", PulseRoles.Healer,
 
 public sealed class LifePulseDbContext(DbContextOptions<LifePulseDbContext> options) : PulseDbContext(options);
 
-await PulseSite.RunAsync<LifePulseDbContext>(args, LifePulseApp.Definition);    // Web/Program.cs
-await PulseWorker.RunAsync<LifePulseDbContext>(args, LifePulseApp.Definition);  // Worker/Program.cs
+// In PulseMetrics/Program.cs: the site and its workers, in one container, mounted under /life/.
+PulseSite.Build<LifePulseDbContext>(builder, LifePulseApp.Definition, workers: true);
 ```
 
-Plus its migrations, `appsettings`, `wwwroot/theme.css` and favicon, and deployment files. Everything named after the application derives from `PulseApp.Name`: configuration sections (`LifePulse:Ingestion`, `LifePulse:Meta`), connection string, cookie, Redis prefix.
+Plus its migrations and `wwwroot/life/theme.css` and favicon (all in [PulseMetrics](../PulseMetrics/README.md)). Everything named after the application derives from `PulseApp.Name`: configuration sections (`LifePulse:Ingestion`, `LifePulse:Meta`), connection string, cookie, Redis prefix; its URL prefix and asset folder derive from `PulseApp.Slug` (`life`).
 
-The host's Web project sets `RequiresAspNetWebAssets` to `true`: its pages live in the library, so the SDK would otherwise leave out `_framework/blazor.web.js` and nothing would become interactive.
+`PulseWorker.RebuildSnapshotsAsync` and `PulseWorker.SyncRoutesAsync` back the `--rebuild-snapshots` and `--sync-routes` switches of PulseMetrics.
 
 ## Optional features
 
@@ -56,7 +56,7 @@ The host's Web project sets `RequiresAspNetWebAssets` to `true`: its pages live 
 
 ## Languages
 
-The sites speak French (default) and English. The language comes from the `.AspNetCore.Culture` cookie set by the switch in the top bar (`GET /culture/{fr|en}?returnUrl=`), otherwise from the browser's `Accept-Language`. In production the cookie is set on `noovio.fr` (`Localization:CookieDomain`), so a choice made on one Noovio site holds for all of them; it is left empty in development, where the sites run on `localhost`.
+The sites speak French (default) and English. The language comes from the `.AspNetCore.Culture` cookie set by the switch in the top bar (`GET /culture/{fr|en}?returnUrl=`), otherwise from the browser's `Accept-Language`. In production the cookie is set on `pulsemetrics.fr` with path `/` (`Localization:CookieDomain`), so a choice made on one tool holds for all of them; it is left empty in development, where the sites run on `localhost`.
 
 | Resource | Project | Holds |
 |---|---|---|

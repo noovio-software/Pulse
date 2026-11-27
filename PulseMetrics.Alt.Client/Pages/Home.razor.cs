@@ -1,0 +1,400 @@
+using PulseMetrics.Alt.Client.Components;
+using PulseMetrics.Alt.Client.Localization;
+using PulseMetrics.Alt.Client.Models;
+using PulseMetrics.Alt.Client.Resources;
+using PulseMetrics.Alt.Client.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
+
+namespace PulseMetrics.Alt.Client.Pages;
+
+public partial class Home
+{
+    [Inject] private IAltPulseApi Api { get; set; } = default!;
+    [Inject] private LocalHistoryStore Store { get; set; } = default!;
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private bool ready;
+    private bool searching;
+    private bool searchOpen;
+    private bool focusNameInput;
+    private bool labelsCompact;
+    private ElementReference nameInput;
+    private string region = "eu";
+    private string? realm;
+    private string? name;
+    private string? searchError;
+    private string selectedHistoryKey = "";
+    private string? highlightKey;
+
+    private AltPulseSettings settings = new();
+    private List<HistoryEntry> history = [];
+    private readonly List<CharacterColumn> columns = [];
+    private IReadOnlyList<RealmInfo> realms = [];
+    private SeasonInfo? season;
+    private CharacterSnapshot? equipmentFor;
+
+    /// <summary>L'addon NoovioPulse sur CurseForge, et en téléchargement direct sur les releases GitHub.</summary>
+    private const string AddonCurseForgeUrl = "https://www.curseforge.com/wow/addons/nooviopulse";
+    private const string AddonDirectDownloadUrl = "https://github.com/noovio-software/Pulse/releases";
+
+    private bool addonOpen;
+    private bool focusAddonInput;
+    private bool importing;
+    private string? addonText;
+    private string? addonError;
+    private string? addonMessage;
+    private ElementReference addonInput;
+    private Dictionary<string, AddonCharacter> addon = [];
+
+    private IReadOnlyList<CharacterColumn> SortedColumns => Ui.Sort(columns, settings.SortBy).ToList();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (focusNameInput && searchOpen)
+        {
+            focusNameInput = false;
+            await nameInput.FocusAsync(preventScroll: true);
+        }
+
+        if (focusAddonInput && addonOpen)
+        {
+            focusAddonInput = false;
+            await addonInput.FocusAsync(preventScroll: true);
+        }
+
+        if (!firstRender)
+        {
+            return;
+        }
+
+        // localStorage n'existe qu'une fois le circuit/WASM interactif : rien n'est lu pendant le prérendu.
+        settings = await Store.GetSettingsAsync();
+        history = await Store.GetHistoryAsync();
+        addon = await Store.GetAddonAsync();
+        region = Regions.All.Contains(settings.LastRegion) ? settings.LastRegion : "eu";
+        labelsCompact = settings.LabelsCompact ?? await JS.InvokeAsync<bool>("altpulse.isSmallScreen");
+        columns.AddRange(history.Select(h => new CharacterColumn(h)));
+        ready = true;
+        if (columns.Count == 0)
+        {
+            OpenSearch();
+        }
+
+        StateHasChanged();
+
+        await Task.WhenAll(LoadRegionAsync(region), LoadAllColumnsAsync());
+    }
+
+    private async Task LoadRegionAsync(string targetRegion)
+    {
+        var seasonTask = Api.GetSeasonAsync(targetRegion);
+        var realmsTask = Api.GetRealmsAsync(targetRegion);
+        try
+        {
+            await Task.WhenAll(seasonTask, realmsTask);
+        }
+        catch (Exception)
+        {
+            // Les tâches en échec sont gérées individuellement ci-dessous.
+        }
+
+        if (targetRegion != region)
+        {
+            return;
+        }
+
+        season = seasonTask.IsCompletedSuccessfully ? seasonTask.Result : season;
+        realms = realmsTask.IsCompletedSuccessfully ? realmsTask.Result : [];
+        StateHasChanged();
+    }
+
+    private async Task LoadAllColumnsAsync()
+    {
+        using var throttle = new SemaphoreSlim(4);
+        await Task.WhenAll(columns.ToList().Select(async c =>
+        {
+            await throttle.WaitAsync();
+            try
+            {
+                await LoadColumnAsync(c, forceRefresh: false);
+            }
+            finally
+            {
+                throttle.Release();
+            }
+        }));
+    }
+
+    private async Task LoadColumnAsync(CharacterColumn column, bool forceRefresh)
+    {
+        column.Loading = true;
+        column.Error = null;
+        StateHasChanged();
+
+        try
+        {
+            var result = await Api.GetCharacterAsync(column.Entry.Region, column.Entry.RealmSlug, column.Entry.Name, forceRefresh);
+            column.Data = WithAddon(result.Character) ?? column.Data;
+            column.Error = result.Error;
+            if (result.Character is null && addon.TryGetValue(column.Key, out var fromGame))
+            {
+                // Introuvable en ligne (bas niveau, API en panne) : la grille garde ce que l'addon a lu en jeu.
+                column.Data = AddonOverlay.Apply(null, fromGame, season, DateTimeOffset.UtcNow);
+                column.Error = null;
+            }
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+        {
+            column.Error = AltTexts.Error_ServerDown;
+        }
+        finally
+        {
+            column.Loading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task SearchAsync()
+    {
+        if (string.IsNullOrWhiteSpace(realm) || string.IsNullOrWhiteSpace(name))
+        {
+            searchError = AltTexts.Search_Missing;
+            return;
+        }
+
+        var realmSlug = realms.FirstOrDefault(r => string.Equals(r.Name, realm.Trim(), StringComparison.OrdinalIgnoreCase))?.Slug ?? realm.Trim();
+        await SearchCoreAsync(realmSlug);
+    }
+
+    private async Task SearchCoreAsync(string realmSlug)
+    {
+        searching = true;
+        searchError = null;
+
+        try
+        {
+            var result = await Api.GetCharacterAsync(region, realmSlug, name!.Trim());
+            if (result.Character is not { } character)
+            {
+                searchError = result.Error ?? AltTexts.Search_NotFound;
+                return;
+            }
+
+            character = WithAddon(character)!;
+            history = await Store.AddOrTouchAsync(character);
+            var entry = history[0];
+            var column = columns.FirstOrDefault(c => c.Key == character.Key);
+            if (column is null)
+            {
+                column = new CharacterColumn(entry);
+                columns.Add(column);
+            }
+
+            column.Entry = entry;
+            column.Data = character;
+            column.Error = null;
+            selectedHistoryKey = character.Key;
+            searchOpen = false;
+            await HighlightAsync(character.Key);
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+        {
+            searchError = AltTexts.Error_ServerUnreachable;
+        }
+        finally
+        {
+            searching = false;
+        }
+    }
+
+    /// <summary>Complète la fiche avec la dernière relecture en jeu par l'addon, s'il en existe une.</summary>
+    private CharacterSnapshot? WithAddon(CharacterSnapshot? character) =>
+        character is not null && addon.TryGetValue(character.Key, out var fromGame)
+            ? AddonOverlay.Apply(character, fromGame, season, DateTimeOffset.UtcNow)
+            : character;
+
+    private void OpenAddon()
+    {
+        searchOpen = false;
+        addonOpen = true;
+        addonError = null;
+        addonMessage = null;
+        focusAddonInput = true;
+    }
+
+    private void CloseAddon() => addonOpen = false;
+
+    private void OnAddonKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+        {
+            CloseAddon();
+        }
+    }
+
+    /// <summary>
+    /// « MàJ depuis l'addon » : les alts de la chaîne rejoignent l'historique et la grille, leurs données en jeu sont gardées
+    /// sur ce poste puis superposées à chaque chargement, jusqu'à la réinitialisation hebdomadaire.
+    /// </summary>
+    private async Task ImportAddonAsync()
+    {
+        importing = true;
+        addonError = null;
+        try
+        {
+            var result = await Api.ImportAddonAsync(addonText ?? "");
+            if (result.Error is not null)
+            {
+                addonError = result.Error;
+                return;
+            }
+
+            addon = await Store.SaveAddonAsync(result.Characters);
+            history = await Store.AddOrTouchAsync(result.Characters);
+
+            var touched = new List<CharacterColumn>();
+            foreach (var character in result.Characters)
+            {
+                var column = columns.FirstOrDefault(c => c.Key == character.Key);
+                var entry = history.FirstOrDefault(h => h.Key == character.Key);
+                if (column is null && entry is not null)
+                {
+                    column = new CharacterColumn(entry);
+                    columns.Add(column);
+                }
+
+                if (column is not null)
+                {
+                    // Affichage immédiat avec les données du jeu, puis complété par raider.io et Blizzard.
+                    column.Data = AddonOverlay.Apply(column.Data, character, season, DateTimeOffset.UtcNow);
+                    touched.Add(column);
+                }
+            }
+
+            addonOpen = false;
+            addonText = null;
+            addonMessage = result.Characters.Count == 1
+                ? AltLocalization.F(AltTexts.Addon_UpdatedOne, result.Characters[0].Name)
+                : AltLocalization.F(AltTexts.Addon_UpdatedMany, result.Characters.Count);
+            StateHasChanged();
+
+            using var throttle = new SemaphoreSlim(4);
+            await Task.WhenAll(touched.Select(async c =>
+            {
+                await throttle.WaitAsync();
+                try
+                {
+                    await LoadColumnAsync(c, forceRefresh: false);
+                }
+                finally
+                {
+                    throttle.Release();
+                }
+            }));
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+        {
+            addonError = AltTexts.Error_ServerUnreachable;
+        }
+        finally
+        {
+            importing = false;
+        }
+    }
+
+    private void OpenSearch()
+    {
+        searchOpen = true;
+        searchError = null;
+        focusNameInput = true;
+    }
+
+    private void CloseSearch() => searchOpen = false;
+
+    private void OnSearchKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+        {
+            CloseSearch();
+        }
+    }
+
+    private async Task OnHistorySelectedAsync(ChangeEventArgs e)
+    {
+        selectedHistoryKey = e.Value?.ToString() ?? "";
+        if (history.FirstOrDefault(h => h.Key == selectedHistoryKey) is not { } entry)
+        {
+            return;
+        }
+
+        name = entry.Name;
+        realm = entry.RealmName;
+        if (region != entry.Region)
+        {
+            region = entry.Region;
+            await LoadRegionAsync(region);
+        }
+
+        await SearchCoreAsync(entry.RealmSlug);
+    }
+
+    private async Task OnRegionChangedAsync(ChangeEventArgs e)
+    {
+        region = e.Value?.ToString() ?? "eu";
+        settings = settings with { LastRegion = region };
+        await Store.SaveSettingsAsync(settings);
+        await LoadRegionAsync(region);
+    }
+
+    private async Task OnSortChangedAsync(string sortBy)
+    {
+        settings = settings with { SortBy = sortBy };
+        await Store.SaveSettingsAsync(settings);
+    }
+
+    private async Task ToggleCompactAsync()
+    {
+        labelsCompact = !labelsCompact;
+        settings = settings with { LabelsCompact = labelsCompact };
+        await Store.SaveSettingsAsync(settings);
+    }
+
+    private async Task ToggleSectionAsync(string section)
+    {
+        if (!settings.CollapsedSections.Remove(section))
+        {
+            settings.CollapsedSections.Add(section);
+        }
+
+        await Store.SaveSettingsAsync(settings);
+    }
+
+    private async Task RemoveAsync(CharacterColumn column)
+    {
+        columns.Remove(column);
+        history = await Store.RemoveAsync(column.Key);
+        if (selectedHistoryKey == column.Key)
+        {
+            selectedHistoryKey = "";
+        }
+    }
+
+    private async Task ClearHistoryAsync()
+    {
+        await Store.ClearAsync();
+        history.Clear();
+        addon.Clear();
+        columns.Clear();
+        selectedHistoryKey = "";
+    }
+
+    private async Task HighlightAsync(string key)
+    {
+        highlightKey = key;
+        StateHasChanged();
+        await Task.Yield();
+        await JS.InvokeVoidAsync("altpulse.scrollToColumn", key);
+    }
+}

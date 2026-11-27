@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 
 namespace Noovio.Pulse.Usage;
 
@@ -46,6 +47,18 @@ public static class UsageDependencyInjection
         await using var scope = services.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<UsageDbContext>().Database;
         var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Noovio.Pulse.Usage.Migrations");
+
+        var connectionString = new NpgsqlConnectionStringBuilder(db.GetConnectionString());
+        var schema = connectionString.SearchPath?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(schema))
+        {
+            var connection = db.GetDbConnection();
+            await connection.OpenAsync(ct);
+            await using var command = connection.CreateCommand();
+            command.CommandText = "CREATE SCHEMA IF NOT EXISTS \"" + schema.Replace("\"", "\"\"", StringComparison.Ordinal) + "\"";
+            await command.ExecuteNonQueryAsync(ct);
+            await connection.CloseAsync();
+        }
 
         for (var attempt = 1; ; attempt++)
         {

@@ -1,6 +1,6 @@
 @page "/routes"
 
-<PageTitle>@Ui.F(WebTexts.Routes_PageTitle, Site.Name)</PageTitle>
+<PageTitle>@Ui.F(WebTexts.Routes_PageTitle, Site.DisplayName)</PageTitle>
 
 <TopBar RoutesActive />
 
@@ -27,7 +27,7 @@
         <section class="panel empty-state">
             <h2>@WebTexts.Routes_None</h2>
             <p>@WebTexts.Routes_NoneText</p>
-            <a class="btn" href="/">@WebTexts.Common_Back</a>
+            <a class="btn" href=".">@WebTexts.Common_Back</a>
         </section>
     }
     else

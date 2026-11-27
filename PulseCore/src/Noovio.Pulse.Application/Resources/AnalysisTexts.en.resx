@@ -184,7 +184,7 @@
     <value>{0} gems or enchantments to rework</value>
   </data>
   <data name="Import_AltsString" xml:space="preserve">
-    <value>This string is your alts' progress: paste it on AltPulse (altpulse.noovio.fr), "Update from addon" button. Here, pick "My character" in the addon.</value>
+    <value>This string is your alts' progress: paste it on PulseMetrics Alt (pulsemetrics.fr/alt), "Update from addon" button. Here, pick "My character" in the addon.</value>
   </data>
   <data name="Import_BadContent" xml:space="preserve">
     <value>Unreadable content: update the NoovioPulse addon, then export again.</value>

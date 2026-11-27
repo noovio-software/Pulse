@@ -98,11 +98,12 @@ public sealed class AddonImportTests
     }
 
     [Fact]
-    public void An_alts_export_points_to_AltPulse()
+    public void An_alts_export_points_to_Alt()
     {
         var result = CharacterImportParser.Parse("NP1:J:" + Convert.ToBase64String(Encoding.UTF8.GetBytes("""{"v":1,"kind":"alts","characters":[]}""")));
 
-        Assert.Contains("AltPulse", result.Error);
+        Assert.Contains("PulseMetrics Alt", result.Error);
+        Assert.Contains("pulsemetrics.fr/alt", result.Error);
     }
 
     [Fact]

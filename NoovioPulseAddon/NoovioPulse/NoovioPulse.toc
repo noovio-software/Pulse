@@ -5,7 +5,7 @@
 ## Notes-enUS: Exports your character to FrontPulse, LifePulse and BurstPulse to compare it with the Mythic+ top players, and your alts' progress to AltPulse.
 ## Author: Noovio
 ## Version: @project-version@
-## X-Website: https://www.noovio.fr
+## X-Website: https://noovio.fr
 ## X-License: AGPL-3.0-only
 ## Category: Noovio
 ## IconTexture: Interface\AddOns\NoovioPulse\Media\Icon

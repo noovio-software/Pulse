@@ -1,5 +1,5 @@
 [Unit]
-Description=PulseAdmin by Noovio - statistiques d'usage (Kestrel)
+Description=PulseMetrics Admin - statistiques d'usage (Kestrel)
 After=network.target postgresql.service
 
 [Service]

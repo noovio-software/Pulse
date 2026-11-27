@@ -38,7 +38,7 @@ local L = {
 }
 
 if GetLocale() ~= "frFR" then
-    L.tagline = "Your character and your alts, analysed by Noovio"
+    L.tagline = "Your character and your alts, analysed by PulseMetrics"
     L.tools = "Noovio tools"
     L.choose = "What do you want to export?"
     L.characterTitle = "My character"
