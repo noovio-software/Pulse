@@ -1,6 +1,6 @@
 # NoovioPulse Addons
 
-World of Warcraft addon that exports the logged-in character to the Pulse sites
+World of Warcraft addon that exports the logged-in character to the PulseMetrics tools
 ([Front](../PulseMetrics/docs/front.md), [Life](../PulseMetrics/docs/life.md), [Burst](../PulseMetrics/docs/burst.md)),
 in the spirit of SimulationCraft: a string copied in game, pasted on the site, which runs the character analysis against the top 100.
 
@@ -17,7 +17,7 @@ The portrait and the Mythic+ part (Raider.io) are read by name, realm and region
 1. Download the zip of the latest version (GitHub releases `noovio-pulse-addon-x.y.z`).
 2. Drop the `NoovioPulse` folder into `World of Warcraft\_retail_\Interface\AddOns`.
 3. In game: `/noovio` (or the addon menu under the minimap), out of combat, in the specialization to analyse.
-4. `Ctrl+C` (the string is already selected), then paste it on `https://noovio.fr/<tool>/importer`.
+4. `Ctrl+C` (the string is already selected), then paste it on `https://pulsemetrics.fr/<tool>/importer` (`front`, `life` or `burst`), or, for the alts, on `https://pulsemetrics.fr/alt/`.
 
 While developing, a symbolic link saves copying the folder:
 
@@ -34,7 +34,7 @@ New-Item -ItemType SymbolicLink -Path "C:\Program Files (x86)\World of Warcraft\
 | `Json.lua` | JSON and Base64 encoder in plain Lua |
 | `Export.lua` | Reads the character: gear, talents, stats, character sheet; encodes the string |
 | `Inventory.lua` | Reads the bags (gear, consumables) and the Great Vault for the character export |
-| `Alts.lua` | Saves each character's progress at login and when it changes (vault, keys, keystone) for AltPulse |
+| `Alts.lua` | Saves each character's progress at login and when it changes (vault, keys, keystone) for Alt |
 | `UI.lua` | Window (banner, two cards, copy screen), `/noovio` command, addon menu |
 | `Minimap.lua` | Minimap button (drag to move, `/noovio minimap` to hide) |
 | `Media/*.tga` | Icon, banner and card art, rendered from `art/*.svg` (32-bit RLE TGA, power-of-two sizes) |
@@ -114,7 +114,7 @@ works): `"upgrade": { "track": "Héros", "rank": 2, "max_rank": 6, "max_ilvl": 3
 max of another piece on the same track, or the step between two ranks, or 3 levels per rank. Pieces are compared at
 their max level, not at their drop level: a Hero 1/6 piece beats a Champion 6/6 one that cannot go higher. Exports from an older addon, without these fields, are still analysed.
 
-Every export carries `"kind"`: `"character"` (above, for FrontPulse, LifePulse and BurstPulse) or `"alts"` (for AltPulse).
+Every export carries `"kind"`: `"character"` (above, for Front, Life and Burst) or `"alts"` (for Alt).
 Each site refuses the other kind with a message telling where to paste it.
 
 The `alts` export lists every character seen on the account (saved in `NoovioPulseDB.characters`):
@@ -136,7 +136,7 @@ The `alts` export lists every character seen on the account (saved in `NoovioPul
 }
 ```
 
-AltPulse (`POST /api/addon`, button « MàJ depuis l'addon ») adds these characters to the grid and keeps the data in
+Alt (`POST /alt/api/addon`, button « MàJ depuis l'addon ») adds these characters to the grid and keeps the data in
 the browser: for the current week it replaces the vault, the keys of the week and the keystone; a week old, only the
 « last week » dungeon row; older, it is ignored.
 

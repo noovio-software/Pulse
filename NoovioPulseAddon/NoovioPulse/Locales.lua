@@ -5,8 +5,8 @@ local _, ns = ...
 
 local L = {
     title = "NoovioPulse",
-    tagline = "Ton personnage et tes alts, analysés par Noovio",
-    tools = "Les outils Noovio",
+    tagline = "Ton personnage et tes alts, analysés par PulseMetrics",
+    tools = "Les outils PulseMetrics",
     choose = "Que veux-tu exporter ?",
 
     characterTitle = "Mon personnage",
@@ -39,7 +39,7 @@ local L = {
 
 if GetLocale() ~= "frFR" then
     L.tagline = "Your character and your alts, analysed by PulseMetrics"
-    L.tools = "Noovio tools"
+    L.tools = "PulseMetrics tools"
     L.choose = "What do you want to export?"
     L.characterTitle = "My character"
     L.characterText = "Gear, talents, gems and stats, exactly as in game right now. Compared point by point with the Mythic+ top 100 of your spec."
