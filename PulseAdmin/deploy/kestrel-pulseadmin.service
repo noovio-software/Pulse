@@ -4,7 +4,7 @@ After=network.target postgresql.service
 
 [Service]
 WorkingDirectory=/home/ubuntu/projects/pulseadmin
-ExecStart=/usr/bin/dotnet /home/ubuntu/projects/pulseadmin/PulseAdmin.dll --urls http://127.0.0.1:8560
+ExecStart=/home/ubuntu/projects/pulseadmin/PulseAdmin --urls http://127.0.0.1:8560
 Restart=always
 RestartSec=10
 KillSignal=SIGINT

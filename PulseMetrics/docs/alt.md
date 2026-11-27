@@ -4,7 +4,7 @@ Track your World of Warcraft characters in a single grid (one column per charact
 with item level, Mythic+ score, keys done this week, Great Vault, best key per dungeon for the season,
 and raid progression and lockouts for the week, per difficulty. Served at `/alt/`.
 
-- **Stack**: Blazor Web App .NET 10, `InteractiveAuto` render mode (Interactive Server on the first visit, then WebAssembly once the runtime is cached).
+- **Stack**: Blazor Web App .NET 11, `InteractiveAuto` render mode (Interactive Server on the first visit, then WebAssembly once the runtime is cached).
 - **Data**: [Raider.io API](https://raider.io/api) (no key needed) + [Blizzard API](https://develop.battle.net) (optional, recommended).
 - **History**: searched characters and display preferences live only in the browser's `localStorage` (`altpulse.history`, `altpulse.settings`). It is per origin: history kept on `altpulse.noovio.fr` does not follow to `pulsemetrics.fr`.
 - **Theme**: Midnight Season 2, *The Curse of Ula'tek*, The Venomous Abyss.

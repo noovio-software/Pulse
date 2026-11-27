@@ -20,7 +20,14 @@ public partial class CopyButton
 
     private async Task CopyAsync()
     {
-        copied = await JS.InvokeAsync<bool>("pulse.copy", Text);
+        try
+        {
+            copied = await JS.InvokeAsync<bool>("pulse.copy", Text);
+        }
+        catch (JSDisconnectedException)
+        {
+            return;
+        }
         failed = !copied;
         if (copied)
         {

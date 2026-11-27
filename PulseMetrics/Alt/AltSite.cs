@@ -54,11 +54,8 @@ public static class AltSite
         app.UseForwardedHeaders();
         app.UseRequestLocalization();
 
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseWebAssemblyDebugging();
-        }
-        else
+        // Débogage WebAssembly : lancé directement par Visual Studio / VS Code depuis .NET 11 (plus de middleware).
+        if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Error", createScopeForErrors: true);
             app.UseHsts();

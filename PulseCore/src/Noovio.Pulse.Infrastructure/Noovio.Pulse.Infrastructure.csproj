@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(PulseExtensionsVersion)" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="$(PulseExtensionsVersion)" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="$(PulseExtensionsVersion)" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0" />
     <PackageReference Include="System.Threading.RateLimiting" Version="$(PulseExtensionsVersion)" />
   </ItemGroup>
 

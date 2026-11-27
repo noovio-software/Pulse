@@ -84,7 +84,8 @@ Hosted on the OVH VPS (user `ubuntu`), behind Nginx.
 | Piece | Location |
 |---|---|
 | App files | `/home/ubuntu/projects/pulsemetrics/` |
-| systemd unit | `/etc/systemd/system/kestrel-pulsemetrics.service` (Kestrel on `127.0.0.1:8580`) |
+| systemd unit | `/etc/systemd/system/kestrel-pulsemetrics.service` (Kestrel on `127.0.0.1:8580`), installed by the deploy workflow |
+| Runtime | none on the server: the app is published self-contained (.NET 11 embedded) |
 | Secrets | `/etc/pulsemetrics/pulsemetrics.env`, `root:root 600`, loaded by `EnvironmentFile=` |
 | Data protection keys | `/var/lib/pulsemetrics/keys` |
 | Nginx vhosts | `/etc/nginx/sites-available/pulsemetrics`, `pulsemetrics-legacy` (old domains → redirects) |

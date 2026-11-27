@@ -56,7 +56,14 @@ public partial class ImportReport
         if (refreshTooltips)
         {
             refreshTooltips = false;
-            await JS.InvokeVoidAsync("pulse.refreshTooltips");
+            try
+            {
+                await JS.InvokeVoidAsync("pulse.refreshTooltips");
+            }
+            catch (JSDisconnectedException)
+            {
+                // Circuit fermé (onglet quitté) : plus rien à mettre à jour.
+            }
         }
     }
 

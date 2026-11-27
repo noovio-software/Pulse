@@ -3,7 +3,7 @@
 Mythic+ meta for World of Warcraft tanks: gear, secondary stats, talents, trinkets and embellishments
 of the top 100 tanks of each spec (Blood, Vengeance, Guardian, Brewmaster, Protection Paladin, Protection Warrior).
 
-- **Stack**: .NET 10, Blazor Web App in Interactive Server mode, EF Core + PostgreSQL, Redis (`IDistributedCache`).
+- **Stack**: .NET 11, Blazor Web App in Interactive Server mode, EF Core + PostgreSQL, Redis (`IDistributedCache`).
 - **Data**: [Raider.io](https://raider.io/api) (season run leaderboard) + [Blizzard API](https://develop.battle.net) (equipment, specializations, statistics, item icons).
 - **Routes**: [Keystone.guru](https://keystone.guru) (popular routes of each season dungeon, with the size of each pull), see [the routes doc](../../PulseCore/docs/keystone-guru-routes.md).
 - **Principle**: the worker precomputes one snapshot per spec every 6 hours; the site only reads those snapshots.

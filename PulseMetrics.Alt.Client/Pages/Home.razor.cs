@@ -74,7 +74,7 @@ public partial class Home
         history = await Store.GetHistoryAsync();
         addon = await Store.GetAddonAsync();
         region = Regions.All.Contains(settings.LastRegion) ? settings.LastRegion : "eu";
-        labelsCompact = settings.LabelsCompact ?? await JS.InvokeAsync<bool>("altpulse.isSmallScreen");
+        labelsCompact = settings.LabelsCompact ?? await IsSmallScreenAsync();
         columns.AddRange(history.Select(h => new CharacterColumn(h)));
         ready = true;
         if (columns.Count == 0)
@@ -395,6 +395,26 @@ public partial class Home
         highlightKey = key;
         StateHasChanged();
         await Task.Yield();
-        await JS.InvokeVoidAsync("altpulse.scrollToColumn", key);
+        try
+        {
+            await JS.InvokeVoidAsync("altpulse.scrollToColumn", key);
+        }
+        catch (JSDisconnectedException)
+        {
+            // Circuit fermé (onglet quitté) : plus rien à faire défiler.
+        }
+    }
+
+    /// <summary>Écran étroit : libellés compacts par défaut. Faux si le circuit est déjà fermé.</summary>
+    private async Task<bool> IsSmallScreenAsync()
+    {
+        try
+        {
+            return await JS.InvokeAsync<bool>("altpulse.isSmallScreen");
+        }
+        catch (JSDisconnectedException)
+        {
+            return false;
+        }
     }
 }

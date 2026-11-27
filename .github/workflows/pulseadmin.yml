@@ -22,7 +22,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: 11.0.x
 
       - name: Extract version from tag
         run: |
@@ -40,7 +40,7 @@ jobs:
 
       # Pas de -p:Version : la variable VERSION posée ci-dessus est lue par le .csproj.
       - name: Dotnet Publish
-        run: dotnet publish PulseAdmin/PulseAdmin/PulseAdmin.csproj -c Release -o deploy
+        run: dotnet publish PulseAdmin/PulseAdmin/PulseAdmin.csproj -c Release -r linux-x64 --self-contained -o deploy
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
@@ -53,6 +53,12 @@ jobs:
 
       - name: Deploy with rsync
         run: rsync -avz --delete deploy/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_TARGET_PULSEADMIN }}
+
+      # L'unité systemd vit dans le dépôt : elle suit la publication (self-contained : on lance l'exécutable).
+      - name: Install systemd unit
+        run: |
+          scp PulseAdmin/deploy/kestrel-pulseadmin.service ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/tmp/kestrel-pulseadmin.service
+          ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'sudo install -m 644 /tmp/kestrel-pulseadmin.service /etc/systemd/system/kestrel-pulseadmin.service && rm /tmp/kestrel-pulseadmin.service && sudo systemctl daemon-reload'
 
       # Le site applique les migrations de la base d'usage au démarrage ; is-active échoue si le service n'a pas redémarré.
       - name: Restart service

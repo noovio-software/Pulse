@@ -16,7 +16,14 @@ public partial class EquipmentDialog
         if (firstRender)
         {
             // Les liens d'objets viennent d'être rendus : on demande à Wowhead d'y brancher ses infobulles.
-            await JS.InvokeVoidAsync("altpulse.refreshTooltips");
+            try
+            {
+                await JS.InvokeVoidAsync("altpulse.refreshTooltips");
+            }
+            catch (JSDisconnectedException)
+            {
+                // Circuit fermé (onglet quitté) : plus rien à mettre à jour.
+            }
         }
     }
 }

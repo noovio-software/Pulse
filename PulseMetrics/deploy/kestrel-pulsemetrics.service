@@ -4,7 +4,8 @@ After=network.target postgresql.service redis-server.service
 
 [Service]
 WorkingDirectory=/home/ubuntu/projects/pulsemetrics
-ExecStart=/usr/bin/dotnet /home/ubuntu/projects/pulsemetrics/PulseMetrics.dll
+# Publication self-contained (runtime .NET embarqué) : on lance l'exécutable, pas /usr/bin/dotnet.
+ExecStart=/home/ubuntu/projects/pulsemetrics/PulseMetrics
 Restart=always
 RestartSec=10
 KillSignal=SIGINT

@@ -123,8 +123,15 @@ public sealed class LocalHistoryStore(IJSRuntime js)
 
     public async Task ClearAsync()
     {
-        await js.InvokeVoidAsync("localStorage.removeItem", HistoryKey);
-        await js.InvokeVoidAsync("localStorage.removeItem", AddonKey);
+        try
+        {
+            await js.InvokeVoidAsync("localStorage.removeItem", HistoryKey);
+            await js.InvokeVoidAsync("localStorage.removeItem", AddonKey);
+        }
+        catch (Exception ex) when (ex is JSException or JSDisconnectedException)
+        {
+            // Stockage indisponible (navigation privée) ou circuit fermé : rien à effacer.
+        }
     }
 
     public async Task<AltPulseSettings> GetSettingsAsync() =>
@@ -156,6 +163,15 @@ public sealed class LocalHistoryStore(IJSRuntime js)
         }
     }
 
-    private async Task WriteAsync<T>(string key, T value) =>
-        await js.InvokeVoidAsync("localStorage.setItem", key, JsonSerializer.Serialize(value, JsonOptions));
+    private async Task WriteAsync<T>(string key, T value)
+    {
+        try
+        {
+            await js.InvokeVoidAsync("localStorage.setItem", key, JsonSerializer.Serialize(value, JsonOptions));
+        }
+        catch (Exception ex) when (ex is JSException or JSDisconnectedException)
+        {
+            // Stockage plein ou refusé (navigation privée), ou circuit fermé : la grille reste à jour pour cette visite.
+        }
+    }
 }
